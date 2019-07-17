@@ -6,7 +6,6 @@ import { LoginComponent } from './login/login.component';
 import { Role } from './_models';
 import { AuthGuard } from './_guards';
 import { DoctorComponent } from './doctor/doctor.component';
-import { NotAuthorizedComponent } from './notauthorized/notauthorized.component';
 
 const appRoutes: Routes = [
     {
