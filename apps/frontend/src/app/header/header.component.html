@@ -1,0 +1,9 @@
+<mat-toolbar color=primary>
+  <span><a routerLink="/">Ząbek 2</a></span>
+  <span class="spacer"></span>
+  <ul>
+      <li>
+          <a mat-button (click)="logout()" *ngIf="currentUser">Logout</a>
+      </li>
+  </ul>
+</mat-toolbar>
