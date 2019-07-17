@@ -17,7 +17,6 @@ import { AdminComponent } from './admin';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
-import { fakeBackendProvider } from './_helpers/fackebackend.interceptor';
 import { DoctorComponent } from './doctor/doctor.component';
 
 @NgModule({
@@ -41,9 +40,7 @@ import { DoctorComponent } from './doctor/doctor.component';
   ],
   providers: [
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
-      fakeBackendProvider
+      { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [
     AppComponent
