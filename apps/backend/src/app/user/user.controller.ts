@@ -1,29 +1,27 @@
-import { Controller, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException, HttpException } from '@nestjs/common';
 import { UserPasswordDto } from './userpassword.dto';
-import { Role } from './role';
-// import { throwError } from 'rxjs';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
-    private users: {id: number, username: string, password: string, role: Role }[] = [
-        { id: 1, username: 'admin', password: 'admin', role: Role.admin },
-        { id: 2, username: 'user', password: 'user', role: Role.user },
-        { id: 3, username: 'doctor', password: 'doctor', role: Role.doctor }
-    ];
+
+    constructor(private readonly userService: UserService) {}
 
     @Post('authenticate')
-    getData(@Body() userPasswordDto: UserPasswordDto)  {
-        const user = this.users.find(x => x.username === userPasswordDto.username && x.password === userPasswordDto.password);
-        if (!user) {
-            throw  new HttpException('Username or password is incorrect', HttpStatus.BAD_REQUEST);
+    async authenticate(@Body() userPasswordDto: UserPasswordDto)  {
+    
+        const user = await this.userService.authenticate(userPasswordDto);
+
+        if (user) {
+            return {
+                    id: user._id,
+                    username: user.username,
+                    role: user.role,
+                    token: `fake-jwt-token.${user.role}`
+                };
         }
-        return {
-            id: user.id,
-            username: user.username,
-            firstName: "firstname",
-            lastName: "lastname",
-            role: user.role,
-            token: `fake-jwt-token.${user.role}`
-        };
+        else {
+            throw new BadRequestException('Invalid username or password');
+        }
     }
 }
