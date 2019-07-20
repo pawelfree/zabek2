@@ -11,12 +11,10 @@ import { CreateUserDto } from './dto/createuser.dto';
 import { User } from './user.interface';
 import * as _ from 'lodash';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 
 @Controller('users')
 export class UserController {
     private static SALT = 10;
-    private static JWT_PRIVATE_KEY = 'jwtPrivateKey';
 
     constructor(private readonly userService: UserService) {}
 
@@ -34,7 +32,7 @@ export class UserController {
             throw new BadRequestException('Invalid email or password');
         }
         
-        const token = jwt.sign({ _id: user._id, role: user.role}, UserController.JWT_PRIVATE_KEY);
+        const token = await user.generateAuthToken();
 
         return {
                 id: user._id,
