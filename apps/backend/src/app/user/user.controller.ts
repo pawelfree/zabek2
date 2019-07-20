@@ -7,7 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from './user.service';
  
-@Controller('users')
+@Controller('user')
 export class UserController {
     private static SALT = 10;
 
