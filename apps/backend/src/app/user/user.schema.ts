@@ -18,8 +18,3 @@ export const UserSchema = new mongoose.Schema({
   },
   role: String
 });
-
-//TODO zmienne powinny byc w konfigu 
-UserSchema.methods.generateAuthToken = function() {
-  return jwt.sign({ _id: this._id, role: this.role}, JWT_PRIVATE_KEY);
-}

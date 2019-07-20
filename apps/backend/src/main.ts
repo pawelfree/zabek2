@@ -6,6 +6,7 @@
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
+import { RolesGuard } from './app/auth/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,11 +15,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix(globalPrefix);
   app.enableCors();
-  
+
   await app.listen(port, () => {
     console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
 }
 
 bootstrap();
-    
