@@ -14,7 +14,7 @@ export class UserService {
   }
   
   async findByEmail(email: string) : Promise<User> {
-    return await this.userModel.findOne({email: email}).select('-password -__v');
+    return await this.userModel.findOne({email: email});
   }
 
   async add(createUserDto: CreateUserDto) : Promise<User> {
