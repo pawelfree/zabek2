@@ -11,10 +11,12 @@ import { CreateUserDto } from './dto/createuser.dto';
 import { User } from './user.interface';
 import * as _ from 'lodash';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 @Controller('users')
 export class UserController {
-    private static salt = 10;
+    private static SALT = 10;
+    private static JWT_PRIVATE_KEY = 'jwtPrivateKey';
 
     constructor(private readonly userService: UserService) {}
 
@@ -32,11 +34,13 @@ export class UserController {
             throw new BadRequestException('Invalid email or password');
         }
         
+        const token = jwt.sign({ _id: user._id, role: user.role}, UserController.JWT_PRIVATE_KEY);
+
         return {
                 id: user._id,
                 email: user.email,
                 role: user.role,
-                token: `fake-jwt-token.${user.role}`
+                token
             };
     }
 
@@ -57,7 +61,7 @@ export class UserController {
             throw new BadRequestException('User already registered');
         }
         const _createUserDto = _.pick(createUserDto,['email', 'role']);
-        const salt = await bcrypt.genSalt(UserController.salt);
+        const salt = await bcrypt.genSalt(UserController.SALT);
         _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
         return _.pick((await this.userService.add(_createUserDto)), ['_id','email', 'role']);
     }
