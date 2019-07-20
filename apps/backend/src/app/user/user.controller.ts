@@ -9,7 +9,6 @@ import { UserPasswordDto } from './dto/userpassword.dto';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/createuser.dto';
 import { User } from './user.interface';
-import * as _ from 'lodash';
 import * as bcrypt from 'bcrypt';
 
 @Controller('users')
@@ -42,9 +41,10 @@ export class UserController {
             };
     }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string) {
-        return _.pick((await this.userService.findById(id)),['_id','email', 'role']);
+    @Get('me')
+    async findOne() {
+        const id = "q"
+        return await this.userService.findById(id);
     }
 
     @Get()
@@ -61,7 +61,7 @@ export class UserController {
         const _createUserDto = _.pick(createUserDto,['email', 'role']);
         const salt = await bcrypt.genSalt(UserController.SALT);
         _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
-        return _.pick((await this.userService.add(_createUserDto)), ['_id','email', 'role']);
+        return await this.userService.add(_createUserDto);
     }
 
     @Delete(':id')
