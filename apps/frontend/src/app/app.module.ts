@@ -7,7 +7,8 @@ import {  MatToolbarModule,
           MatCardModule,
           MatInputModule, 
           MatFormFieldModule,
-          MatButtonModule} from '@angular/material';
+          MatButtonModule,
+          MatListModule} from '@angular/material';
 
 
 import { AppComponent } from './app.component';
@@ -36,7 +37,8 @@ import { DoctorComponent } from './doctor/doctor.component';
               MatCardModule,
               MatFormFieldModule,
               MatInputModule,
-              MatButtonModule
+              MatButtonModule,
+              MatListModule
   ],
   providers: [
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
