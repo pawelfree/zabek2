@@ -18,7 +18,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
 
   app.setGlobalPrefix(globalPrefix);
-  app.useStaticAssets(join(__dirname, '..', './dist/apps/frontend'));
+  app.useStaticAssets(join(__dirname, '..', '../../dist/apps/frontend/'));
   app.enableCors();
 
   await app.listen(port, () => {

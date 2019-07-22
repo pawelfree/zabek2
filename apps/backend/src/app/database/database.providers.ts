@@ -5,6 +5,7 @@ export const databaseProviders = [
   {
     provide: 'DATABASE_CONNECTION',
     useFactory: (): Promise<typeof mongoose> =>
-      mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true } )
+      //mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true } )
+      mongoose.connect('mongodb://localhost/zabek', { useNewUrlParser: true } )
   },
 ];
