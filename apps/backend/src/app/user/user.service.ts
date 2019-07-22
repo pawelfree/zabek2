@@ -19,7 +19,7 @@ export class UserService {
   }
 
   async add(createUserDto: CreateUserDto) : Promise<User> {
-    return (new this.userModel(createUserDto)).save().select('-password -__v');
+    return await (new this.userModel(createUserDto)).save();
   }
 
   async findAll(): Promise<User[]> {

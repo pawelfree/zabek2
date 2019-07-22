@@ -52,6 +52,6 @@ export class UserController {
       const _createUserDto = _.pick(createUserDto,['email', 'role']);
       const salt = await bcrypt.genSalt(UserController.SALT);
       _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
-      return await this.userService.add(_createUserDto);
+      return _.pick(await this.userService.add(_createUserDto),['email','role']);
   }
 }
