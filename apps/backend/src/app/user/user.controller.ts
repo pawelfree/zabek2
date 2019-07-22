@@ -7,6 +7,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { CreateUserDto } from './dto/createuser.dto';
 import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
+import * as _ from 'lodash';
 
 @Controller('user')
 export class UserController {
