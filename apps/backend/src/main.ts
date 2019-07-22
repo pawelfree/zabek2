@@ -13,13 +13,23 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
   );
+  
+  function redirectToRoot(req, res, next) {
+    res.redirect('/');
+  };
 
   const globalPrefix = 'api';
   const port = process.env.PORT || 3001;
+  
 
-  app.setGlobalPrefix(globalPrefix);
-  app.useStaticAssets(join(__dirname, '..', '../../dist/apps/frontend/'));
+  const os = require("os");
+    console.log(os.hostname());
+  
   app.enableCors();
+  app.setGlobalPrefix(globalPrefix);
+  app.useStaticAssets(join(__dirname, '..', '../../dist/apps/frontend/'), {fallthrough : true});
+  app.use(redirectToRoot);
+
 
   await app.listen(port, () => {
     console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
