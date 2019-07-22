@@ -9,6 +9,7 @@ export class ConfigService {
     constructor() {
         console.log('!!!!! config constructor');
         console.log(process.env.NODE_ENV)
+        console.log(process.env.MONGODB_URI);
        // this.envConfig = dotenv.parse(fs.readFileSync(`${process.env.NODE_ENV}.env`));
     }
 
