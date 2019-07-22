@@ -6,11 +6,12 @@ import { LocalStrategy } from './local.strategy';
 import { UserService } from '../user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './roles.guard';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UserSchema } from '../user/user.schema';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([{name: 'User', schema: UserSchema }]),
     UserModule,
     PassportModule,
     JwtModule.register({

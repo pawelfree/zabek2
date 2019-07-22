@@ -11,7 +11,7 @@ const JWT_PRIVATE_KEY = 'jwtPrivateKey'
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService) {}
+     private readonly userService: UserService) {}
 
   async validateUser(email: string, pass: string): Promise<User> {
     const user = await this.userService.findByEmail(email);

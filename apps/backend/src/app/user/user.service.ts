@@ -3,11 +3,12 @@ import { Model } from 'mongoose';
 import { Injectable, Inject } from '@nestjs/common';
 import { User } from './user.interface';
 import { CreateUserDto } from './dto/createuser.dto';
+import { InjectModel } from '@nestjs/mongoose';
 
 
 @Injectable()
 export class UserService {
-  constructor(@Inject('USER_MODEL') private readonly userModel: Model<User>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async findById(id: string) : Promise<User> {
     return await this.userModel.findById(id).select('-password -__v');
