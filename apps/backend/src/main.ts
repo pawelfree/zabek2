@@ -28,7 +28,7 @@ async function bootstrap() {
   app.enableCors();
   app.setGlobalPrefix(globalPrefix);
   app.useStaticAssets(join(__dirname, '..', '../../dist/apps/frontend/'), {fallthrough : true});
-  app.use(redirectToRoot);
+ // app.use(redirectToRoot);
 
 
   await app.listen(port, () => {
