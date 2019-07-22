@@ -24,6 +24,7 @@ export class AuthenticationService {
             .pipe(map(user => {
 
                 if (user && user.token) {
+                    console.log("authenticate")
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUserSubject.next(user);
                 }
