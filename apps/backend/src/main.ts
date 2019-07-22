@@ -15,7 +15,7 @@ async function bootstrap() {
   );
 
   const globalPrefix = 'api';
-  const port = process.env.port || 3333;
+  const port = process.env.PORT || 3001;
 
   app.setGlobalPrefix(globalPrefix);
   app.useStaticAssets(join(__dirname, '..', './dist/apps/frontend'));
