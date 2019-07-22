@@ -1,9 +1,12 @@
-import { Controller, Post, Request, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards, Get, Body, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from './user.service';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
+import { CreateUserDto } from './dto/createuser.dto';
+import { User } from './user.interface';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
@@ -11,6 +14,8 @@ export class UserController {
     private readonly authService: AuthService,
     private readonly userService: UserService
   ) {}
+
+  static SALT = 10;
 
   @UseGuards(AuthGuard('local'))
   @Post('authenticate')
@@ -37,15 +42,15 @@ export class UserController {
     return await this.userService.findAll();
   }
 
-  // @Post()
-  // async addUser(@Body() createUserDto: CreateUserDto) {
-  //     const user: User = await  this.userService.findByEmail(createUserDto.email);
-  //     if  (user) {
-  //         throw new BadRequestException('User already registered');
-  //     }
-  //     const _createUserDto = _.pick(createUserDto,['email', 'role']);
-  //     const salt = await bcrypt.genSalt(UserController.SALT);
-  //     _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
-  //     return await this.userService.add(_createUserDto);
-  // }
+  @Post()
+  async addUser(@Body() createUserDto: CreateUserDto) {
+      const user: User = await  this.userService.findByEmail(createUserDto.email);
+      if  (user) {
+          throw new BadRequestException('User already registered');
+      }
+      const _createUserDto = _.pick(createUserDto,['email', 'role']);
+      const salt = await bcrypt.genSalt(UserController.SALT);
+      _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
+      return await this.userService.add(_createUserDto);
+  }
 }
