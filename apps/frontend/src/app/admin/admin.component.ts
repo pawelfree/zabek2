@@ -10,6 +10,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 
 export class AdminComponent implements OnInit {
 
+  
   constructor() { }
 
   ngOnInit() {

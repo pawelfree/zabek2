@@ -1,8 +1,7 @@
 export class Doctor {
     id: number;
     firstName: string;
-    lastName: string;
-	pesel?: string;
+    lastName: string;	
 	officeName: string;    
     officeAddress?: string;
     qualificationsNo: string;
