@@ -10,7 +10,8 @@ import { DoctorComponent } from './doctor/doctor.component';
 const appRoutes: Routes = [
     {
         path: '',
-        component: LoginComponent
+        pathMatch: 'full',
+        redirectTo: 'login'
     },
     {
         path: 'user',
@@ -36,7 +37,7 @@ const appRoutes: Routes = [
     },
     {
         path: '**',
-        redirectTo: ''
+        redirectTo: 'login'
     }
 
 ];
