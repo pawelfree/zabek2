@@ -23,7 +23,7 @@ export class ExaminationService {
   getAllExaminations(): void {
     this.httpClient.get<Examination[]>(this.DATA).subscribe(
       data => {
-        this.dataChange.next(data);
+        this.dataChange.next(data);        
       },
       (error: HttpErrorResponse) => {
         console.log(error.name + ' ' + error.message);

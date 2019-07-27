@@ -26,54 +26,54 @@
       <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="dataWykonania">
+    <ng-container matColumnDef="examinationDate">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Data wykonania</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.dataWykonania}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.examinationDate}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="rodzaj">
+    <ng-container matColumnDef="examinationType">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Rodzaj</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.rodzaj}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.examinationType}}</mat-cell>
     </ng-container>
     
-    <ng-container matColumnDef="pacjentNazwisko">
+    <ng-container matColumnDef="patientFullName">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Pacjent</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.pacjentNazwisko}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientFullName}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="pacjentPesel">
+    <ng-container matColumnDef="patientPesel">
       <mat-header-cell *matHeaderCellDef mat-sort-header>PESEL</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.pacjentPesel}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientPesel}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="pacjentWiek">
+    <ng-container matColumnDef="patientAge">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Wiek</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.pacjentWiek}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientAge}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="lekarzNazwisko">
+    <ng-container matColumnDef="doctorFullName">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Lekarz</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.lekarzNazwisko}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.doctorFullName}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="lekarzNrUprawnien">
+    <ng-container matColumnDef="doctorQualificationsNo">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Nr uprawnień</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.lekarzNrUprawnien}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.doctorQualificationsNo}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="lekarzNazwaGabinetu">
+    <ng-container matColumnDef="doctorOfficeName">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Gabinet</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.lekarzNazwaGabinetu}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.doctorOfficeName}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="pacjentZgoda">
+    <ng-container matColumnDef="patientAck">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Zgoda pacjenta</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.pacjentZgoda}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientAck}}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="wyniki">
+    <ng-container matColumnDef="examinationFile">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Wyniki</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.wyniki}}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.examinationFile}}</mat-cell>
     </ng-container>
 
     <!-- actions -->
@@ -85,11 +85,11 @@
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i=index;">
-        <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.title, row.state, row.url, row.created_at, row.updated_at)">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.examinationDate, row.examinationType, row.patientFullName, row.doctorFullName, row.examinationFile)">
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.title, row.state, row.url)">
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.examinationDate, row.examinationType, row.patientFullName, row.doctorFullName)">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
       </mat-cell>

@@ -21,15 +21,16 @@ import { map } from 'rxjs/operators';
 })
 export class AdminComponent implements OnInit {
   displayedColumns: string[] = [
-    'dataWykonania',
-    'pacjentNazwisko',
-    'pacjentPesel',
-    'pacjentWiek',
-    'rodzaj',
-    'lekarzNazwisko',
-    'lekarzNrUprawnien',
-    'lekarzNazwaGabinetu',
-    'wyniki'
+    'id',
+    'examinationDate',
+    'patientFullName',
+    'patientPesel',
+    'patientAge',
+    'examinationType',
+    'doctorFullName',
+    'doctorQualificationsNo',
+    'doctorOfficeName',
+    'examinationFile'
   ];
 
   exampleDatabase: ExaminationService | null;
@@ -175,8 +176,8 @@ export class ExampleDataSource extends DataSource<Examination> {
             const searchStr = (
               examination.id +
               examination.examinationDate +
-              examination.doctorLastName +
-              examination.patientLastName
+              examination.doctorFullName +
+              examination.patientFullName
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
