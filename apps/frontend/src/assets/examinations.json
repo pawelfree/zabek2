@@ -1,0 +1,17 @@
+{
+    "data": [
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Jan Kowalski", "dataWykonania": "2019-02-03", "pacjentWiek": "23", "rodzaj": "Wewnątrzustne", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Anna Kowalska", "dataWykonania": "2019-02-12", "pacjentWiek": "15", "rodzaj": "Pantomograficzne PX", "pacjentZgoda": "Nie", "wyniki":""},
+        {"lekarzNazwisko":"Eustachy Gwidoń","pacjentNazwisko": "Marcin Nowak", "dataWykonania": "2019-02-25", "pacjentWiek": "45", "rodzaj": "Mikro CBCT", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Janina Białas","pacjentNazwisko": "Mikołaj Burza", "dataWykonania": "2019-03-15", "pacjentWiek": "32", "rodzaj": "Wewnątrzustne", "pacjentZgoda": "N/A", "wyniki":""},
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Jan Kowalski", "dataWykonania": "2019-03-26", "pacjentWiek": "23", "rodzaj": "CBCT całkowite", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Eustachy Gwidoń","pacjentNazwisko": "Patrycja Sosna", "dataWykonania": "2019-04-11", "pacjentWiek": "15", "rodzaj": "CBCT całkowite", "pacjentZgoda": "Nie", "wyniki":""},
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Marcin Nowak", "dataWykonania": "2019-04-17", "pacjentWiek": "45", "rodzaj": "Wewnątrzustne", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Jan Kowalski", "dataWykonania": "2019-04-25", "pacjentWiek": "23", "rodzaj": "Pantomograficzne pozostałe", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Janina Białas","pacjentNazwisko": "Marcin Nowak", "dataWykonania": "2019-05-02", "pacjentWiek": "45", "rodzaj": "CBCT całkowite", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Jan Kowalski", "dataWykonania": "2019-05-08", "pacjentWiek": "23", "rodzaj": "Wewnątrzustne", "pacjentZgoda": "Tak", "wyniki":""},
+        {"lekarzNazwisko":"Janina Białas","pacjentNazwisko": "Mikołaj Burza", "dataWykonania": "2019-05-10", "pacjentWiek": "32", "rodzaj": "CBCT sektorowe", "pacjentZgoda": "N/A", "wyniki":""},
+        {"lekarzNazwisko":"Cezary Ptak","pacjentNazwisko": "Jan Kowalski", "dataWykonania": "2019-05-12", "pacjentWiek": "23", "rodzaj": "Cefalometryczne", "pacjentZgoda": "Tak", "wyniki":""}
+        
+    ]
+}

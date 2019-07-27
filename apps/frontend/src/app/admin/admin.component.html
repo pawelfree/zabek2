@@ -1,3 +1,113 @@
-<p>
-  admin works!
-</p>
+<mat-toolbar color="primary">
+  <span>Admin - czyli office manager Pracowni</span>
+  <span class="spacer"></span>
+  Reload data:
+  <button mat-icon-button (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="container mat-elevation-z8">
+
+  <div class="form">
+    <mat-form-field floatPlaceholder="never" color="accent">
+      <input matInput #filter placeholder="Filter issues">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="dataWykonania">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Data wykonania</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.dataWykonania}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="rodzaj">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rodzaj</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.rodzaj}}</mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="pacjentNazwisko">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Pacjent</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.pacjentNazwisko}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pacjentPesel">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>PESEL</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.pacjentPesel}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pacjentWiek">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Wiek</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.pacjentWiek}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lekarzNazwisko">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Lekarz</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.lekarzNazwisko}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lekarzNrUprawnien">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nr uprawnień</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.lekarzNrUprawnien}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lekarzNazwaGabinetu">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Gabinet</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.lekarzNazwaGabinetu}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pacjentZgoda">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Zgoda pacjenta</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.pacjentZgoda}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="wyniki">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Wyniki</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.wyniki}}</mat-cell>
+    </ng-container>
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary" (click)="addNew()">
+          <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+        </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i=index;">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.title, row.state, row.url, row.created_at, row.updated_at)">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.title, row.state, row.url)">
+          <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+
+  <div class="no-results" [style.display]="dataSource.renderedData.length == 0 ? '' : 'none'">
+    No results
+  </div>
+
+  <mat-paginator #paginator
+                 [length]="dataSource.filteredData.length"
+                 [pageIndex]="0"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
