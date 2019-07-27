@@ -23,13 +23,14 @@ export class AdminComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
     'examinationDate',
+    'examinationType',
     'patientFullName',
     'patientPesel',
-    'patientAge',
-    'examinationType',
+    'patientAge',    
     'doctorFullName',
     'doctorQualificationsNo',
     'doctorOfficeName',
+    'patientAck',
     'examinationFile'
   ];
 
@@ -216,10 +217,10 @@ export class ExampleDataSource extends DataSource<Examination> {
           [propertyA, propertyB] = [a.examinationDate, b.examinationDate];
           break;
         case 'doctorLastName':
-          [propertyA, propertyB] = [a.doctorLastName, b.doctorLastName];
+          [propertyA, propertyB] = [a.doctorFullName, b.doctorFullName];
           break;
         case 'patientLastName':
-          [propertyA, propertyB] = [a.patientLastName, b.patientLastName];
+          [propertyA, propertyB] = [a.patientFullName, b.patientFullName];
           break;
         case 'patientPesel':
           [propertyA, propertyB] = [a.patientPesel, b.patientPesel];
