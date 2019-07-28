@@ -31,7 +31,8 @@ export class AdminComponent implements OnInit {
     'doctorQualificationsNo',
     'doctorOfficeName',
     'patientAck',
-    'examinationFile'
+    'examinationFile',
+    'actions'
   ];
 
   exampleDatabase: ExaminationService | null;
