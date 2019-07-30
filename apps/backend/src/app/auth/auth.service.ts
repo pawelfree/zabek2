@@ -28,6 +28,6 @@ export class AuthService {
 
   async login(user: User) {
     const payload = { email: user.email, _id: user._id, role: user.role};
-    return jsonwebtoken.sign(payload, JWT_PRIVATE_KEY);
+    return jsonwebtoken.sign(payload, JWT_PRIVATE_KEY, { expiresIn: 120 });
   }
 }

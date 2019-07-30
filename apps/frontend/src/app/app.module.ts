@@ -18,6 +18,9 @@ import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { DoctorComponent } from './doctor/doctor.component';
+import { UserListComponent } from './admin/user-list/user-list.component';
+import { ReportsComponent } from './admin/reports/reports.component';
+import { UserCreateComponent } from './admin/user-create/user-create.component';
 
 @NgModule({
   declarations: [ AppComponent, 
@@ -25,7 +28,10 @@ import { DoctorComponent } from './doctor/doctor.component';
                   AdminComponent,
                   LoginComponent,
                   HeaderComponent,
-                  DoctorComponent
+                  DoctorComponent,
+                  UserListComponent,
+                  ReportsComponent,
+                  UserCreateComponent
                 ],
   imports: [  BrowserModule, 
               BrowserAnimationsModule,

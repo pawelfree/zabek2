@@ -6,6 +6,8 @@ import { LoginComponent } from './login/login.component';
 import { Role } from './_models';
 import { AuthGuard } from './_guards';
 import { DoctorComponent } from './doctor/doctor.component';
+import { UserListComponent } from './admin/user-list/user-list.component';
+import { ReportsComponent } from './admin/reports/reports.component';
 
 const appRoutes: Routes = [
     {
@@ -23,7 +25,21 @@ const appRoutes: Routes = [
         path: 'admin',
         component: AdminComponent,
         canActivate: [AuthGuard],
-        data: { roles: [Role.admin] }
+        data: { roles: [Role.admin] },
+        children: [
+            {
+                path: '',
+                redirectTo: 'list'
+            },
+            {
+                path: 'list',
+                component: UserListComponent
+            },
+            {
+                path: 'reports',
+                component: ReportsComponent
+            }
+        ]
     },
     {
         path: 'doctor',
