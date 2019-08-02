@@ -3,11 +3,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {  MatToolbarModule,
-          MatCardModule,
-          MatInputModule, 
-          MatFormFieldModule,
-          MatButtonModule} from '@angular/material';
 
 
 import { AppComponent } from './app.component';
@@ -21,6 +16,7 @@ import { DoctorComponent } from './doctor/doctor.component';
 import { UserListComponent } from './admin/user-list/user-list.component';
 import { ReportsComponent } from './admin/reports/reports.component';
 import { UserCreateComponent } from './admin/user-create/user-create.component';
+import { AngularMaterialModule } from './angular-material.module';
 
 @NgModule({
   declarations: [ AppComponent, 
@@ -39,11 +35,7 @@ import { UserCreateComponent } from './admin/user-create/user-create.component';
               ReactiveFormsModule,
               HttpClientModule,
               routing,
-              MatToolbarModule,
-              MatCardModule,
-              MatFormFieldModule,
-              MatInputModule,
-              MatButtonModule
+              AngularMaterialModule
   ],
   providers: [
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

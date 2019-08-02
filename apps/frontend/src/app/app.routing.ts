@@ -29,7 +29,8 @@ const appRoutes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'list'
+                redirectTo: 'list',
+                pathMatch: 'full'
             },
             {
                 path: 'list',
