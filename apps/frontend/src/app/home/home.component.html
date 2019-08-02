@@ -1,3 +1,113 @@
-<p>
-  home works!
-</p>
+<mat-toolbar color="primary">
+  <span>Admin - czyli office manager Pracowni</span>
+  <span class="spacer"></span>
+  Reload data:
+  <button mat-icon-button (click)="refresh()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="container mat-elevation-z8">
+
+  <div class="form">
+    <mat-form-field floatPlaceholder="never" color="accent">
+      <input matInput #filter placeholder="Filter issues">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="examinationDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Data wykonania</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.examinationDate}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="examinationType">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rodzaj</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.examinationType}}</mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="patientFullName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Pacjent</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientFullName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="patientPesel">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>PESEL</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientPesel}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="patientAge">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Wiek</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientAge}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="doctorFullName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Lekarz</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.doctorFullName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="doctorQualificationsNo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nr uprawnień</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.doctorQualificationsNo}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="doctorOfficeName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Gabinet</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.doctorOfficeName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="patientAck">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Zgoda pacjenta</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.patientAck}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="examinationFile">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Wyniki</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.examinationFile}}</mat-cell>
+    </ng-container>
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary" (click)="addNew()">
+          <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+        </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i=index;">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.examinationDate, row.examinationType, row.patientFullName, row.doctorFullName, row.examinationFile)">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.examinationDate, row.examinationType, row.patientFullName, row.doctorFullName)">
+          <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+
+  <div class="no-results" [style.display]="dataSource.renderedData.length == 0 ? '' : 'none'">
+    No results
+  </div>
+
+  <mat-paginator #paginator
+                 [length]="dataSource.filteredData.length"
+                 [pageIndex]="0"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
