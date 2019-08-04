@@ -29,7 +29,7 @@ export class AuthenticationService {
             .pipe(map(user => {
                 if (user) {
                     if (user.token) {
-                        const expiresInDuration = user.expiresIn;
+                        const expiresInDuration = user.expiresIn;                  
                         this.tokenTimer = setTimeout(() => {
                             this.logout();
                         }, expiresInDuration * 1000);

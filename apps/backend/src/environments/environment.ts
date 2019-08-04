@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  loginExpiresIn: 300,
+  loginExpiresIn: 120,
   MONGODB_URI: 'mongodb://localhost/zabek',
   JWT_PRIVATE_KEY: 'secret_jwt_key'
 };
