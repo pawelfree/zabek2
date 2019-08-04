@@ -3,5 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  loginExpiresIn: 300,
+  MONGODB_URI: 'mongodb://localhost/zabek',
+  JWT_PRIVATE_KEY: 'secret_jwt_key'
 };

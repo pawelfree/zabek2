@@ -20,14 +20,13 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(req)
             .pipe(catchError(err => {
                 const error = err.error.message || err.statusText;
-                if ([401, 403].indexOf(err.status) !== -1 ) {
+                if ([401, 403, 500].indexOf(err.status) !== -1 ) {
                     this.authService.logout();
                     let errorMessage = 'Wystąpił nieznany błąd';
                     if (err.error.message) {
                         errorMessage = err.error.message
                     }
                     this.dialog.open(ErrorComponent, {data: { message: errorMessage, status: err.statusText }});
-                    console.log(err.statusText)
                     this.router.navigate(['/']);
                 }
                 return throwError(error);

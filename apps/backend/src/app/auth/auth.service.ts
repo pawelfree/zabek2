@@ -4,14 +4,14 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import * as jsonwebtoken from 'jsonwebtoken';
 import { User } from '../user/user.interface';
-
-const JWT_PRIVATE_KEY = 'jwtPrivateKey'
-
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-     private readonly userService: UserService) {}
+     private readonly userService: UserService,
+     private readonly configService: ConfigService
+  ) {}
 
   async validateUser(email: string, pass: string): Promise<{user: User, message: string}> {
     const user = await this.userService.findByEmail(email);
@@ -32,8 +32,8 @@ export class AuthService {
       id: user._id,
       email: user.email,
       role: user.role,
-      expiresIn: 15 * 60,
-      token: jsonwebtoken.sign(payload, JWT_PRIVATE_KEY, { expiresIn: 120 })
+      expiresIn: this.configService.get('loginExpiresIn'),
+      token: jsonwebtoken.sign(payload, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn: this.configService.get('loginExpiresIn') })
     };
   }
 }

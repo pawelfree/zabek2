@@ -1,20 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ConfigService {
-    private readonly envConfig: { [key: string]: string };
+    private envConfig: { [key: string]: string };
 
     constructor() {
-        console.log(process.env.NODE_ENV)
-        console.log(process.env.MONGODB_URI)
+
+        this.envConfig = {}
+        
+        Object.assign(this.envConfig, environment);
+
         if (process.env.MONGODB_URI) {
-           this.envConfig = { MONGODB_URI: process.env.MONGODB_URI }
-        } else {
-            this.envConfig = { MONGODB_URI: 'mongodb://localhost/zabek' }
+           this.envConfig = { MONGODB_URI: process.env.MONGODB_URI };
+        } 
+
+        if (process.env.JWT_PRIVATE_KEY) {
+            this.envConfig = { JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY };
         }
+        
     }
 
     get(key: string): string {
-        return this.envConfig[key];
+        const value =  this.envConfig[key];
+        if (value) {
+            return value
+        }
+        throw new HttpException ('Property ' + key + ' not found.', HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }
