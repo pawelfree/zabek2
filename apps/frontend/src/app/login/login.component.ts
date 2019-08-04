@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   returnUrl: string;
-  error = '';
 
   constructor(
       private formBuilder: FormBuilder,
@@ -55,10 +54,9 @@ export class LoginComponent implements OnInit {
           .subscribe(
               (data: User) => {
                 this.router.navigate([data.role]);
-              },
-              error => {
-                this.error = error;
-                this.loading = false;
-              });
+          },
+          err => {
+            this.loading = false;
+          });
   }
 }

@@ -2,8 +2,14 @@
   <span><a routerLink="/">Ząbek 2</a></span>
   <span class="spacer"></span>
   <ul>
-      <li>
-          <a mat-button (click)="logout()" *ngIf="currentUser">Logout</a>
-      </li>
+    <li *ngIf='isAdmin()'>
+      <a mat-button routerLink='/admin/list' routerLinkActive="mat-accent">Users</a>
+    </li>
+    <li *ngIf='isAdmin()'>
+      <a mat-button routerLink='/admin/reports' routerLinkActive="mat-accent">Reports</a>
+    </li>
+    <li>
+        <a mat-button (click)="logout()" *ngIf="currentUser">Logout</a>
+    </li>
   </ul>
 </mat-toolbar>

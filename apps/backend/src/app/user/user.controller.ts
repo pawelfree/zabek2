@@ -21,13 +21,8 @@ export class UserController {
   @UseGuards(AuthGuard('local'))
   @Post('authenticate')
   async authenticate(@Request() req) {
-    const token = await this.authService.login(req.user);
-    return {
-      id: req.user._id,
-      email: req.user.email,
-      role: req.user.role,
-      token
-    };
+    const userData = await this.authService.login(req.user);
+    return userData;
   }
 
   @UseGuards(AuthGuard('jwt'))

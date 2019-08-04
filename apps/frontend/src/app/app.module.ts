@@ -18,21 +18,23 @@ import { UserListComponent } from './admin/user-list/user-list.component';
 import { ReportsComponent } from './admin/reports/reports.component';
 import { UserCreateComponent } from './admin/user-create/user-create.component';
 import { AngularMaterialModule } from './angular-material.module';
+import { ErrorComponent } from './dialogs/error/error.component';
 
 @NgModule({
   declarations: [ 
-    AppComponent, 
-    HomeComponent, 
+    AddDialogComponent,
     AdminComponent,
-    LoginComponent,
-    HeaderComponent,
+    AppComponent, 
     DoctorComponent,
-    UserListComponent,
+    HeaderComponent,
+    HomeComponent, 
+    LoginComponent,
     ReportsComponent,
     UserCreateComponent,
-    AddDialogComponent,
+    UserListComponent,
+    ErrorComponent,
     EditDialogComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
   ],
   imports: [ 
     BrowserModule, 
@@ -47,6 +49,9 @@ import { AngularMaterialModule } from './angular-material.module';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ErrorComponent
+  ]
 })
 export class AppModule {}

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Nieoczekiwanie wystąpił błąd</h1>
+<div mat-dailog-content>
+    <p *ngIf='data.status' class='mat-body-1'>{{ data.message }} - {{ data.status }}</p>
+    <p *ngIf='!data.status' class='mat-body-1'>{{ data.message }}</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>OK</button>
+</div>

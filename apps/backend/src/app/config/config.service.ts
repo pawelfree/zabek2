@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
-import * as dotenv from 'dotenv';
 
 @Injectable()
 export class ConfigService {
@@ -14,7 +12,6 @@ export class ConfigService {
         } else {
             this.envConfig = { MONGODB_URI: 'mongodb://localhost/zabek' }
         }
-       // this.envConfig = dotenv.parse(fs.readFileSync(`${process.env.NODE_ENV}.env`));
     }
 
     get(key: string): string {
