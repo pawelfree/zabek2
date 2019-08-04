@@ -25,7 +25,7 @@ export class AuthenticationService {
     }
 
      login(email: string, password: string) {
-        return this.http.post<User>('http://localhost:3001/api/user/authenticate', { email, password })
+        return this.http.post<User>('/api/user/authenticate', { email, password })
             .pipe(map(user => {
                 if (user) {
                     if (user.token) {
