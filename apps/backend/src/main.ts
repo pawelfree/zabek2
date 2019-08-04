@@ -1,13 +1,9 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- **/
-
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { NotFoundExceptionFilter } from './app/filter/notfoundexception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -19,6 +15,7 @@ async function bootstrap() {
   
   app.enableCors();
   app.setGlobalPrefix(globalPrefix);
+  app.useGlobalFilters(new NotFoundExceptionFilter());
   app.useStaticAssets(join(__dirname, '..', '../../dist/apps/frontend/'));
 
   await app.listen(port, () => {
