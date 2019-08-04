@@ -1,16 +1,16 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Component, Inject} from '@angular/core';
-import {ExaminationService} from '../../_services/examination.service';
+import {ExaminationService} from '../examination.service';
 import {FormControl, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'zabek-baza.dialog',
-  templateUrl: '../../dialogs/edit/edit.dialog.html',
-  styleUrls: ['../../dialogs/edit/edit.dialog.css']
+  selector: 'zabek-edit-examination',
+  templateUrl: './edit-examination.html',
+  styleUrls: ['./edit-examination.css']
 })
-export class EditDialogComponent {
+export class EditExaminationComponent {
 
-  constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<EditExaminationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, public dataService: ExaminationService) { }
 
   formControl = new FormControl('', [

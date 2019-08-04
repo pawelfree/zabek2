@@ -19,6 +19,10 @@ export class ConfigService {
             Object.assign(this.envConfig, { JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY });
         }
 
+        if (process.env.LOGIN_EXPIRES_IN) {
+            Object.assign(this.envConfig, process.env.LOGIN_EXPIRES_IN);
+        }
+
     }
 
     get(key: string): string {

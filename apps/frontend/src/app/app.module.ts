@@ -3,11 +3,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddDialogComponent } from './dialogs/add/add.dialog.component';
-import { EditDialogComponent } from './dialogs/edit/edit.dialog.component';
-import { DeleteDialogComponent } from './dialogs/delete/delete.dialog.component';
 import { AppComponent } from './app.component';
-import { routing } from './app.routing';
+import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin';
 import { LoginComponent } from './login/login.component';
@@ -19,10 +16,10 @@ import { ReportsComponent } from './admin/reports/reports.component';
 import { UserCreateComponent } from './admin/user-create/user-create.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent } from './dialogs/error/error.component';
+import { ExaminationModule } from './examination/examination.module';
 
 @NgModule({
   declarations: [ 
-    AddDialogComponent,
     AdminComponent,
     AppComponent, 
     DoctorComponent,
@@ -33,8 +30,7 @@ import { ErrorComponent } from './dialogs/error/error.component';
     UserCreateComponent,
     UserListComponent,
     ErrorComponent,
-    EditDialogComponent,
-    DeleteDialogComponent,
+
   ],
   imports: [ 
     BrowserModule, 
@@ -42,8 +38,9 @@ import { ErrorComponent } from './dialogs/error/error.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    routing,
-    AngularMaterialModule
+    AppRoutingModule,
+    AngularMaterialModule,
+    ExaminationModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -51,10 +48,7 @@ import { ErrorComponent } from './dialogs/error/error.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    ErrorComponent,
-    AddDialogComponent,
-    EditDialogComponent,
-    DeleteDialogComponent
+    ErrorComponent
   ]
 })
 export class AppModule {}

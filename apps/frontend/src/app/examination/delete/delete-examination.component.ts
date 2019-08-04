@@ -1,16 +1,16 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Component, Inject} from '@angular/core';
-import {ExaminationService} from '../../_services/examination.service';
+import {ExaminationService} from '../examination.service';
 
 
 @Component({
-  selector: 'zabek-delete.dialog',
-  templateUrl: '../../dialogs/delete/delete.dialog.html',
-  styleUrls: ['../../dialogs/delete/delete.dialog.css']
+  selector: 'zabek-delete-examination',
+  templateUrl: './delete-examination.html',
+  styleUrls: ['./delete-examination.css']
 })
-export class DeleteDialogComponent {
+export class DeleteExaminationComponent {
 
-  constructor(public dialogRef: MatDialogRef<DeleteDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<DeleteExaminationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, public dataService: ExaminationService) { }
 
   onNoClick(): void {

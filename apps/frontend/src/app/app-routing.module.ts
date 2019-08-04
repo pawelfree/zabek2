@@ -8,8 +8,9 @@ import { AuthGuard } from './_guards';
 import { DoctorComponent } from './doctor/doctor.component';
 import { UserListComponent } from './admin/user-list/user-list.component';
 import { ReportsComponent } from './admin/reports/reports.component';
+import { NgModule } from '@angular/core';
 
-const appRoutes: Routes = [
+const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
@@ -59,5 +60,10 @@ const appRoutes: Routes = [
 
 ];
 
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
+    providers: [AuthGuard]
 
-export const routing = RouterModule.forRoot(appRoutes); 
+})
+export class AppRoutingModule {}

@@ -1,17 +1,17 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Component, Inject} from '@angular/core';
-import {ExaminationService} from '../../_services/examination.service';
+import {ExaminationService} from '../examination.service';
 import {FormControl, Validators} from '@angular/forms';
-import {Examination} from '../../_models/examination';
+import {Examination} from '../examination';
 
 @Component({
-  selector: 'zabek-add.dialog',
-  templateUrl: '../../dialogs/add/add.dialog.html',
-  styleUrls: ['../../dialogs/add/add.dialog.css']
+  selector: 'zabek-add-examination',
+  templateUrl: './add-examination.html',
+  styleUrls: ['./add-examination.css']
 })
 
-export class AddDialogComponent {
-  constructor(public dialogRef: MatDialogRef<AddDialogComponent>,
+export class AddExaminationComponent {
+  constructor(public dialogRef: MatDialogRef<AddExaminationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Examination,
               public dataService: ExaminationService) { }
 

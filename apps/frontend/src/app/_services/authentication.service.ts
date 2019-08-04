@@ -24,12 +24,12 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-     login(email: string, password: string) {
+    login(email: string, password: string) {
         return this.http.post<User>('/api/user/authenticate', { email, password })
             .pipe(map(user => {
                 if (user) {
                     if (user.token) {
-                        const expiresInDuration = user.expiresIn;                  
+                        const expiresInDuration = user.expiresIn;              
                         this.tokenTimer = setTimeout(() => {
                             this.logout();
                         }, expiresInDuration * 1000);

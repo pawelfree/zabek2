@@ -1,14 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ExaminationService } from '../_services/examination.service';
+import { ExaminationService } from '../examination/examination.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Examination } from '../_models/examination';
+import { Examination } from '../examination/examination';
 import { DataSource } from '@angular/cdk/collections';
-import {AddDialogComponent} from '../dialogs/add/add.dialog.component';
-import {EditDialogComponent} from '../dialogs/edit/edit.dialog.component';
-import {DeleteDialogComponent} from '../dialogs/delete/delete.dialog.component';
+import {AddExaminationComponent} from '../examination/add/add-examination.component';
+import {EditExaminationComponent} from '../examination/edit/edit-examination.component';
+import {DeleteExaminationComponent} from '../examination/delete/delete-examination.component';
 import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
     }
   
     addNew(examination: Examination) {
-      const dialogRef = this.dialog.open(AddDialogComponent, {
+      const dialogRef = this.dialog.open(AddExaminationComponent, {
         data: {examination: examination }
       });
   
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
       // index row is used just for debugging proposes and can be removed
       this.index = i;
       console.log(this.index);
-      const dialogRef = this.dialog.open(EditDialogComponent, {
+      const dialogRef = this.dialog.open(EditExaminationComponent, {
         data: {id: id, title: title, state: state, url: url, created_at: created_at, updated_at: updated_at}
       });
   
@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit {
     deleteItem(i: number, id: number, title: string, state: string, url: string) {
       this.index = i;
       this.id = id;
-      const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      const dialogRef = this.dialog.open(DeleteExaminationComponent, {
         data: {id: id, title: title, state: state, url: url}
       });
   
