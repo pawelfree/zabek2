@@ -51,7 +51,10 @@ import { ErrorComponent } from './dialogs/error/error.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    ErrorComponent
+    ErrorComponent,
+    AddDialogComponent,
+    EditDialogComponent,
+    DeleteDialogComponent
   ]
 })
 export class AppModule {}
