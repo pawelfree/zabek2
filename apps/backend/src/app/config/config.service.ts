@@ -12,13 +12,13 @@ export class ConfigService {
         Object.assign(this.envConfig, environment);
 
         if (process.env.MONGODB_URI) {
-           this.envConfig = { MONGODB_URI: process.env.MONGODB_URI };
+           Object.assign(this.envConfig,{ MONGODB_URI: process.env.MONGODB_URI });
         } 
 
         if (process.env.JWT_PRIVATE_KEY) {
-            this.envConfig = { JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY };
+            Object.assign(this.envConfig, { JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY });
         }
-        
+
     }
 
     get(key: string): string {
