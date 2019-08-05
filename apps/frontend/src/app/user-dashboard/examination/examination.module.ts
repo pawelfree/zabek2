@@ -4,19 +4,25 @@ import { CommonModule } from '@angular/common';
 import { AddExaminationComponent } from './add/add-examination.component';
 import { EditExaminationComponent } from './edit/edit-examination.component';
 import { DeleteExaminationComponent } from './delete/delete-examination.component';
-import { AngularMaterialModule } from '../angular-material.module';
+import { ExaminationListComponent } from './examination-list/examination-list.component';
+import { ExaminationCreateComponent } from './examination-create/examination-create.component';
+import { AngularMaterialModule } from '../../angular-material.module';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [
         AddExaminationComponent,
         EditExaminationComponent,
-        DeleteExaminationComponent,        
+        DeleteExaminationComponent,   
+        ExaminationListComponent,
+        ExaminationCreateComponent
     ],
     imports: [
         CommonModule,
         FormsModule,
-        AngularMaterialModule
+        AngularMaterialModule,
+        RouterModule
     ],
     entryComponents: [
         AddExaminationComponent,

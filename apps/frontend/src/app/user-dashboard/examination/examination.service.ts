@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
-import { Examination } from '../_models';
+import { Examination } from './examination';
 
 @Injectable({ providedIn: 'root' })
 export class ExaminationService {

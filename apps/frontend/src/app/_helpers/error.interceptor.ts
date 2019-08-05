@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { AuthenticationService } from '../_services';
 import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
-import { ErrorComponent } from '../dialogs/error/error.component';
+import { ErrorComponent } from '../error/error.component';
 import { Router } from '@angular/router';
 
 @Injectable()

@@ -1,23 +1,24 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ExaminationService } from '../examination/examination.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Examination } from '../examination/examination';
 import { DataSource } from '@angular/cdk/collections';
-import {AddExaminationComponent} from '../examination/add/add-examination.component';
-import {EditExaminationComponent} from '../examination/edit/edit-examination.component';
-import {DeleteExaminationComponent} from '../examination/delete/delete-examination.component';
 import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { ExaminationService } from '../examination.service'
+import { Examination } from '../examination';
+import {AddExaminationComponent} from '../add/add-examination.component';
+import {EditExaminationComponent} from '../edit/edit-examination.component';
+import {DeleteExaminationComponent} from '../delete/delete-examination.component';
+
 @Component({
-  selector: 'zabek-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'zabek-examination-list',
+  templateUrl: './examination-list.component.html',
+  styleUrls: ['./examination-list.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ExaminationListComponent implements OnInit {
     displayedColumns: string[] = [
       'id',
       'examinationDate',
