@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../_services';
-import { User } from '../_models';
+import { User, Role } from '../_models';
 
 @Component({
   selector: 'zabek-login',
@@ -18,45 +18,54 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
   constructor(
-      private formBuilder: FormBuilder,
-      private route: ActivatedRoute,
-      private router: Router,
-      private authenticationService: AuthenticationService
-  ) { 
-      // redirect to home if already logged in
-      if (this.authenticationService.currentUserValue) { 
-          this.router.navigate([`/${this.authenticationService.currentUserValue.role}`]);
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    if (this.authenticationService.currentUserValue) {
+      let role = this.authenticationService.currentUserValue.role;
+      if (role === Role.sadmin) {
+        role = Role.admin;
       }
+      this.router.navigate([`/${role}`]);
+    }
   }
 
   ngOnInit() {
-      this.loginForm = this.formBuilder.group({
-          username: ['', Validators.required],
-          password: ['', Validators.required]
-      });
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
 
-      // get return url from route parameters or default to '/'
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   async onSubmit() {
+    if (this.loginForm.invalid) {
+      return;
+    }
 
-      if (this.loginForm.invalid) {
-          return;
-      }
-
-      this.loading = true;
-      this.authenticationService.login(this.f.username.value, this.f.password.value)
-          .pipe(first())
-          .subscribe(
-              (data: User) => {
-                this.router.navigate([data.role]);
-          },
-          err => {
-            this.loading = false;
-          });
+    this.loading = true;
+    this.authenticationService
+      .login(this.f.username.value, this.f.password.value)
+      .pipe(first())
+      .subscribe(
+        (data: User) => {
+          let role = data.role;
+          if (role === Role.sadmin) {
+            role = Role.admin;
+          }
+          this.router.navigate([role]);
+        },
+        err => {
+          this.loading = false;
+        }
+      );
   }
 }

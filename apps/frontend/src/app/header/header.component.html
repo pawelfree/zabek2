@@ -1,15 +1,24 @@
-<mat-toolbar color=primary>
+<mat-toolbar color="primary">
   <span><a routerLink="/">Ząbek 2</a></span>
   <span class="spacer"></span>
   <ul>
-    <li *ngIf='isAdmin()'>
-      <a mat-button routerLink='/admin/userlist' routerLinkActive="mat-accent">Users</a>
+    <li *ngIf="isSAdmin">
+      <a mat-button routerLink="/admin/officelist" routerLinkActive="mat-accent">Gabinety</a>
     </li>
-    <li *ngIf='isAdmin()'>
-      <a mat-button routerLink='/admin/reports' routerLinkActive="mat-accent">Reports</a>
+    <li *ngIf="isSAdmin">
+      <a mat-button routerLink="/admin/officecreate" routerLinkActive="mat-accent">Nowy gabinet</a>
+    </li>
+    <li *ngIf="isAdmin">
+      <a mat-button routerLink="/admin/userlist" routerLinkActive="mat-accent">Użytkownicy</a>
+    </li>
+    <li *ngIf="isAdmin">
+      <a mat-button routerLink="/admin/usercreate" routerLinkActive="mat-accent">Nowy użytkownik</a>
+    </li>
+    <li *ngIf="isAdmin">
+      <a mat-button routerLink="/admin/reports" routerLinkActive="mat-accent">Raporty</a>
     </li>
     <li>
-        <a mat-button (click)="logout()" *ngIf="currentUser">Logout</a>
+      <a mat-button (click)="logout()" *ngIf="currentUser">Logout ({{ currentUser.email }})</a>
     </li>
   </ul>
 </mat-toolbar>

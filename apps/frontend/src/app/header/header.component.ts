@@ -13,22 +13,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User;
   subscription: Subscription;
 
-  constructor(private router: Router, private authService: AuthenticationService) {} 
+  constructor(
+    private router: Router,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit() {
-    this.subscription = this.authService.currentUser.subscribe(user => this.currentUser = user);
+    this.currentUser = this.authService.currentUserValue;
+    this.subscription = this.authService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  get isLoggedIn() {
-    return this.currentUser;
+  get isAdmin() {
+    return this.currentUser && (this.currentUser.role === Role.admin || this.currentUser.role === Role.sadmin);
   }
 
-  isAdmin() {
-    return this.isLoggedIn && this.currentUser.role === Role.admin;
+  get isSAdmin() {
+    return this.currentUser && this.currentUser.role === Role.sadmin;
+  }
+  
+  get isLoggedIn() {
+    return this.currentUser;
   }
 
   logout() {
