@@ -10,5 +10,12 @@ export class Examination {
   examinationDate: string; //data wykonania badania
   examinationType: string; //rodzaj badania
   examinationFile: string; //link do wyników badan
+
+  //TODO remove
+  title: string;
+  url: string;
+  created_at: string;
+  state: string;
+  updated_at: string;
   
 }

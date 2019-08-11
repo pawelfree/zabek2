@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node ./dist/apps/backend/main",
-    "build": "ng build backend && ng build frontend",
+    "build": "ng build --prod backend && ng build --prod frontend",
     "test": "ng test",
     "lint": "nx lint && ng lint",
     "e2e": "ng e2e",
@@ -76,7 +76,7 @@
     "@types/jest": "24.0.9",
     "@types/node": "~8.9.4",
     "codelyzer": "~5.0.1",
-    "cypress": "^3.4.0",
+    "cypress": "^3.4.1",
     "jest": "24.1.0",
     "jest-preset-angular": "^7.1.1",
     "prettier": "1.16.4",
