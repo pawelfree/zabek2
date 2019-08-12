@@ -5,13 +5,9 @@
       {{ user.email }}
     </mat-expansion-panel-header>
     <p>{{ user.role }}</p>
-    <mat-action-row *ngIf="currentUser">
-      <a mat-button color="primary" [routerLink]="['../useredit', user.id]"
-        >EDIT</a
-      >
-      <button mat-button color="warn" (click)="onDelete(user.id)">
-        DELETE
-      </button>
+    <mat-action-row>
+      <a mat-button color="primary" [routerLink]="['../useredit', user._id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(user._id)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>

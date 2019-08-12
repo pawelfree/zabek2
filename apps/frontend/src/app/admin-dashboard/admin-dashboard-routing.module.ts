@@ -45,6 +45,12 @@ const routes: Routes = [
     data: { roles: [Role.sadmin] }
   },
   {
+    path: 'officeedit/:officeId',
+    component: OfficeCreateComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.sadmin] }
+  },
+  {
     path: 'reports',
     component: ReportsComponent,
     canActivate: [AuthGuard],

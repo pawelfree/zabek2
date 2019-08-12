@@ -33,11 +33,11 @@ export class UserService {
         })
       )
       .subscribe(
-        transformedPostsData => {
-          this.users = transformedPostsData.users;
+        transformedUsersData => {
+          this.users = transformedUsersData.users;
           this.usersUpdated.next({
             users: [...this.users],
-            userCount: transformedPostsData.count
+            userCount: transformedUsersData.count
           });
         },
         err => {
@@ -52,6 +52,7 @@ export class UserService {
   }
 
   getUser(id: string) {
+    //TODO any
     return this.http.get<any>(BACKEND_URL + id);
   }
 

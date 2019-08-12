@@ -16,8 +16,8 @@ export class UserService {
     return await this.userModel.findOne({ email: email });
   }
 
-  async add(createUserDto: CreateUserDto): Promise<User> {
-    return await new this.userModel(createUserDto).save();
+  async add(createDto: CreateUserDto): Promise<User> {
+    return await new this.userModel(createDto).save();
   }
 
   async findAll(
@@ -42,7 +42,7 @@ export class UserService {
       });
   }
 
-  async delete(id: string) {
-    return await this.userModel.deleteOne({ _id: id });
+  async delete(_id: string) {
+    return await this.userModel.deleteOne({ _id });
   }
 }

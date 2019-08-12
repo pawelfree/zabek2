@@ -1,5 +1,5 @@
 export class AuthenticatedUser {
-  id: string;
+  _id: string;
   email: string;
   role: string;
   expiresIn: number;

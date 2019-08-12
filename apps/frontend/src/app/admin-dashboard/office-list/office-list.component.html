@@ -1,12 +1,33 @@
-<p>office list works!</p>
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="false" *ngIf="offices.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let office of offices">
+    <mat-expansion-panel-header>
+      {{ office.name }}
+    </mat-expansion-panel-header>
+    <mat-action-row>
+      <a mat-button color="primary" [routerLink]="['../officeedit', office._id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(office._id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-paginator
+  [length]="totalOffices"
+  [hidePageSize]="true"
+  [pageSize]="officesPerPage"
+  (page)="onChangedPage($event)"
+  *ngIf="offices.length > 0"
+></mat-paginator>
+<p class="info-text mat-body-1" *ngIf="offices.length <= 0 && !isLoading">
+  Jeszcze nie ma zdefiniowanych gebinetów!
+</p>
 <div style="right: 15px; bottom: 5px; position: fixed">
-        <button
-          mat-fab
-          color="accent"
-          md-fab-bottom-right
-          aria-label="Dodaj gabinet"
-          routerLink="../officecreate"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
+  <button
+    mat-fab
+    color="accent"
+    md-fab-bottom-right
+    aria-label="Dodaj gabinet"
+    routerLink="../officecreate"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

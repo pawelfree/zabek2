@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from '../../_models';
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from '../../_services';
 import { PageEvent } from '@angular/material';
-import { UserService } from '../../_services/user.service';
+import { UserService } from '../../_services';
 
 @Component({
   selector: 'zabek-user-list',
@@ -11,8 +10,6 @@ import { UserService } from '../../_services/user.service';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit, OnDestroy {
-  currentUser: User;
-  userSubscription: Subscription;
   dataSubscription: Subscription;
   users: User[] = [];
   isLoading = false;
@@ -21,7 +18,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   currentPage = 1;
 
   constructor(
-    private readonly authService: AuthenticationService,
     private readonly userService: UserService
   ) {}
 
@@ -35,13 +31,9 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.totalUsers = userData.userCount;
         this.users = userData.users;
       });
-    this.userSubscription = this.authService.currentUser.subscribe(user => {
-      this.currentUser = user;
-    });
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
     this.dataSubscription.unsubscribe();
   }
 

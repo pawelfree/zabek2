@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { OfficeModule } from './office/office.module';
 
 
 @Module({
   imports: [ 
-    UserModule, 
     AuthModule,
+    OfficeModule,
+    UserModule, 
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
