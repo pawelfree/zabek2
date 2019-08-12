@@ -24,20 +24,20 @@ export class UserService {
     pageSize: number,
     currentPage: number
   ): Promise<{ users: User[]; count: number }> {
-    let fetchedUsers;
+    let users;
     const findallQuery = this.userModel.find();
     if (pageSize && currentPage) {
       findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
     }
     return await findallQuery
       .then(documents => {
-        fetchedUsers = documents;
+        users = documents;
         return this.userModel.countDocuments();
       })
       .then(count => {
         return {
-          users: fetchedUsers,
-          count: count
+          users,
+          count
         };
       });
   }

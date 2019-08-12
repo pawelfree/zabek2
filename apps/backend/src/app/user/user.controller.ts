@@ -71,7 +71,6 @@ export class UserController {
   @Roles('admin', 'sadmin')
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
-    //TODO
     console.log('delete user' + id);
   }
 }
