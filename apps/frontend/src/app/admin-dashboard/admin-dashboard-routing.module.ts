@@ -5,8 +5,8 @@ import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { ReportsComponent } from './reports/reports.component';
 import { UserCreateComponent } from './user-create/user-create.component';
-import { OfficeListComponent } from './office-list/office-list.component';
-import { OfficeCreateComponent } from './office-create/office-create.component';
+import { LabCreateComponent } from './lab-create/lab-create.component';
+import { LabListComponent } from './lab-list/lab-list.component';
 
 const routes: Routes = [
   {
@@ -33,20 +33,20 @@ const routes: Routes = [
     data: { roles: [Role.admin, Role.sadmin] }
   },
   {
-    path: 'officelist',
-    component: OfficeListComponent,
+    path: 'lablist',
+    component: LabListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin] }
   },
   {
-    path: 'officecreate',
-    component: OfficeCreateComponent,
+    path: 'labcreate',
+    component: LabCreateComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin] }
   },
   {
-    path: 'officeedit/:officeId',
-    component: OfficeCreateComponent,
+    path: 'labedit/:labId',
+    component: LabCreateComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin] }
   },

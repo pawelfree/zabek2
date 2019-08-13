@@ -10,46 +10,46 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { OfficeService } from './office.service';
+import { LabService } from './lab.service';
 
-@Controller('office')
-export class OfficeController {
+@Controller('lab')
+export class LabController {
   constructor(
-    private readonly officeService: OfficeService
+    private readonly labService: LabService
   ) {}
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Get()
-    async allOffices(
+    async allLabs(
       @Query('pagesize') pagesize: number,
       @Query('page') page: number
     ) {
-      return await this.officeService.findAll(+pagesize, +page);
+      return await this.labService.findAll(+pagesize, +page);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Post()
-    async addOffice() {
+    async addLab() {
         console.log('add office');
-        return {office: 'add'};
+        return {lab: 'add'};
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Delete(':id')
-    async getOffice(@Param('id') id: string) {
+    async getLab(@Param('id') id: string) {
       console.log('get office' + id);
-      return { office: 'get ' + id};
+      return { lab: 'get ' + id};
     }   
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Delete(':id')
-    async deleteOffice(@Param('id') id: string) {
+    async deleteLab(@Param('id') id: string) {
       console.log('delete office' + id);
-      return {office: 'delete'};
+      return {lab: 'delete'};
     }
 
 }

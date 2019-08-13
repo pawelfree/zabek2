@@ -5,8 +5,8 @@ import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
 import { ReportsComponent } from './reports/reports.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCreateComponent } from './user-create/user-create.component';
-import { OfficeListComponent } from './office-list/office-list.component';
-import { OfficeCreateComponent } from './office-create/office-create.component';
+import { LabListComponent } from './lab-list/lab-list.component';
+import { LabCreateComponent } from './lab-create/lab-create.component';
 
 @NgModule({
   imports: [CommonModule, AngularMaterialModule, AdminDashboardRoutingModule],
@@ -14,8 +14,8 @@ import { OfficeCreateComponent } from './office-create/office-create.component';
     ReportsComponent,
     UserListComponent,
     UserCreateComponent,
-    OfficeListComponent,
-    OfficeCreateComponent
+    LabListComponent,
+    LabCreateComponent
   ]
 })
 export class AdminDashboardModule {}

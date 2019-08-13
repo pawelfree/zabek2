@@ -4,13 +4,13 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { OfficeModule } from './office/office.module';
+import { LabModule } from './lab/lab.module';
 
 
 @Module({
   imports: [ 
     AuthModule,
-    OfficeModule,
+    LabModule,
     UserModule, 
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
