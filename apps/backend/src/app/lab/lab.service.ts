@@ -12,6 +12,10 @@ export class LabService {
     return await this.labModel.findById(id).select('-__v');
   }
 
+  async findByName(name: string): Promise<Lab> {
+    return await this.labModel.findOne({ name }).select('-__v');
+  }
+
   async add(createDto: CreateLabDto): Promise<Lab> {
     return await new this.labModel(createDto).save();
   }

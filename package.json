@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "node ./dist/apps/backend/main",
     "build": "ng build --prod backend && ng build --prod frontend",
-    "test": "ng test",
+    "test": "ng test --passWithNoTests",
     "lint": "nx lint && ng lint",
     "e2e": "ng e2e",
     "affected:apps": "nx affected:apps",

@@ -13,7 +13,7 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email: email });
+    return await this.userModel.findOne({ email });
   }
 
   async add(createDto: CreateUserDto): Promise<User> {
