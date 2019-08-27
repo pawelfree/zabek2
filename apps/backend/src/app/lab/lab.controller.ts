@@ -36,7 +36,7 @@ export class LabController {
     @Roles('sadmin')
     @Post()
     async addLab(@Body() createLabDto: CreateLabDto) {
-      const lab: Lab = this.labService.findByName(createLabDto.name);
+      const lab: Lab = await this.labService.findByName(createLabDto.name);
       if (lab) {
         throw new BadRequestException('Pracownia już istnieje');
       }

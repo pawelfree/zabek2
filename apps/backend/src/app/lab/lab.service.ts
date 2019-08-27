@@ -25,7 +25,7 @@ export class LabService {
     currentPage: number
   ): Promise<{ labs: Lab[]; count: number }> {
     let labs;
-    const findallQuery = this.labModel.find();
+    const findallQuery = this.labModel.find<Lab>();
     if (pageSize && currentPage) {
       findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
     }
