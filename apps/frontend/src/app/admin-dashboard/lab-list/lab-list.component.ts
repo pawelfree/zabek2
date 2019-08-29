@@ -1,59 +1,45 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Lab } from '../../_models';
-import { PageEvent } from '@angular/material';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { MatPaginator } from '@angular/material';
+import { LabListDataSource } from './lab-list.datasource';
 import { LabService } from '../../_services';
-import { Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-lab-list',
   templateUrl: './lab-list.component.html',
   styleUrls: ['./lab-list.component.css']
 })
-export class LabListComponent implements OnInit, OnDestroy  {
-  dataSubscription: Subscription;
-  labs: Lab[] = [];
-  isLoading = false;
-  totalLabs = 0;
+export class LabListComponent implements AfterViewInit, OnInit  {
   labsPerPage = 15;
   currentPage = 1;
+
+  displayedColumns = ['name', 'email', 'address', 'actions'];
+  dataSource;
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     private readonly labService: LabService,
   ) {}
 
   ngOnInit() {
-    this.isLoading = true;
-    this.labService.getLabs(this.labsPerPage, this.currentPage);
-    this.dataSubscription = this.labService
-      .getLabUpdateListener()
-      .subscribe((labData: { labs: Lab[]; labCount: number }) => {
-        this.isLoading = false;
-        this.totalLabs = labData.labCount;
-        this.labs = labData.labs;
-      });
+    this.dataSource = new LabListDataSource(this.labService);
+    this.dataSource.loadLabs(1, this.labsPerPage);
   }
 
-  ngOnDestroy() {
-    this.dataSubscription.unsubscribe();
+  ngAfterViewInit() {
+    this.paginator.page
+        .pipe(
+            tap(() => this.loadLabsPage())
+        )
+        .subscribe();
+  }
+
+  loadLabsPage() {
+      this.dataSource.loadLabs( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onDelete(labId: string) {
-    this.isLoading = true;
-    this.labService.deleteLab(labId).subscribe(
-      () => {
-        this.labService.getLabs(this.labsPerPage, this.currentPage);
-      },
-      err => {
-        this.labService.getLabs(this.labsPerPage, this.currentPage);
-      }
-    );
-  }
-
-  onChangedPage(event: PageEvent) {
-    this.isLoading = true;
-    this.currentPage = event.pageIndex + 1;
-    this.labsPerPage = event.pageSize;
-    this.labService.getLabs(this.labsPerPage, this.currentPage);
   }
 
 }

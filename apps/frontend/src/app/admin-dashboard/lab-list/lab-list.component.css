@@ -3,11 +3,20 @@
     margin-top: 1rem;
   }
   
-  mat-spinner {
-    margin: auto;
-  }
-  
   mat-paginator {
     margin-top: 1rem;
   }
   
+  table {
+    width: 100%;
+  }
+
+  .spinner-container {
+    height: 360px;
+    width: 390px;
+    position: fixed;
+  }
+
+mat-spinner {
+      margin: auto;
+  }
