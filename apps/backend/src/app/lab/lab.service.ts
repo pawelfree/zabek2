@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Lab } from './lab.interface';
 import { CreateLabDto } from './dto/createlab.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { UpdateLabDto } from './dto/updatelab.dto';
 
 @Injectable()
 export class LabService {
@@ -40,6 +41,10 @@ export class LabService {
           count
         };
       });
+  }
+
+  async update(updateLabDto: UpdateLabDto) {
+    return await this.labModel.updateOne({_id: updateLabDto._id}, updateLabDto);
   }
 
   async delete(_id: string) {

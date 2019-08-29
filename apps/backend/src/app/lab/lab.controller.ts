@@ -1,19 +1,21 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Delete,
     Get,
     Param,
     Post,
+    Put,
     Query,
     UseGuards,
-    BadRequestException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { LabService } from './lab.service';
 import { CreateLabDto } from './dto/createlab.dto';
+import { UpdateLabDto } from './dto/updatelab.dto';
 import { Lab } from './lab.interface';
 
 @Controller('lab')
@@ -41,6 +43,20 @@ export class LabController {
         throw new BadRequestException('Pracownia już istnieje');
       }
       return await this.labService.add(createLabDto);
+    }
+
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles('sadmin')
+    @Put(':id')
+    async updateLab(@Body() updateLabDto: UpdateLabDto, @Param('id') id: string) {
+      if (id !== updateLabDto._id ) {
+        throw new BadRequestException('Błędne dane pracowni i żądania');        
+      }
+      const lab: Lab = await this.labService.findById(id);
+      if (!lab) {
+        throw new BadRequestException('Pracownia nie istnieje');
+      }
+      return await this.labService.update(updateLabDto);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
