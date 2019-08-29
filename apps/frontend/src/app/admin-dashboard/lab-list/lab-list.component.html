@@ -14,11 +14,11 @@
   </ng-container>
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Akcje </th>   
-    <td mat-cell *matCellDef="let element"> 
+    <td mat-cell *matCellDef="let element; let i=index;"> 
       <button mat-icon-button color="primary" title="Edytuj" alt="Edytuj">
         <mat-icon aria-label="Edytuj">edit</mat-icon>
       </button> 
-      <button mat-icon-button color="warn" title="Usuń" alt="Usuń">
+      <button mat-icon-button color="warn" title="Usuń" alt="Usuń" (click)="onDelete(element._id, i)">
         <mat-icon aria-label="Usuń">delete</mat-icon>
       </button>
     </td>
@@ -42,7 +42,19 @@
     color="accent"
     md-fab-bottom-right
     aria-label="Dodaj pracownię"
+    title="Dodaj" alt="Dodaj"
     routerLink="../labcreate">
     <mat-icon>add</mat-icon>
   </button>
 </div>
+<div style="right: 85px; bottom: 5px; position: fixed">
+    <button
+      mat-fab
+      color="primary"
+      md-fab-bottom-right
+      aria-label="Odśwież"
+      title="Odśwież" alt="Odśwież"
+      (click)="loadLabsPage()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>

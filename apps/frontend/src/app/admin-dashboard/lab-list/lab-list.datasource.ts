@@ -10,10 +10,12 @@ export class LabListDataSource extends DataSource<Lab> {
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public dataCount = 0; 
+  public itemsOnPage = 0;
   public loading$ = this.loadingSubject.asObservable();
 
   constructor (
-    private readonly labService: LabService
+    private readonly labService: LabService, 
+    private readonly pageSize
   ) {
     super();
   }
@@ -27,7 +29,7 @@ export class LabListDataSource extends DataSource<Lab> {
     this.loadingSubject.complete();
   }
 
-  loadLabs(pageIndex = 0, pageSize = 3) {
+  loadLabs(pageIndex = 1, pageSize = this.pageSize) {
     this.loadingSubject.next(true);
     this.labsSubject.subscribe();
 
@@ -50,6 +52,7 @@ export class LabListDataSource extends DataSource<Lab> {
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe(({labs, count}) => {
+        this.itemsOnPage = labs.length;
         this.dataCount = count;
         this.labsSubject.next([...labs])
       });

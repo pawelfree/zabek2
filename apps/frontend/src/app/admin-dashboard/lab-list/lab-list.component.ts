@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material';
 import { LabListDataSource } from './lab-list.datasource';
 import { LabService } from '../../_services';
 import { tap } from 'rxjs/operators';
+import { DataSource } from '@angular/cdk/table';
 
 @Component({
   selector: 'zabek-lab-list',
@@ -10,11 +11,11 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./lab-list.component.css']
 })
 export class LabListComponent implements AfterViewInit, OnInit  {
-  labsPerPage = 15;
+  labsPerPage = 2;
   currentPage = 1;
 
   displayedColumns = ['name', 'email', 'address', 'actions'];
-  dataSource;
+  dataSource: LabListDataSource;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -23,8 +24,8 @@ export class LabListComponent implements AfterViewInit, OnInit  {
   ) {}
 
   ngOnInit() {
-    this.dataSource = new LabListDataSource(this.labService);
-    this.dataSource.loadLabs(1, this.labsPerPage);
+    this.dataSource = new LabListDataSource(this.labService, this.labsPerPage);   
+    this.dataSource.loadLabs(this.currentPage, this.labsPerPage);
   }
 
   ngAfterViewInit() {
@@ -36,10 +37,19 @@ export class LabListComponent implements AfterViewInit, OnInit  {
   }
 
   loadLabsPage() {
-      this.dataSource.loadLabs( this.paginator.pageIndex, this.paginator.pageSize);
+      this.dataSource.loadLabs( this.paginator.pageIndex+1, this.paginator.pageSize);
   }
 
-  onDelete(labId: string) {
+  onDelete(id: string) {
+    //TODO obsluga bledow
+    this.labService.deleteLab(id)
+      .subscribe(res => {
+        if (this.dataSource.itemsOnPage === 1 ) {
+          this.paginator.pageIndex = this.paginator.pageIndex -1;
+        }
+        this.loadLabsPage();
+      }
+    );
   }
 
 }
