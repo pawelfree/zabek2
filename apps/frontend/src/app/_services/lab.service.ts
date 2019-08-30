@@ -26,6 +26,7 @@ export class LabService {
   }
 
   addLab(lab : { name: string, address: string, email: string }) {
+    //TODO nawigacja
     this.http.post<{ message: string; post: Lab }>(BACKEND_URL, lab)
       .subscribe(responseData => {
         this.router.navigate(['/admin/lablist']);
@@ -33,6 +34,7 @@ export class LabService {
   }
 
   updateLab(lab : { _id: string, name: string, address: string, email: string }) {
+    //TODO nawigacja
     this.http.put<{ message: string; post: Lab }>(BACKEND_URL+lab._id, lab)
       .subscribe(responseData => {
         this.router.navigate(['/admin/lablist']);

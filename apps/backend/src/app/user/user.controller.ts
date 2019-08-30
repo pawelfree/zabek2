@@ -8,7 +8,8 @@ import {
   BadRequestException,
   Query,
   Delete,
-  Param
+  Param,
+  Put
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
@@ -16,6 +17,7 @@ import { UserService } from './user.service';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { CreateUserDto } from './dto/createuser.dto';
+import { UpdateUserDto } from './dto/updateuser.dto';
 import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
@@ -51,12 +53,14 @@ export class UserController {
   ) {
     return await this.userService.findAll(+pagesize, +page);
   }
-
+  
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin', 'sadmin')
   @Post()
   async addUser(@Body() createUserDto: CreateUserDto) {
     const user: User = await this.userService.findByEmail(createUserDto.email);
     if (user) {
-      throw new BadRequestException('User already registered');
+      throw new BadRequestException('Użytkownik już istnieje');
     }
     const _createUserDto = _.pick(createUserDto, ['email', 'role']);
     const salt = await bcrypt.genSalt(UserController.SALT);
@@ -70,7 +74,36 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('admin', 'sadmin')
   @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
-    console.log('delete user' + id);
+  async deleteUser(@Param('id') id: string, @Request() req) {
+    const user: User =  await this.userService.findById(id);
+    if (user.role === 'sadmin') {
+      throw new BadRequestException('Nie można usunąć super administratora');
+    }
+    if (user.role === 'admin' && req.user.role === 'admin') {
+      throw new BadRequestException('Użytkownik nie może usunąć administratora');
+    }
+    return this.userService.delete(id);
+  }
+
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin', 'sadmin')
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin', 'sadmin')
+  @Put(':id')
+  async updateUser(@Body() updateUserDto: UpdateUserDto, @Param('id') id: string) {
+    if (id !== updateUserDto._id ) {
+      throw new BadRequestException('Błędne dane użytkownika i żądania');        
+    }  
+    const user: User = await this.userService.findById(id);
+    if (!user) {
+      throw new BadRequestException('Użytkownik nie istnieje');
+    }  
+    return await this.userService.update(updateUserDto);
   }
 }

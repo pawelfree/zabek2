@@ -1,26 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { User } from '../_models';
-import { Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 const BACKEND_URL = environment.apiUrl + '/api/user/';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private users: User[] = [];
-  private usersUpdated = new Subject<{ users: User[]; userCount: number }>();
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient, private router: Router) {}
 
   getUsers(usersPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${usersPerPage}&page=${currentPage}`;
     return this.http.get<{ users: any; count: number }>(BACKEND_URL + queryParams);
-  }
-
-  getUserUpdateListener() {
-    return this.usersUpdated.asObservable();
   }
 
   getUser(id: string) {
@@ -30,5 +23,21 @@ export class UserService {
 
   deleteUser(userId: string) {
     return this.http.delete(BACKEND_URL + userId);
+  }
+
+  addUser(user : { role: string, password: string, email: string }) {
+    //TODO nawigacja
+    this.http.post<{ message: string; user: User }>(BACKEND_URL, user)
+      .subscribe(responseData => {
+        this.router.navigate(['/admin/lablist']);
+      });
+  }
+
+  updateUser(user : { _id: string, role: string, password: string, email: string }) {
+    //TODO nawigacja
+    this.http.put<{ message: string; user: User }>(BACKEND_URL+user._id, user)
+      .subscribe(responseData => {
+        this.router.navigate(['/admin/lablist']);
+      });
   }
 }

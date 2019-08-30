@@ -1,3 +1,27 @@
-<p>
-  user-create works!
-</p>
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form [formGroup]="form" (submit)="onSaveUser()" *ngIf="!isLoading">
+    <mat-form-field>
+      <input matInput type="text" formControlName="email" placeholder="Email użytkownika">
+      <mat-error *ngIf="form.get('email').invalid">Wprowadź email użytkownika.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="text" formControlName="role" placeholder="Rola użytkownika">
+        <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" formControlName="password1" placeholder="Hasło użytkownika">
+      <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('minLength')">Hasło musi mieć minimum 8 znaków.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasNumber')">Hasło musi zawierać cyfrę.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasCapitalCase')">Hasło musi zawierać wielką literę.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasSmallCase')">Hasło musi zawierać małą literę.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasSpecialCharacters')">Hasło musi zawierać znak specjalny.</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła użytkownika">
+    <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="accent" type="submit">Zapisz użytkownika</button>
+  </form>
+</mat-card>

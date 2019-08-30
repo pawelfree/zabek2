@@ -37,7 +37,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             data: { message: errorMessage, status: err.statusText }
           });
           this.router.navigate(['/']);
-        } else if (err.status === 404) {
+        } else if ([400, 404].indexOf(err.status) !== -1) {
           this.dialog.open(ErrorComponent, {
             data: { message: err.error.message, status: err.statusText }
           });

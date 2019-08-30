@@ -10,7 +10,7 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit, AfterViewInit {
-  usersPerPage = 2;
+  usersPerPage = 10;
   currentPage = 1;
 
   displayedColumns = [ 'email', 'role', 'actions'];
@@ -40,15 +40,13 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(id: string) {
-    //TODO obsluga bledow
     this.userService.deleteUser(id)
       .subscribe(res => {
         if (this.dataSource.itemsOnPage === 1 ) {
           this.paginator.pageIndex = this.paginator.pageIndex -1;
         }
         this.loadUsersPage();
-      }
-    );
+      });
   }
 
 }
