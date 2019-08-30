@@ -41,7 +41,11 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   @Get('me')
   async findOne(@Request() req) {
-    return await this.userService.findById(req.user._id);
+    const user =  await this.userService.findById(req.user._id);
+    if (!user) {
+      throw new BadRequestException('Użytkownik nie istnieje');
+    }
+    return user;
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)

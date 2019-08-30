@@ -10,7 +10,6 @@ import { CustomValidator } from '../../_validators';
   styleUrls: ['./user-create.component.css']
 })
 export class UserCreateComponent implements OnInit {
-  //TODO haslo ustawia sam uzytkownik
   isLoading = false;
   form: FormGroup;
   private mode = 'create';

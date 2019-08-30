@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../_models';
 import { environment } from '../../environments/environment';
-import { Router } from '@angular/router';
+import { Router, ChildActivationStart } from '@angular/router';
 
 const BACKEND_URL = environment.apiUrl + '/api/user/';
 
@@ -39,5 +39,13 @@ export class UserService {
       .subscribe(responseData => {
         this.router.navigate(['/admin/lablist']);
       });
+  }
+
+  changePassword(authData: { _id: string, oldPassword: string, newPassword: string}) {
+    return this.http.post(BACKEND_URL+'changepassword', authData);
+  }
+
+  me() {
+    return this.http.get<User>(BACKEND_URL+'me');
   }
 }

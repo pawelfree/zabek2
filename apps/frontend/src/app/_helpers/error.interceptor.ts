@@ -33,17 +33,19 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (err.error.message) {
             errorMessage = err.error.message;
           }
-          this.dialog.open(ErrorComponent, {
-            data: { message: errorMessage, status: err.statusText }
-          });
+          this.openErrorDialog(errorMessage, err.statusText);
           this.router.navigate(['/']);
         } else if ([400, 404].indexOf(err.status) !== -1) {
-          this.dialog.open(ErrorComponent, {
-            data: { message: err.error.message, status: err.statusText }
-          });
+          this.openErrorDialog(err.error.message, err.statusText);
         }
         return throwError(error);
       })
     );
+  }
+
+  openErrorDialog(message: string, status: string) { 
+    this.dialog.open(ErrorComponent, {
+      data: { message, status }
+    });
   }
 }

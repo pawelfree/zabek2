@@ -3,6 +3,9 @@ import { User, Role } from '../_models';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { InfoComponent } from '../info/info.component';
 
 @Component({
   selector: 'zabek-header',
@@ -15,7 +18,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -45,4 +49,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout();
     this.router.navigate(['login']);
   }
-}
+
+  openChangePasswordDialog() {
+    this.dialog.open(ChangePasswordComponent, {
+       disableClose: true
+    });
+  }
+} 

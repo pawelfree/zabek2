@@ -10,6 +10,8 @@ import { HeaderComponent } from './header/header.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent } from './error/error.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
   declarations: [ 
@@ -17,7 +19,8 @@ import { ErrorComponent } from './error/error.component';
     HeaderComponent,
     LoginComponent,
     ErrorComponent,
-
+    ChangePasswordComponent,
+    InfoComponent
   ],
   imports: [ 
     BrowserModule, 
@@ -34,7 +37,9 @@ import { ErrorComponent } from './error/error.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    ErrorComponent
+    ErrorComponent,
+    ChangePasswordComponent,
+    InfoComponent
   ]
 })
 export class AppModule {}
