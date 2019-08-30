@@ -17,8 +17,17 @@
     <li *ngIf="isAdmin">
       <a mat-button routerLink="/admin/reports" routerLinkActive="mat-accent">Raporty</a>
     </li>
-    <li>
-      <a mat-button (click)="logout()" *ngIf="currentUser">Logout ({{ currentUser.email }})</a>
+    <li *ngIf="currentUser">
+      <a mat-button (click)="logout()" >Logout ({{ currentUser.email }})</a>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>Zmień hasło</span>
+        </button>
+      </mat-menu>      
     </li>
   </ul>
 </mat-toolbar>

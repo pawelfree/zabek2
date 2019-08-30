@@ -9,15 +9,15 @@ import {
   Query,
   Delete,
   Param,
-  Put
+  Put,
+  InternalServerErrorException
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from './user.service';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { CreateUserDto } from './dto/createuser.dto';
-import { UpdateUserDto } from './dto/updateuser.dto';
+import { CreateUserDto, UpdateUserDto, ChangePasswordDto } from './dto';
 import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
@@ -105,5 +105,40 @@ export class UserController {
       throw new BadRequestException('Użytkownik nie istnieje');
     }  
     return await this.userService.update(updateUserDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin', 'sadmin', 'user', 'doctor')
+  @Post('changepassword')
+  async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Request() req){
+    if (!changePasswordDto.newPassword || ! changePasswordDto.oldPassword) {
+      throw new BadRequestException('Brak danych wejściowych');
+    }
+    let error = null;
+    await this.authService.validateUser(req.user.email, changePasswordDto.oldPassword)
+      .then(async ({ user , message}) => {
+        if (!user) {
+          error = new BadRequestException(message);
+        } else {
+          const salt = await bcrypt.genSalt(UserController.SALT);
+          const updateUserDto: UpdateUserDto = {
+            _id: user._id,
+            password: await bcrypt.hash(changePasswordDto.newPassword, salt),
+            email: user.email,
+            role: user.role
+          };
+          const {n, nModified, ok} = await this.userService.update(updateUserDto);
+          if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
+            error = new InternalServerErrorException('Nieznany błąd');
+          } 
+        }
+      })
+      .catch(err => {
+        error = new BadRequestException(err);
+      });
+
+      if (error) {
+        throw error;
+      }
   }
 }
