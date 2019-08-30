@@ -1,58 +1,54 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from '../../_models';
-import { Subscription } from 'rxjs';
-import { PageEvent } from '@angular/material';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material';
+import { UserListDataSource } from './user-list.datasource';
 import { UserService } from '../../_services';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit, OnDestroy {
-  dataSubscription: Subscription;
-  users: User[] = [];
-  isLoading = false;
-  totalUsers = 0;
-  usersPerPage = 15;
+export class UserListComponent implements OnInit, AfterViewInit {
+  usersPerPage = 2;
   currentPage = 1;
 
+  displayedColumns = [ 'email', 'role', 'actions'];
+  dataSource: UserListDataSource;
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   ngOnInit() {
-    this.isLoading = true;
-    this.userService.getUsers(this.usersPerPage, this.currentPage);
-    this.dataSubscription = this.userService
-      .getUserUpdateListener()
-      .subscribe((userData: { users: User[]; userCount: number }) => {
-        this.isLoading = false;
-        this.totalUsers = userData.userCount;
-        this.users = userData.users;
-      });
+    this.dataSource = new UserListDataSource(this.userService, this.usersPerPage);   
+    this.dataSource.loadUsers(this.currentPage, this.usersPerPage);
   }
 
-  ngOnDestroy() {
-    this.dataSubscription.unsubscribe();
+  ngAfterViewInit() {
+    this.paginator.page
+        .pipe(
+            tap(() => this.loadUsersPage())
+        )
+        .subscribe();
   }
 
-  onDelete(userId: string) {
-    this.isLoading = true;
-    this.userService.deleteUser(userId).subscribe(
-      () => {
-        this.userService.getUsers(this.usersPerPage, this.currentPage);
-      },
-      err => {
-        this.userService.getUsers(this.usersPerPage, this.currentPage);
+  loadUsersPage() {
+      this.dataSource.loadUsers( this.paginator.pageIndex+1, this.paginator.pageSize);
+  }
+
+  onDelete(id: string) {
+    //TODO obsluga bledow
+    this.userService.deleteUser(id)
+      .subscribe(res => {
+        if (this.dataSource.itemsOnPage === 1 ) {
+          this.paginator.pageIndex = this.paginator.pageIndex -1;
+        }
+        this.loadUsersPage();
       }
     );
   }
 
-  onChangedPage(event: PageEvent) {
-    this.isLoading = true;
-    this.currentPage = event.pageIndex + 1;
-    this.usersPerPage = event.pageSize;
-    this.userService.getUsers(this.usersPerPage, this.currentPage);
-  }
 }

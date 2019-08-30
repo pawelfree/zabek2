@@ -16,35 +16,7 @@ export class UserService {
 
   getUsers(usersPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${usersPerPage}&page=${currentPage}`;
-    this.http
-      .get<{ users: any; count: number }>(BACKEND_URL + queryParams)
-      .pipe(
-        map(usersData => {
-          return {
-            users: usersData.users.map(user => {
-              return {
-                email: user.email,
-                role: user.role,
-                id: user._id
-              };
-            }),
-            count: usersData.count
-          };
-        })
-      )
-      .subscribe(
-        transformedUsersData => {
-          this.users = transformedUsersData.users;
-          this.usersUpdated.next({
-            users: [...this.users],
-            userCount: transformedUsersData.count
-          });
-        },
-        err => {
-          this.users = [];
-          this.usersUpdated.next({ users: [], userCount: 0 });
-        }
-      );
+    return this.http.get<{ users: any; count: number }>(BACKEND_URL + queryParams);
   }
 
   getUserUpdateListener() {

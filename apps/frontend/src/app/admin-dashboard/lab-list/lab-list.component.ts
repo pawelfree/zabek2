@@ -3,7 +3,6 @@ import { MatPaginator } from '@angular/material';
 import { LabListDataSource } from './lab-list.datasource';
 import { LabService } from '../../_services';
 import { tap } from 'rxjs/operators';
-import { DataSource } from '@angular/cdk/table';
 
 @Component({
   selector: 'zabek-lab-list',
