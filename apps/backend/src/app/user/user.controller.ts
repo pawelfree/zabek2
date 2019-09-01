@@ -66,12 +66,13 @@ export class UserController {
     if (user) {
       throw new BadRequestException('Użytkownik już istnieje');
     }
-    const _createUserDto = _.pick(createUserDto, ['email', 'role']);
+    const _createUserDto = _.pick(createUserDto, ['email', 'role', 'lab']);
     const salt = await bcrypt.genSalt(UserController.SALT);
     _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
     return _.pick(await this.userService.add(_createUserDto), [
       'email',
-      'role'
+      'role',
+      'lab'
     ]);
   }
 
@@ -116,7 +117,8 @@ export class UserController {
             _id: id,
             password: await bcrypt.hash(updateUserDto.password, salt),
             email: updateUserDto.email,
-            role: updateUserDto.role
+            role: updateUserDto.role,
+            lab: updateUserDto.lab
           };
           const {n, nModified, ok} = await this.userService.update(_updateUserDto);
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
@@ -150,7 +152,8 @@ export class UserController {
             _id: user._id,
             password: await bcrypt.hash(changePasswordDto.newPassword, salt),
             email: user.email,
-            role: user.role
+            role: user.role,
+            lab: user.lab
           };
           const {n, nModified, ok} = await this.userService.update(updateUserDto);
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {

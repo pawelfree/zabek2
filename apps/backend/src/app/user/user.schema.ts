@@ -14,5 +14,6 @@ export const UserSchema = new mongoose.Schema({
     minlength: 8,
     maxLength: 300
   },
-  role: String
+  role: String,
+  lab: String
 });

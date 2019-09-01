@@ -16,19 +16,18 @@ export class UserService {
   }
 
   getUser(id: string) {
-    //TODO any
-    return this.http.get<any>(BACKEND_URL + id);
+    return this.http.get<User>(BACKEND_URL + id);
   }
 
   deleteUser(userId: string) {
     return this.http.delete(BACKEND_URL + userId);
   }
 
-  addUser(user : { role: string, password: string, email: string }) {
+  addUser(user :  User) {
     return this.http.post(BACKEND_URL, user);
   }
 
-  updateUser(user : { _id: string, role: string, password: string, email: string }) {
+  updateUser(user : User) { 
     return this.http.put(BACKEND_URL+user._id, user);
   }
 

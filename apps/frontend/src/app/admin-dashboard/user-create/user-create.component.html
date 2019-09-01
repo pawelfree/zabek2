@@ -15,6 +15,11 @@
       <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>
     </mat-form-field>
     <mat-form-field>
+      <input matInput type="text" formControlName="lab" placeholder="Pracownia użytkownika" 
+            readonly (click)="onSelectLab()">
+      <mat-error *ngIf="form.get('lab').invalid">Wprowadź pracownię użytkownika.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
       <input matInput type="password" formControlName="password1" placeholder="Hasło użytkownika">
       <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>
       <mat-error *ngIf="form.get('password1').hasError('minLength')">Hasło musi mieć minimum 8 znaków.</mat-error>

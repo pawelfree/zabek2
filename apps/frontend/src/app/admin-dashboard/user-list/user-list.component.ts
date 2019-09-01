@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
-import { UserListDataSource } from './user-list.datasource';
+import { UserListDataSource } from '../_datasource/user-list.datasource';
 import { UserService } from '../../_services';
 import { tap } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   usersPerPage = 10;
   currentPage = 1;
 
-  displayedColumns = [ 'email', 'role', 'actions'];
+  displayedColumns = [ 'email', 'role', 'lab', 'actions'];
   dataSource: UserListDataSource;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

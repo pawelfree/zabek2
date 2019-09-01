@@ -41,6 +41,7 @@ export class UserListDataSource extends DataSource<User> {
               return {
                 role: user.role,
                 email: user.email,
+                lab: user.lab,
                 _id: user._id
               };
             }),
