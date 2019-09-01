@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator } from '../_validators';
-import { UserService } from '../_services';
+import { CustomValidator } from '../../_validators';
+import { UserService } from '../../_services';
 import { InfoComponent } from '../info/info.component';
 
 @Component({

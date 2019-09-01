@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import { ChangePasswordComponent } from '../change-password/change-password.component';
-import { InfoComponent } from '../info/info.component';
+import { ChangePasswordComponent } from '../common-dialogs';
 
 @Component({
   selector: 'zabek-header',

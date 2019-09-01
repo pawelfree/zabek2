@@ -9,9 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
-import { ErrorComponent } from './error/error.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-import { InfoComponent } from './info/info.component';
+import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common-dialogs';
 
 @NgModule({
   declarations: [ 
