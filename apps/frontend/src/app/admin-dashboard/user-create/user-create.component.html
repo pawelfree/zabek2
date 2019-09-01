@@ -6,8 +6,13 @@
       <mat-error *ngIf="form.get('email').invalid">Wprowadź email użytkownika.</mat-error>
     </mat-form-field>
     <mat-form-field>
-        <input matInput type="text" formControlName="role" placeholder="Rola użytkownika">
-        <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>
+      <mat-label>Rola użytkownika</mat-label>
+      <mat-select formControlName="role">
+        <mat-option  *ngFor="let role of roles" [value]="role">
+          {{ role }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput type="password" formControlName="password1" placeholder="Hasło użytkownika">
@@ -22,6 +27,6 @@
     <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła użytkownika">
     <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
   </mat-form-field>
-  <button mat-raised-button color="accent" type="submit">Zapisz użytkownika</button>
+  <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz użytkownika</button>
   </form>
 </mat-card>

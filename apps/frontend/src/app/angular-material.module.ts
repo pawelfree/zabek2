@@ -10,6 +10,7 @@ import {
   MatListModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
   MatSortModule,
   MatTableModule,
   MatToolbarModule,
@@ -29,6 +30,7 @@ import {
     MatMenuModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     MatSortModule,
     MatTableModule,
     MatToolbarModule

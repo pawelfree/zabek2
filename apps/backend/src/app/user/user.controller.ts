@@ -104,11 +104,32 @@ export class UserController {
     if (id !== updateUserDto._id ) {
       throw new BadRequestException('Błędne dane użytkownika i żądania');        
     }  
-    const user: User = await this.userService.findById(id);
-    if (!user) {
-      throw new BadRequestException('Użytkownik nie istnieje');
-    }  
-    return await this.userService.update(updateUserDto);
+
+    let error;
+    await this.userService.findById(id)
+      .then(async user => {
+        if (!user) {
+          error = new BadRequestException('Użytkownik nie istnieje');
+        }  else {
+          const salt = await bcrypt.genSalt(UserController.SALT);
+          const _updateUserDto: UpdateUserDto = {
+            _id: id,
+            password: await bcrypt.hash(updateUserDto.password, salt),
+            email: updateUserDto.email,
+            role: updateUserDto.role
+          };
+          const {n, nModified, ok} = await this.userService.update(_updateUserDto);
+          if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
+            error = new InternalServerErrorException('Nieznany błąd');
+          }        
+        }
+      })
+     .catch(err => {
+        error = new BadRequestException(err);
+      });
+    if (error) {
+      throw error;
+    }
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)

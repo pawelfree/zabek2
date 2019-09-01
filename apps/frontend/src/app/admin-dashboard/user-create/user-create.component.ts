@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { UserService } from '../../_services';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CustomValidator } from '../../_validators';
+import { Role } from '../../_models';
 
 @Component({
   selector: 'zabek-user-create',
@@ -14,10 +15,12 @@ export class UserCreateComponent implements OnInit {
   form: FormGroup;
   private mode = 'create';
   private _id: string;
+  roles = [Role.admin, Role.user, Role.doctor];
 
   constructor(
-    public userService: UserService,
-    public route: ActivatedRoute
+    private readonly userService: UserService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {}
 
   ngOnInit() {
@@ -72,20 +75,22 @@ export class UserCreateComponent implements OnInit {
       return;
     }
     this.isLoading = true;
+    const user = {
+      _id: this._id ? this._id : "",
+      email: this.form.value.email,
+      role: this.form.value.role,
+      password: this.form.value.password1 };
+
     if (this.mode === "create") {
-      this.userService.addUser( {
-        email: this.form.value.email,
-        role: this.form.value.role,
-        password: this.form.value.password1 }
-      );
+      this.userService.addUser(user).subscribe(res => this.goOut());
     } else {
-      this.userService.updateUser({
-        _id: this._id,
-        email: this.form.value.email,
-        role: this.form.value.role,
-        password: this.form.value.password1}
-      );
+      this.userService.updateUser(user).subscribe(res => this.goOut());
     }
+    this.isLoading = false;
     this.form.reset();
+  }
+
+  private goOut() {
+    this.router.navigate(['/userlist']);
   }
 }
