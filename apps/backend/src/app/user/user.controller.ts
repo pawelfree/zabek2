@@ -21,6 +21,7 @@ import { CreateUserDto, UpdateUserDto, ChangePasswordDto } from './dto';
 import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
+import { UpdateUserInternalDto } from './dto/updateuser.internal.dto';
 
 @Controller('user')
 export class UserController {
@@ -66,9 +67,13 @@ export class UserController {
     if (user) {
       throw new BadRequestException('Użytkownik już istnieje');
     }
-    const _createUserDto = _.pick(createUserDto, ['email', 'role', 'lab']);
     const salt = await bcrypt.genSalt(UserController.SALT);
-    _createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
+    const _createUserDto = {
+      email: createUserDto.email,
+      role: createUserDto.role,
+      lab: createUserDto.lab._id,
+      password: await bcrypt.hash(createUserDto.password, salt)
+    } 
     return _.pick(await this.userService.add(_createUserDto), [
       'email',
       'role',
@@ -113,14 +118,14 @@ export class UserController {
           error = new BadRequestException('Użytkownik nie istnieje');
         }  else {
           const salt = await bcrypt.genSalt(UserController.SALT);
-          const _updateUserDto: UpdateUserDto = {
+          const _updateUserInternalDto: UpdateUserInternalDto = {
             _id: id,
             password: await bcrypt.hash(updateUserDto.password, salt),
             email: updateUserDto.email,
             role: updateUserDto.role,
-            lab: updateUserDto.lab
+            lab: updateUserDto.lab._id
           };
-          const {n, nModified, ok} = await this.userService.update(_updateUserDto);
+          const {n, nModified, ok} = await this.userService.update(_updateUserInternalDto);
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
             error = new InternalServerErrorException('Nieznany błąd');
           }        
@@ -148,14 +153,14 @@ export class UserController {
           error = new BadRequestException(message);
         } else {
           const salt = await bcrypt.genSalt(UserController.SALT);
-          const updateUserDto: UpdateUserDto = {
+          const updateUserInternalDto: UpdateUserInternalDto = {
             _id: user._id,
             password: await bcrypt.hash(changePasswordDto.newPassword, salt),
             email: user.email,
             role: user.role,
             lab: user.lab
           };
-          const {n, nModified, ok} = await this.userService.update(updateUserDto);
+          const {n, nModified, ok} = await this.userService.update(updateUserInternalDto);
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
             error = new InternalServerErrorException('Nieznany błąd');
           } 

@@ -15,5 +15,8 @@ export const UserSchema = new mongoose.Schema({
     maxLength: 300
   },
   role: String,
-  lab: String
+  lab: {
+    type: mongoose.Schema.Types.ObjectId , 
+    ref: 'Lab'
+  }
 });

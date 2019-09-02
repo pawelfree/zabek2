@@ -1,24 +1,23 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
-import { CreateUserDto } from './dto/createuser.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateUserDto } from './dto/updateuser.dto';
+import { UpdateUserInternalDto, CreateUserInternalDto } from './dto';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async findById(id: string): Promise<User> {
-    return await this.userModel.findById(id).select('-password -__v');
+    return await this.userModel.findById(id).populate('lab').select('-password -__v');
   }
 
   async findByEmail(email: string): Promise<User> {
     return await this.userModel.findOne({ email });
   }
 
-  async add(createDto: CreateUserDto): Promise<User> {
-    return await new this.userModel(createDto).save();
+  async add(createUserInternalDto: CreateUserInternalDto): Promise<User> {
+    return await new this.userModel(createUserInternalDto).save();
   }
 
   async findAll(
@@ -26,7 +25,7 @@ export class UserService {
     currentPage: number
   ): Promise<{ users: User[]; count: number }> {
     let users;
-    const findallQuery = this.userModel.find();
+    const findallQuery = this.userModel.find().populate('lab', 'name');
     if (pageSize && currentPage) {
       findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
     }
@@ -47,7 +46,7 @@ export class UserService {
     return await this.userModel.deleteOne({ _id });
   }
 
-  async update(updateUserDto: UpdateUserDto) {
+  async update(updateUserDto: UpdateUserInternalDto) {
     return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
   }
 }

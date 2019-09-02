@@ -1,9 +1,7 @@
-import { Lab } from '../../lab/lab.interface';
-
-export class UpdateUserDto {
+export class UpdateUserInternalDto {
   readonly _id: string;
   readonly email: string; 
   readonly password: string;
   readonly role: string;
-  readonly lab: Lab;
+  readonly lab: string;
 }
