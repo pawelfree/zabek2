@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { User, Role } from '../_models';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../_services';
@@ -14,7 +14,8 @@ import { ChangePasswordComponent } from '../common-dialogs';
 export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User;
   subscription: Subscription;
-
+  @Output() public sidenavToggle = new EventEmitter();
+  
   constructor(
     private router: Router,
     private authService: AuthenticationService,
@@ -53,5 +54,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dialog.open(ChangePasswordComponent, {
        disableClose: true
     });
+  }
+
+  onToogleSideNav() {
+    this.sidenavToggle.emit();
   }
 } 

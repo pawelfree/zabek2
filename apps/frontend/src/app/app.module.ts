@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
+import { SideNavComponent } from './side-nav/side-nav.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common-dialogs';
@@ -15,6 +17,7 @@ import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common
   declarations: [ 
     AppComponent, 
     HeaderComponent,
+    SideNavComponent,
     LoginComponent,
     ErrorComponent,
     ChangePasswordComponent,
@@ -27,7 +30,8 @@ import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    FlexLayoutModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
