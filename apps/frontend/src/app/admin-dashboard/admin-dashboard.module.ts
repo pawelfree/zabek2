@@ -15,7 +15,6 @@ import { SelectLabComponent } from './select-lab/select-lab.component';
     CommonModule, 
     AngularMaterialModule, 
     AdminDashboardRoutingModule,
-    FormsModule,
     ReactiveFormsModule
   ],
   declarations: [
