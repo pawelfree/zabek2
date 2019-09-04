@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Lab } from '../_models';
 import { Observable } from 'rxjs';
@@ -13,8 +13,11 @@ export class LabService {
   constructor(private readonly http: HttpClient, private router: Router) {}
 
   getLabs(labsPerPage: number, currentPage: number): Observable<{labs: Lab[], count: number}> {
-    const queryParams = `?pagesize=${labsPerPage}&page=${currentPage}`;
-    return this.http.get<{labs: Lab[], count: number}>(BACKEND_URL + queryParams);
+    let params = new HttpParams();
+    params = params.append('pagesize', ""+labsPerPage);
+    params = params.append('page', ""+currentPage);
+
+    return this.http.get<{labs: Lab[], count: number}>(BACKEND_URL,{ params });
   }
 
   getLab(id: string): Observable<Lab> {
