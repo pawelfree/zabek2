@@ -1,0 +1,30 @@
+<mat-nav-list>
+  <a *ngIf="isSAdmin" 
+    mat-list-item 
+    routerLink="/admin/lablist"
+    routerLinkActive="mat-accent"
+    (click)="onSidenavClose()">Pracownie</a>
+  <a *ngIf="isSAdmin" 
+    mat-list-item 
+    routerLink="/admin/labcreate" 
+    routerLinkActive="mat-accent"
+    (click)="onSidenavClose()">Nowa pracownia</a>
+  <a *ngIf="isAdmin" 
+    mat-list-item 
+    routerLink="/admin/userlist" 
+    routerLinkActive="mat-accent"
+    (click)="onSidenavClose()">Użytkownicy</a>
+  <a *ngIf="isAdmin" 
+    mat-list-item 
+    routerLink="/admin/usercreate" 
+    routerLinkActive="mat-accent"
+    (click)="onSidenavClose()">Nowy użytkownik</a>
+  <a *ngIf="isAdmin" 
+    mat-list-item 
+    routerLink="/admin/reports" 
+    routerLinkActive="mat-active"
+    (click)="onSidenavClose()">Raporty</a>
+</mat-nav-list>
+
+
+

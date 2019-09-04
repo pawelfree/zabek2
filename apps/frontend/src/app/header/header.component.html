@@ -1,33 +1,43 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/">Ząbek 2</a></span>
-  <span class="spacer"></span>
-  <ul>
-    <li *ngIf="isSAdmin">
-      <a mat-button routerLink="/admin/lablist" routerLinkActive="mat-accent">Pracownie</a>
-    </li>
-    <li *ngIf="isSAdmin">
-      <a mat-button routerLink="/admin/labcreate" routerLinkActive="mat-accent">Nowa pracownia</a>
-    </li>
-    <li *ngIf="isAdmin">
-      <a mat-button routerLink="/admin/userlist" routerLinkActive="mat-accent">Użytkownicy</a>
-    </li>
-    <li *ngIf="isAdmin">
-      <a mat-button routerLink="/admin/usercreate" routerLinkActive="mat-accent">Nowy użytkownik</a>
-    </li>
-    <li *ngIf="isAdmin">
-      <a mat-button routerLink="/admin/reports" routerLinkActive="mat-accent">Raporty</a>
-    </li>
-    <li *ngIf="currentUser">
-      <a mat-button (click)="logout()" >Logout ({{ currentUser.email }})</a>
-      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
-        <mat-icon>more_vert</mat-icon>
+  <div fxHide.gt-sm *ngIf="isSAdmin || isAdmin">
+      <button mat-icon-button (click)="onToogleSideNav()">
+          <mat-icon>menu</mat-icon>
       </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openChangePasswordDialog()">
-          <mat-icon>person</mat-icon>
-          <span>Zmień hasło</span>
+  </div>
+  <span><a routerLink="/">Ząbek 2</a></span>
+  <div fxFlex fxLayout fxLayoutAlign="end">
+    <div fxHide.lt-md>
+      <ul fxLayout fxLayoutGap="5px">
+        <li *ngIf="isSAdmin">
+          <a mat-button routerLink="/admin/lablist" routerLinkActive="mat-accent">Pracownie</a>
+        </li>
+        <li *ngIf="isSAdmin">
+          <a mat-button routerLink="/admin/labcreate" routerLinkActive="mat-accent">Nowa pracownia</a>
+        </li>
+        <li *ngIf="isAdmin">
+          <a mat-button routerLink="/admin/userlist" routerLinkActive="mat-accent">Użytkownicy</a>
+        </li>
+        <li *ngIf="isAdmin">
+          <a mat-button routerLink="/admin/usercreate" routerLinkActive="mat-accent">Nowy użytkownik</a>
+        </li>
+        <li *ngIf="isAdmin">
+          <a mat-button routerLink="/admin/reports" routerLinkActive="mat-accent">Raporty</a>
+        </li>
+      </ul>
+    </div>
+    <ul>
+      <li *ngIf="currentUser">
+        <a mat-button (click)="logout()" >Logout ({{ currentUser.email }})</a>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
+          <mat-icon>more_vert</mat-icon>
         </button>
-      </mat-menu>      
-    </li>
-  </ul>
+      </li>
+    </ul>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="openChangePasswordDialog()">
+        <mat-icon>person</mat-icon>
+        <span>Zmień hasło</span>
+      </button>
+    </mat-menu>  
+  </div>
 </mat-toolbar>

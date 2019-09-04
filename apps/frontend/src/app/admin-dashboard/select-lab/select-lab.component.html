@@ -24,8 +24,11 @@
       [pageSize]="labsPerPage"
     ></mat-paginator>
   </div>
-  <p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && !(dataSource.loading$ | async)">
-    Jeszcze nie ma zdefiniowanych pracowni!
-  </p>
+  <div *ngIf="dataSource.dataCount <= 0 && !(dataSource.loading$ | async)">
+    <p class="info-text mat-body-1">
+      Jeszcze nie ma zdefiniowanych pracowni!
+    </p>
+    <button mat-button mat-dialog-close color="primary" cdkFocusInitial>Zamknij</button>
+  </div>
   <mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>
 </mat-card-content>
