@@ -16,8 +16,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
   constructor(private readonly authService: AuthenticationService) { }
  
   ngOnInit() {
-    this.currentUser = this.authService.currentUserValue;
-    this.subscription = this.authService.currentUser.subscribe(user => {
+    this.subscription = this.authService.user.subscribe(user => {
       this.currentUser = user;
     });
   }

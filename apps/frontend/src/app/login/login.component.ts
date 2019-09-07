@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { first } from 'rxjs/operators';
+import { first, take, map } from 'rxjs/operators';
 
 import { AuthenticationService } from '../_services';
 import { User, Role } from '../_models';
@@ -21,15 +21,21 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authService: AuthenticationService
   ) {
-    if (this.authenticationService.currentUserValue) {
-      let role = this.authenticationService.currentUserValue.role;
-      if (role === Role.sadmin) {
-        role = Role.admin;
-      }
-      this.router.navigate([`/${role}`]);
-    }
+
+    this.authService.user.pipe(
+      take(1),
+      map(user => {
+        if (user) {
+          let role = user.role;
+          if (role === Role.sadmin) {
+            role = Role.admin;
+          }
+          this.router.navigate([`/${role}`]);
+        }
+      })
+    );
   }
 
   ngOnInit() {
@@ -52,7 +58,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authenticationService
+    this.authService
       .login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe(
