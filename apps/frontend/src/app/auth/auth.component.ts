@@ -6,13 +6,15 @@ import { first, map } from 'rxjs/operators';
 
 import { AuthenticationService } from '../_services';
 import { User, Role } from '../_models';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.reducer';
 
 @Component({
-  selector: 'zabek-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'zabek-auth',
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
-export class LoginComponent implements OnInit {
+export class AuthComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   returnUrl: string;
@@ -21,12 +23,13 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    private readonly store: Store<AppState>  ) {}
 
   ngOnInit() {
-    this.authService.user.pipe(
+    this.store.select('auth').pipe(
       first(),
+      map(authState => authState.user),
       map(user => {
         if (user) {
           let role = user.role;

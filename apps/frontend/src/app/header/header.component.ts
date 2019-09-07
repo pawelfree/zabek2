@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { User, Role } from '../_models';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../_services';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { ChangePasswordComponent } from '../common-dialogs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.reducer';
+import { map } from 'rxjs/operators';
+import { AuthenticationService } from '../_services';
 
 @Component({
   selector: 'zabek-header',
@@ -18,12 +21,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   constructor(
     private router: Router,
-    private authService: AuthenticationService,
+    private readonly store: Store<AppState>,
+    private readonly authService: AuthenticationService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.subscription = this.authService.user.subscribe(user => {
+    this.subscription = this.store.select('auth').pipe(
+      map(authState => authState.user)
+    ).subscribe(user => {
       this.currentUser = user;
     });
   }

@@ -1,7 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { AuthenticationService } from '../_services';
 import { User, Role } from '../_models';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.reducer';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-side-nav',
@@ -13,10 +15,12 @@ export class SideNavComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   @Output() sidenavClose = new EventEmitter();
  
-  constructor(private readonly authService: AuthenticationService) { }
+  constructor(private readonly store: Store<AppState>) { }
  
   ngOnInit() {
-    this.subscription = this.authService.user.subscribe(user => {
+    this.subscription = this.store.select('auth').pipe(
+      map(authState => authState.user )
+    ).subscribe(user => {
       this.currentUser = user;
     });
   }
