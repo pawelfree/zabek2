@@ -1,51 +1,66 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { User } from '../_models';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService implements OnInit {
+export class AuthenticationService {
   user = new BehaviorSubject<User>(null);
-  private tokenTimer: any;
+  private tokenExpirationTimer: any;
 
   constructor(
     private readonly http: HttpClient,
     private readonly router: Router
   ) {}
 
-  ngOnInit(){
-    this.user.next(JSON.parse(localStorage.getItem('currentUser')))
+  autoLogout(expirationDuration) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();  
+    }, expirationDuration); 
+  }
+
+  autoLogin() {
+    const user_from_localstorage = JSON.parse(localStorage.getItem('currentUser'));
+    if (user_from_localstorage.token && user_from_localstorage.tokenExpirationDate) {
+      this.user.next(user_from_localstorage);
+      const expirationDuration =
+        new Date(user_from_localstorage.tokenExpirationDate).getTime() -
+        new Date().getTime();
+      this.autoLogout(expirationDuration);      
+    }
   }
 
   login(email: string, password: string) {
     return this.http
       .post<User>('/api/user/authenticate', { email, password })
       .pipe(
-        map(user => {
+        tap(user => {
           if (user) {
             if (user.token) {
-              //const expiresInDuration = user.expiresIn;
-              //TODO change
-              const expiresInDuration = 900;
-              this.tokenTimer = setTimeout(() => {
-                this.logout();
-              }, expiresInDuration * 1000);
-              localStorage.setItem('currentUser', JSON.stringify(user));
-              this.user.next(user);
+              const expirationDate = new Date(new Date().getTime() + user.expiresIn * 1000);
+              this.autoLogout(user.expiresIn * 1000);
+              const newUser: User = {
+                ...user,
+                tokenExpirationDate: expirationDate
+              }
+              localStorage.setItem('currentUser', JSON.stringify(newUser));
+              this.user.next(newUser);
             }
           }
-          return user;
         })
       );
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    clearTimeout(this.tokenTimer);
     this.user.next(null);
     this.router.navigate(['/']);
+    localStorage.removeItem('currentUser');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
   }
 }

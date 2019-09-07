@@ -7,5 +7,6 @@ export class User {
   lab: Lab;
   password?: string;
   tokenExpirationDate?: Date
+  expiresIn?: number; 
   token?: string;
 }
