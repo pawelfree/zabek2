@@ -24,7 +24,7 @@ export class AuthenticationService {
 
   autoLogin() {
     const user_from_localstorage = JSON.parse(localStorage.getItem('currentUser'));
-    if (user_from_localstorage.token && user_from_localstorage.tokenExpirationDate) {
+    if (user_from_localstorage && user_from_localstorage.token && user_from_localstorage.tokenExpirationDate) {
       this.user.next(user_from_localstorage);
       const expirationDuration =
         new Date(user_from_localstorage.tokenExpirationDate).getTime() -
