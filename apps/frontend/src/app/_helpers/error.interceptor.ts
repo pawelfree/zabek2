@@ -11,13 +11,17 @@ import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { ErrorComponent } from '../common-dialogs';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(
     private readonly authService: AuthenticationService,
     private readonly dialog: MatDialog,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly store: Store<AppState>
   ) {}
 
   intercept(
@@ -28,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(err => {
         const error = err.error.message || err.statusText;
         if ([401, 403, 500].indexOf(err.status) !== -1) {
-          this.authService.logout();
+          this.store.dispatch(new AuthActions.Logout());
           let errorMessage = 'Wystąpił nieznany błąd';
           if (err.error.message) {
             errorMessage = err.error.message;

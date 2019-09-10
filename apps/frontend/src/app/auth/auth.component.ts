@@ -1,36 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { first, map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
-import { AuthenticationService } from '../_services';
-import { User, Role } from '../_models';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
+import { Role } from '../_models';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'zabek-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   loading = false;
+  authError  = '';
   returnUrl: string;
+  private storeSub: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthenticationService,
     private readonly store: Store<AppState>  ) {}
 
   ngOnInit() {
-    this.store.select('auth').pipe(
-      first(),
-      map(authState => authState.user),
-      map(user => {
+    this.storeSub = this.store.select('auth')
+    .pipe(
+      //TODO to chyba bedzie zbedne
+      tap(authData => {
+        const user = authData.user
         if (user) {
           let role = user.role;
           if (role === Role.sadmin) {
@@ -39,15 +42,23 @@ export class AuthComponent implements OnInit {
           this.router.navigate([`/${role}`]);
         }
       })
-    ).subscribe();
+    )
+    .subscribe(authData => {
+      this.loading = authData.isLoading;
+      this.authError = authData.authError;
+    });
 
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
 
-    // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  ngOnDestroy(){
+    if (this.storeSub)
+      this.storeSub.unsubscribe();
   }
 
   get f() {
@@ -59,21 +70,9 @@ export class AuthComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-    this.authService
-      .login(this.f.username.value, this.f.password.value)
-      .pipe(first())
-      .subscribe(
-        (data: User) => {
-          let role = data.role;
-          if (role === Role.sadmin) {
-            role = Role.admin;
-          }
-          this.router.navigate([role]);
-        },
-        err => {
-          this.loading = false;
-        }
-      );
+    this.store.dispatch( new AuthActions.LoginStart({
+      email: this.f.username.value,
+      password: this.f.password.value
+    }));
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from './_services';
+import { Store } from '@ngrx/store';
+import { AppState } from './store/app.reducer';
+import * as AuthActions from './auth/store/auth.actions';
 
 @Component({
   selector: 'zabek-root',
@@ -8,9 +10,9 @@ import { AuthenticationService } from './_services';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private readonly authService: AuthenticationService) {}
+  constructor(private readonly store: Store<AppState>) {}
 
   ngOnInit() {
-    this.authService.autoLogin();
+    this.store.dispatch(new AuthActions.AutoLogin());
   }
 }

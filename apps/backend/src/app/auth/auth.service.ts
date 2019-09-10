@@ -29,7 +29,7 @@ export class AuthService {
   async login(user: User) {
     const payload = { email: user.email, _id: user._id, role: user.role};
     return { 
-      id: user._id,
+      _id: user._id,
       email: user.email,
       role: user.role,
       expiresIn: this.configService.get('loginExpiresIn'),

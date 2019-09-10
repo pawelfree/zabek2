@@ -13,7 +13,9 @@ import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common-dialogs';
 import { StoreModule } from '@ngrx/store';
-import { appReducer } from './store/app.reducer'
+import { EffectsModule } from '@ngrx/effects';
+import { appReducer } from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 
 @NgModule({
   declarations: [ 
@@ -34,7 +36,7 @@ import { appReducer } from './store/app.reducer'
     AppRoutingModule,
     AngularMaterialModule,
     StoreModule.forRoot(appReducer),
-//    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects]),
     FlexLayoutModule
   ],
   providers: [

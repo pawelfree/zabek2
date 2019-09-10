@@ -7,7 +7,7 @@ import { ChangePasswordComponent } from '../common-dialogs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
 import { map } from 'rxjs/operators';
-import { AuthenticationService } from '../_services';
+import * as AuthActions from '../auth/store/auth.actions';
 
 @Component({
   selector: 'zabek-header',
@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private readonly store: Store<AppState>,
-    private readonly authService: AuthenticationService,
     private dialog: MatDialog
   ) {}
 
@@ -51,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    this.store.dispatch(new AuthActions.Logout());
     this.router.navigate(['login']);
   }
 
