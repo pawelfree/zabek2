@@ -3,10 +3,11 @@ import { User } from '../../_models'
 
 
 export const LOGIN_START = '[Auth] Login start'; 
-export const LOGIN = '[Auth] Login';
-export const LOGIN_FAIL = '[Auth] Login fail';
+export const AUTHENTICATE_SUCCESS = '[Auth] Authenticate success';
+export const AUTHENTICATE_FAIL = '[Auth] Authenticate fail';
 export const LOGOUT = '[Auth] Logout';
 export const AUTO_LOGIN = '[Auth] Auto Login';
+export const AUTHENTICATION_CLEAR_ERROR = '[Auth] Clear error';
 
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
@@ -14,14 +15,14 @@ export class LoginStart implements Action {
   constructor(public payload: {email: string, password: string}) {}
 }
 
-export class LoginFail implements Action {
-  readonly type = LOGIN_FAIL;
+export class AuthenticateFail implements Action {
+  readonly type = AUTHENTICATE_FAIL;
 
   constructor(public payload: string) {}
 }
 
-export class Login implements Action {
-  readonly type = LOGIN;
+export class AuthenticateSuccess implements Action {
+  readonly type = AUTHENTICATE_SUCCESS;
 
   constructor(public payload: User) {}
 }
@@ -36,9 +37,15 @@ export class AutoLogin implements Action {
 
 }
 
+export class ClearError implements Action {
+  readonly type = AUTHENTICATION_CLEAR_ERROR;
+
+}
+
 export type AuthActions =
-    Login
+    AuthenticateSuccess
+  | AuthenticateFail
   | LoginStart
-  | LoginFail
   | Logout
-  | AutoLogin;
+  | AutoLogin
+  | ClearError;

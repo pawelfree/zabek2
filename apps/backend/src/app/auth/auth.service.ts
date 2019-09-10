@@ -21,9 +21,9 @@ export class AuthService {
       if (validPassword) {
         return { user: user , message: null };
       }
-      return { user: null, message: 'Niepoprawne hasło'};
+      return { user: null, message: 'INVALID_PASSWORD'};
     }
-    return { user: null, message: 'Użytkownik nie istnieje' };
+    return { user: null, message: 'EMAIL_NOT_FOUND' };
   }
 
   async login(user: User) {

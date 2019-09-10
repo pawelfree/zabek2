@@ -9,6 +9,8 @@ import { AppState } from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
 import { Role } from '../_models';
 import { Subscription } from 'rxjs';
+import { InfoComponent } from '../common-dialogs';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'zabek-auth',
@@ -20,12 +22,15 @@ export class AuthComponent implements OnInit, OnDestroy {
   loading = false;
   authError  = '';
   returnUrl: string;
+
   private storeSub: Subscription;
+  private closeSub: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private readonly dialog: MatDialog,
     private readonly store: Store<AppState>  ) {}
 
   ngOnInit() {
@@ -46,6 +51,9 @@ export class AuthComponent implements OnInit, OnDestroy {
     .subscribe(authData => {
       this.loading = authData.isLoading;
       this.authError = authData.authError;
+      if (this.authError) {
+        this.showErrorAlert(this.authError);
+      }
     });
 
     this.loginForm = this.formBuilder.group({
@@ -57,12 +65,24 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    if (this.storeSub)
+    if (this.storeSub) {
       this.storeSub.unsubscribe();
+    }
+    if (this.closeSub) {
+      this.closeSub.unsubscribe();
+    }
   }
 
   get f() {
     return this.loginForm.controls;
+  }
+
+  onHandleError() {
+    this.store.dispatch(new AuthActions.ClearError());
+  }
+
+  private showErrorAlert(message: string) {
+    this.dialog.open(InfoComponent, { data:  message });
   }
 
   async onSubmit() {

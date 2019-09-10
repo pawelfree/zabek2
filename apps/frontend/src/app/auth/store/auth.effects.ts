@@ -8,6 +8,22 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services';
 
+const handleError = (errorRes: any) => {
+  let errorMessage = 'An unknown error occurred!';
+  if (!errorRes) {
+    return of(new AuthActions.AuthenticateFail(errorMessage));
+  }
+  switch (errorRes) {
+    case 'EMAIL_NOT_FOUND':
+      errorMessage = 'Użytkownik nie istnieje.';
+      break;
+    case 'INVALID_PASSWORD':
+      errorMessage = 'Wprowadzone hasło jest niepoprawne.';
+      break;
+  }
+  return of(new AuthActions.AuthenticateFail(errorMessage));
+};
+
 @Injectable()
 export class AuthEffects {
 
@@ -21,7 +37,7 @@ export class AuthEffects {
           new Date(user_from_localstorage.tokenExpirationDate).getTime() -
           new Date().getTime();
         this.authService.setLogoutTimer(expirationDuration);
-        return new AuthActions.Login(user_from_localstorage);   
+        return new AuthActions.AuthenticateSuccess(user_from_localstorage);   
       }
       return { type: 'DUMMY' }
     })
@@ -43,10 +59,10 @@ export class AuthEffects {
             tokenExpirationDate: expirationDate
           }
           localStorage.setItem('currentUser', JSON.stringify(user));          
-          return new AuthActions.Login(user);
+          return new AuthActions.AuthenticateSuccess(user);
         }),
         catchError(error => {
-          return of(new AuthActions.LoginFail("nieoczekiwany blad - " + error))
+          return (handleError(error))
         })
 
       )
@@ -65,8 +81,8 @@ export class AuthEffects {
 
   @Effect({dispatch: false})
   authSuccess = this.actions$.pipe(
-    ofType(AuthActions.LOGIN),
-    tap((authData: AuthActions.Login) => {
+    ofType(AuthActions.AUTHENTICATE_SUCCESS),
+    tap((authData: AuthActions.AuthenticateSuccess) => {
       const user = authData.payload;
       if (user) {
         let role = user.role;
