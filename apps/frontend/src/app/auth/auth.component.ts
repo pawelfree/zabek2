@@ -60,8 +60,6 @@ export class AuthComponent implements OnInit, OnDestroy {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   ngOnDestroy(){
@@ -89,10 +87,11 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (this.loginForm.invalid) {
       return;
     }
-
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.store.dispatch( new AuthActions.LoginStart({
       email: this.f.username.value,
-      password: this.f.password.value
+      password: this.f.password.value,
+      returnUrl: this.returnUrl
     }));
   }
 }

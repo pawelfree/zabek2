@@ -1,12 +1,14 @@
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
-import { switchMap, catchError, map, tap } from 'rxjs/operators'; 
+import { switchMap, catchError, map, tap, withLatestFrom } from 'rxjs/operators'; 
 import * as AuthActions from './auth.actions';
 import { User, Role } from '../../_models';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services';
+import { AppState } from '../../store/app.reducer';
+import { Store } from '@ngrx/store';
 
 const handleError = (errorRes: any) => {
   let errorMessage = 'An unknown error occurred!';
@@ -82,20 +84,28 @@ export class AuthEffects {
   @Effect({dispatch: false})
   authSuccess = this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
-    tap((authData: AuthActions.AuthenticateSuccess) => {
-      const user = authData.payload;
-      if (user) {
+    withLatestFrom(this.store$),
+    tap(([action, state]:[AuthActions.AuthenticateSuccess, AppState]) => {
+      const returnUrl = state.auth.returnUrl;
+      const user = action.payload
+      if (!user) {
+        this.router.navigate(['/']);
+      } else {
         let role = user.role;
         if (role === Role.sadmin) {
           role = Role.admin;
         }
-        this.router.navigate([`/${role}`]);
-      } else 
-        this.router.navigate(['/']);
+        if (returnUrl === '/') {
+         this.router.navigate([`/${role}`]);
+        } else {
+          this.router.navigate([returnUrl]);
+        }
+      }
     })
-  )
+  );
 
   constructor(
+    private readonly store$: Store<AppState>,
     private readonly actions$: Actions,
     private readonly http: HttpClient,
     private readonly authService: AuthenticationService,

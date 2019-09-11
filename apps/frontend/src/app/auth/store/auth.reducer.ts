@@ -5,12 +5,15 @@ export interface State {
   user: User;
   authError: string;
   isLoading: boolean;
+  returnUrl: string;
 }
 
 const initialState: State = {
   user: null,
   authError: null,
-  isLoading: false
+  isLoading: false,
+  returnUrl: '/'
+
 };
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions ) {
@@ -26,7 +29,8 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       return {
         ...state,
         authError: null,
-        isLoading: true
+        isLoading: true,
+        returnUrl: action.payload.returnUrl
       }
     }
     case AuthActions.AUTHENTICATE_FAIL: {
@@ -41,7 +45,8 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       return {
         ...state,
         authError: null,
-        user: null
+        user: null,
+        returnUrl : '/'
       }
     case AuthActions.AUTHENTICATION_CLEAR_ERROR :
       return {

@@ -12,7 +12,7 @@ export const AUTHENTICATION_CLEAR_ERROR = '[Auth] Clear error';
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
 
-  constructor(public payload: {email: string, password: string}) {}
+  constructor(public payload: {email: string, password: string, returnUrl: string}) {}
 }
 
 export class AuthenticateFail implements Action {
