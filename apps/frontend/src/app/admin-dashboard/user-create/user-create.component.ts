@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { UserService } from '../../_services';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CustomValidator } from '../../_validators';
-import { Role, Lab } from '../../_models';
+import { Role, Lab, User } from '../../_models';
 import { MatDialog } from '@angular/material';
 import { SelectLabComponent } from '../select-lab/select-lab.component';
 
@@ -99,12 +99,12 @@ export class UserCreateComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    const user = {
-      _id: this._id ? this._id : "",
-      email: this.form.value.email,
-      role: this.form.value.role,
-      lab:  this.form.value.lab,
-      password: this.form.value.password1 };
+    const user = new User(
+      this._id ? this._id : "",
+      this.form.value.email,
+      this.form.value.role,
+      this.form.value.lab,
+      this.form.value.password1);
     if (this.mode === "create") {
       this.userService.addUser(user).subscribe(res => this.goOut());
     } else {

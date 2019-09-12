@@ -40,6 +40,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(id: string) {
+    //TO DO nie usuwac z labami ktore sa
     this.userService.deleteUser(id)
       .subscribe(res => {
         if (this.dataSource.itemsOnPage === 1 ) {

@@ -22,7 +22,7 @@ export function authReducer(state = initialState, action: AuthActions.AuthAction
       return {
         ...state,
         authError: null,
-        user: Object.assign({}, action.payload),
+        user: action.payload,
         isLoading: false
       }
     case AuthActions.LOGIN_START: {

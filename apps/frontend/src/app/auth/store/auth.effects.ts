@@ -33,13 +33,22 @@ export class AuthEffects {
   authAutoLogin = this.actions$.pipe(
     ofType(AuthActions.AUTO_LOGIN),
     map(() => {
-      const user_from_localstorage = JSON.parse(localStorage.getItem('currentUser'));
-      if (user_from_localstorage && user_from_localstorage.token && user_from_localstorage.tokenExpirationDate) {
-        const expirationDuration =
-          new Date(user_from_localstorage.tokenExpirationDate).getTime() -
-          new Date().getTime();
-        this.authService.setLogoutTimer(expirationDuration);
-        return new AuthActions.AuthenticateSuccess(user_from_localstorage);   
+      const userData = JSON.parse(localStorage.getItem('currentUser'));
+      if (userData) {
+        const temp_user = new User(
+          userData._id, 
+          userData.email, 
+          userData.role, 
+          userData.lab,
+          "", 
+          userData.expiresIn,
+          new Date(userData._tokenExpirationDate),
+          userData._token) 
+        if (temp_user && temp_user.token) {
+          const expirationDuration = temp_user.tokenExpirationDate.getTime() - new Date().getTime();
+          this.authService.setLogoutTimer(expirationDuration);
+          return new AuthActions.AuthenticateSuccess(temp_user);   
+        }
       }
       return { type: 'DUMMY' }
     })
@@ -56,11 +65,16 @@ export class AuthEffects {
         tap(resData => this.authService.setLogoutTimer(resData.expiresIn * 1000)),
         map(resData => {
           const expirationDate = new Date(new Date().getTime() + resData.expiresIn * 1000);
-          const user: User = {
-            ...resData,
-            tokenExpirationDate: expirationDate
-          }
-          localStorage.setItem('currentUser', JSON.stringify(user));          
+          const user: User = new User(
+            resData._id, 
+            resData.email, 
+            resData.role, 
+            resData.lab,
+            "",
+            resData.expiresIn,
+            expirationDate,
+            resData.token);
+          localStorage.setItem('currentUser', JSON.stringify(user));        
           return new AuthActions.AuthenticateSuccess(user);
         }),
         catchError(error => {

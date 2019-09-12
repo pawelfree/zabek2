@@ -158,7 +158,7 @@ export class UserController {
             password: await bcrypt.hash(changePasswordDto.newPassword, salt),
             email: user.email,
             role: user.role,
-            lab: user.lab
+            lab: user.lab._id
           };
           const {n, nModified, ok} = await this.userService.update(updateUserInternalDto);
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
