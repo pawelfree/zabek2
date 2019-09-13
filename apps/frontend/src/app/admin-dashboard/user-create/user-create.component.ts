@@ -17,7 +17,7 @@ export class UserCreateComponent implements OnInit {
   form: FormGroup;
   private mode = 'create';
   private _id: string;
-  roles = [Role.admin, Role.user, Role.doctor];
+  roles = [Role.admin, Role.user];
 
   constructor(
     private readonly userService: UserService,

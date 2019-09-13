@@ -19,7 +19,8 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email]
+        validators: [ Validators.required, 
+                      Validators.email]
       }),
       firstName: new FormControl(null, {
         validators: [Validators.required]
