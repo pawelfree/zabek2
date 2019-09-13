@@ -13,11 +13,14 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   form: FormGroup;
   regulationsAccepted$: Observable<boolean>;
   sameAddresses$: Observable<boolean>;
-  officeAddressSubs: Subscription;
-  regulationsAcceptedSubs: Subscription;
+  private officeAddressSubs: Subscription;
+  private regulationsAcceptedSubs: Subscription;
 
   ngOnInit() {
     this.form = new FormGroup({
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email]
+      }),
       firstName: new FormControl(null, {
         validators: [Validators.required]
       }),
@@ -79,7 +82,6 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
           this.sameAddresses$ = value;
         })
       ).subscribe();
-
   }
 
   ngOnDestroy() {

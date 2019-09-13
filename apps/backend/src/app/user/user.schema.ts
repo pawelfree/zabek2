@@ -14,9 +14,25 @@ export const UserSchema = new mongoose.Schema({
     minlength: 8,
     maxLength: 300
   },
-  role: String,
+  role: { 
+    type: String,
+    required: true
+  },
   lab: {
     type: mongoose.Schema.Types.ObjectId , 
-    ref: 'Lab'
+    ref: 'Lab',
+    required: false
+  },
+  firstName: {
+    type: String,
+    required: false,
+    minlength: 5,
+    maxLength: 25
+  },
+  lastname: {
+    type: String,
+    required: false,
+    minlength: 5,
+    maxLength: 25
   }
 });

@@ -2,6 +2,10 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-card-content>
       <mat-form-field>
+        <input matInput type="text" formControlName="email" placeholder="Email">
+        <mat-error *ngIf="form.get('email').invalid">Email jest wymagany.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput type="text" formControlName="firstName" placeholder="Imię">
         <mat-error *ngIf="form.get('firstName').invalid">Imię jest wymagane.</mat-error>
       </mat-form-field>
