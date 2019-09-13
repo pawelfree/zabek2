@@ -15,13 +15,15 @@ import {
   MatSortModule,
   MatTableModule,
   MatToolbarModule,
-  MatMenuModule
+  MatMenuModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 @NgModule({
   exports: [
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDialogModule,
     MatExpansionModule,
     MatInputModule,

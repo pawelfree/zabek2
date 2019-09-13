@@ -109,6 +109,7 @@ export class AuthEffects {
         if (role === Role.sadmin) {
           role = Role.admin;
         }
+        console.log('zmienic reload aplikacji w backendzie')
         if (returnUrl === '/') {
          this.router.navigate([`/${role}`]);
         } else {

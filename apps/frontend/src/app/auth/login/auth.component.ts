@@ -5,11 +5,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { tap } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/app.reducer';
-import * as AuthActions from './store/auth.actions';
-import { Role } from '../_models';
+import { AppState } from '../../store/app.reducer';
+import * as AuthActions from '../store/auth.actions';
+import { Role } from '../../_models';
 import { Subscription } from 'rxjs';
-import { InfoComponent } from '../common-dialogs';
+import { InfoComponent } from '../../common-dialogs';
 import { MatDialog } from '@angular/material';
 
 @Component({
@@ -44,6 +44,7 @@ export class AuthComponent implements OnInit, OnDestroy {
           if (role === Role.sadmin) {
             role = Role.admin;
           }
+          console.log('auth')
           this.router.navigate([`/${role}`]);
         }
       })

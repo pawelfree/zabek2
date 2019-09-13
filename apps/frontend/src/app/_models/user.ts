@@ -6,8 +6,7 @@ export class User {
     public readonly _id: string = null, 
     public email: string,
     public  role: string,
-  //lab powinien byc z ?
-    public lab: Lab,
+    public lab?: Lab,
     public password?: string,
     public expiresIn?: number, 
     private _tokenExpirationDate?: Date,

@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthComponent } from './auth/auth.component';
+import { AuthComponent } from './auth/login/auth.component';
+import { UserRegisterComponent } from './auth/user-register/user-register.component';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
@@ -24,6 +25,10 @@ const routes: Routes = [
     {
         path: 'login',
         component: AuthComponent
+    },
+    {
+        path: 'register',
+        component: UserRegisterComponent
     },
     {
         path: '**',

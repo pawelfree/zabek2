@@ -6,7 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthComponent } from './auth/auth.component';
+import { AuthComponent } from './auth/login/auth.component';
 import { HeaderComponent } from './header/header.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
@@ -16,6 +16,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
+import { UserRegisterComponent } from './auth/user-register/user-register.component';
 
 @NgModule({
   declarations: [ 
@@ -23,6 +24,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     HeaderComponent,
     SideNavComponent,
     AuthComponent,
+    UserRegisterComponent,
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent
