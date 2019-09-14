@@ -1,37 +1,34 @@
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
-import { switchMap, catchError, map, tap, withLatestFrom } from 'rxjs/operators'; 
+import { switchMap, catchError, map, tap } from 'rxjs/operators'; 
 import * as AuthActions from './auth.actions';
 import { User, Role } from '../../_models';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services';
-import { AppState } from '../../store/app.reducer';
-import { Store } from '@ngrx/store';
 
 const handleError = (errorRes: any) => {
-  let errorMessage = 'An unknown error occurred!';
+  let error = 'An unknown error occurred!';
   if (!errorRes) {
-    return of(new AuthActions.AuthenticateFail(errorMessage));
+    return of(AuthActions.authenticateFail({error}));
   }
   switch (errorRes) {
     case 'EMAIL_NOT_FOUND':
-      errorMessage = 'Użytkownik nie istnieje.';
+      error = 'Użytkownik nie istnieje.';
       break;
     case 'INVALID_PASSWORD':
-      errorMessage = 'Wprowadzone hasło jest niepoprawne.';
+      error = 'Wprowadzone hasło jest niepoprawne.';
       break;
   }
-  return of(new AuthActions.AuthenticateFail(errorMessage));
+  return of(AuthActions.authenticateFail({error}));
 };
 
 @Injectable()
 export class AuthEffects {
 
-  @Effect()
-  authAutoLogin = this.actions$.pipe(
-    ofType(AuthActions.AUTO_LOGIN),
+  authAutoLogin$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.autoLogin),
     map(() => {
       const userData = JSON.parse(localStorage.getItem('currentUser'));
       if (userData) {
@@ -47,20 +44,19 @@ export class AuthEffects {
         if (user && user.token) {
           const expirationDuration = user.tokenExpirationDate.getTime() - new Date().getTime();
           this.authService.setLogoutTimer(expirationDuration);
-          return new AuthActions.AuthenticateSuccess({user, redirect: false, returnUrl: '/'});   
+          return AuthActions.authenticateSuccess({user, redirect: false, returnUrl: '/'});   
         }
       }
       return { type: 'DUMMY' }
     })
-  );
+  ));
 
-  @Effect()
-  authLogin = this.actions$.pipe(
-    ofType(AuthActions.LOGIN_START),
-    switchMap((authData: AuthActions.LoginStart) => {
+  authLogin$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.loginStart),
+    switchMap((authData) => {
       return this.http.post<User>('/api/user/authenticate', { 
-        email: authData.payload.email, 
-        password: authData.payload.password })
+        email: authData.email, 
+        password: authData.password })
       .pipe(
         tap(resData => this.authService.setLogoutTimer(resData.expiresIn * 1000)),
         map(resData => {
@@ -75,7 +71,7 @@ export class AuthEffects {
             expirationDate,
             resData.token);
           localStorage.setItem('currentUser', JSON.stringify(user));        
-          return new AuthActions.AuthenticateSuccess({ user, redirect: true, returnUrl: authData.payload.returnUrl});
+          return AuthActions.authenticateSuccess({ user, redirect: true, returnUrl: authData.returnUrl});
         }),
         catchError(error => {
           return (handleError(error))
@@ -83,25 +79,24 @@ export class AuthEffects {
 
       )
     })
-  );
+  ));
 
-  @Effect({dispatch: false})
-  authLogout = this.actions$.pipe(
-    ofType(AuthActions.LOGOUT),
+  authLogout$ = createEffect(()=> this.actions$.pipe(
+    ofType(AuthActions.logout),
     tap(() => {
       this.authService.clearLogoutTimer();
       localStorage.removeItem('currentUser');
       this.router.navigate(['/']);
     })
-  );
+  ),
+  { dispatch: false });
 
-  @Effect({dispatch: false})
-  authSuccess = this.actions$.pipe(
-    ofType(AuthActions.AUTHENTICATE_SUCCESS),
-    tap((action:AuthActions.AuthenticateSuccess) => {
-      const returnUrl = action.payload.returnUrl;
-      const redirect = action.payload.redirect;
-      const user = action.payload.user;
+  authSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.authenticateSuccess),
+    tap(action => {
+      const returnUrl = action.returnUrl;
+      const redirect = action.redirect;
+      const user = action.user;
       if (!user) {
         this.router.navigate(['/']);
       } else {
@@ -118,7 +113,8 @@ export class AuthEffects {
         }
       }
     })
-  );
+  ), 
+  {dispatch: false});
 
   constructor(
     private readonly actions$: Actions,

@@ -76,7 +76,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError() {
-    this.store.dispatch(new AuthActions.ClearError());
+    this.store.dispatch(AuthActions.authenticateClearError());
   }
 
   private showErrorAlert(message: string) {
@@ -88,7 +88,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       return;
     }
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.store.dispatch( new AuthActions.LoginStart({
+    this.store.dispatch(AuthActions.loginStart({
       email: this.f.username.value,
       password: this.f.password.value,
       returnUrl: this.returnUrl

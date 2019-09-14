@@ -31,7 +31,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(err => {
         const error = err.error.message || err.statusText;
         if ([401, 500].indexOf(err.status) !== -1) {
-          this.store.dispatch(new AuthActions.Logout());
+          this.store.dispatch(AuthActions.logout());
           let errorMessage = 'Wystąpił nieznany błąd';
           if (err.error.message) {
             errorMessage = err.error.message;
