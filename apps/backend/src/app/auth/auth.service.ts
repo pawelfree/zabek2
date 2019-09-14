@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import * as jsonwebtoken from 'jsonwebtoken';
 import { User } from '../user/user.interface';
 import { ConfigService } from '../config/config.service';
+import { Role } from '../user/role';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,9 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
 
     if (user) {
+      if (user.role === Role.doctor && !user.active) {
+        return { user: null, message: 'USER_NOT_ACTIVE'};
+      }
       const validPassword = await bcrypt.compare(pass, user.password);
       if (validPassword) {
         return { user: user , message: null };

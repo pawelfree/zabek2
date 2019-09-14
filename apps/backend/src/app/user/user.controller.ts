@@ -28,7 +28,9 @@ export class UserController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService
-  ) {}
+  ) {
+    console.log('UserController - przemyslec co kto moze zrobic - usunac/edytowac/dodawac');
+  }
 
   static SALT = 10;
 
@@ -72,9 +74,10 @@ export class UserController {
       email: createUserDto.email,
       role: createUserDto.role,
       lab: createUserDto.lab._id,
+      active: true,
       password: await bcrypt.hash(createUserDto.password, salt)
     } 
-    return _.pick(await this.userService.add(_createUserDto), [
+    return _.pick(await this.userService.addUser(_createUserDto), [
       'email',
       'role',
       'lab'
@@ -86,8 +89,8 @@ export class UserController {
   @Delete(':id')
   async deleteUser(@Param('id') id: string, @Request() req) {
     const user: User =  await this.userService.findById(id);
-    if (user.role === 'sadmin') {
-      throw new BadRequestException('Nie można usunąć super administratora');
+    if (user.role === 'sadmin' || user.role === 'doctor') {
+      throw new BadRequestException('Nie można usunąć użytkownika');
     }
     if (user.role === 'admin' && req.user.role === 'admin') {
       throw new BadRequestException('Użytkownik nie może usunąć administratora');
@@ -110,7 +113,6 @@ export class UserController {
     if (id !== updateUserDto._id ) {
       throw new BadRequestException('Błędne dane użytkownika i żądania');        
     }  
-
     let error;
     await this.userService.findById(id)
       .then(async user => {

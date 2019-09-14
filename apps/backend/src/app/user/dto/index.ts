@@ -4,3 +4,4 @@ export * from './updateuser.dto';
 export * from './userpassword.dto';
 export * from './updateuser.internal.dto';
 export * from './createuser.internal.dto';
+export * from './createdoctor.dto';

@@ -15,11 +15,14 @@ const handleError = (errorRes: any) => {
   }
   switch (errorRes) {
     case 'EMAIL_NOT_FOUND':
-      error = 'Użytkownik nie istnieje.';
-      break;
     case 'INVALID_PASSWORD':
-      error = 'Wprowadzone hasło jest niepoprawne.';
+      error = 'Błędny użytkownik lub hasłp';
       break;
+    case 'USER_NOT_ACTIVE':
+      error = 'Użytkownik nie jest aktywny.';
+      break;
+    default:
+      error = 'Nieznany błąd';
   }
   return of(AuthActions.authenticateFail({error}));
 };

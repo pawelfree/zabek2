@@ -1,9 +1,7 @@
-import { Document } from 'mongoose';
-
-export interface Doctor extends Document {
-  readonly _id: string;
+export class CreateDoctorDto {
   readonly email: string;
   readonly password: string;
+  readonly role: string;
   readonly firstName: string;
   readonly lastName: string;	
   readonly officeName: string;   
