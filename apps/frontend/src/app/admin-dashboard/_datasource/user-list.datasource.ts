@@ -35,19 +35,6 @@ export class UserListDataSource extends DataSource<User> {
 
     this.userService.getUsers(pageSize, pageIndex) 
       .pipe(
-        map(usersData => {
-          return {
-            users: usersData.users.map(user => {
-              return {
-                role: user.role,
-                email: user.email,
-                lab: user.lab,
-                _id: user._id
-              };
-            }),
-            count: usersData.count
-          };
-        }),
         catchError(() => of<{users: User[], count: number}>({users: [], count: 0})),
         finalize(() => this.loadingSubject.next(false))
       )

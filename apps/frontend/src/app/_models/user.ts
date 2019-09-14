@@ -11,6 +11,7 @@ export class User {
     public expiresIn?: number, 
     private _tokenExpirationDate?: Date,
     private _token?: string,
+    public active?: boolean
 
   ){}
 

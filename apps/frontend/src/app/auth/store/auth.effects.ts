@@ -16,7 +16,7 @@ const handleError = (errorRes: any) => {
   switch (errorRes) {
     case 'EMAIL_NOT_FOUND':
     case 'INVALID_PASSWORD':
-      error = 'Błędny użytkownik lub hasłp';
+      error = 'Błędny użytkownik lub hasło';
       break;
     case 'USER_NOT_ACTIVE':
       error = 'Użytkownik nie jest aktywny.';

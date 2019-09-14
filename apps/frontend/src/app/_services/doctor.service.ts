@@ -10,32 +10,12 @@ export class DoctorService {
 
   constructor(private readonly http: HttpClient) {}
 
-  // getUsers(usersPerPage: number, currentPage: number) {
-  //   const queryParams = `?pagesize=${usersPerPage}&page=${currentPage}`;
-  //   return this.http.get<{ users: any; count: number }>(BACKEND_URL + queryParams);
-  // }
-
-  // getUser(id: string) {
-  //   return this.http.get<User>(BACKEND_URL + id);
-  // }
-
-  // deleteUser(userId: string) {
-  //   return this.http.delete(BACKEND_URL + userId);
-  // }
-
   addDoctor(doctor:  Doctor) {
     return this.http.post(BACKEND_URL, doctor);
   }
 
-  // updateUser(user : User) { 
-  //   return this.http.put(BACKEND_URL+user._id, user);
-  // }
+  activate(userId: string) {
+    return this.http.put(BACKEND_URL+"activate/"+userId, {});
+  }
 
-  // changePassword(authData: { _id: string, oldPassword: string, newPassword: string}) {
-  //   return this.http.post(BACKEND_URL+'changepassword', authData);
-  // }
-
-  // me() {
-  //   return this.http.get<User>(BACKEND_URL+'me');
-  // }
 }

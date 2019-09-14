@@ -35,19 +35,6 @@ export class LabListDataSource extends DataSource<Lab> {
 
     this.labService.getLabs(pageSize, pageIndex) 
       .pipe(
-        map(labsData => {
-          return {
-            labs: labsData.labs.map(lab => {
-              return {
-                name: lab.name,
-                email: lab.email,
-                address: lab.address,
-                _id: lab._id
-              };
-            }),
-            count: labsData.count
-          };
-        }),
         catchError(() => of<{labs: Lab[], count: number}>({labs: [], count: 0})),
         finalize(() => this.loadingSubject.next(false))
       )

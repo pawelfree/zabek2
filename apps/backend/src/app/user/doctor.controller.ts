@@ -1,12 +1,20 @@
 import { Controller, 
   Post, 
   Body,
-  BadRequestException} from '@nestjs/common';
+  BadRequestException,
+  Put,
+  UseGuards,
+  Param,
+  InternalServerErrorException} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateDoctorDto } from './dto/createdoctor.dto';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
 import { User } from './user.interface';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { UpdateUserInternalDto } from './dto';
 
 @Controller('doctor')
 export class DoctorController {
@@ -36,4 +44,37 @@ export class DoctorController {
       'email', 'role', 'firstName', 'lastName', 'qualificationsNo'
     ]);
   }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin', 'sadmin', 'user')
+  @Put('/activate/:id')
+  async activateUser(@Param('id') id: string) {
+    let error;
+    await this.userService.findById(id)
+      .then(async (user: User) => {
+        if (!user) {
+          error = new BadRequestException('Lekarz nie istnieje.');
+        } else if (user.active) {
+          error = new BadRequestException('Lekarz jest już aktywny.');
+        } else {
+          const _updateUserInternalDto: UpdateUserInternalDto = {
+            _id: user._id,
+            email: user.email,
+            role: user.role,
+            active: !user.active
+          };
+          const {n, nModified, ok} = await this.userService.update(_updateUserInternalDto);
+          if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
+            error = new InternalServerErrorException('Nieznany błąd.');
+          }        
+        }
+      })
+     .catch(err => {
+        error = new BadRequestException(err);
+      });
+    if (error) {
+      throw error;
+    }
+  }
+
 }
