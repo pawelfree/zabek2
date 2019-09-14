@@ -16,7 +16,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
-import { UserRegisterComponent } from './auth/user-register/user-register.component';
+import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 
 @NgModule({
   declarations: [ 
@@ -24,7 +24,7 @@ import { UserRegisterComponent } from './auth/user-register/user-register.compon
     HeaderComponent,
     SideNavComponent,
     AuthComponent,
-    UserRegisterComponent,
+    DoctorRegisterComponent,
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent

@@ -10,7 +10,8 @@ export class User {
     public password?: string,
     public expiresIn?: number, 
     private _tokenExpirationDate?: Date,
-    private _token?: string
+    private _token?: string,
+
   ){}
 
     get token() {

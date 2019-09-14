@@ -1,4 +1,5 @@
 <mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-card-content>
       <mat-form-field>
@@ -22,14 +23,14 @@
         <mat-error *ngIf="form.get('officeName').invalid">Nazwa gabinetu jest wymagana.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="officeAddres" placeholder="Adres gabinetu">
-        <mat-error *ngIf="form.get('officeAddres').invalid">Adres gabinetu jest wymagany.</mat-error>
+        <input matInput type="text" formControlName="officeAddress" placeholder="Adres gabinetu">
+        <mat-error *ngIf="form.get('officeAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
       </mat-form-field>
       <mat-checkbox formControlName="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
       <!-- <div [hidden]="sameAddresses$"> -->
         <mat-form-field *ngIf="!sameAddresses$">
-          <input matInput type="text" formControlName="officeCorrespondenceAddres" placeholder="Adres gabinetu">
-          <mat-error *ngIf="form.get('officeCorrespondenceAddres').invalid">Adres gabinetu jest wymagany.</mat-error>
+          <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres gabinetu">
+          <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
         </mat-form-field>
       <!-- </div> -->
       <mat-form-field>
@@ -42,7 +43,7 @@
       </mat-form-field>
       <mat-checkbox formControlName="tomographyWithViewer">Tomografia razem z czytnikiem</mat-checkbox>
       <mat-form-field>
-        <input matInput type="password" formControlName="password1" placeholder="Hasło użytkownika">
+        <input matInput type="password" formControlName="password1" placeholder="Hasło">
         <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>
         <mat-error *ngIf="form.get('password1').hasError('minLength')">Hasło musi mieć minimum 8 znaków.</mat-error>
         <mat-error *ngIf="form.get('password1').hasError('hasNumber')">Hasło musi zawierać cyfrę.</mat-error>
@@ -51,7 +52,7 @@
         <mat-error *ngIf="form.get('password1').hasError('hasSpecialCharacters')">Hasło musi zawierać znak specjalny.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła użytkownika">
+        <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła">
         <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
       </mat-form-field>
       <mat-checkbox formControlName="regulationsAccepted">Akceptuję</mat-checkbox><a style="margin-left:0.2rem; text-decoration: underline;" (click)="showRegulations()" >regulamin</a>

@@ -3,27 +3,39 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith } from 'rxjs/operators';
+import { Doctor } from '../../_models';
+import { Router } from '@angular/router';
+import { DoctorService } from '../../_services'
 
 @Component({
-  selector: 'zabek-register',
-  templateUrl: './user-register.component.html',
-  styleUrls: ['./user-register.component.css']
+  selector: 'zabek-doctor-register',
+  templateUrl: './doctor-register.component.html',
+  styleUrls: ['./doctor-register.component.css']
 })
-export class UserRegisterComponent implements OnInit, OnDestroy { 
+export class DoctorRegisterComponent implements OnInit, OnDestroy { 
   form: FormGroup;
   regulationsAccepted$: Observable<boolean>;
   sameAddresses$: Observable<boolean>;
   private officeAddressSubs: Subscription;
   private regulationsAcceptedSubs: Subscription;
+  isLoading: boolean;
+
+
+  constructor(
+    private readonly router: Router,
+    private readonly doctorService: DoctorService
+  ){}
 
   ngOnInit() {
+    this.isLoading = false;
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [ Validators.required, 
                       Validators.email]
       }),
       firstName: new FormControl(null, {
-        validators: [Validators.required]
+        validators: [ Validators.required,
+                      Validators.minLength(5)]
       }),
       lastName: new FormControl(null, {
         validators: [ Validators.required,
@@ -36,12 +48,12 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
         validators: [ Validators.required,
                       Validators.minLength(5)]
       }),   
-      officeAddres: new FormControl(null, {
+      officeAddress: new FormControl(null, {
         validators: [ Validators.required,
                       Validators.minLength(5)]
       }),
       sameAddresses: new FormControl(true), 
-      officeCorrespondenceAddres: new FormControl(null),
+      officeCorrespondenceAddress: new FormControl(null),
       examFormat: new FormControl("tiff", {
         validators: [ Validators.required]
       }),    
@@ -73,13 +85,13 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
         startWith(true),
         tap(value => {
           if (!value) {
-            this.form.controls.officeCorrespondenceAddres.setValidators(
+            this.form.controls.officeCorrespondenceAddress.setValidators(
               [ Validators.required,
                 Validators.minLength(5)]);
           } else {
-            this.form.controls.officeCorrespondenceAddres.clearValidators();
+            this.form.controls.officeCorrespondenceAddress.clearValidators();
           }
-          this.form.controls.officeCorrespondenceAddres.updateValueAndValidity({ onlySelf: true, emitEvent: false});
+          this.form.controls.officeCorrespondenceAddress.updateValueAndValidity({ onlySelf: true, emitEvent: false});
           this.sameAddresses$ = value;
         })
       ).subscribe();
@@ -98,9 +110,34 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.form);
+      if (this.form.invalid) {
+        return;
+      }
+      this.isLoading = true;
+      const doctor = new Doctor(
+        "",
+        this.form.value.email,
+        this.form.value.password1,
+        null,null,null,
+        this.form.value.firstName,
+        this.form.value.lastName,
+        this.form.value.officeName,
+        this.form.value.officeAddress,
+        this.form.value.qualificationsNo,
+        this.form.value.sameAddresses ? this.form.value.officeAddress : this.form.value.officeCorrespondenceAddress,
+        this.form.value.examFormat,
+        this.form.value.tomographyWithViewer,
+        false);
+
+      this.doctorService.addDoctor(doctor).subscribe(res => this.goOut());
+
+      this.isLoading = false;
   }
   
+  private goOut() {
+    this.router.navigate(['/login']);
+  }
+
   showRegulations() {
     console.log(this.form)
   }

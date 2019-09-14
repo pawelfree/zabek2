@@ -32,7 +32,7 @@ export class UserCreateComponent implements OnInit {
         email: new FormControl(null, {
           validators: [Validators.required, Validators.email]
         }),
-        role: new FormControl(null, {
+        role: new FormControl("user", {
           validators: [Validators.required]
         }),
         lab_name: new FormControl(null, {

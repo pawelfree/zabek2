@@ -23,7 +23,7 @@
       </mat-form-field>
     </div>
     <mat-form-field>
-      <input matInput type="password" formControlName="password1" placeholder="Hasło użytkownika">
+      <input matInput type="password" formControlName="password1" placeholder="Hasło">
       <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>
       <mat-error *ngIf="form.get('password1').hasError('minLength')">Hasło musi mieć minimum 8 znaków.</mat-error>
       <mat-error *ngIf="form.get('password1').hasError('hasNumber')">Hasło musi zawierać cyfrę.</mat-error>
@@ -32,7 +32,7 @@
       <mat-error *ngIf="form.get('password1').hasError('hasSpecialCharacters')">Hasło musi zawierać znak specjalny.</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła użytkownika">
+    <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła">
     <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
   </mat-form-field>
   <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz użytkownika</button>
