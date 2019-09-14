@@ -35,7 +35,7 @@ export class AuthEffects {
     map(() => {
       const userData = JSON.parse(localStorage.getItem('currentUser'));
       if (userData) {
-        const temp_user = new User(
+        const user = new User(
           userData._id, 
           userData.email, 
           userData.role, 
@@ -44,10 +44,10 @@ export class AuthEffects {
           userData.expiresIn,
           new Date(userData._tokenExpirationDate),
           userData._token) 
-        if (temp_user && temp_user.token) {
-          const expirationDuration = temp_user.tokenExpirationDate.getTime() - new Date().getTime();
+        if (user && user.token) {
+          const expirationDuration = user.tokenExpirationDate.getTime() - new Date().getTime();
           this.authService.setLogoutTimer(expirationDuration);
-          return new AuthActions.AuthenticateSuccess(temp_user);   
+          return new AuthActions.AuthenticateSuccess({user, redirect: false, returnUrl: '/'});   
         }
       }
       return { type: 'DUMMY' }
@@ -75,7 +75,7 @@ export class AuthEffects {
             expirationDate,
             resData.token);
           localStorage.setItem('currentUser', JSON.stringify(user));        
-          return new AuthActions.AuthenticateSuccess(user);
+          return new AuthActions.AuthenticateSuccess({ user, redirect: true, returnUrl: authData.payload.returnUrl});
         }),
         catchError(error => {
           return (handleError(error))
@@ -98,10 +98,10 @@ export class AuthEffects {
   @Effect({dispatch: false})
   authSuccess = this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
-    withLatestFrom(this.store$),
-    tap(([action, state]:[AuthActions.AuthenticateSuccess, AppState]) => {
-      const returnUrl = state.auth.returnUrl;
-      const user = action.payload
+    tap((action:AuthActions.AuthenticateSuccess) => {
+      const returnUrl = action.payload.returnUrl;
+      const redirect = action.payload.redirect;
+      const user = action.payload.user;
       if (!user) {
         this.router.navigate(['/']);
       } else {
@@ -109,18 +109,18 @@ export class AuthEffects {
         if (role === Role.sadmin) {
           role = Role.admin;
         }
-        console.log('zmienic reload aplikacji w backendzie')
-        if (returnUrl === '/') {
-         this.router.navigate([`/${role}`]);
-        } else {
-          this.router.navigate([returnUrl]);
+        if (redirect) {
+          if (returnUrl === '/') {
+            this.router.navigate([`/${role}`]);
+            } else {
+              this.router.navigate([returnUrl]);
+          }
         }
       }
     })
   );
 
   constructor(
-    private readonly store$: Store<AppState>,
     private readonly actions$: Actions,
     private readonly http: HttpClient,
     private readonly authService: AuthenticationService,

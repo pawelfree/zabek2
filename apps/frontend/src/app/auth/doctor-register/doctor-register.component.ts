@@ -130,7 +130,6 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         false);
 
       this.doctorService.addDoctor(doctor).subscribe(res => this.goOut());
-
       this.isLoading = false;
   }
   
