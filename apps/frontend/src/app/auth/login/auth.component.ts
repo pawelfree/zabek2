@@ -44,7 +44,6 @@ export class AuthComponent implements OnInit, OnDestroy {
           if (role === Role.sadmin) {
             role = Role.admin;
           }
-          console.log('auth')
           this.router.navigate([`/${role}`]);
         }
       })

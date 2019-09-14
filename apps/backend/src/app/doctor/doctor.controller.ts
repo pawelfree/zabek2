@@ -30,7 +30,6 @@ export class DoctorController {
       active: false,
       password: await bcrypt.hash(createDoctorDto.password, salt)
     } 
-    console.log(_createDoctorDto)
     //TODO ten lodash to trzeba zmienic na cos innego
     return _.pick(await this.doctorService.add(_createDoctorDto), [
       'email', 'firstName', 'lastName', 'qualificationsNo'

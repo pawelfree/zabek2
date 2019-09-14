@@ -19,20 +19,13 @@ export class AuthGuard implements CanActivate {
         return this.store.select('auth').pipe(
             take(1),
             map(authState => authState.user),
-            tap(()=> {
-                console.log('route ', route);
-                console.log('state' , state)
-            }),
             map(user => {
                 if (user) {
                     if (route.data.roles && route.data.roles.indexOf(user.role) === -1 ) {
-                        console.log('redirect to role')
                         return this.router.createUrlTree([user.role]);
                     }
-                    console.log('true')
                     return true;
                 }
-                console.log('redirect to login')
                 return this.router.createUrlTree(['login'], {queryParams: {returnUrl: state.url}});
             })
         );
