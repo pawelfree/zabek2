@@ -6,7 +6,7 @@
     </ng-container>
     <ng-container matColumnDef="role">
       <th mat-header-cell *matHeaderCellDef> Rola </th>
-      <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.role}}</td>
     </ng-container>
     <ng-container matColumnDef="lab">
       <th mat-header-cell *matHeaderCellDef> Pracownia </th>
@@ -16,7 +16,7 @@
       <th mat-header-cell *matHeaderCellDef> Akcje </th>   
       <td mat-cell *matCellDef="let element"> 
         <button mat-icon-button
-                [disabled]="element.role === 'sadmin'"
+                [disabled]="element.role === 'sadmin' || element.role === 'doctor'"
                 [routerLink]="['../useredit', element._id]"
                 color="primary" 
                 title="Edytuj" 
@@ -24,12 +24,20 @@
           <mat-icon aria-label="Edytuj">edit</mat-icon>
         </button> 
         <button mat-icon-button 
-                [disabled]="element.role === 'sadmin'"
+                [disabled]="element.role === 'sadmin' || element.role === 'doctor'"
                 color="warn" 
                 title="Usuń" 
                 alt="Usuń" 
                 (click)="onDelete(element._id)">
           <mat-icon aria-label="Usuń">delete</mat-icon>
+        </button>
+        <button mat-icon-button 
+          [disabled]="element.role !== 'doctor' || element.active"
+          color="warn" 
+          title="Aktywuj" 
+          alt="Aktywuj" 
+          (click)="onActivate(element._id)">
+          <mat-icon aria-label="Aktywuj">check_circle</mat-icon>
         </button>
       </td>
     </ng-container>  

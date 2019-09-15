@@ -6,24 +6,30 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './login/login.component';
+import { AuthComponent } from './auth/login/auth.component';
 import { HeaderComponent } from './header/header.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common-dialogs';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { appReducer } from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
+import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 
 @NgModule({
   declarations: [ 
     AppComponent, 
     HeaderComponent,
     SideNavComponent,
-    LoginComponent,
+    AuthComponent,
+    DoctorRegisterComponent,
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent
   ],
-  imports: [ 
+  imports: [
     BrowserModule, 
     BrowserAnimationsModule,
     FormsModule,
@@ -31,6 +37,8 @@ import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common
     HttpClientModule,
     AppRoutingModule,
     AngularMaterialModule,
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([AuthEffects]),
     FlexLayoutModule
   ],
   providers: [

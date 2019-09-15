@@ -73,6 +73,7 @@ export class LabCreateComponent implements OnInit {
         address: this.form.value.address}
       );
     }
+    this.isLoading = false;
     this.form.reset();
   }
 }

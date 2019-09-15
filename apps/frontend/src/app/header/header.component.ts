@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { User, Role } from '../_models';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../_services';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { ChangePasswordComponent } from '../common-dialogs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/app.reducer';
+import { map } from 'rxjs/operators';
+import * as AuthActions from '../auth/store/auth.actions';
 
 @Component({
   selector: 'zabek-header',
@@ -18,13 +21,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   constructor(
     private router: Router,
-    private authService: AuthenticationService,
+    private readonly store: Store<AppState>,
     private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.currentUser = this.authService.currentUserValue;
-    this.subscription = this.authService.currentUser.subscribe(user => {
+    this.subscription = this.store.select('auth').pipe(
+      map(authState => authState.user)
+    ).subscribe(user => {
       this.currentUser = user;
     });
   }
@@ -46,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    this.store.dispatch(AuthActions.logout());
     this.router.navigate(['login']);
   }
 

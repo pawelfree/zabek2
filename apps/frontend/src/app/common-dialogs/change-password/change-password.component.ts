@@ -47,10 +47,19 @@ export class ChangePasswordComponent implements OnInit {
           oldPassword: this.form.value.oldPassword, 
           newPassword: this.form.value.password1 })
         .subscribe(()=> {
-          this.dialog.open(InfoComponent,{
-            data: 'Hasło zostało zmienione'
-          });
+          this.dialog.open(InfoComponent,{ data: 'Hasło zostało zmienione.' });
           this.dialogRef.close(); 
+        },
+        err => {
+          switch(err) {
+            case('INVALID_PASSWORD'): 
+              this.form.patchValue({oldPassword: ''})
+              this.dialog.open(InfoComponent,{ data: 'Błędne hasło.' });
+              break;
+            default:
+              this.dialog.open(InfoComponent,{ data: 'Wystąpił nieoczekiwany błąd.' });
+              this.form.reset();
+          }
         })
       });
   }

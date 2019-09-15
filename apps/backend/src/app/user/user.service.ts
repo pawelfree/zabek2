@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateUserInternalDto, CreateUserInternalDto } from './dto';
+import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -16,7 +16,11 @@ export class UserService {
     return await this.userModel.findOne({ email });
   }
 
-  async add(createUserInternalDto: CreateUserInternalDto): Promise<User> {
+  async addDoctor(createDoctorDto: CreateDoctorDto): Promise<User> {
+    return await new this.userModel(createDoctorDto).save();
+  }
+
+  async addUser(createUserInternalDto: CreateUserInternalDto): Promise<User> {
     return await new this.userModel(createUserInternalDto).save();
   }
 

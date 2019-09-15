@@ -1,12 +1,26 @@
-export class Doctor {
-    id: number;
-    firstName: string;
-    lastName: string;	
-	officeName: string;    
-    officeAddress?: string;
-    qualificationsNo: string;
-	officeCorrAddress?: string;
-	examFormat?: string; // tutaj powinna być tablica opcji
-    active: boolean;
-    tomographyWithViewver: boolean;
+import { User } from './user';
+
+export class Doctor extends User {
+
+  constructor(
+     _id: string, 
+    email: string,
+    password?: string,
+    expiresIn?: number, 
+    _tokenExpirationDate?: Date,
+    _token?: string,
+    //dla lekarza
+    public firstName: string = "",
+    public lastName: string = "",	
+    public officeName: string = "",    
+    public officeAddress: string = "",
+    public qualificationsNo: string = "", 
+    public officeCorrespondenceAddres: string = "",
+    public examFormat: string = "tiff",
+    public tomographyWithViewer: boolean = false,
+    public active: boolean = false
+    ){
+      super(_id, email, "doctor", null, password, expiresIn, _tokenExpirationDate, _token);
+    }
+
 }
