@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
-import { ExaminationListComponent } from './examination/examination-list/examination-list.component';
+import { ExamListComponent } from './exam-list/exam-list.component';
 
 
 const routes: Routes = [
@@ -13,7 +13,7 @@ const routes: Routes = [
     },
     {
         path: 'examinations',
-        component: ExaminationListComponent,
+        component: ExamListComponent,
         canActivate: [ AuthGuard ],
         data: { roles: [ Role.user ] }
     }
