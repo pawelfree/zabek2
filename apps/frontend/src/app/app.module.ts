@@ -30,7 +30,7 @@ import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.
     InfoComponent
   ],
   imports: [
-    BrowserModule, 
+    BrowserModule.withServerTransition({ appId: "zabek"}), 
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
