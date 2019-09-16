@@ -1,20 +1,25 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { Exam } from './exam.interface';
+import { CreateExamDto } from './dto/createexam.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { UpdateExamDto } from './dto/updateexam.dto';
 
 @Injectable()
 export class ExamService {
-  private  DATA = [
+  /* private  DATA = [
     {
       id: '101',
       examinationDate: '2019-02-03',
       patientFullName: 'Jan Kowalski',
       examinationType: 'Wewnątrzustne',
       patientPesel: '11223312345',
-      patientAge: '23',
+      patientAge: '666',
       doctorFullName: 'Cezary Ptak',
       doctorQualificationsNo: '001-1',
       doctorOfficeName: 'PTAK1',
       patientAck: 'Tak',
-      examinationFile: ''
+      examinationFile: 'https://pl.wikipedia.org/wiki/Z%C4%99by_cz%C5%82owieka#/media/Plik:06-10-06smile.jpg'
     },
     {
       id: '102',
@@ -66,7 +71,7 @@ export class ExamService {
       doctorQualificationsNo: 'H81-1',
       doctorOfficeName: 'PTAK1',
       patientAck: 'Tak',
-      examinationFile: ''
+      examinationFile: 'https://pl.wikipedia.org/wiki/Z%C4%99by_cz%C5%82owieka#/media/Plik:06-10-06smile.jpg'
     },
     {
       id: '106',
@@ -159,19 +164,50 @@ export class ExamService {
       patientAck: 'Tak',
       examinationFile: ''
     }
-  ];
+  ]; */
 
-  constructor() {}
+  constructor(@InjectModel('Exam') private readonly examModel: Model<Exam>) {}
 
-  findAll(pageSize: number, currentPage: number) {
-    
-    return {exams: this.DATA.slice(currentPage,currentPage+pageSize), count:this.DATA.length};
+  async findById(id: string): Promise<Exam> {
+    return await this.examModel.findById(id).select('-__v');
+  }
+
+  // TODO zmienic z name na na przykład patientFullName
+  async findByName(name: string): Promise<Exam> {
+    return await this.examModel.findOne({ name }).select('-__v');
+  }
+
+  async add(createDto: CreateExamDto): Promise<Exam> {
+    return await new this.examModel(createDto).save();
+  }
+
+  async findAll(
+    pageSize: number,
+    currentPage: number
+  ): Promise<{ exams: Exam[]; count: number }> {
+    let exams;
+    const findallQuery = this.examModel.find<Exam>();
+    if (pageSize && currentPage) {
+      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+    }
+    return await findallQuery
+      .then(documents => {
+        exams = documents;
+        return this.examModel.countDocuments();
+      })
+      .then(count => {
+        return {
+          exams,
+          count
+        };
+      });
+  }
+
+  async update(updateExamDto: UpdateExamDto) {
+    return await this.examModel.updateOne({_id: updateExamDto._id}, updateExamDto);
   }
 
   async delete(_id: string) {
-    console.log(JSON.stringify(_id));
-
-    this.DATA = this.DATA.filter(e => e.id !== _id);
-    //console.log(this.DATA);
+    return await this.examModel.deleteOne({ _id });
   }
 }

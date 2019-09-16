@@ -12,8 +12,14 @@ import { tap } from 'rxjs/operators';
 export class ExamListComponent implements AfterViewInit, OnInit  {
   examsPerPage = 5;
   currentPage = 1;
-
-  displayedColumns = ['patientPesel','patientFullName', 'actions']; //TODO zmienic na pola z badania
+  // order of columns on the view
+  displayedColumns = ['examinationDate', 
+                      'patientFullName',
+                      'patientPesel', 
+                      'patientAge', 
+                      'examinationType', 
+                      'examinationFile',
+                      'actions']; 
   dataSource: ExamListDataSource;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -36,7 +42,7 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
   }
 
   loadExamsPage() {
-      this.dataSource.loadExams( this.paginator.pageIndex+1, this.paginator.pageSize);
+      this.dataSource.loadExams( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onDelete(id) {

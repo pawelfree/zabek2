@@ -11,12 +11,8 @@ import { ExamModule } from './exam/exam.module';
   imports: [ 
     AuthModule,
     LabModule,
-<<<<<<< HEAD
-    UserModule, 
     ExamModule,
-=======
     UserModule,
->>>>>>> 410acb03add73ed222f5be47f2d9268e13ae5c54
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

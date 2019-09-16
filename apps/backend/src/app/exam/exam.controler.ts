@@ -1,16 +1,22 @@
 import {
-    Controller,
-    UseGuards,
-    Get,
-    Query,
-    Delete,
-    Param
-  } from '@nestjs/common';
-  import { AuthGuard } from '@nestjs/passport';
-  import { ExamService } from './exam.service';
-  import { Roles } from '../auth/roles.decorator';
-  import { RolesGuard } from '../auth/roles.guard';
-  import * as _ from 'lodash';
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { ExamService } from './exam.service';
+import { CreateExamDto } from './dto/createexam.dto';
+import { UpdateExamDto } from './dto/updateexam.dto';
+import { Exam } from './exam.interface';
   
   
   @Controller('exam')
@@ -21,21 +27,48 @@ import {
 
   
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('admin', 'sadmin', 'user')
+    @Roles('sadmin')
     @Get()
-    async p4(
+    async allExams(
       @Query('pagesize') pagesize: number,
       @Query('page') page: number
     ) {
       return await this.examService.findAll(+pagesize, +page);
     }
-    
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin', 'user', 'admin')
-    @Delete(':id')
 
-    async deleteLab(@Param('id') id: string) {
-      //TODO zabronic usuwania takich z uzytkownikami i badaniami
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles('sadmin')
+    @Post()
+    async addExam(@Body() createExamDto: CreateExamDto) {
+      return await this.examService.add(createExamDto);
+    }
+
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles('sadmin')
+    @Put(':id')
+    async updateExam(@Body() updateExamDto: UpdateExamDto, @Param('id') id: string) {
+      if (id !== updateExamDto._id ) {
+        throw new BadRequestException('Błędne dane badania i żądania');        
+      }
+      const exam: Exam = await this.examService.findById(id);
+      if (!exam) {
+        throw new BadRequestException('Badanie nie istnieje');
+      }
+      return await this.examService.update(updateExamDto);
+    }
+
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles('sadmin')
+    @Get(':id')
+    async getExam(@Param('id') id: string) {
+      return this.examService.findById(id);
+    }   
+
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles('sadmin')
+    @Delete(':id')
+    async deleteExam(@Param('id') id: string) {
+      //TODO zdefinowac kto i kiedy moze usuwac
       return this.examService.delete(id);
     }
 
