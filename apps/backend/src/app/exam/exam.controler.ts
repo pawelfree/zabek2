@@ -27,7 +27,7 @@ import { Exam } from './exam.interface';
 
   
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin')
+    @Roles('sadmin','admin','user')
     @Get()
     async allExams(
       @Query('pagesize') pagesize: number,
@@ -37,14 +37,14 @@ import { Exam } from './exam.interface';
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin')
+    @Roles('admin','user')
     @Post()
     async addExam(@Body() createExamDto: CreateExamDto) {
       return await this.examService.add(createExamDto);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin')
+    @Roles('admin','user')
     @Put(':id')
     async updateExam(@Body() updateExamDto: UpdateExamDto, @Param('id') id: string) {
       if (id !== updateExamDto._id ) {
@@ -58,14 +58,14 @@ import { Exam } from './exam.interface';
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin')
+    @Roles('admin','user')
     @Get(':id')
     async getExam(@Param('id') id: string) {
       return this.examService.findById(id);
     }   
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin')
+    @Roles('sadmin','admin')
     @Delete(':id')
     async deleteExam(@Param('id') id: string) {
       //TODO zdefinowac kto i kiedy moze usuwac
