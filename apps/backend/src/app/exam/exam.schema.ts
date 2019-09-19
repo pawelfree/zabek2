@@ -39,7 +39,7 @@ export const ExamSchema = new mongoose.Schema({
     requred: true,
     minLength: 7,
     maxLength: 7,
-    unique: true
+    unique: false
   },
   sendEmailTo: {
     type: String,

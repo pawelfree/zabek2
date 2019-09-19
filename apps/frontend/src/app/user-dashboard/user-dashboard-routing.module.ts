@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { ExamListComponent } from './exam-list/exam-list.component';
+import { ExamCreateComponent } from './exam-create/exam-create.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,18 @@ const routes: Routes = [
         component: ExamListComponent,
         canActivate: [ AuthGuard ],
         data: { roles: [ Role.user ] }
+    },
+    {
+      path: 'examcreate',
+      component: ExamCreateComponent,
+      canActivate: [AuthGuard],
+      data: { roles: [Role.user] }
+    },
+    {
+      path: 'examedit/:examId',
+      component: ExamCreateComponent,
+      canActivate: [AuthGuard],
+      data: { roles: [Role.user] }
     }
 ];
 

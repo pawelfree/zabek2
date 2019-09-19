@@ -1,5 +1,5 @@
 export class Examination {
-  id: string;
+  _id: string;
   patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
   patientPesel: string; //pesel pacjenta ze skierowania
   patientAge: number; //z pesela - wyliczane automatycznie

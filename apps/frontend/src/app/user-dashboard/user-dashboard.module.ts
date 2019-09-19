@@ -4,6 +4,8 @@ import { UserDashboardComponent } from './user-dashboard.component';
 import { AngularMaterialModule } from '../angular-material.module';
 import { UserDashboardRoutingModule } from './user-dashboard-routing.module';
 import { ExamListComponent } from './exam-list/exam-list.component';
+import { ExamCreateComponent } from './exam-create/exam-create.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -11,11 +13,13 @@ import { ExamListComponent } from './exam-list/exam-list.component';
     imports: [
         CommonModule,
         AngularMaterialModule,
-        UserDashboardRoutingModule
+        UserDashboardRoutingModule,
+        ReactiveFormsModule
     ],
     declarations: [
         UserDashboardComponent,
-        ExamListComponent
+        ExamListComponent,
+        ExamCreateComponent
     ]
 })
 export class UserDashboardModule {}
