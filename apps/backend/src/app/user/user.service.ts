@@ -26,23 +26,25 @@ export class UserService {
 
   async findAll(
     pageSize: number,
-    currentPage: number
+    currentPage: number,
+    labId: string = null
   ): Promise<{ users: User[]; count: number }> {
     let users;
-    const findallQuery = this.userModel.find().populate('lab', 'name');
+    const options = {};
+    if (labId) {
+      options['lab']= labId;
+    } 
+    const findallQuery = this.userModel.find(options);
+    const count = await this.userModel.countDocuments(findallQuery);
     if (pageSize && currentPage) {
       findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
     }
-    return await findallQuery
+    return await findallQuery.populate('lab', 'name')
       .then(documents => {
-        users = documents;
-        return this.userModel.countDocuments();
-      })
-      .then(count => {
         return {
-          users,
+          users: documents,
           count
-        };
+        }
       });
   }
 

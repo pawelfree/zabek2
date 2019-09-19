@@ -22,6 +22,7 @@ import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { UpdateUserInternalDto } from './dto/updateuser.internal.dto';
+import { CLIENT_RENEG_WINDOW } from 'tls';
 
 @Controller('user')
 export class UserController {
@@ -56,9 +57,10 @@ export class UserController {
   @Get()
   async allUsers(
     @Query('pagesize') pagesize: number,
-    @Query('page') page: number
+    @Query('page') page: number,
+    @Request() req
   ) {
-    return await this.userService.findAll(+pagesize, +page);
+    return await this.userService.findAll(+pagesize,+page, req.user.lab);
   }
   
   @UseGuards(AuthGuard('jwt'), RolesGuard)
