@@ -32,7 +32,8 @@
             "tsConfig": "apps/frontend/tsconfig.app.json",
             "assets": [
               "apps/frontend/src/favicon.ico",
-              "apps/frontend/src/assets"
+              "apps/frontend/src/assets",
+              "apps/frontend/src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
@@ -63,7 +64,9 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "apps/frontend/ngsw-config.json"
             }
           }
         },

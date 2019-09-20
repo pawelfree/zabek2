@@ -17,6 +17,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [ 
@@ -39,7 +41,8 @@ import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.
     AngularMaterialModule,
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([AuthEffects]),
-    FlexLayoutModule
+    FlexLayoutModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
