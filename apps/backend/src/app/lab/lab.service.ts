@@ -48,6 +48,6 @@ export class LabService {
   }
 
   async delete(_id: string) {
-    return await this.labModel.deleteOne({ _id });
+    return await this.labModel.findByIdAndRemove( _id );
   }
 }

@@ -50,7 +50,7 @@
     [pageSize]="usersPerPage"
   ></mat-paginator>
   </div>
-  <p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && !(dataSource.loading$ | async)">
+  <p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
     Jeszcze nie ma zdefiniowanych użytkowników!
   </p>
   <mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>

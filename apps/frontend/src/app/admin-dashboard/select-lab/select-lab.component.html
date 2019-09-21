@@ -24,7 +24,7 @@
       [pageSize]="labsPerPage"
     ></mat-paginator>
   </div>
-  <div *ngIf="dataSource.dataCount <= 0 && !(dataSource.loading$ | async)">
+  <div *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
     <p class="info-text mat-body-1">
       Jeszcze nie ma zdefiniowanych pracowni!
     </p>
