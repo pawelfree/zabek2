@@ -28,7 +28,14 @@ export class ExamService {
     return this.http.delete(BACKEND_URL + examId);
   }
   //TODO zaktualizowac o pola badania
-  addExam(exam : { patientFullName: string, patientPesel: string, patientAge: string }) {
+  addExam(exam : { 
+    examinationDate: string,
+    examinationType: string,
+    examinationFile: string,
+    patientFullName: string, 
+    patientPesel: string, 
+    patientAge: string }
+    ) {
     //TODO nawigacja
     this.http.post<{ message: string; post: Examination }>(BACKEND_URL, exam)
       .subscribe(responseData => {
@@ -37,7 +44,15 @@ export class ExamService {
   }
   
   //TODO zaktualizowac o pola badania
-  updateExam(exam : { _id: string, patientFullName: string, patientPesel: string, patientAge: string }) {
+  updateExam(exam : {
+     _id: string, 
+     examinationDate: string,
+     examinationType: string,
+     examinationFile: string,
+     patientFullName: string, 
+     patientPesel: string, 
+     patientAge: string 
+    }) {
     //TODO nawigacja
     this.http.put<{ message: string; post: Examination }>(BACKEND_URL+exam._id, exam)
       .subscribe(responseData => {
