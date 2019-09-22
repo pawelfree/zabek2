@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Examination } from '../../_models';
+import { PeselValidator } from '../../_validators';
+
 
 @Component({
   selector: 'zabek-exam-create',
@@ -36,7 +38,7 @@ export class ExamCreateComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)]
       }),
       patientPesel: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11)]
+        validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11), PeselValidator.validPesel ]
       }),
       patientAge: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
