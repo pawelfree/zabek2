@@ -36,7 +36,7 @@
   [pageSize]="labsPerPage"
 ></mat-paginator>
 </div>
-<p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && (ngOnInit(dataSource.loading$ | async) === false)">
+<p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
   Jeszcze nie ma zdefiniowanych pracowni!
 </p>
 <mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>
