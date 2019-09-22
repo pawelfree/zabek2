@@ -16,7 +16,7 @@
       <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki  badania.</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" formControlName="patientFullName" placeholder="Imię i nazwiskopacjenta">
+      <input matInput type="text" formControlName="patientFullName" placeholder="Pacjent">
       <mat-error *ngIf="form.get('patientFullName').invalid">Wprowadź imię i nazwisko pacjenta (max 50 znaków).</mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -42,8 +42,13 @@
       <mat-error *ngIf="form.get('doctorQualificationsNo').invalid">Wprowadź poprawny numer uprawnień lekarza (7 znaków).</mat-error>
     </mat-form-field>   
     <mat-form-field>
+      <input matInput type="text" formControlName="sendEmailTo" placeholder="Email lekarza">
+      <mat-error *ngIf="form.get('sendEmailTo').invalid">Wprowadź email lekarza, na który ma zostać wysłane powiadomienie o badaniu do pobrania.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
       <input matInput type="text" formControlName="examinationFile" placeholder="Pliki badania">
-      <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki  badania.</mat-error>
+      
     </mat-form-field>
 
     <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz badanie</button>
