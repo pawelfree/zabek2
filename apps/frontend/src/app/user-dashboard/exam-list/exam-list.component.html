@@ -43,8 +43,8 @@
 
   <ng-container matColumnDef="patientAck">
     <th mat-header-cell *matHeaderCellDef> Zgoda na wyniki online </th>
-    <td mat-cell *matCellDef="let element">    
-        <mat-checkbox checked="{{patientAck}}" disabled>
+    <td mat-cell *matCellDef="let element"> {{element.patientAck}}   
+        <mat-checkbox checked="{{element.patientAck}}" disabled>
         </mat-checkbox>
     </td>
   </ng-container>
