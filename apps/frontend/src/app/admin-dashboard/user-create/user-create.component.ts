@@ -100,7 +100,7 @@ export class UserCreateComponent implements OnInit {
     }
     this.isLoading = true;
     const user = new User(
-      this._id ? this._id : "",
+      this._id ? this._id : null,
       this.form.value.email,
       this.form.value.role,
       this.form.value.lab,

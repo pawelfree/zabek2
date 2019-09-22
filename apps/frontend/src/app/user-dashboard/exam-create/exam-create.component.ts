@@ -33,7 +33,7 @@ export class ExamCreateComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({      
-      examinationDate: new FormControl(null, {
+      examinationDate: new FormControl(new Date(), {
         validators: [Validators.required] // chyba potrzebny jest validator na date w formacie polskim
       }),
       examinationType: new FormControl(null, {
@@ -54,7 +54,7 @@ export class ExamCreateComponent implements OnInit {
       patientAge: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
       }),
-      patientAck: new FormControl(null, {
+      patientAck: new FormControl(false, {
         validators: [Validators.required]
       }),
       doctorFullName: new FormControl(null, {
@@ -90,19 +90,7 @@ export class ExamCreateComponent implements OnInit {
         });
       } else {
         this.mode = "create";
-        this._id = null; 
-        this.form.setValue({
-          examinationDate:  Date.now(),
-          examinationType:  null,
-          examinationFile:  null,
-          patientFullName:  null,
-          patientPesel:     null,
-          patientAge:       null,
-          patientAck:       false,
-          doctorFullName:   null,
-          doctorQualificationsNo: null,
-          sendEmailTo:      null
-        });       
+        this._id = null;       
       }
     });
   }
@@ -112,33 +100,23 @@ export class ExamCreateComponent implements OnInit {
       return;
     }
     this.isLoading = true;
+    const exam = {
+      _id: this._id ? this._id : null,
+      examinationDate:  this.form.value.examinationDate,
+      examinationType:  this.form.value.examinationType,
+      examinationFile:  this.form.value.examinationFile,
+      patientFullName:  this.form.value.patientFullName,
+      patientPesel:     this.form.value.patientPesel,
+      patientAge:       this.form.value.patientAge,
+      patientAck:       this.form.value.patientAck,
+      sendEmailTo:      this.form.value.sendEmailTo,
+      doctorFullName:   this.form.value.doctorFullName,
+      doctorQualificationsNo: this.form.value.doctorQualificationsNo
+    }
     if (this.mode === "create") {
-      this.examService.addExam( {
-        examinationDate:  this.form.value.examinationDate,
-        examinationType:  this.form.value.examinationType,
-        examinationFile:  this.form.value.examinationFile,
-        patientFullName:  this.form.value.patientFullName,
-        patientPesel:     this.form.value.patientPesel,
-        patientAge:       this.form.value.patientAge,
-        patientAck:       this.form.value.patientAck,
-        sendEmailTo:      this.form.value.sendEmailTo,
-        doctorFullName:   this.form.value.doctorFullName,
-        doctorQualificationsNo: this.form.value.doctorQualificationsNo}
-      );
+      this.examService.addExam(exam);
     } else {
-      this.examService.updateExam({
-        _id: this._id,
-        examinationDate:  this.form.value.examinationDate,
-        examinationType:  this.form.value.examinationType,
-        examinationFile:  this.form.value.examinationFile,
-        patientFullName:  this.form.value.patientFullName,
-        patientPesel:     this.form.value.patientPesel,
-        patientAge:       this.form.value.patientAge,
-        patientAck:       this.form.value.patientAck,
-        sendEmailTo:      this.form.value.sendEmailTo,
-        doctorFullName:   this.form.value.doctorFullName,
-        doctorQualificationsNo: this.form.value.doctorQualificationsNo}
-      );
+      this.examService.updateExam(exam);
     }
     this.isLoading = false;
     this.form.reset();
