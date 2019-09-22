@@ -3,12 +3,12 @@
   <form [formGroup]="form" (submit)="onSaveExam()" *ngIf="!isLoading">
 
     <mat-form-field>
-      <input matInput [matDatepicker]="picker1" 
-             formControlName="examinationDate" 
+      <input matInput formControlName="examinationDate" [matDatepicker]="examinationDatePicker"               
              placeholder="Data badania"
-             [formControl]="date">
-      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
+             >
+      <mat-datepicker-toggle matSuffix [for]="examinationDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #examinationDatePicker></mat-datepicker>
+      <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę badania.</mat-error>
     </mat-form-field>
 
 
@@ -17,10 +17,6 @@
       <mat-error *ngIf="form.get('examinationType').invalid">Wprowadź rodzaj badania.</mat-error>
     </mat-form-field>
 
-    <mat-form-field>
-      <input matInput type="text" formControlName="examinationFile" placeholder="Pliki badania">
-      <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki badania.</mat-error>
-    </mat-form-field>
 
     <mat-form-field>
       <input matInput type="text" formControlName="patientFullName" placeholder="Pacjent">

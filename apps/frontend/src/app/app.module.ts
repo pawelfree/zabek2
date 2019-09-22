@@ -20,6 +20,10 @@ import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { registerLocaleData } from '@angular/common';
+import localePl from '@angular/common/locales/pl';
+
+registerLocaleData(localePl, 'pl');
 
 @NgModule({
   declarations: [ 
@@ -57,4 +61,6 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     InfoComponent
   ]
 })
-export class AppModule {}
+export class AppModule {
+
+}

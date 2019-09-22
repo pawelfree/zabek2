@@ -3,7 +3,7 @@
 
   <ng-container matColumnDef="examinationDate">
     <th mat-header-cell *matHeaderCellDef> Data badania </th>
-    <td mat-cell *matCellDef="let element"> {{element.examinationDate}} </td>
+    <td mat-cell *matCellDef="let element"> {{element.examinationDate | date :  "yyyy.MM.dd"}} </td>
   </ng-container>
 
   <ng-container matColumnDef="patientFullName">
