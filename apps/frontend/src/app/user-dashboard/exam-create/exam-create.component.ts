@@ -33,7 +33,7 @@ export class ExamCreateComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({      
-      examinationDate: new FormControl(null, {
+      examinationDate: new FormControl(new Date(), {
         validators: [Validators.required] // chyba potrzebny jest validator na date w formacie polskim
       }),
       examinationType: new FormControl(null, {
