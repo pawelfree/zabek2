@@ -1,53 +1,78 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" (submit)="onSaveExam()" *ngIf="!isLoading">
-
+<!--
     <mat-form-field>
       <input matInput type="text" formControlName="examinationDate" placeholder="Data badania">
-      <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę wykonania badania (format yyyy-mm-dd).</mat-error>
+      <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę wykonania badania (format
+        yyyy-mm-dd).</mat-error>
     </mat-form-field>
+-->
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker1" 
+             formControlName="examinationDate" 
+             placeholder="Data badania"
+             [formControl]="date">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+
+
     <mat-form-field>
       <input matInput type="text" formControlName="examinationType" placeholder="Rodzaj badania">
       <mat-error *ngIf="form.get('examinationType').invalid">Wprowadź rodzaj badania.</mat-error>
     </mat-form-field>
-    <mat-form-field>      
+
+    <mat-form-field>
       <input matInput type="text" formControlName="examinationFile" placeholder="Pliki badania">
-      <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki  badania.</mat-error>
+      <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki badania.</mat-error>
     </mat-form-field>
+
     <mat-form-field>
       <input matInput type="text" formControlName="patientFullName" placeholder="Pacjent">
-      <mat-error *ngIf="form.get('patientFullName').invalid">Wprowadź imię i nazwisko pacjenta (max 50 znaków).</mat-error>
+      <mat-error *ngIf="form.get('patientFullName').invalid">Wprowadź imię i nazwisko pacjenta (max 50 znaków).
+      </mat-error>
     </mat-form-field>
+
     <mat-form-field>
       <input matInput type="text" formControlName="patientPesel" placeholder="PESEL">
       <mat-error *ngIf="form.get('patientPesel').hasError('required')">PESEL jest wymagany.</mat-error>
-      <mat-error *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL musi mieć 11 znaków.</mat-error>
+      <mat-error
+        *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL
+        musi mieć 11 znaków.</mat-error>
       <mat-error *ngIf="form.get('patientPesel').hasError('validPesel')">PESEL jest niepoprawny.</mat-error>
     </mat-form-field>
+
     <mat-form-field>
       <input matInput type="text" formControlName="patientAge" placeholder="Wiek pacjenta">
       <mat-error *ngIf="form.get('patientAge').invalid">Wprowadź wiek pacjenta.</mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input matInput type="text" formControlName="patientAck" placeholder="Zgoda pacjenta na badania online">
+
+    <mat-checkbox formControlName="patientAck">
       <mat-error *ngIf="form.get('patientAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
-    </mat-form-field>
+      Zgoda pacjenta na badania online
+    </mat-checkbox>
+
     <mat-form-field>
       <input matInput type="text" formControlName="doctorFullName" placeholder="Lekarz zlecający">
-      <mat-error *ngIf="form.get('doctorFullName').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).</mat-error>
+      <mat-error *ngIf="form.get('doctorFullName').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).
+      </mat-error>
     </mat-form-field>
+
     <mat-form-field>
       <input matInput type="text" formControlName="doctorQualificationsNo" placeholder="Nr uprawnień">
-      <mat-error *ngIf="form.get('doctorQualificationsNo').invalid">Wprowadź poprawny numer uprawnień lekarza (7 znaków).</mat-error>
-    </mat-form-field>   
+      <mat-error *ngIf="form.get('doctorQualificationsNo').invalid">Wprowadź poprawny numer uprawnień lekarza (7
+        znaków).</mat-error>
+    </mat-form-field>
+
     <mat-form-field>
       <input matInput type="text" formControlName="sendEmailTo" placeholder="Email lekarza">
-      <mat-error *ngIf="form.get('sendEmailTo').invalid">Wprowadź email lekarza, na który ma zostać wysłane powiadomienie o badaniu do pobrania.</mat-error>
+      <mat-error *ngIf="form.get('sendEmailTo').invalid">Wprowadź email lekarza, na który ma zostać wysłane
+        powiadomienie o badaniu do pobrania.</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <input matInput type="text" formControlName="examinationFile" placeholder="Pliki badania">
-      
     </mat-form-field>
 
     <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz badanie</button>

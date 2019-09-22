@@ -19,6 +19,7 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [ 
@@ -36,6 +37,7 @@ import { environment } from '../environments/environment';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatMomentDateModule,
     HttpClientModule,
     AppRoutingModule,
     AngularMaterialModule,

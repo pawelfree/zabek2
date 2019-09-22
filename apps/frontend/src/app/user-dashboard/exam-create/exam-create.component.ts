@@ -22,9 +22,8 @@ export class ExamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.form = new FormGroup({
-      //TODO zaktualizowac warunki dla pol badania
-      examinationDate: new FormControl(null, {
+    this.form = new FormGroup({      
+      examinationDate: new FormControl(new Date(), {
         validators: [Validators.required, Validators.minLength(10), Validators.maxLength(10)] // chyba potrzebny jest validator na date w formacie polskim
       }),
       examinationType: new FormControl(null, {
