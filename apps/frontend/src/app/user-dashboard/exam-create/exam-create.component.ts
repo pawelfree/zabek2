@@ -26,9 +26,9 @@ export class ExamCreateComponent implements OnInit {
       examinationDate: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(10), Validators.maxLength(10)] // chyba potrzebny jest validator na date w formacie polskim
       }),
-      examinationType: new FormControl(null, {
-        validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
-      }),      
+//      examinationType: new FormControl(null, {
+//        validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
+//     }),      
       examinationFile: new FormControl(null, { // TODO: jak obsluzyc validator dla pliku badania?
         validators: [Validators.nullValidator] 
       }),
@@ -52,12 +52,16 @@ export class ExamCreateComponent implements OnInit {
           this.isLoading = false;
           this.form.setValue({
             //TODO uzupełnić pozostałe pola z badania
-            examinationDate: examData.examinationDate,
-            examinationType: examData.examinationType,
-            examinationFile: examData.examinationFile,
-            patientFullName: examData.patientFullName,
-            patientPesel: examData.patientPesel,
-            patientAge: examData.patientAge
+            examinationDate:  examData.examinationDate,
+            examinationType:  examData.examinationType,
+            examinationFile:  examData.examinationFile,
+            patientFullName:  examData.patientFullName,
+            patientPesel:     examData.patientPesel,
+            patientAge:       examData.patientAge,
+            patientAck:       examData.patientAck,
+            doctorFullName:   examData.doctorFullName,
+            doctorQualificationsNo: examData.doctorQualificationsNo,
+            sendEmailTo:      examData.sendEmailTo
           });
         });
       } else {
@@ -65,7 +69,6 @@ export class ExamCreateComponent implements OnInit {
         this._id = null;        
       }
     });
-
   }
 // TODO dodac pozostałe pola
   onSaveExam() {
@@ -75,22 +78,30 @@ export class ExamCreateComponent implements OnInit {
     this.isLoading = true;
     if (this.mode === "create") {
       this.examService.addExam( {
-        examinationDate: this.form.value.examinationDate,
-        examinationType: this.form.value.examinationType,
-        examinationFile: this.form.value.examinationFile,
-        patientFullName: this.form.value.patientFullName,
-        patientPesel: this.form.value.patientPesel,
-        patientAge: this.form.value.patientAge }
+        examinationDate:  this.form.value.examinationDate,
+        examinationType:  this.form.value.examinationType,
+        examinationFile:  this.form.value.examinationFile,
+        patientFullName:  this.form.value.patientFullName,
+        patientPesel:     this.form.value.patientPesel,
+        patientAge:       this.form.value.patientAge,
+        patientAck:       this.form.value.patientAck,
+        sendEmailTo:      this.form.value.sendEmailTo,
+        doctorFullName:   this.form.value.doctorFullName,
+        doctorQualificationsNo: this.form.value.doctorQualificationsNo}
       );
     } else {
       this.examService.updateExam({
         _id: this._id,
-        examinationDate: this.form.value.examinationDate,
-        examinationType: this.form.value.examinationType,
-        examinationFile: this.form.value.examinationFile,
-        patientFullName: this.form.value.patientFullName,
-        patientPesel: this.form.value.patientPesel,
-        patientAge: this.form.value.patientAge}
+        examinationDate:  this.form.value.examinationDate,
+        examinationType:  this.form.value.examinationType,
+        examinationFile:  this.form.value.examinationFile,
+        patientFullName:  this.form.value.patientFullName,
+        patientPesel:     this.form.value.patientPesel,
+        patientAge:       this.form.value.patientAge,
+        patientAck:       this.form.value.patientAck,
+        sendEmailTo:      this.form.value.sendEmailTo,
+        doctorFullName:   this.form.value.doctorFullName,
+        doctorQualificationsNo: this.form.value.doctorQualificationsNo}
       );
     }
     this.isLoading = false;

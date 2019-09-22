@@ -14,10 +14,14 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
   currentPage = 1;
   // order of columns on the view
   displayedColumns = ['examinationDate', 
+                      'examinationType',                     
                       'patientFullName',
                       'patientPesel', 
                       'patientAge', 
-                      'examinationType', 
+                      'patientAck',
+                      'doctorFullName',
+                      'doctorQualificationsNo',
+                      'sendEmailTo',
                       'examinationFile',
                       'actions']; 
   dataSource: ExamListDataSource;

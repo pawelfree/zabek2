@@ -9,15 +9,19 @@ const BACKEND_URL = environment.apiUrl + '/api/exam/';
 
 @Injectable({ providedIn: 'root' })
 export class ExamService {
-
   constructor(private readonly http: HttpClient, private router: Router) {}
 
-  getExams(examsPerPage: number, currentPage: number): Observable<{exams: Examination[], count: number}> {
+  getExams(
+    examsPerPage: number,
+    currentPage: number
+  ): Observable<{ exams: Examination[]; count: number }> {
     let params = new HttpParams();
-    params = params.append('pagesize', ""+examsPerPage);
-    params = params.append('page', ""+currentPage);
+    params = params.append('pagesize', '' + examsPerPage);
+    params = params.append('page', '' + currentPage);
 
-    return this.http.get<{exams: Examination[], count: number}>(BACKEND_URL,{ params });
+    return this.http.get<{ exams: Examination[]; count: number }>(BACKEND_URL, {
+      params
+    });
   }
 
   getExam(id: string): Observable<Examination> {
@@ -28,33 +32,42 @@ export class ExamService {
     return this.http.delete(BACKEND_URL + examId);
   }
   //TODO zaktualizowac o pola badania
-  addExam(exam : { 
-    examinationDate: string,
-    examinationType: string,
-    examinationFile: string,
-    patientFullName: string, 
-    patientPesel: string, 
-    patientAge: string }
-    ) {
-    //TODO nawigacja
-    this.http.post<{ message: string; post: Examination }>(BACKEND_URL, exam)
+  addExam(exam: {
+    examinationDate: string;
+    examinationType: string;
+    examinationFile: string;
+    patientFullName: string;
+    patientPesel: string;
+    patientAge: string;
+    patientAck: string;
+    doctorFullName: string;
+    doctorQualificationsNo: string;
+    sendEmailTo: string;
+  }) {
+    this.http
+      .post<{ message: string; post: Examination }>(BACKEND_URL, exam)
       .subscribe(responseData => {
         this.router.navigate(['examinations']);
       });
   }
-  
+
   //TODO zaktualizowac o pola badania
-  updateExam(exam : {
-     _id: string, 
-     examinationDate: string,
-     examinationType: string,
-     examinationFile: string,
-     patientFullName: string, 
-     patientPesel: string, 
-     patientAge: string 
-    }) {
+  updateExam(exam: {
+    _id: string;
+    examinationDate: string;
+    examinationType: string;
+    examinationFile: string;
+    patientFullName: string;
+    patientPesel: string;
+    patientAge: string;
+    patientAck: string;
+    doctorFullName: string;
+    doctorQualificationsNo: string;
+    sendEmailTo: string;
+  }) {
     //TODO nawigacja
-    this.http.put<{ message: string; post: Examination }>(BACKEND_URL+exam._id, exam)
+    this.http
+      .put<{ message: string; post: Examination }>(BACKEND_URL + exam._id, exam)
       .subscribe(responseData => {
         this.router.navigate(['examinations']);
       });

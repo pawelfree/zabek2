@@ -12,10 +12,6 @@
       <mat-error *ngIf="form.get('examinationType').invalid">Wprowadź rodzaj badania.</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" formControlName="examinationFile" placeholder="Pliki badania">
-      <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki  badania.</mat-error>
-    </mat-form-field>
-    <mat-form-field>
       <input matInput type="text" formControlName="patientFullName" placeholder="Imię i nazwisko pacjenta">
       <mat-error *ngIf="form.get('patientFullName').invalid">Wprowadź imię i nazwisko pacjenta (max 50 znaków).</mat-error>
     </mat-form-field>
@@ -27,6 +23,23 @@
       <input matInput type="text" formControlName="patientAge" placeholder="Wiek pacjenta">
       <mat-error *ngIf="form.get('patientAge').invalid">Wprowadź wiek pacjenta.</mat-error>
     </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" formControlName="patientAck" placeholder="Zgoda pacjenta na badania online">
+      <mat-error *ngIf="form.get('patientAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" formControlName="doctorFullName" placeholder="Lekarz zlecający">
+      <mat-error *ngIf="form.get('doctorFullName').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" formControlName="doctorQualificationsNo" placeholder="Nr uprawnień">
+      <mat-error *ngIf="form.get('doctorQualificationsNo').invalid">Wprowadź poprawny numer uprawnień lekarza (7 znaków).</mat-error>
+    </mat-form-field>   
+    <mat-form-field>
+      <input matInput type="text" formControlName="examinationFile" placeholder="Pliki badania">
+      <mat-error *ngIf="form.get('examinationFile').invalid">Wprowadź pliki  badania.</mat-error>
+    </mat-form-field>
+
     <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz badanie</button>
   </form>
 </mat-card>
