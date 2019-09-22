@@ -95,10 +95,7 @@
               "apps/frontend/tsconfig.app.json",
               "apps/frontend/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/frontend/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/frontend/**"]
           }
         },
         "test": {
@@ -133,10 +130,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/frontend-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/frontend-e2e/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/frontend-e2e/**"]
           }
         }
       }
@@ -154,9 +148,7 @@
             "outputPath": "dist/apps/backend",
             "main": "apps/backend/src/main.ts",
             "tsConfig": "apps/backend/tsconfig.app.json",
-            "assets": [
-              "apps/backend/src/assets"
-            ]
+            "assets": ["apps/backend/src/assets"]
           },
           "configurations": {
             "production": {
@@ -185,10 +177,7 @@
               "apps/backend/tsconfig.app.json",
               "apps/backend/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/backend/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/backend/**"]
           }
         },
         "test": {
@@ -196,6 +185,31 @@
           "options": {
             "jestConfig": "apps/backend/jest.config.js",
             "tsConfig": "apps/backend/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "pesel": {
+      "root": "libs/pesel",
+      "sourceRoot": "libs/pesel/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pesel/tsconfig.lib.json",
+              "libs/pesel/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/pesel/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/pesel/jest.config.js",
+            "tsConfig": "libs/pesel/tsconfig.spec.json"
           }
         }
       }
