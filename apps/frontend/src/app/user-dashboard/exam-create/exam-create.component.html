@@ -1,13 +1,7 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" (submit)="onSaveExam()" *ngIf="!isLoading">
-<!--
-    <mat-form-field>
-      <input matInput type="text" formControlName="examinationDate" placeholder="Data badania">
-      <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę wykonania badania (format
-        yyyy-mm-dd).</mat-error>
-    </mat-form-field>
--->
+
     <mat-form-field>
       <input matInput [matDatepicker]="picker1" 
              formControlName="examinationDate" 
@@ -37,9 +31,8 @@
     <mat-form-field>
       <input matInput type="text" formControlName="patientPesel" placeholder="PESEL">
       <mat-error *ngIf="form.get('patientPesel').hasError('required')">PESEL jest wymagany.</mat-error>
-      <mat-error
-        *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL
-        musi mieć 11 znaków.</mat-error>
+      <mat-error *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL musi mieć 11 znaków.</mat-error>
+      <mat-error *ngIf="form.get('patientPesel').hasError('onlyNumbers')">PESEL może składać się tylko z cyfr.</mat-error>
       <mat-error *ngIf="form.get('patientPesel').hasError('validPesel')">PESEL jest niepoprawny.</mat-error>
     </mat-form-field>
 

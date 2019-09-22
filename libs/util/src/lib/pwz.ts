@@ -10,11 +10,9 @@ const isValidPwz = (pwz: string): boolean => {
 	}
 
 	const arr = pwz.split('').map(e => Number(e));
-
-	const validate = ((4 * arr[1]) + (2 * arr[2]) + (5 * arr[3]) + (7 * arr[4]) + (4 * arr[5]));
-	const checksum = validate % 11 ;
-
-  return  checksum === arr[0];
+	const validate = arr.slice(1).reduce((prev, curr, index) => curr*(index+1) + prev, 0);
+	
+  return  (validate % 11) === arr[0];
 };
 
 export {

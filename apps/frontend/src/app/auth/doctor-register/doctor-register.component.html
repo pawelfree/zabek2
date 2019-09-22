@@ -15,8 +15,11 @@
         <mat-error *ngIf="form.get('lastName').invalid">Nazwisko jest wymagane.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="qualificationsNo" placeholder="Numer kwalifikacji">
-        <mat-error *ngIf="form.get('qualificationsNo').invalid">Numer kwalifikacji jest wymagany.</mat-error>
+        <input matInput type="text" formControlName="qualificationsNo" placeholder="Numer pozwolenia na wykonywanie zawodu (PWZ)">
+        <mat-error *ngIf="form.get('qualificationsNo').hasError('required')">PWZ jest wymagany.</mat-error>
+        <mat-error *ngIf="form.get('qualificationsNo').hasError('minlength') || form.get('qualificationsNo').hasError('maxlength')">PWZ musi mieć 7 cyfr.</mat-error>
+        <mat-error *ngIf="form.get('qualificationsNo').hasError('onlyNumbers')">PWZ może składać się tylko z cyfr.</mat-error>
+        <mat-error *ngIf="form.get('qualificationsNo').hasError('validPwz')">PWZ jest niepoprawny.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" formControlName="officeName" placeholder="Nazwa gabinetu">

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { PeselValidator } from '../../_validators';
+import { PeselValidator, CustomValidator } from '../../_validators';
 
 
 @Component({
@@ -35,7 +35,11 @@ export class ExamCreateComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)]
       }),
       patientPesel: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11), PeselValidator.validPesel ]
+        validators: [ Validators.required, 
+                      Validators.minLength(11), 
+                      Validators.maxLength(11), 
+                      CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
+                      PeselValidator.validPesel ]
       }),
       patientAge: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
