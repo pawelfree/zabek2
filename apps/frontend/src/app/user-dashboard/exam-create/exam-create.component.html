@@ -7,7 +7,7 @@
              placeholder="Data badania"
              >
       <mat-datepicker-toggle matSuffix [for]="examinationDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #examinationDatePicker></mat-datepicker>
+      <mat-datepicker touchUi #examinationDatePicker></mat-datepicker>
       <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę badania.</mat-error>
     </mat-form-field>
 
