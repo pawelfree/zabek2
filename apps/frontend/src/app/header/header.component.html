@@ -20,6 +20,9 @@
         <li *ngIf="isAdmin">
           <a mat-button routerLink="/admin/usercreate" routerLinkActive="mat-accent">Nowy użytkownik</a>
         </li>
+        <li *ngIf="isLoggedIn">
+          <a mat-button routerLink="/doctorlist" routerLinkActive="mat-accent">Lekarze</a>
+        </li>
         <li *ngIf="isAdmin">
           <a mat-button routerLink="/admin/reports" routerLinkActive="mat-accent">Raporty</a>
         </li>

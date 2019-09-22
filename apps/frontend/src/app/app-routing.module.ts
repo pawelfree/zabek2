@@ -3,6 +3,7 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { AuthComponent } from './auth/login/auth.component';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from './_guards';
 
 const routes: Routes = [
     {
@@ -31,9 +32,14 @@ const routes: Routes = [
         component: DoctorRegisterComponent
     },
     {
+        path: "doctorlist",
+        loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule), 
+    },
+    {
         path: '**',
         redirectTo: 'login'
-    }
+    },
+
 
 ];
 
