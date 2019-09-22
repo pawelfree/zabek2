@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../_validators';
-//import { DatePipe } from '@angular/common';
+
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
@@ -15,8 +15,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
     {provide: MAT_DATE_LOCALE, useValue: 'pl-PL'},
 
     // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
-    // `MatMomentDateModule` in your applications root module. We provide it at the component level
-    // here, due to limitations of our example generation script.
+    // `MatMomentDateModule` in your applications root module.
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
@@ -26,7 +25,6 @@ export class ExamCreateComponent implements OnInit {
   form: FormGroup;
   private mode = 'create';
   private _id: string;
-  //pipe = new DatePipe('pl-PL');
 
   constructor(
     public examService: ExamService,
@@ -34,10 +32,6 @@ export class ExamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-    //const now = Date.now();
-    //const myFormattedDate = this.pipe.transform(now, 'short');
-
     this.form = new FormGroup({      
       examinationDate: new FormControl(null, {
         validators: [Validators.required] // chyba potrzebny jest validator na date w formacie polskim
@@ -99,6 +93,15 @@ export class ExamCreateComponent implements OnInit {
         this._id = null; 
         this.form.setValue({
           examinationDate:  Date.now(),
+          examinationType:  null,
+          examinationFile:  null,
+          patientFullName:  null,
+          patientPesel:     null,
+          patientAge:       null,
+          patientAck:       false,
+          doctorFullName:   null,
+          doctorQualificationsNo: null,
+          sendEmailTo:      null
         });       
       }
     });
