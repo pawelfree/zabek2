@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { isValidPesel } from '@zabek/util';
 
 export class PeselValidator {

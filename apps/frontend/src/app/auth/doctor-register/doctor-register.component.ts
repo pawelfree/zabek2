@@ -6,6 +6,8 @@ import { tap, startWith } from 'rxjs/operators';
 import { Doctor } from '../../_models';
 import { Router } from '@angular/router';
 import { DoctorService } from '../../_services'
+import { PwzValidator } from '../../_validators';
+
 
 @Component({
   selector: 'zabek-doctor-register',
@@ -42,7 +44,11 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
                       Validators.minLength(5)]
       }),    
       qualificationsNo: new FormControl(null, {
-        validators: [ Validators.required]
+        validators: [ Validators.required, 
+                      Validators.minLength(7), 
+                      Validators.maxLength(7), 
+                      CustomValidator.patternMatch(/^[0-9]{7}$/, {onlyNumbers : true}),
+                      PwzValidator.validPwz ]
       }),  
       officeName: new FormControl(null, {
         validators: [ Validators.required,
