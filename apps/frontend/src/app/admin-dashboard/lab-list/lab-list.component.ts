@@ -10,7 +10,7 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./lab-list.component.css']
 })
 export class LabListComponent implements AfterViewInit, OnInit  {
-  labsPerPage = 2;
+  labsPerPage = 5;
   currentPage = 1;
 
   displayedColumns = ['name', 'email', 'address', 'actions'];

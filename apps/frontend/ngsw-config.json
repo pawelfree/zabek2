@@ -9,8 +9,7 @@
         "files": [
           "/favicon.ico",
           "/index.html",
-          "/*.css",
-          "/*.js"
+          "/*.css"
         ],
         "urls": [
           "https://fonts.googleapis.com/css?family=Roboto:300,400,500",

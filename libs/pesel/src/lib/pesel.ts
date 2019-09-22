@@ -2,9 +2,9 @@
 
 /**
 * @param {string} pesel PESEL you want to check.
-* @return {boolean} Whether the provided PESEL is valid or not.
+* @return {boolean} Whether the provided PESEL is valid.
 */
-const isValidPesel = (pesel: string): boolean => {
+const isValid = (pesel: string): boolean => {
 	// Basic validation
 	if (pesel.length !== 11) {
 		return false;
@@ -88,7 +88,7 @@ const getDateOfBirth = (pesel: string): string => {
 };
 
 export {
-	isValidPesel,
+	isValid,
 	isFemale,
 	getDateOfBirth
 };
