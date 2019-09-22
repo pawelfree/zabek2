@@ -1,5 +1,5 @@
 import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
-import { isValid } from '@zabek/pesel';
+import { isValidPesel } from '@zabek/util';
 
 export class PeselValidator {
 
@@ -7,7 +7,7 @@ export class PeselValidator {
       if (!control.value) {
         return;
       }
-      if (!isValid(control.value)) {
+      if (!isValidPesel(control.value)) {
         return {validPesel: true};
       } 
     }

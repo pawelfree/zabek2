@@ -189,9 +189,9 @@
         }
       }
     },
-    "pesel": {
-      "root": "libs/pesel",
-      "sourceRoot": "libs/pesel/src",
+    "util": {
+      "root": "libs/util",
+      "sourceRoot": "libs/util/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -199,17 +199,17 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/pesel/tsconfig.lib.json",
-              "libs/pesel/tsconfig.spec.json"
+              "libs/util/tsconfig.lib.json",
+              "libs/util/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/pesel/**"]
+            "exclude": ["**/node_modules/**", "!libs/util/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/pesel/jest.config.js",
-            "tsConfig": "libs/pesel/tsconfig.spec.json"
+            "jestConfig": "libs/util/jest.config.js",
+            "tsConfig": "libs/util/tsconfig.spec.json"
           }
         }
       }

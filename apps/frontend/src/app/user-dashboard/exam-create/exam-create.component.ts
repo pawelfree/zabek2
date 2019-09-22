@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Examination } from '../../_models';
 import { PeselValidator } from '../../_validators';
 
 
