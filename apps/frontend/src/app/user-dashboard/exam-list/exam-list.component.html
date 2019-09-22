@@ -27,7 +27,7 @@
   </ng-container>
   
   <ng-container matColumnDef="doctorFullName">
-    <th mat-header-cell *matHeaderCellDef> Lekarz </th>
+    <th mat-header-cell *matHeaderCellDef>Lekarz</th>
     <td mat-cell *matCellDef="let element"> {{element.doctorFullName}} </td>
   </ng-container>
   
@@ -37,22 +37,24 @@
   </ng-container>
 
   <ng-container matColumnDef="sendEmailTo">
-    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <th mat-header-cell *matHeaderCellDef>Email</th>
     <td mat-cell *matCellDef="let element"> {{element.sentEmailTo}} </td>
   </ng-container>
 
   <ng-container matColumnDef="patientAck">
-    <th mat-header-cell *matHeaderCellDef> Zgoda na wyniki online </th>
-    <td mat-cell *matCellDef="let element"> {{element.patientAck}} </td>
+    <th mat-header-cell *matHeaderCellDef>Zgoda na wyniki online</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-checkbox [checked]="element.patientAck" disabled="true"></mat-checkbox>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="examinationFile">
-    <th mat-header-cell *matHeaderCellDef> Pliki </th>
+    <th mat-header-cell *matHeaderCellDef>Pliki</th>
     <td mat-cell *matCellDef="let element"><a href="{{element.examinationFile}}" target="_blank" rel="_noopener"> Pobierz </a></td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef> Akcje </th>   
+    <th mat-header-cell *matHeaderCellDef>Akcje</th>   
     <td mat-cell *matCellDef="let element; let i=index;"> 
       <button mat-icon-button
               [routerLink]="['../examedit', element._id]"
