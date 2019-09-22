@@ -32,20 +32,9 @@ export class ExamService {
     return this.http.delete(BACKEND_URL + examId);
   }
   //TODO zaktualizowac o pola badania
-  addExam(exam: {
-    examinationDate: string;
-    examinationType: string;
-    examinationFile: string;
-    patientFullName: string;
-    patientPesel: string;
-    patientAge: string;
-    patientAck: string;
-    doctorFullName: string;
-    doctorQualificationsNo: string;
-    sendEmailTo: string;
-  }) {
+  addExam(exam: Examination) {
     this.http
-      .post<{ message: string; post: Examination }>(BACKEND_URL, exam)
+      .post<{ message: string; exam: Examination }>(BACKEND_URL, exam)
       .subscribe(responseData => {
         this.router.navigate(['examinations']);
       });
