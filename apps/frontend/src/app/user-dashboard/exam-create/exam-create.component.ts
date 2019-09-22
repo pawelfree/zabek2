@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Examination } from '../../_models';
 import { PeselValidator } from '../../_validators';
 
 
@@ -28,11 +27,10 @@ export class ExamCreateComponent implements OnInit {
       examinationDate: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(10), Validators.maxLength(10)] // chyba potrzebny jest validator na date w formacie polskim
       }),
-     examinationType: new FormControl(null, {
-       validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
-    }),      
-      examinationFile: new FormControl(null, { // TODO: jak obsluzyc validator dla pliku badania?
-        validators: [Validators.nullValidator] 
+      examinationType: new FormControl(null, {
+        validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
+     }),      
+      examinationFile: new FormControl(null, { 
       }),
       patientFullName: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)]
@@ -42,6 +40,18 @@ export class ExamCreateComponent implements OnInit {
       }),
       patientAge: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
+      }),
+      patientAck: new FormControl(null, {
+        validators: [Validators.required]
+      }),
+      doctorFullName: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)]
+      }),
+      doctorQualificationsNo: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(7), Validators.maxLength(7)]
+      }),
+      sendEmailTo: new FormControl(null, {
+        validators: [Validators.required, Validators.email] 
       })
     });
 
@@ -53,7 +63,6 @@ export class ExamCreateComponent implements OnInit {
         this.examService.getExam(this._id).subscribe(examData => {
           this.isLoading = false;
           this.form.setValue({
-            //TODO uzupełnić pozostałe pola z badania
             examinationDate:  examData.examinationDate,
             examinationType:  examData.examinationType,
             examinationFile:  examData.examinationFile,
@@ -72,7 +81,7 @@ export class ExamCreateComponent implements OnInit {
       }
     });
   }
-// TODO dodac pozostałe pola
+
   onSaveExam() {
     if (this.form.invalid) {
       return;
