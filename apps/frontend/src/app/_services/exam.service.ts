@@ -51,23 +51,10 @@ export class ExamService {
       });
   }
 
-  //TODO zaktualizowac o pola badania
-  updateExam(exam: {
-    _id: string;
-    examinationDate: string;
-    examinationType: string;
-    examinationFile: string;
-    patientFullName: string;
-    patientPesel: string;
-    patientAge: string;
-    patientAck: string;
-    doctorFullName: string;
-    doctorQualificationsNo: string;
-    sendEmailTo: string;
-  }) {
+  updateExam(exam: Examination) {
     //TODO nawigacja
     this.http
-      .put<{ message: string; post: Examination }>(BACKEND_URL + exam._id, exam)
+      .put<{ message: string; exam: Examination }>(BACKEND_URL + exam._id, exam)
       .subscribe(responseData => {
         this.router.navigate(['examinations']);
       });

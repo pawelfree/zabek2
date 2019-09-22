@@ -46,7 +46,7 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
   }
 
   loadExamsPage() {
-      this.dataSource.loadExams( this.paginator.pageIndex, this.paginator.pageSize);
+      this.dataSource.loadExams( this.paginator.pageIndex + 1, this.paginator.pageSize);
   }
 
   onDelete(id) {
@@ -55,7 +55,7 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
     this.examService.deleteExam(id)
       .subscribe(res => {
         if (this.dataSource.itemsOnPage === 1 ) {
-          this.paginator.pageIndex = this.paginator.pageIndex -1;
+          this.paginator.pageIndex = this.paginator.pageIndex - 1;
         }
         this.loadExamsPage();
       }
