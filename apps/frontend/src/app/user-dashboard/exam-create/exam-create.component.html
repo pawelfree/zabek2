@@ -4,8 +4,7 @@
 
     <mat-form-field>
       <input matInput type="text" formControlName="examinationDate" placeholder="Data badania">
-      <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę wykonania badania (format
-        yyyy-mm-dd).</mat-error>
+      <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę wykonania badania (format yyyy-mm-dd).</mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput type="text" formControlName="examinationType" placeholder="Rodzaj badania">

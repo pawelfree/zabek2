@@ -28,9 +28,9 @@ export class ExamCreateComponent implements OnInit {
       examinationDate: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(10), Validators.maxLength(10)] // chyba potrzebny jest validator na date w formacie polskim
       }),
-//      examinationType: new FormControl(null, {
-//        validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
-//     }),      
+     examinationType: new FormControl(null, {
+       validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
+    }),      
       examinationFile: new FormControl(null, { // TODO: jak obsluzyc validator dla pliku badania?
         validators: [Validators.nullValidator] 
       }),
