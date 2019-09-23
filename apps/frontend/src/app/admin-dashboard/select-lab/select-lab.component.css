@@ -3,6 +3,11 @@
   margin-top: 1rem;
 }
 
+mat-card {
+  min-width: 500px;
+  min-height: 500px;
+}
+
 mat-paginator {
   margin-top: 1rem;
 }

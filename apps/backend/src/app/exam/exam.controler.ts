@@ -9,38 +9,39 @@ import {
   Put,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { ExamService } from './exam.service';
-import { CreateExamDto } from './dto/createexam.dto';
-import { UpdateExamDto } from './dto/updateexam.dto';
+import { CreateExamDto,UpdateExamDto } from './dto';
 import { Exam } from './exam.interface';
-  
   
   @Controller('exam')
   export class ExamController {
     constructor(
       private readonly examService: ExamService
-    ) {}
+    ) {
+      console.warn('Sprawdzic przekazywanie labow jako obiektow lub id')
+    }
 
-  
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin','admin','user')
     @Get()
     async allExams(
       @Query('pagesize') pagesize: number,
-      @Query('page') page: number
+      @Query('page') page: number,
+      @Request() req
     ) {
-      return await this.examService.findAll(+pagesize, +page);
+      return await this.examService.findAllExams(+pagesize, +page, req.user.lab);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('admin','user')
     @Post()
-    async addExam(@Body() createExamDto: CreateExamDto) {
-      return await this.examService.add(createExamDto);
+    async addExam(@Body() createExamDto: CreateExamDto, @Request() req) {
+      return await this.examService.add({...createExamDto, lab: req.user.lab});
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)

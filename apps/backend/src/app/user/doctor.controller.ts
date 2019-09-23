@@ -9,14 +9,13 @@ import { Controller,
   Get,
   Query} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { CreateDoctorDto } from './dto/createdoctor.dto';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
 import { User } from './user.interface';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { UpdateUserInternalDto } from './dto';
+import { UpdateUserInternalDto, CreateDoctorDto } from './dto';
 import { Role } from '../shared/role';
 
 @Controller('doctor')

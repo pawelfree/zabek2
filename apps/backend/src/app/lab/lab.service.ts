@@ -1,9 +1,8 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { Lab } from './lab.interface';
-import { CreateLabDto } from './dto/createlab.dto';
+import { CreateLabDto, UpdateLabDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateLabDto } from './dto/updatelab.dto';
 
 @Injectable()
 export class LabService {

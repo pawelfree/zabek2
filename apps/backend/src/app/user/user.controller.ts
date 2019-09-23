@@ -21,7 +21,7 @@ import { CreateUserDto, UpdateUserDto, ChangePasswordDto } from './dto';
 import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
-import { UpdateUserInternalDto } from './dto/updateuser.internal.dto';
+import { UpdateUserInternalDto } from './dto';
 import { Role } from '../shared/role';
 
 @Controller('user')

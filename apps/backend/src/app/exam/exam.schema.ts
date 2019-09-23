@@ -68,5 +68,10 @@ export const ExamSchema = new mongoose.Schema({
     minLength: 1,
     maxLength: 500,
     unique: false
-  }
+  },
+  lab: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Lab',
+    required: true
+  },
 });
