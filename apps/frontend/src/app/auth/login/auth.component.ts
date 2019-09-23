@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
@@ -26,12 +26,16 @@ export class AuthComponent implements OnInit, OnDestroy {
   private storeSub: Subscription;
   private closeSub: Subscription;
 
+  queryParams: Params;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private readonly dialog: MatDialog,
     private readonly store: Store<AppState>  ) {}
+
+
 
   ngOnInit() {
     this.storeSub = this.store.select('auth')
@@ -54,6 +58,12 @@ export class AuthComponent implements OnInit, OnDestroy {
       if (this.authError) {
         this.showErrorAlert(this.authError);
       }
+    });
+
+    this.route.queryParams.pipe(
+      take(1)
+    ).subscribe(params => {
+      this.queryParams = {id: params['id']};
     });
 
     this.loginForm = this.formBuilder.group({
