@@ -10,8 +10,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: [ './doctor-list.component.css' ]
 })
 export class DoctorListComponent implements OnInit, AfterViewInit  {
-  doctorsPerPage = 10;
-  currentPage = 1;
+  doctorsPerPage = 2;
+  currentPage = 0;
 
   displayedColumns = ['firstName', 'lastName', 'email', 'actions'];
   dataSource: DoctorListDataSource;
@@ -34,7 +34,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit  {
   }
 
   loadDoctorsPage() {
-    this.dataSource.loadDoctors( this.paginator.pageIndex+1, this.paginator.pageSize);
+    this.dataSource.loadDoctors( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onActivate(id: string) {

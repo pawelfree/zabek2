@@ -29,10 +29,7 @@ export class UserService {
     const options = {role: Role.doctor };
     const findallQuery = this.userModel.find(options);
     const count = await this.userModel.countDocuments(findallQuery);
-    if (pageSize && currentPage) {
-      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
-    return await findallQuery.then(doctors => ({ doctors, count }) );
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(doctors => ({ doctors, count }) );
   }
 
   async findAllUsers(
@@ -48,10 +45,7 @@ export class UserService {
     } 
     const findallQuery = this.userModel.find(options);
     const count = await this.userModel.countDocuments(findallQuery);
-    if (pageSize && currentPage) {
-      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
-    return await findallQuery.populate('lab', 'name').then(users => ({ users, count }) );
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).populate('lab', 'name').then(users => ({ users, count }) );
   }
 
   async delete(_id: string) {

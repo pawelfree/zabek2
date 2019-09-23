@@ -29,7 +29,7 @@ export class UserListDataSource extends DataSource<User> {
     this.loadingSubject.complete();
   }
 
-  loadUsers(pageIndex = 1, pageSize = this.pageSize) {
+  loadUsers(pageIndex = 0, pageSize = this.pageSize) {
     this.loadingSubject.next(true);
     this.usersSubject.subscribe();
 

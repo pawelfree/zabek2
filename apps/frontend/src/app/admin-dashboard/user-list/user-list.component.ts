@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators';
 })
 export class UserListComponent implements OnInit, AfterViewInit {
   usersPerPage = 10;
-  currentPage = 1;
+  currentPage = 0;
 
   displayedColumns = [ 'email', 'role', 'lab', 'actions'];
   dataSource: UserListDataSource;
@@ -34,7 +34,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   loadUsersPage() {
-      this.dataSource.loadUsers( this.paginator.pageIndex+1, this.paginator.pageSize);
+      this.dataSource.loadUsers( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onDelete(id: string) {

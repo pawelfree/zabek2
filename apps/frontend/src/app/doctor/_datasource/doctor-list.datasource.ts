@@ -29,7 +29,7 @@ export class DoctorListDataSource extends DataSource<Doctor> {
     this.loadingSubject.complete();
   }
 
-  loadDoctors(pageIndex = 1, pageSize = this.pageSize) {
+  loadDoctors(pageIndex = 0, pageSize = this.pageSize) {
     this.loadingSubject.next(true);
     this.doctorSubject.subscribe();
 

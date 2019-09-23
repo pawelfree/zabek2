@@ -23,25 +23,12 @@ export class ExamService {
   }
 
   async findAll(
-    pageSize: number,
-    currentPage: number
+    pageSize: number = 10,
+    currentPage: number = 0
   ): Promise<{ exams: Exam[]; count: number }> {
-    let exams;
     const findallQuery = this.examModel.find<Exam>();
-    if (pageSize && currentPage) {
-      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
-    return await findallQuery
-      .then(documents => {
-        exams = documents;
-        return this.examModel.countDocuments();
-      })
-      .then(count => {
-        return {
-          exams,
-          count
-        };
-      });
+    const count = await this.examModel.countDocuments(findallQuery);   
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(exams => ({ exams, count }) );
   }
 
   async update(updateExamDto: UpdateExamDto) {

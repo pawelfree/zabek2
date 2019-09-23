@@ -10,8 +10,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./exam-list.component.css']
 })
 export class ExamListComponent implements AfterViewInit, OnInit  {
-  examsPerPage = 5;
-  currentPage = 1;
+  examsPerPage = 10;
+  currentPage = 0;
   // order of columns on the view
   displayedColumns = ['examinationDate', 
                       'examinationType',                     
@@ -46,7 +46,7 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
   }
 
   loadExamsPage() {
-      this.dataSource.loadExams( this.paginator.pageIndex + 1, this.paginator.pageSize);
+      this.dataSource.loadExams( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onDelete(id) {

@@ -10,8 +10,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./lab-list.component.css']
 })
 export class LabListComponent implements AfterViewInit, OnInit  {
-  labsPerPage = 5;
-  currentPage = 1;
+  labsPerPage = 10;
+  currentPage = 0;
 
   displayedColumns = ['name', 'email', 'address', 'actions'];
   dataSource: LabListDataSource;
@@ -36,7 +36,7 @@ export class LabListComponent implements AfterViewInit, OnInit  {
   }
 
   loadLabsPage() {
-      this.dataSource.loadLabs( this.paginator.pageIndex+1, this.paginator.pageSize);
+      this.dataSource.loadLabs( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onDelete(id: string) {

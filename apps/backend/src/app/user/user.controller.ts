@@ -56,8 +56,8 @@ export class UserController {
   @Roles(Role.sadmin, Role.admin)
   @Get()
   async allUsers(
-    @Query('pagesize') pagesize: number,
-    @Query('page') page: number,
+    @Query('pagesize') pagesize: number = 0,
+    @Query('page') page: number = 10,
     @Request() req
   ) {
     //TODO dodac sadminowi lab

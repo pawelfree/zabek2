@@ -22,25 +22,12 @@ export class LabService {
   }
 
   async findAll(
-    pageSize: number,
-    currentPage: number
+    pageSize: number = 10,
+    currentPage: number = 0
   ): Promise<{ labs: Lab[]; count: number }> {
-    let labs;
     const findallQuery = this.labModel.find<Lab>();
-    if (pageSize && currentPage) {
-      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
-    return await findallQuery
-      .then(documents => {
-        labs = documents;
-        return this.labModel.countDocuments();
-      })
-      .then(count => {
-        return {
-          labs,
-          count
-        };
-      });
+    const count = await this.labModel.countDocuments(findallQuery);
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(labs => ({ labs, count }) );
   }
 
   async update(updateLabDto: UpdateLabDto) {

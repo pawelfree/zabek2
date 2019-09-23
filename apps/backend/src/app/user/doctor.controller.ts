@@ -32,8 +32,8 @@ export class DoctorController {
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Get()
   async allUsers(
-    @Query('pagesize') pagesize: number,
-    @Query('page') page: number
+    @Query('pagesize') pagesize: number = 0,
+    @Query('page') page: number = 10
   ) {
     return await this.userService.findAllDoctors(+pagesize, +page);
   }
