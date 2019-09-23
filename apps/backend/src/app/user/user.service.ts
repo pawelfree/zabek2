@@ -25,18 +25,19 @@ export class UserService {
     return await new this.userModel(createUserInternalDto).save();
   }
 
-  async findAllDoctors(pageSize: number, currentPage: number): Promise<{ doctors: User[]; count: number }>  {
+  async findAllDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {
     const options = {role: Role.doctor };
+    //TODO dodac sadminowi lab
+    console.warn('dodac sadminowi lab');
+    if (labId) {
+      options['lab'] = labId;
+    } 
     const findallQuery = this.userModel.find(options);
     const count = await this.userModel.countDocuments(findallQuery);
     return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(doctors => ({ doctors, count }) );
   }
 
-  async findAllUsers(
-    pageSize: number,
-    currentPage: number,
-    labId: string = null
-  ): Promise<{ users: User[]; count: number }> {
+  async findAllUsers( pageSize: number, currentPage: number, labId: string): Promise<{ users: User[]; count: number }> {
     const options = {role: { $in: [Role.admin, Role.user]}};
     //TODO dodac sadminowi lab
     console.warn('dodac sadminowi lab');

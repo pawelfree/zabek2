@@ -7,7 +7,8 @@ import { Controller,
   Param,
   InternalServerErrorException,
   Get,
-  Query} from '@nestjs/common';
+  Query,
+  Request} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
@@ -17,12 +18,15 @@ import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { UpdateUserInternalDto, CreateDoctorDto } from './dto';
 import { Role } from '../shared/role';
+import { LabService } from '../lab/lab.service';
+import { Lab } from '../lab/lab.interface';
 
 @Controller('doctor')
 export class DoctorController {
 
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly labService: LabService
   ) {}
 
   static SALT = 10;
@@ -32,9 +36,10 @@ export class DoctorController {
   @Get()
   async allUsers(
     @Query('pagesize') pagesize: number = 0,
-    @Query('page') page: number = 10
+    @Query('page') page: number = 10,
+    @Request() req
   ) {
-    return await this.userService.findAllDoctors(+pagesize, +page);
+    return await this.userService.findAllDoctors(+pagesize, +page, req.user.lab);
   }
 
   @Post()
@@ -43,11 +48,15 @@ export class DoctorController {
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
+    const lab: Lab = await this.labService.findById(createDoctorDto.lab._id);
+    if(! lab) {
+      throw new BadRequestException('Pracownia obsługująca lekarza nie istnieje')
+    }
     const salt = await bcrypt.genSalt(DoctorController.SALT);
-    const _createDoctorDto = {
+    const _createDoctorDto: CreateDoctorDto = {
       ...createDoctorDto,
-      _id: null,
       active: false,
+      lab: lab,
       role: Role.doctor,
       password: await bcrypt.hash(createDoctorDto.password, salt)
     } 

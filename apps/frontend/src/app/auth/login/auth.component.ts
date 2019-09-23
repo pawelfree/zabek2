@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   private storeSub: Subscription;
   private closeSub: Subscription;
 
-  queryParams: Params;
+  queryParams: Params = { id: '0' };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -63,7 +63,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.route.queryParams.pipe(
       take(1)
     ).subscribe(params => {
-      this.queryParams = {id: params['id']};
+      this.queryParams = {id: params['id'] ? params['id']: '0'};
     });
 
     this.loginForm = this.formBuilder.group({

@@ -6,6 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class LabService {
+  
   constructor(@InjectModel('Lab') private readonly labModel: Model<Lab>) {}
 
   async findById(id: string): Promise<Lab> {
