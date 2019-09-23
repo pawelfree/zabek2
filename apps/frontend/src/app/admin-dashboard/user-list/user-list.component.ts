@@ -1,20 +1,22 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { UserListDataSource } from '../_datasource/user-list.datasource';
 import { UserService } from '../../_services';
 import { tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'zabek-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit, AfterViewInit {
+export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   usersPerPage = 10;
   currentPage = 0;
 
   displayedColumns = [ 'email', 'role', 'lab', 'actions'];
   dataSource: UserListDataSource;
+  paginatorSub: Subscription = null;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -26,11 +28,18 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.paginator.page
+    this.paginatorSub = this.paginator.page
         .pipe(
             tap(() => this.loadUsersPage())
         )
         .subscribe();
+  }
+
+  ngOnDestroy() {
+    if (this.paginatorSub) {
+      this.paginatorSub.unsubscribe();
+      this.paginatorSub = null;
+    }
   }
 
   loadUsersPage() {

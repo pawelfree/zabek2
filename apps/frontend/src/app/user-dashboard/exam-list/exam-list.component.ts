@@ -3,13 +3,14 @@ import { MatPaginator } from '@angular/material';
 import { ExamListDataSource } from '../_datasource/exam-list.datasource';
 import { ExamService } from '../../_services';
 import { tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'zabek-exam-list',
   templateUrl: './exam-list.component.html',
   styleUrls: ['./exam-list.component.css']
 })
-export class ExamListComponent implements AfterViewInit, OnInit  {
+export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy  {
   examsPerPage = 10;
   currentPage = 0;
   // order of columns on the view
@@ -25,6 +26,7 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
                       'examinationFile',
                       'actions']; 
   dataSource: ExamListDataSource;
+  paginatorSub: Subscription = null;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -38,11 +40,18 @@ export class ExamListComponent implements AfterViewInit, OnInit  {
   }
 
   ngAfterViewInit() {
-    this.paginator.page
+    this.paginatorSub = this.paginator.page
         .pipe(
             tap(() => this.loadExamsPage())
         )
         .subscribe();
+  }
+
+  ngOnDestroy() {
+    if (this.paginatorSub) {
+      this.paginatorSub.unsubscribe();
+      this.paginatorSub = null;
+    }
   }
 
   loadExamsPage() {
