@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto } from './dto';
+import { Role } from '../shared/role';
 
 @Injectable()
 export class UserService {
@@ -24,12 +25,24 @@ export class UserService {
     return await new this.userModel(createUserInternalDto).save();
   }
 
-  async findAll(
+  async findAllDoctors(pageSize: number, currentPage: number): Promise<{ doctors: User[]; count: number }>  {
+    const options = {role: Role.doctor };
+    const findallQuery = this.userModel.find(options);
+    const count = await this.userModel.countDocuments(findallQuery);
+    if (pageSize && currentPage) {
+      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+    }
+    return await findallQuery.then(doctors => ({ doctors, count }) );
+  }
+
+  async findAllUsers(
     pageSize: number,
     currentPage: number,
     labId: string = null
   ): Promise<{ users: User[]; count: number }> {
-    const options = {};
+    const options = {role: { $in: [Role.admin, Role.user]}};
+    //TODO dodac sadminowi lab
+    console.warn('dodac sadminowi lab');
     if (labId) {
       options['lab'] = labId;
     } 

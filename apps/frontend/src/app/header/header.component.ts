@@ -45,6 +45,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.currentUser && this.currentUser.role === Role.sadmin;
   }
   
+  get isUser() {
+    return this.currentUser && !(this.currentUser.role === Role.doctor);
+  }
+
   get isLoggedIn() {
     return this.currentUser;
   }

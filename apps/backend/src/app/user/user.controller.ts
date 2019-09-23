@@ -22,7 +22,7 @@ import { User } from './user.interface';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { UpdateUserInternalDto } from './dto/updateuser.internal.dto';
-import { CLIENT_RENEG_WINDOW } from 'tls';
+import { Role } from '../shared/role';
 
 @Controller('user')
 export class UserController {
@@ -53,18 +53,20 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin')
+  @Roles(Role.sadmin, Role.admin)
   @Get()
   async allUsers(
     @Query('pagesize') pagesize: number,
     @Query('page') page: number,
     @Request() req
   ) {
-    return await this.userService.findAll(+pagesize,+page, req.user.lab);
+    //TODO dodac sadminowi lab
+    console.warn('Dodac sadminowi lab');
+    return await this.userService.findAllUsers(+pagesize, +page, req.user.lab);
   }
   
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin')
+  @Roles(Role.sadmin, Role.admin)
   @Post()
   async addUser(@Body() createUserDto: CreateUserDto) {
     const user: User = await this.userService.findByEmail(createUserDto.email);
@@ -87,14 +89,16 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin')
+  @Roles(Role.sadmin, Role.admin)
   @Delete(':id')
   async deleteUser(@Param('id') id: string, @Request() req) {
+    //TODO kto moze usunac kogo
+    console.warn('kto moze usunac kogo')
     const user: User =  await this.userService.findById(id);
-    if (user.role === 'sadmin' || user.role === 'doctor') {
+    if (user.role === Role.sadmin || user.role === Role.doctor) {
       throw new BadRequestException('Nie można usunąć użytkownika');
     }
-    if (user.role === 'admin' && req.user.role === 'admin') {
+    if (user.role === Role.admin && req.user.role === Role.admin) {
       throw new BadRequestException('Użytkownik nie może usunąć administratora');
     }
     return this.userService.delete(id);
@@ -102,14 +106,14 @@ export class UserController {
 
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin')
+  @Roles(Role.sadmin, Role.admin)
   @Get(':id')
   async getUser(@Param('id') id: string) {
     return this.userService.findById(id);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin')
+  @Roles(Role.sadmin, Role.admin)
   @Put(':id')
   async updateUser(@Body() updateUserDto: UpdateUserDto, @Param('id') id: string) {
     if (id !== updateUserDto._id ) {
@@ -144,7 +148,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin', 'user', 'doctor')
+  @Roles(Role.sadmin, Role.admin, Role.user, Role.doctor)
   @Post('changepassword')
   async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Request() req){
     if (!changePasswordDto.newPassword || ! changePasswordDto.oldPassword) {

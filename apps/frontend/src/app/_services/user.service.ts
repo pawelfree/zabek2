@@ -12,7 +12,7 @@ export class UserService {
 
   getUsers(usersPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${usersPerPage}&page=${currentPage}`;
-    return this.http.get<{ users: any; count: number }>(BACKEND_URL + queryParams);
+    return this.http.get<{ users: User[]; count: number }>(BACKEND_URL + queryParams);
   }
 
   getUser(id: string) {

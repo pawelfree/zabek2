@@ -5,7 +5,9 @@ import { Controller,
   Put,
   UseGuards,
   Param,
-  InternalServerErrorException} from '@nestjs/common';
+  InternalServerErrorException,
+  Get,
+  Query} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateDoctorDto } from './dto/createdoctor.dto';
 import * as _ from 'lodash';
@@ -15,6 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { UpdateUserInternalDto } from './dto';
+import { Role } from '../shared/role';
 
 @Controller('doctor')
 export class DoctorController {
@@ -24,6 +27,16 @@ export class DoctorController {
   ) {}
 
   static SALT = 10;
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.sadmin, Role.admin, Role.user)
+  @Get()
+  async allUsers(
+    @Query('pagesize') pagesize: number,
+    @Query('page') page: number
+  ) {
+    return await this.userService.findAllDoctors(+pagesize, +page);
+  }
 
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
@@ -36,17 +49,18 @@ export class DoctorController {
       ...createDoctorDto,
       _id: null,
       active: false,
-      role: "doctor",
+      role: Role.doctor,
       password: await bcrypt.hash(createDoctorDto.password, salt)
     } 
     //TODO ten lodash to trzeba zmienic na cos innego
+    console.warn('zrobic cos z lodashem')
     return _.pick(await this.userService.addDoctor(_createDoctorDto), [
       'email', 'role', 'firstName', 'lastName', 'qualificationsNo'
     ]);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin', 'user')
+  @Roles(Role.sadmin, Role.admin, Role.user)
   @Put('/activate/:id')
   async activateUser(@Param('id') id: string) {
     let error;

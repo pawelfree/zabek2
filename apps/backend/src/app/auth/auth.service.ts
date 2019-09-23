@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import * as jsonwebtoken from 'jsonwebtoken';
 import { User } from '../user/user.interface';
 import { ConfigService } from '../config/config.service';
-import { Role } from '../user/role';
+import { Role } from '../shared/role';
 
 @Injectable()
 export class AuthService {

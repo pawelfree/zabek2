@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { UserListDataSource } from '../_datasource/user-list.datasource';
-import { UserService, DoctorService } from '../../_services';
+import { UserService } from '../../_services';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -18,10 +18,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly doctorService: DoctorService
-  ) {}
+  constructor( private readonly userService: UserService ) {}
 
   ngOnInit() {
     this.dataSource = new UserListDataSource(this.userService, this.usersPerPage);   
@@ -47,13 +44,6 @@ export class UserListComponent implements OnInit, AfterViewInit {
         if (this.dataSource.itemsOnPage === 1 ) {
           this.paginator.pageIndex = this.paginator.pageIndex -1;
         }
-        this.loadUsersPage();
-      });
-  }
-
-  onActivate(id: string) {
-    this.doctorService.activate(id)
-      .subscribe(res => {
         this.loadUsersPage();
       });
   }
