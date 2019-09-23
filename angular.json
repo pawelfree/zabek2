@@ -31,6 +31,7 @@
             "polyfills": "apps/frontend/src/polyfills.ts",
             "tsConfig": "apps/frontend/tsconfig.app.json",
             "assets": [
+              "apps/frontend/src/test.html",
               "apps/frontend/src/favicon.ico",
               "apps/frontend/src/assets",
               "apps/frontend/src/manifest.webmanifest"

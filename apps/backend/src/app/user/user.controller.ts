@@ -161,14 +161,10 @@ export class UserController {
           error = new BadRequestException(message);
         } else {
           const salt = await bcrypt.genSalt(UserController.SALT);
-          const updateUserInternalDto: UpdateUserInternalDto = {
+          const {n, nModified, ok} = await this.userService.update({
             _id: user._id,
-            password: await bcrypt.hash(changePasswordDto.newPassword, salt),
-            email: user.email,
-            role: user.role,
-            lab: user.lab._id
-          };
-          const {n, nModified, ok} = await this.userService.update(updateUserInternalDto);
+            password: await bcrypt.hash(changePasswordDto.newPassword, salt)
+          });
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
             error = new InternalServerErrorException('Nieznany błąd');
           } 

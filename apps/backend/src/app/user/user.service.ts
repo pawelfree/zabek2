@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto } from './dto';
+import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto, ChangePasswordInternalDto } from './dto';
 import { Role } from '../shared/role';
 
 @Injectable()
@@ -52,7 +52,7 @@ export class UserService {
     return await this.userModel.deleteOne({ _id });
   }
 
-  async update(updateUserDto: UpdateUserInternalDto) {
+  async update(updateUserDto: UpdateUserInternalDto | ChangePasswordInternalDto) {
     return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
   }
 }
