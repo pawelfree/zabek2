@@ -38,7 +38,7 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
       }),
       firstName: new FormControl(null, {
         validators: [ Validators.required,
-                      Validators.minLength(5)]
+                      Validators.minLength(2)]
       }),
       lastName: new FormControl(null, {
         validators: [ Validators.required,
