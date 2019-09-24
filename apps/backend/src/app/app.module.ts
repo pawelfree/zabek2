@@ -6,6 +6,8 @@ import { ConfigService } from './config/config.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LabModule } from './lab/lab.module';
 import { ExamModule } from './exam/exam.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [ 
@@ -13,6 +15,9 @@ import { ExamModule } from './exam/exam.module';
     LabModule,
     ExamModule,
     UserModule,
+    ServeStaticModule.forRoot({
+        rootPath: join(__dirname, '..', '../../dist/apps/frontend/')
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

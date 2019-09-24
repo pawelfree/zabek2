@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
-import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
@@ -14,7 +13,6 @@ async function bootstrap() {
   
   app.enableCors();
   app.setGlobalPrefix(globalPrefix);
-  app.useStaticAssets(join(__dirname, '..', '../../dist/apps/frontend/'));
 
   await app.listen(port, () => {
    console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
