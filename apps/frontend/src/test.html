@@ -8,10 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body>
-  <H1>Załóż lekarza</H1>
-  <a href="/login?id=5d87359c4e119b087cff590c">Login lab=5d87359c4e119b087cff590c (to samo okno)</a>
-  <br>
-  <a href="/login?id=5d87359c4e119b087cff590c" rel="noopener noreferrer" target="_blank">Login lab=5d87359c4e119b087cff590c (nowe okno)</a>
-  <br>
+  <H1>Zakładanie lekarza przez linka</H1>
+  <div></div>
+    Identyfikator pracowni <input id="labid" type="text" value="5d68d22b8f5dfc00170330dd"/>
+    <button onClick="myFun()">Załóż lekarza</button>
+  </div>
+  <script>
+    function myFun() { window.open("/login?id="+document.getElementById("labid").value); }
+  </script>
 </body>
 </html>
