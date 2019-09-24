@@ -14,8 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 import { LabService } from './lab.service';
-import { CreateLabDto } from './dto/createlab.dto';
-import { UpdateLabDto } from './dto/updatelab.dto';
+import { CreateLabDto, UpdateLabDto } from './dto';
 import { Lab } from './lab.interface';
 
 @Controller('lab')

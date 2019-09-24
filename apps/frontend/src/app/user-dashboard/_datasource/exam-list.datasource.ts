@@ -29,7 +29,7 @@ export class ExamListDataSource extends DataSource<Examination> {
     this.loadingSubject.complete();
   }
 
-  loadExams(pageIndex, pageSize = this.pageSize) {
+  loadExams(pageIndex = 0, pageSize = this.pageSize) {
     this.loadingSubject.next(true);
     this.examsSubject.subscribe();
 

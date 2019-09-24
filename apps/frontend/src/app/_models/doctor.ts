@@ -5,6 +5,7 @@ export class Doctor extends User {
   constructor(
      _id: string, 
     email: string,
+    lab: string,
     password?: string,
     expiresIn?: number, 
     _tokenExpirationDate?: Date,
@@ -20,7 +21,7 @@ export class Doctor extends User {
     public tomographyWithViewer: boolean = false,
     public active: boolean = false
     ){
-      super(_id, email, "doctor", null, password, expiresIn, _tokenExpirationDate, _token);
+      super(_id, email, "doctor", { _id: lab, email: null, address: null, name: null }, password, expiresIn, _tokenExpirationDate, _token);
     }
 
 }

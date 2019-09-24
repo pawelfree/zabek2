@@ -5,25 +5,42 @@ import { Controller,
   Put,
   UseGuards,
   Param,
-  InternalServerErrorException} from '@nestjs/common';
+  InternalServerErrorException,
+  Get,
+  Query,
+  Request} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { CreateDoctorDto } from './dto/createdoctor.dto';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
 import { User } from './user.interface';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import { UpdateUserInternalDto } from './dto';
+import { UpdateUserInternalDto, CreateDoctorDto } from './dto';
+import { Role } from '../shared/role';
+import { LabService } from '../lab/lab.service';
+import { Lab } from '../lab/lab.interface';
 
 @Controller('doctor')
 export class DoctorController {
 
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly labService: LabService
   ) {}
 
   static SALT = 10;
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.sadmin, Role.admin, Role.user)
+  @Get()
+  async allUsers(
+    @Query('pagesize') pagesize: number = 0,
+    @Query('page') page: number = 10,
+    @Request() req
+  ) {
+    return await this.userService.findAllDoctors(+pagesize, +page, req.user.lab);
+  }
 
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
@@ -31,22 +48,27 @@ export class DoctorController {
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
+    const lab: Lab = await this.labService.findById(createDoctorDto.lab._id);
+    if(! lab) {
+      throw new BadRequestException('Pracownia obsługująca lekarza nie istnieje')
+    }
     const salt = await bcrypt.genSalt(DoctorController.SALT);
-    const _createDoctorDto = {
+    const _createDoctorDto: CreateDoctorDto = {
       ...createDoctorDto,
-      _id: null,
       active: false,
-      role: "doctor",
+      lab: lab,
+      role: Role.doctor,
       password: await bcrypt.hash(createDoctorDto.password, salt)
     } 
     //TODO ten lodash to trzeba zmienic na cos innego
+    console.warn('zrobic cos z lodashem')
     return _.pick(await this.userService.addDoctor(_createDoctorDto), [
       'email', 'role', 'firstName', 'lastName', 'qualificationsNo'
     ]);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('admin', 'sadmin', 'user')
+  @Roles(Role.sadmin, Role.admin, Role.user)
   @Put('/activate/:id')
   async activateUser(@Param('id') id: string) {
     let error;

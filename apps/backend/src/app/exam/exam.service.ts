@@ -1,9 +1,9 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { Exam } from './exam.interface';
-import { CreateExamDto } from './dto/createexam.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateExamDto } from './dto/updateexam.dto';
+import { UpdateExamDto, CreateExamInternalDto } from './dto';
+import { Lab } from '../lab/lab.interface';
 
 @Injectable()
 export class ExamService {
@@ -18,30 +18,25 @@ export class ExamService {
     return await this.examModel.findOne({ name }).select('-__v');
   }
 
-  async add(createDto: CreateExamDto): Promise<Exam> {
+  async add(createDto: CreateExamInternalDto): Promise<Exam> {
+    console.log('createDto', createDto)
     return await new this.examModel(createDto).save();
   }
 
-  async findAll(
-    pageSize: number,
-    currentPage: number
+  async findAllExams(
+    pageSize: number = 10,
+    currentPage: number = 0,
+    lab: Lab = null
   ): Promise<{ exams: Exam[]; count: number }> {
-    let exams;
-    const findallQuery = this.examModel.find<Exam>();
-    if (pageSize && currentPage) {
-      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
-    return await findallQuery
-      .then(documents => {
-        exams = documents;
-        return this.examModel.countDocuments();
-      })
-      .then(count => {
-        return {
-          exams,
-          count
-        };
-      });
+    const options = {};
+    //TODO dodac sadminowi lab
+    console.warn('dodac sadminowi lab');
+    if (lab) {
+      options['lab'] = lab;
+    } 
+    const findallQuery = this.examModel.find<Exam>(options);
+    const count = await this.examModel.countDocuments(findallQuery);   
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(exams => ({ exams, count }) );
   }
 
   async update(updateExamDto: UpdateExamDto) {

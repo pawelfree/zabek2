@@ -19,6 +19,10 @@
     routerLink="/admin/usercreate" 
     routerLinkActive="mat-accent"
     (click)="onSidenavClose()">Nowy użytkownik</a>
+  <a mat-list-item
+    routerLink="/doctorlist" 
+    routerLinkActive="mat-accent"
+    (click)="onSidenavClose()">Lekarze</a>
   <a *ngIf="isAdmin" 
     mat-list-item 
     routerLink="/admin/reports" 

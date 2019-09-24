@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
-import { tap, startWith } from 'rxjs/operators';
+import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '../../_models';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DoctorService } from '../../_services'
 import { PwzValidator } from '../../_validators';
 
@@ -21,10 +21,11 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
   private officeAddressSubs: Subscription;
   private regulationsAcceptedSubs: Subscription;
   isLoading: boolean;
-
+  private queryParams: Params = { id: '0' };
 
   constructor(
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly doctorService: DoctorService
   ){}
 
@@ -82,6 +83,12 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
           validators: CustomValidator.mustMatch('password1', 'password2')
       });
 
+      this.route.queryParams.pipe(
+        take(1)
+      ).subscribe(params => {
+        this.queryParams = {id: params['id'] ? params['id']: '0'};
+      });
+
       this.regulationsAcceptedSubs = this.form.controls.regulationsAccepted.valueChanges.pipe(
         startWith(false),
         tap(value => this.regulationsAccepted$ = value)
@@ -116,13 +123,15 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-      if (this.form.invalid) {
+      if (this.form.invalid || !this.queryParams['id'] || this.queryParams['id'] === '0') {
+        console.warn('Niepoprawny formularz lub parametr id')
         return;
       }
       this.isLoading = true;
       const doctor = new Doctor(
-        "",
+        null,
         this.form.value.email,
+        this.queryParams['id'],
         this.form.value.password1,
         null,null,null,
         this.form.value.firstName,

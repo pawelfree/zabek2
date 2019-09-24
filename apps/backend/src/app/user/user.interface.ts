@@ -6,7 +6,7 @@ export interface User extends Document {
   readonly email: string;
   readonly password: string;
   readonly role: string;
-  readonly lab?: Lab;
+  readonly lab?: string;
   readonly firstName?: string;
   readonly lastName?: string;	
   readonly officeName?: string;   

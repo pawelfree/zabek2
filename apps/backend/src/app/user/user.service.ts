@@ -2,7 +2,8 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto } from './dto';
+import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto, ChangePasswordInternalDto } from './dto';
+import { Role } from '../shared/role';
 
 @Injectable()
 export class UserService {
@@ -24,28 +25,35 @@ export class UserService {
     return await new this.userModel(createUserInternalDto).save();
   }
 
-  async findAll(
-    pageSize: number,
-    currentPage: number,
-    labId: string = null
-  ): Promise<{ users: User[]; count: number }> {
-    const options = {};
+  async findAllDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {
+    const options = {role: Role.doctor };
+    //TODO dodac sadminowi lab
+    console.warn('dodac sadminowi lab');
     if (labId) {
       options['lab'] = labId;
     } 
     const findallQuery = this.userModel.find(options);
     const count = await this.userModel.countDocuments(findallQuery);
-    if (pageSize && currentPage) {
-      findallQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-    }
-    return await findallQuery.populate('lab', 'name').then(users => ({ users, count }) );
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(doctors => ({ doctors, count }) );
+  }
+
+  async findAllUsers( pageSize: number, currentPage: number, labId: string): Promise<{ users: User[]; count: number }> {
+    const options = {role: { $in: [Role.admin, Role.user]}};
+    //TODO dodac sadminowi lab
+    console.warn('dodac sadminowi lab');
+    if (labId) {
+      options['lab'] = labId;
+    } 
+    const findallQuery = this.userModel.find(options);
+    const count = await this.userModel.countDocuments(findallQuery);
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).populate('lab', 'name').then(users => ({ users, count }) );
   }
 
   async delete(_id: string) {
     return await this.userModel.deleteOne({ _id });
   }
 
-  async update(updateUserDto: UpdateUserInternalDto) {
+  async update(updateUserDto: UpdateUserInternalDto | ChangePasswordInternalDto) {
     return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
   }
 }

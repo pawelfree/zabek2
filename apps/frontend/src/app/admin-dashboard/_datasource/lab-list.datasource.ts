@@ -29,7 +29,7 @@ export class LabListDataSource extends DataSource<Lab> {
     this.loadingSubject.complete();
   }
 
-  loadLabs(pageIndex = 1, pageSize = this.pageSize) {
+  loadLabs(pageIndex = 0, pageSize = this.pageSize) {
     this.loadingSubject.next(true);
     this.labsSubject.subscribe();
 

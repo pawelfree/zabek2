@@ -2,7 +2,7 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { UserService } from '../../_services';
 import { User } from '../../_models';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 
 export class UserListDataSource extends DataSource<User> {
 
@@ -20,7 +20,7 @@ export class UserListDataSource extends DataSource<User> {
     super();
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<User[] | readonly User[]> {
+  connect(collectionViewer: CollectionViewer): Observable<readonly User[]> {
     return this.usersSubject.asObservable();
   }  
   
@@ -29,7 +29,7 @@ export class UserListDataSource extends DataSource<User> {
     this.loadingSubject.complete();
   }
 
-  loadUsers(pageIndex = 1, pageSize = this.pageSize) {
+  loadUsers(pageIndex = 0, pageSize = this.pageSize) {
     this.loadingSubject.next(true);
     this.usersSubject.subscribe();
 

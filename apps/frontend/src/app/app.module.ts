@@ -48,7 +48,8 @@ registerLocaleData(localePl, 'pl');
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([AuthEffects]),
     FlexLayoutModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    //TODO odkomentowac na produkcji
+    //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

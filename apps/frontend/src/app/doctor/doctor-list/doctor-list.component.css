@@ -3,15 +3,14 @@
   margin-top: 1rem;
 }
 
-mat-card {
-  min-width: 500px;
-  min-height: 500px;
-}
-
 mat-paginator {
   margin-top: 1rem;
 }
 
 table {
   width: 100%;
+}
+
+mat-spinner {
+    margin: auto;
 }
