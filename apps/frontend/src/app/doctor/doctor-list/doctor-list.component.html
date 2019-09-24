@@ -21,7 +21,8 @@
           title="Aktywuj" 
           alt="Aktywuj" 
           (click)="onActivate(element._id)">
-          <mat-icon aria-label="Aktywuj">check_circle</mat-icon>
+          <mat-icon aria-label="Aktywuj"  
+            [ngStyle]="{color: element.active ? '#64A8A8' : 'gray'}">check_circle</mat-icon>
         </button>
       </td>
     </ng-container>  

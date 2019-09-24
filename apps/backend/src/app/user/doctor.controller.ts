@@ -48,9 +48,16 @@ export class DoctorController {
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
-    const lab: Lab = await this.labService.findById(createDoctorDto.lab._id);
+    const lab: Lab = await this.labService.findById(createDoctorDto.lab._id).catch(err =>
+      { 
+        let error = err.message;
+        if (err.name === 'CastError' && err.path === '_id') {
+          error = 'Błędny identyfikator pracowni ' + createDoctorDto.lab._id;
+        }
+        throw new BadRequestException(error) }
+    );
     if(! lab) {
-      throw new BadRequestException('Pracownia obsługująca lekarza nie istnieje')
+      throw new BadRequestException('Pracownia przypisana do obsługi lekarza nie istnieje')
     }
     const salt = await bcrypt.genSalt(DoctorController.SALT);
     const _createDoctorDto: CreateDoctorDto = {

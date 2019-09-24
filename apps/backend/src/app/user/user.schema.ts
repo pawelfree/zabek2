@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { isValidPwz } from '@zabek/util';
 
 export const UserSchema = new mongoose.Schema({
   email: {
@@ -37,6 +38,10 @@ export const UserSchema = new mongoose.Schema({
   },
   qualificationsNo: {
     type: String,
+    validate: {
+      validator: function(value) { return isValidPwz(value); },
+      message: props => `${props.value} nie jest poprawnym numerem PWZ`
+    },
     required: false,
     minLength: 5,
     maxLength: 25

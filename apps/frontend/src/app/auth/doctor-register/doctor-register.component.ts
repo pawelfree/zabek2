@@ -7,6 +7,8 @@ import { Doctor } from '../../_models';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DoctorService } from '../../_services'
 import { PwzValidator } from '../../_validators';
+import { MatDialog } from '@angular/material';
+import { InfoComponent } from '../../common-dialogs';
 
 
 @Component({
@@ -21,11 +23,12 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
   private officeAddressSubs: Subscription;
   private regulationsAcceptedSubs: Subscription;
   isLoading: boolean;
-  private queryParams: Params = { id: '0' };
+  private queryParams: Params = null;
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService
   ){}
 
@@ -86,7 +89,7 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
       this.route.queryParams.pipe(
         take(1)
       ).subscribe(params => {
-        this.queryParams = {id: params['id'] ? params['id']: '0'};
+        this.queryParams = params['id'] ? {id: params['id']} : null;
       });
 
       this.regulationsAcceptedSubs = this.form.controls.regulationsAccepted.valueChanges.pipe(
@@ -123,8 +126,14 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-      if (this.form.invalid || !this.queryParams['id'] || this.queryParams['id'] === '0') {
-        console.warn('Niepoprawny formularz lub parametr id')
+
+      if (this.form.invalid)  {
+        return;
+      }
+      if (!this.queryParams) {
+        console.warn('zrobic lepsza weryfikacje id pracowni po stronie frontendu')
+        //var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$")
+        this.dialog.open(InfoComponent, { data:  'Niepoprawny identyfikator pracowni' });
         return;
       }
       this.isLoading = true;
@@ -144,7 +153,11 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         this.form.value.tomographyWithViewer,
         false);
 
-      this.doctorService.addDoctor(doctor).subscribe(res => this.goOut());
+      this.doctorService.addDoctor(doctor).subscribe(
+        res => this.goOut(),
+        err => {
+          this.dialog.open(InfoComponent, { data:  err });
+        });
       this.isLoading = false;
   }
   

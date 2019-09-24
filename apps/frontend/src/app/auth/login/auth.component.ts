@@ -63,7 +63,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.route.queryParams.pipe(
       take(1)
     ).subscribe(params => {
-      this.queryParams = {id: params['id'] ? params['id']: '0'};
+      this.queryParams = params['id'] ? {id: params['id'] } : null;
     });
 
     this.loginForm = this.formBuilder.group({
