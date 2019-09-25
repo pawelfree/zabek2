@@ -23,12 +23,14 @@ import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { UpdateUserInternalDto } from './dto';
 import { Role } from '../shared/role';
+import { LabService } from '../lab/lab.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly labService: LabService
   ) {
     console.log('UserController - przemyslec co kto moze zrobic - usunac/edytowac/dodawac');
   }
@@ -73,6 +75,7 @@ export class UserController {
     if (user) {
       throw new BadRequestException('Użytkownik już istnieje');
     }
+    await this.labService.incrementUsers(createUserDto.lab._id);
     const salt = await bcrypt.genSalt(UserController.SALT);
     const _createUserDto = {
       email: createUserDto.email,
@@ -101,6 +104,7 @@ export class UserController {
     if (user.role === Role.admin && req.user.role === Role.admin) {
       throw new BadRequestException('Użytkownik nie może usunąć administratora');
     }
+    await this.labService.decrementUsers(user.lab);
     return this.userService.delete(id);
   }
 

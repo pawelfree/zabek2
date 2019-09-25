@@ -21,10 +21,15 @@ export class LabService {
     return await new this.labModel(createDto).save();
   }
 
-  async findAll(
-    pageSize: number = 10,
-    currentPage: number = 0
-  ): Promise<{ labs: Lab[]; count: number }> {
+  async incrementUsers(_id: string) {
+    return await this.labModel.findOneAndUpdate({_id}, { $inc: {usersCount: 1}});
+  }
+
+  async decrementUsers(_id: string) {
+    return await this.labModel.findOneAndUpdate({_id}, { $inc: {usersCount: -1}});
+  }
+
+  async findAll(pageSize: number = 10, currentPage: number = 0): Promise<{ labs: Lab[]; count: number }> {
     const findallQuery = this.labModel.find<Lab>();
     const count = await this.labModel.countDocuments(findallQuery);
     return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(labs => ({ labs, count }) );
@@ -34,7 +39,7 @@ export class LabService {
     return await this.labModel.updateOne({_id: updateLabDto._id}, updateLabDto);
   }
 
-  async delete(_id: string) {
-    return await this.labModel.findByIdAndRemove( _id );
+  delete(_id: string) {
+    return this.labModel.findOneAndRemove( {_id, usersCount: 0 } );
   }
 }

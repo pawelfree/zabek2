@@ -5,4 +5,5 @@ export interface Lab extends Document {
   readonly name: string;
   readonly address: string;
   readonly email: string;
+  readonly usersCount: number;
 }

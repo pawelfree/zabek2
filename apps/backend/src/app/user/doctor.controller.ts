@@ -59,6 +59,7 @@ export class DoctorController {
     if(! lab) {
       throw new BadRequestException('Pracownia przypisana do obsługi lekarza nie istnieje')
     }
+    await this.labService.incrementUsers(createDoctorDto.lab._id);
     const salt = await bcrypt.genSalt(DoctorController.SALT);
     const _createDoctorDto: CreateDoctorDto = {
       ...createDoctorDto,

@@ -41,7 +41,7 @@ export class LabController {
       if (lab) {
         throw new BadRequestException('Pracownia już istnieje');
       }
-      return await this.labService.add(createLabDto);
+      return await this.labService.add({ ...createLabDto, usersCount: 0});
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -61,7 +61,7 @@ export class LabController {
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Get(':id')
-    async getLab(@Param('id') id: string) {
+    getLab(@Param('id') id: string) {
       return this.labService.findById(id);
     }   
 
@@ -69,8 +69,10 @@ export class LabController {
     @Roles('sadmin')
     @Delete(':id')
     async deleteLab(@Param('id') id: string) {
-      //TODO zabronic usuwania takich z uzytkownikami i badaniami
-      return this.labService.delete(id);
+      
+      if (!await this.labService.delete(id)) {
+        throw new BadRequestException('Nie można usunąć pracowni, która ma użytkowników');
+      }
     }
 
 }

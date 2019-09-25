@@ -22,7 +22,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get('MONGODB_URI'),
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useFindAndModify: false
       }),
       inject: [ConfigService],
     })

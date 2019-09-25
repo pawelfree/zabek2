@@ -24,5 +24,9 @@ export const LabSchema = new mongoose.Schema({
     minLength: 20,
     maxLength: 150,
     unique: true
+  },
+  usersCount: {
+    type: Number,
+    required: true
   }
 });
