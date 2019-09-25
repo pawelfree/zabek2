@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { LabService } from '../../_services';
+import { LabService } from '../../../_services';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { InfoComponent } from '../../common-dialogs';
+import { InfoComponent } from '../../../common-dialogs';
 import { MatDialog } from '@angular/material';
 
 @Component({
@@ -64,7 +64,7 @@ export class LabCreateComponent implements OnInit {
     this.isLoading = true;
     if (this.mode === "create") {
       this.labService.addLab({...this.form.value}).subscribe(res => {
-        this.router.navigate(['/admin/lablist']);
+        this.router.navigate(['/admin/lab']);
       },
       err => {
         this.dialog.open(InfoComponent, { data:  err });
@@ -72,7 +72,7 @@ export class LabCreateComponent implements OnInit {
       });
     } else {
       this.labService.updateLab({ _id: this._id, ...this.form.value}).subscribe(res => {
-        this.router.navigate(['/admin/lablist']);
+        this.router.navigate(['/admin/lab']);
       },
       err => {
         this.dialog.open(InfoComponent, { data:  err });

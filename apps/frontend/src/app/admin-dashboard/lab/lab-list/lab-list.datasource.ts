@@ -1,7 +1,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { LabService } from '../../_services';
-import { Lab } from '../../_models';
+import { LabService } from '../../../_services';
+import { Lab } from '../../../_models';
 import { catchError, finalize, map } from 'rxjs/operators';
 
 export class LabListDataSource extends DataSource<Lab> {

@@ -1,7 +1,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { UserService } from '../../_services';
-import { User } from '../../_models';
+import { UserService } from '../../../_services';
+import { User } from '../../../_models';
 import { catchError, finalize } from 'rxjs/operators';
 
 export class UserListDataSource extends DataSource<User> {

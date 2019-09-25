@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import { LabService } from '../../_services';
 import { MatPaginator, MatDialogRef } from '@angular/material';
 import { tap } from 'rxjs/operators';
-import { LabListDataSource } from '../_datasource/lab-list.datasource';
+import { LabListDataSource } from '../lab/lab-list/lab-list.datasource';
 import { Subscription } from 'rxjs';
 
 @Component({

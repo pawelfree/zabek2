@@ -9,16 +9,16 @@
     <div fxHide.lt-md>
       <ul fxLayout fxLayoutGap="5px">
         <li *ngIf="isSAdmin">
-          <a mat-button routerLink="/admin/lablist" routerLinkActive="mat-accent">Pracownie</a>
+          <a mat-button routerLink="/admin/lab/list" routerLinkActive="mat-accent">Pracownie</a>
         </li>
         <li *ngIf="isSAdmin">
-          <a mat-button routerLink="/admin/labcreate" routerLinkActive="mat-accent">Nowa pracownia</a>
+          <a mat-button routerLink="/admin/lab/create" routerLinkActive="mat-accent">Nowa pracownia</a>
         </li>
         <li *ngIf="isAdmin">
-          <a mat-button routerLink="/admin/userlist" routerLinkActive="mat-accent">Użytkownicy</a>
+          <a mat-button routerLink="/admin/user/list" routerLinkActive="mat-accent">Użytkownicy</a>
         </li>
         <li *ngIf="isAdmin">
-          <a mat-button routerLink="/admin/usercreate" routerLinkActive="mat-accent">Nowy użytkownik</a>
+          <a mat-button routerLink="/admin/user/create" routerLinkActive="mat-accent">Nowy użytkownik</a>
         </li>
         <li *ngIf="isUser">
           <a mat-button routerLink="/doctorlist" routerLinkActive="mat-accent">Lekarze</a>

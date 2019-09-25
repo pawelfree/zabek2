@@ -16,7 +16,7 @@
     <th mat-header-cell *matHeaderCellDef> Akcje </th>   
     <td mat-cell *matCellDef="let element; let i=index;"> 
       <button mat-icon-button
-              [routerLink]="['../labedit', element._id]"
+              [routerLink]="['../edit', element._id]"
               color="primary" 
               title="Edytuj" 
               alt="Edytuj">
@@ -52,7 +52,7 @@
     md-fab-bottom-right
     aria-label="Dodaj pracownię"
     title="Dodaj" alt="Dodaj"
-    routerLink="../labcreate">
+    routerLink="../create">
     <mat-icon>add</mat-icon>
   </button>
 </div>

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { UserService } from '../../_services';
+import { UserService } from '../../../_services';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { CustomValidator } from '../../_validators';
-import { Role, Lab, User } from '../../_models';
+import { CustomValidator } from '../../../_validators';
+import { Role, Lab, User } from '../../../_models';
 import { MatDialog } from '@angular/material';
-import { SelectLabComponent } from '../select-lab/select-lab.component';
+import { SelectLabComponent } from '../../select-lab/select-lab.component';
 
 @Component({
   selector: 'zabek-user-create',
@@ -115,6 +115,6 @@ export class UserCreateComponent implements OnInit {
   }
 
   private goOut() {
-    this.router.navigate(['/userlist']);
+    this.router.navigate(['/user/list']);
   }
 }
