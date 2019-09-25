@@ -27,7 +27,7 @@ export const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: false,
-    minlength: 5,
+    minlength: 2,
     maxLength: 25
   },
   lastName: {

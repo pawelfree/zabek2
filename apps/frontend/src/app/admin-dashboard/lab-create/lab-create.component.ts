@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { LabService } from '../../_services';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Lab } from '../../_models';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { InfoComponent } from '../../common-dialogs';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'zabek-lab-create',
@@ -16,14 +17,16 @@ export class LabCreateComponent implements OnInit {
   private _id: string;
 
   constructor(
-    public labService: LabService,
-    public route: ActivatedRoute
+    private readonly labService: LabService,
+    public readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
       name: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(20)]
+        validators: [Validators.required, Validators.minLength(5), Validators.maxLength(20)]
       }),
       address: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(20)]
@@ -51,29 +54,30 @@ export class LabCreateComponent implements OnInit {
         this._id = null;
       }
     });
-
   }
 
   onSaveLab() {
     if (this.form.invalid) {
       return;
     }
+
     this.isLoading = true;
     if (this.mode === "create") {
-      this.labService.addLab( {
-        name: this.form.value.name,
-        email: this.form.value.email,
-        address: this.form.value.address }
-      );
+      this.labService.addLab({...this.form.value}).subscribe(res => {
+        this.router.navigate(['/admin/lablist']);
+      },
+      err => {
+        this.dialog.open(InfoComponent, { data:  err });
+
+      });
     } else {
-      this.labService.updateLab({
-        _id: this._id,
-        name: this.form.value.name,
-        email: this.form.value.email,
-        address: this.form.value.address}
-      );
+      this.labService.updateLab({ _id: this._id, ...this.form.value}).subscribe(res => {
+        this.router.navigate(['/admin/lablist']);
+      },
+      err => {
+        this.dialog.open(InfoComponent, { data:  err });
+      });
     }
     this.isLoading = false;
-    this.form.reset();
   }
 }
