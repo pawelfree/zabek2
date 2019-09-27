@@ -6,7 +6,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content style="display: block; padding: 1rem 0;">
-    <div [hidden]="dataSource.dataCount <= 0 || (dataSource.loading$ | async)">
+    <div [hidden]="count <= 0 || isLoading">
       <table mat-table [dataSource]='dataSource' class='mat-elevation-z2' >
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Nazwa pracowni </th>
@@ -20,17 +20,17 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)"></tr>
       </table>
       <mat-paginator
-        [length]="dataSource.dataCount"
+        [length]="count"
         [hidePageSize]="true"
         [pageSize]="labsPerPage"
       ></mat-paginator>
     </div>
-    <div *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
+    <div *ngIf="count <= 0 && !isLoading">
       <p class="info-text mat-body-1">
         Jeszcze nie ma zdefiniowanych pracowni!
       </p>
       <button mat-button mat-dialog-close color="primary" cdkFocusInitial>Zamknij</button>
     </div>
-    <mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
   </mat-card-content>
 </mat-card>

@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material';
 import { LabListDataSource } from './lab-list.datasource';
-import { LabService } from '../../../_services';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/app.reducer';
+import * as LabActions from '../store/lab.actions';
 
 @Component({
   selector: 'zabek-lab-list',
@@ -11,28 +13,38 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./lab-list.component.css']
 })
 export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
-  labsPerPage = 10;
-  currentPage = 0;
-
   displayedColumns = ['name', 'email', 'address', 'actions'];
   dataSource: LabListDataSource;
-  paginatorSub: Subscription = null;
+  private paginatorSub: Subscription = null;
+  private storeSub: Subscription = null;
+  public isLoading = false;
+  public count = 0; 
+  public labsPerPage = 10;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
-    private readonly labService: LabService,
+    private readonly store: Store<AppState>,
   ) {}
 
   ngOnInit() {
-    this.dataSource = new LabListDataSource(this.labService, this.labsPerPage);   
-    this.dataSource.loadLabs(this.currentPage, this.labsPerPage);
+    this.storeSub = this.store.select('lab').subscribe(state => {
+      this.isLoading = state.loading;
+      this.count = state.count;
+      this.labsPerPage = state.labsPerPage;
+      if (this.paginator && this.paginator.pageIndex !==state.currentPage ) {
+        this.paginator.pageIndex = state.currentPage;
+      } 
+    });
+
+    this.dataSource = new LabListDataSource(this.store);   
+    this.store.dispatch(LabActions.setCurrentPage({page: 0}))
   }
 
   ngAfterViewInit() {
     this.paginatorSub = this.paginator.page
         .pipe(
-            tap(() => this.loadLabsPage())
+            tap(() => this.store.dispatch(LabActions.setCurrentPage({page: this.paginator.pageIndex})))
         )
         .subscribe();
   }
@@ -42,22 +54,18 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
       this.paginatorSub.unsubscribe();
       this.paginatorSub = null;
     }
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+      this.storeSub = null;
+    }
   }
 
   loadLabsPage() {
-      this.dataSource.loadLabs( this.paginator.pageIndex, this.paginator.pageSize);
+    this.store.dispatch(LabActions.setCurrentPage({page: this.paginator.pageIndex}));
   }
 
   onDelete(id: string) {
-    //TODO obsluga bledow
-    this.labService.deleteLab(id)
-      .subscribe(res => {
-        if (this.dataSource.itemsOnPage === 1 ) {
-          this.paginator.pageIndex = this.paginator.pageIndex -1;
-        }
-        this.loadLabsPage();
-      }
-    );
+    this.store.dispatch(LabActions.deleteLab({id}));
   }
 
 }

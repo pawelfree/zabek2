@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
+import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
 
 registerLocaleData(localePl, 'pl');
 
@@ -46,7 +47,7 @@ registerLocaleData(localePl, 'pl');
     AppRoutingModule,
     AngularMaterialModule,
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, LabEffects]),
     FlexLayoutModule,
     //TODO odkomentowac na produkcji
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

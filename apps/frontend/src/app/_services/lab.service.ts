@@ -10,22 +10,10 @@ const BACKEND_URL = environment.apiUrl + '/api/lab/';
 @Injectable({ providedIn: 'root' })
 export class LabService {
 
-  constructor(private readonly http: HttpClient, private router: Router) {}
-
-  getLabs(labsPerPage: number, currentPage: number): Observable<{labs: Lab[], count: number}> {
-    let params = new HttpParams();
-    params = params.append('pagesize', ""+labsPerPage);
-    params = params.append('page', ""+currentPage);
-
-    return this.http.get<{labs: Lab[], count: number}>(BACKEND_URL,{ params });
-  }
+  constructor(private readonly http: HttpClient) {}
 
   getLab(id: string): Observable<Lab> {
     return this.http.get<Lab>(BACKEND_URL + id);
-  }
-
-  deleteLab(labId: string) {
-    return this.http.delete(BACKEND_URL + labId);
   }
 
   addLab(lab : { name: string, address: string, email: string }) {
