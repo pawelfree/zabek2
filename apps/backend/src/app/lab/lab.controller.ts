@@ -61,8 +61,8 @@ export class LabController {
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Get(':id')
-    getLab(@Param('id') id: string) {
-      return this.labService.findById(id);
+    async getLab(@Param('id') id: string) {
+      return await this.labService.findById(id);
     }   
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)

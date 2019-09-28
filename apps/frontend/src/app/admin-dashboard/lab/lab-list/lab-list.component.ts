@@ -37,7 +37,8 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
       } 
     });
 
-    this.dataSource = new LabListDataSource(this.store);   
+    this.dataSource = new LabListDataSource(this.store);  
+     
     this.store.dispatch(LabActions.setCurrentPage({page: 0}))
   }
 

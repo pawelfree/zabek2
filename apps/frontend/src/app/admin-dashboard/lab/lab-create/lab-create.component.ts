@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { LabService } from '../../../_services';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { InfoComponent } from '../../../common-dialogs';
 import { MatDialog } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/app.reducer';
+import * as LabActions from '../store/lab.actions';
+import { Lab } from '../../../_models';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'zabek-lab-create',
   templateUrl: './lab-create.component.html',
   styleUrls: ['./lab-create.component.css']
 })
-export class LabCreateComponent implements OnInit {
+export class LabCreateComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
   private mode = 'create';
   private _id: string;
+  private storeSub: Subscription = null;
 
   constructor(
-    private readonly labService: LabService,
-    public readonly route: ActivatedRoute,
-    private readonly router: Router,
+    private readonly store: Store<AppState>,
+    private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog
   ) {}
 
@@ -36,48 +40,45 @@ export class LabCreateComponent implements OnInit {
       }),
     });
 
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("labId")) {
-        this.mode = "edit";
-        this._id = paramMap.get("labId");
-        this.isLoading = true;
-        this.labService.getLab(this._id).subscribe(labData => {
-          this.isLoading = false;
-          this.form.setValue({
-            name: labData.name,
-            email: labData.email,
-            address: labData.address
-          });
-        });
-      } else {
-        this.mode = "create";
-        this._id = null;
+    this.storeSub = this.store.select('lab').subscribe(state => {
+      this.isLoading = state.loading;
+      if (state.error) {
+        this.dialog.open(InfoComponent, { data:  state.error });
       }
-    });
+    })
+
+    const lab = this.route.snapshot.data.lab;
+    if (lab) {
+      this.mode = 'edit';
+      this._id = lab._id;
+      this.form.setValue({
+            name: lab.name,
+            email: lab.email,
+            address: lab.address
+          });
+    } else {
+      this._id = null;
+      this.mode = 'create';
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+      this.storeSub = null;
+    }
   }
 
   onSaveLab() {
     if (this.form.invalid) {
       return;
     }
-
-    this.isLoading = true;
     if (this.mode === "create") {
-      this.labService.addLab({...this.form.value}).subscribe(res => {
-        this.router.navigate(['/admin/lab']);
-      },
-      err => {
-        this.dialog.open(InfoComponent, { data:  err });
-
-      });
+      const lab: Lab = {...this.form.value, id: null };
+      this.store.dispatch(LabActions.addLab({ lab }));
     } else {
-      this.labService.updateLab({ _id: this._id, ...this.form.value}).subscribe(res => {
-        this.router.navigate(['/admin/lab']);
-      },
-      err => {
-        this.dialog.open(InfoComponent, { data:  err });
-      });
+      const lab: Lab = { _id: this._id, ...this.form.value};
+      this.store.dispatch(LabActions.updateLab({ lab }));
     }
-    this.isLoading = false;
   }
 }

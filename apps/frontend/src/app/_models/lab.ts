@@ -3,5 +3,6 @@ export class Lab {
   name: string;
   address: string;
   email: string;
+  //TODO to raczej number
   readonly usersCount?: string;
 }

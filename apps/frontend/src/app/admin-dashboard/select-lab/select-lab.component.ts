@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { LabService } from '../../_services';
 import { MatPaginator, MatDialogRef } from '@angular/material';
 import { tap } from 'rxjs/operators';
 import { LabListDataSource } from '../lab/lab-list/lab-list.datasource';

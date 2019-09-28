@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LabCreateComponent } from './lab-create/lab-create.component';
 import { LabListComponent } from './lab-list/lab-list.component';
 import { LabRoutingModule } from './lab-routing.module';
+import { LabEditResolver } from './lab-create/lab-create.resolver';
 
 @NgModule({
   imports: [
@@ -17,5 +18,8 @@ import { LabRoutingModule } from './lab-routing.module';
     LabListComponent,
     LabCreateComponent
   ],
+  providers: [
+    LabEditResolver
+  ]
 })
 export class LabModule {}
