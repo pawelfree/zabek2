@@ -10,7 +10,6 @@ export interface AppState {
    user: fromUser.State;
 }
 
-//TODO czy to nie  lamie lazy loadingu
 export const appReducer: ActionReducerMap<AppState> = {
   auth: fromAuth.authReducer,
   lab: fromLab.labReducer,

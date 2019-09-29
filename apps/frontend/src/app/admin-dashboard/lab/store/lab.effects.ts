@@ -15,10 +15,10 @@ const BACKEND_URL = environment.apiUrl + '/api/lab/';
 @Injectable()
 export class LabEffects {
 
-  getLab = createEffect(() => this.actions$.pipe(
+  getLab$ = createEffect(() => this.actions$.pipe(
     ofType(LabActions.getLab),
     switchMap(props => {
-      return this.http.get<Lab>(BACKEND_URL + props.id).pipe(
+      return this.http.get<Lab>(BACKEND_URL + props._id).pipe(
         map(lab => {
           return LabActions.setLab({lab});
         }),
@@ -27,7 +27,7 @@ export class LabEffects {
     })
   ));
 
-  addLab = createEffect(() => this.actions$.pipe(
+  addLab$ = createEffect(() => this.actions$.pipe(
     ofType(LabActions.addLab),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
@@ -41,7 +41,7 @@ export class LabEffects {
     })
   ));
 
-  updateLab = createEffect(() => this.actions$.pipe(
+  updateLab$ = createEffect(() => this.actions$.pipe(
     ofType(LabActions.updateLab),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
@@ -55,7 +55,7 @@ export class LabEffects {
     })
   ));
 
-  fetchLabs = createEffect(() => this.actions$.pipe(
+  fetchLabs$ = createEffect(() => this.actions$.pipe(
     ofType(LabActions.fetchLabs),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
@@ -69,10 +69,10 @@ export class LabEffects {
     })
   ));
 
-  deleteLab = createEffect(() => this.actions$.pipe(
+  deleteLab$ = createEffect(() => this.actions$.pipe(
     ofType(LabActions.deleteLab),
     switchMap(props => {
-      return this.http.delete(BACKEND_URL + props.id).pipe(
+      return this.http.delete(BACKEND_URL + props._id).pipe(
         catchError(error => of(LabActions.errorLab({error})))
       )
     }),

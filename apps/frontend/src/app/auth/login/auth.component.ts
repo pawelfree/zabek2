@@ -53,8 +53,8 @@ export class AuthComponent implements OnInit, OnDestroy {
       })
     )
     .subscribe(authData => {
-      this.loading = authData.isLoading;
-      this.authError = authData.authError;
+      this.loading = authData.loading;
+      this.authError = authData.error;
       if (this.authError) {
         this.showErrorAlert(this.authError);
       }

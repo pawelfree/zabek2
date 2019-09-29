@@ -70,8 +70,8 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
     this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex}));
   }
 
-  onDelete(id: string) {
-    this.store.dispatch(LabActions.deleteLab({id}));
+  onDelete(_id: string) {
+    this.store.dispatch(LabActions.deleteLab({_id}));
   }
 
 }

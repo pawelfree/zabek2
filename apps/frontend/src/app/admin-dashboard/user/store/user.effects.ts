@@ -15,10 +15,10 @@ const BACKEND_URL = environment.apiUrl + '/api/user/';
 @Injectable()
 export class UserEffects {
 
-  getUser = createEffect(() => this.actions$.pipe(
+  getUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.getUser),
     switchMap(props => {
-      return this.http.get<User>(BACKEND_URL + props.id).pipe(
+      return this.http.get<User>(BACKEND_URL + props._id).pipe(
         map(user => {
           return UserActions.setUser({user});
         }),
@@ -27,7 +27,7 @@ export class UserEffects {
     })
   ));
 
-  addUser = createEffect(() => this.actions$.pipe(
+  addUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.addUser),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
@@ -41,7 +41,7 @@ export class UserEffects {
     })
   ));
 
-  updateUser = createEffect(() => this.actions$.pipe(
+  updateUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.updateUser),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
@@ -55,7 +55,7 @@ export class UserEffects {
     })
   ));
 
-  fetchUsers = createEffect(() => this.actions$.pipe(
+  fetchUsers$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.fetchUsers),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
@@ -69,10 +69,10 @@ export class UserEffects {
     })
   ));
 
-  deleteUser = createEffect(() => this.actions$.pipe(
+  deleteUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.deleteUser),
     switchMap(props => {
-      return this.http.delete(BACKEND_URL + props.id).pipe(
+      return this.http.delete(BACKEND_URL + props._id).pipe(
         catchError(error => of(UserActions.errorUser({error})))
       )
     }),

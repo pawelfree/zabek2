@@ -4,5 +4,5 @@ export class Lab {
   address: string;
   email: string;
   //TODO to raczej number
-  readonly usersCount?: string;
+  readonly usersCount?: number;
 }

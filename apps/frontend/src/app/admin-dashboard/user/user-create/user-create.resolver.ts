@@ -19,8 +19,8 @@ export class UserEditResolver implements Resolve<User> {
 
    resolve(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot) {      
       if (route.paramMap.has('userId')) {
-         const id = route.paramMap.get('userId');         
-         this.store.dispatch(UserActions.getUser({id}));
+         const _id = route.paramMap.get('userId');         
+         this.store.dispatch(UserActions.getUser({_id}));
          return this.actions$.pipe(
             ofType(UserActions.setUser),
             take(1),

@@ -71,8 +71,8 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(UserActions.fetchUsers({page: this.paginator.pageIndex}));
   }
 
-  onDelete(id: string) {
-    this.store.dispatch(UserActions.deleteUser({id}));
+  onDelete(_id: string) {
+    this.store.dispatch(UserActions.deleteUser({_id}));
   }
 
 }

@@ -6,7 +6,6 @@ import {
   HttpEvent
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { AuthenticationService } from '../_services';
 import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { ErrorComponent } from '../common-dialogs';

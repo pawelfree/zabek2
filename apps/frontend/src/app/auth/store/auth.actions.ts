@@ -7,3 +7,6 @@ export const authenticateFail = createAction('[Auth] Authenticate fail', props<{
 export const logout = createAction('[Auth] Logout');
 export const autoLogin = createAction('[Auth] Auto Login');
 export const authenticateClearError = createAction('[Auth] Clear error');
+export const changePassword = createAction('[Auth] Change password', props<{oldPassword: string, newPassword: string}>());
+export const passwordChanged = createAction('[Auth] Password changed');
+export const passwordChangeError = createAction('[Auth] Password change error', props<{error: any}>());

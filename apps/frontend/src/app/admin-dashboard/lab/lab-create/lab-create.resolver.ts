@@ -19,8 +19,8 @@ export class LabEditResolver implements Resolve<Lab> {
 
    resolve(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot) {      
       if (route.paramMap.has('labId')) {
-         const id = route.paramMap.get('labId');         
-         this.store.dispatch(LabActions.getLab({id}));
+         const _id = route.paramMap.get('labId');         
+         this.store.dispatch(LabActions.getLab({_id}));
          return this.actions$.pipe(
             ofType(LabActions.setLab),
             take(1),
