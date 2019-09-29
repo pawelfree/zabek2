@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { InfoComponent } from '../../../common-dialogs';
 import { MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -45,7 +45,7 @@ export class LabCreateComponent implements OnInit, OnDestroy {
       if (state.error) {
         this.dialog.open(InfoComponent, { data:  state.error });
       }
-    })
+    });
 
     const lab = this.route.snapshot.data.lab;
     if (lab) {
@@ -75,10 +75,10 @@ export class LabCreateComponent implements OnInit, OnDestroy {
     }
     if (this.mode === "create") {
       const lab: Lab = {...this.form.value, id: null };
-      this.store.dispatch(LabActions.addLab({ lab }));
+      this.store.dispatch(LabActions.addLab({lab}));
     } else {
       const lab: Lab = { _id: this._id, ...this.form.value};
-      this.store.dispatch(LabActions.updateLab({ lab }));
+      this.store.dispatch(LabActions.updateLab({lab}));
     }
   }
 }

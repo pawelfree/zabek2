@@ -5,6 +5,7 @@ import { AuthGuard } from '../../_guards';
 import { Role } from '../../_models';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCreateComponent } from './user-create/user-create.component';
+import { UserEditResolver } from './user-create/user-create.resolver';
 
 const routes: Routes = [
     {
@@ -27,6 +28,7 @@ const routes: Routes = [
     {
       path: 'edit/:userId',
       component: UserCreateComponent,
+      resolve: {user: UserEditResolver},
       canActivate: [AuthGuard],
       data: { roles: [Role.admin, Role.sadmin] }
     },

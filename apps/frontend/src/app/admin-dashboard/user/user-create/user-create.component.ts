@@ -1,28 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { UserService } from '../../../_services';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CustomValidator } from '../../../_validators';
 import { Role, Lab, User } from '../../../_models';
 import { MatDialog } from '@angular/material';
 import { SelectLabComponent } from '../../select-lab/select-lab.component';
+import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/app.reducer';
+import * as UserActions from '../store/user.actions';
+import { InfoComponent } from '../../../common-dialogs';
+
 
 @Component({
   selector: 'zabek-user-create',
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.css']
 })
-export class UserCreateComponent implements OnInit {
+export class UserCreateComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
+  roles = [Role.admin, Role.user];
   private mode = 'create';
   private _id: string;
-  roles = [Role.admin, Role.user];
+  private storeSub: Subscription = null;
 
-  constructor(
-    private readonly userService: UserService,
+  constructor(    
+    private readonly store: Store<AppState>,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly dialog: MatDialog
   ) {}
 
@@ -58,27 +63,29 @@ export class UserCreateComponent implements OnInit {
         validators: CustomValidator.mustMatch('password1', 'password2')
     });
 
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("userId")) {
-        this.mode = "edit";
-        this._id = paramMap.get("userId");
-        this.isLoading = true;
-        this.userService.getUser(this._id).subscribe(userData => {
-          this.isLoading = false;
-          this.form.setValue({
-            email: userData.email,
-            role: userData.role,
-            lab_name: userData.lab.name,
-            lab: userData.lab,
-            password1: '',
-            password2: ''
-          });
-        });
-      } else {
-        this.mode = "create";
-        this._id = null;
+    this.storeSub = this.store.select('user').subscribe(state => {
+      this.isLoading = state.loading;
+      if (state.error) {
+        this.dialog.open(InfoComponent, { data:  state.error });
       }
     });
+
+    const user = this.route.snapshot.data.user;
+    if (user) {
+      this._id = user._id;
+      this.mode = 'edit';
+      this.form.setValue({
+        email: user.email,
+        role: user.role,
+        lab_name: user.lab.name,
+        lab: user.lab,
+        password1: '',
+        password2: ''
+      });
+    } else {
+      this._id = null;
+      this.mode = 'create';
+    } 
   }
 
   onSelectLab() {
@@ -94,6 +101,13 @@ export class UserCreateComponent implements OnInit {
       );
   }
 
+  ngOnDestroy() {
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+      this.storeSub = null;
+    }
+  }
+
   onSaveUser() {
     if (this.form.invalid) {
       return;
@@ -106,15 +120,9 @@ export class UserCreateComponent implements OnInit {
       this.form.value.lab,
       this.form.value.password1);
     if (this.mode === "create") {
-      this.userService.addUser(user).subscribe(res => this.goOut());
+      this.store.dispatch(UserActions.addUser({user}));
     } else {
-      this.userService.updateUser(user).subscribe(res => this.goOut());
+      this.store.dispatch(UserActions.updateUser({user}));
     }
-    this.isLoading = false;
-    this.form.reset();
-  }
-
-  private goOut() {
-    this.router.navigate(['/user/list']);
   }
 }

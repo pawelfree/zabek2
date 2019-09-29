@@ -16,7 +16,7 @@ const initialState: State = {
   labs: [],
   count: 0,
   loading: false,
-  labsPerPage: 2,
+  labsPerPage: 10,
   page: 0,
   lab: null,
   error: null
