@@ -3,7 +3,6 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { AuthComponent } from './auth/login/auth.component';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { NgModule } from '@angular/core';
-import { AuthGuard } from './_guards';
 
 const routes: Routes = [
     {
@@ -44,7 +43,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
+//    imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}
