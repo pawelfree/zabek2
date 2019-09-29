@@ -7,7 +7,7 @@ export interface State {
   count: number;
   loading: boolean;
   labsPerPage: number;
-  currentPage: number;
+  page: number;
   lab: Lab;
   error: string
 }
@@ -17,7 +17,7 @@ const initialState: State = {
   count: 0,
   loading: false,
   labsPerPage: 2,
-  currentPage: 0,
+  page: 0,
   lab: null,
   error: null
 };
@@ -25,8 +25,7 @@ const initialState: State = {
 const _labReducer = createReducer(initialState,
   on(LabActions.setLabsPerPage, (state, {labsPerPage}) => ({...state, labsPerPage})),
   on(LabActions.setLabs, (state, {labs, count} ) => ({...state, labs, count, loading: false, error: null})),
-  on(LabActions.fetchLabs, (state ) => ({...state, labs:[], count: 0, loading: true, error: null})),
-  on(LabActions.setCurrentPage, (state, {page}) => ({...state, currentPage: page})),
+  on(LabActions.fetchLabs, (state, {page}) => ({...state, labs:[], page, count: 0, loading: true, error: null})),
   on(LabActions.deleteLab, (state, {id})=> ({...state, error: null, loading: false})),
   on(LabActions.addLab,(state, {lab}) => ({...state, lab, error: null, loading: true})),
   on(LabActions.setLab, (state, {lab}) => ({...state, lab, error: null, loading: false})),

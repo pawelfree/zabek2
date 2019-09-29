@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Lab } from '../../../_models';
-import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
-import { take, map } from 'rxjs/operators';
+import { take, map, catchError } from 'rxjs/operators';
 import * as LabActions from '../store/lab.actions';
 import { Actions, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
 
 @Injectable({ 
    providedIn: 'root'
@@ -24,7 +24,8 @@ export class LabEditResolver implements Resolve<Lab> {
          return this.actions$.pipe(
             ofType(LabActions.setLab),
             take(1),
-            map(props => props.lab)
+            map(props => props.lab),
+            catchError(error => of(null))
          )
       } else {
          return null;

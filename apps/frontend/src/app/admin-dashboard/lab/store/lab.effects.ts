@@ -22,7 +22,6 @@ export class LabEffects {
         map(lab => {
           return LabActions.setLab({lab});
         }),
-        //TODO obsluzyc na froncie i baku
         catchError(error => of(LabActions.errorLab({error})))
       )
     })
@@ -32,32 +31,26 @@ export class LabEffects {
     ofType(LabActions.addLab),
     withLatestFrom(this.store),
     switchMap(([props, store]) => {
-      return this.http.post<{lab: Lab }>(BACKEND_URL, store.lab.lab).pipe(
+      return this.http.post<Lab>(BACKEND_URL, props.lab).pipe(
         map(() => {
-          //TODO nawigacja nie dziala
-          this.router.navigate(['../list']);
-          return LabActions.fetchLabs();
+          this.router.navigate(['/admin/lab/list']);
+          return LabActions.fetchLabs({page: store.lab.page});
         }),
-        catchError(error => {
-          return of(LabActions.errorLab({error}));
-        })
+        catchError(error => of(LabActions.errorLab({error})))
       )
     })
   ));
 
   updateLab = createEffect(() => this.actions$.pipe(
     ofType(LabActions.updateLab),
-    switchMap(props => {
-      //TODO message jest raczej pusty
-      return this.http.put<{ message: string; lab: Lab }>(BACKEND_URL+props.lab._id, props.lab).pipe(
+    withLatestFrom(this.store),
+    switchMap(([props, store]) => {
+      return this.http.put<Lab>(BACKEND_URL+props.lab._id, props.lab).pipe(
         map(() => {
-          //TODO nawigacja nie dziala
-          this.router.navigate(['../list']);
-          return LabActions.fetchLabs();
+          this.router.navigate(['/admin/lab/list']);
+          return LabActions.fetchLabs({page: store.lab.page});
         }),
-        catchError(error => {
-          return of(LabActions.errorLab({error}));
-        })
+        catchError(error => of(LabActions.errorLab({error})))
       );
     })
   ));
@@ -68,32 +61,29 @@ export class LabEffects {
     switchMap(([props, store]) => {
       let params = new HttpParams();
       params = params.append('pagesize', ""+store.lab.labsPerPage);
-      params = params.append('page', ""+store.lab.currentPage);
-      //TODO to zwrocie blad i wywali aplikacje
-      return this.http.get<{labs: Lab[], count: number}>(BACKEND_URL,{ params });
-    }),
-    map(res => LabActions.setLabs({labs: res.labs, count: res.count}))
+      params = params.append('page', ""+store.lab.page);
+      return this.http.get<{labs: Lab[], count: number}>(BACKEND_URL,{ params }).pipe(
+        map(res => LabActions.setLabs({labs: res.labs, count: res.count})),
+        catchError(error => of(LabActions.errorLab({error})))
+      )
+    })
   ));
 
   deleteLab = createEffect(() => this.actions$.pipe(
     ofType(LabActions.deleteLab),
     switchMap(props => {
-      //TODO zwroci blad i wywali aplikacje
-      return this.http.delete(BACKEND_URL + props.id);
+      return this.http.delete(BACKEND_URL + props.id).pipe(
+        catchError(error => of(LabActions.errorLab({error})))
+      )
     }),
     withLatestFrom(this.store),
     map(([props, store]) => {
       if (store.lab.labs.length === 1) {
-        return LabActions.setCurrentPage({page: store.lab.currentPage === 0 ? 0 : store.lab.currentPage - 1 });
+        return LabActions.fetchLabs({page: store.lab.page === 0 ? 0 : store.lab.page - 1 });
       } else {
-        return LabActions.fetchLabs();
+        return LabActions.fetchLabs({page: store.lab.page});
       }
     })
-  ));
-
-  setCurrentPage = createEffect(() => this.actions$.pipe(
-    ofType(LabActions.setCurrentPage),
-    map(() => LabActions.fetchLabs())
   ));
 
   constructor(

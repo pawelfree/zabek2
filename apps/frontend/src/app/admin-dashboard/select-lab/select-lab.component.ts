@@ -36,13 +36,13 @@ export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
       this.labsPerPage = state.labsPerPage;
     });
     this.dataSource = new LabListDataSource(this.store);   
-    this.store.dispatch(LabActions.setCurrentPage({page: 0}))
+    this.store.dispatch(LabActions.fetchLabs({page: 0}))
   }
 
   ngAfterViewInit() {
     this.paginatorSub = this.paginator.page
         .pipe(
-            tap(() => this.store.dispatch(LabActions.setCurrentPage({page: this.paginator.pageIndex})))
+            tap(() => this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex})))
         )
         .subscribe();
   }
@@ -59,7 +59,7 @@ export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadLabsPage() {
-    this.store.dispatch(LabActions.setCurrentPage({page: this.paginator.pageIndex}));
+    this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex}));
   }
 
   onRowClicked(row){

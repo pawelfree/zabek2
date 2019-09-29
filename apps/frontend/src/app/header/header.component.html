@@ -32,7 +32,10 @@
       <li *ngIf="currentUser">
         <a mat-button (click)="logout()" >Logout ({{ currentUser.email }})</a>
         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
-          <mat-icon>more_vert</mat-icon>
+          <mat-icon
+          aria-label="Więcej"
+          title="Więcej" 
+          alt="Więcej">more_vert</mat-icon>
         </button>
       </li>
     </ul>

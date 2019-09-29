@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MatDialog } from '@angular/material';
 import { LabListDataSource } from './lab-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import * as LabActions from '../store/lab.actions';
+import { InfoComponent } from '../../../common-dialogs';
 
 @Component({
   selector: 'zabek-lab-list',
@@ -25,6 +26,7 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   constructor(
     private readonly store: Store<AppState>,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -32,20 +34,23 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
       this.isLoading = state.loading;
       this.count = state.count;
       this.labsPerPage = state.labsPerPage;
-      if (this.paginator && this.paginator.pageIndex !==state.currentPage ) {
-        this.paginator.pageIndex = state.currentPage;
+      if (state.error) {
+        this.dialog.open(InfoComponent, { data:  state.error });
+      }
+      if (this.paginator && this.paginator.pageIndex !== state.page ) {
+        this.paginator.pageIndex = state.page;
       } 
     });
 
     this.dataSource = new LabListDataSource(this.store);  
      
-    this.store.dispatch(LabActions.setCurrentPage({page: 0}))
+    this.store.dispatch(LabActions.fetchLabs({page: 0}))
   }
 
   ngAfterViewInit() {
     this.paginatorSub = this.paginator.page
         .pipe(
-            tap(() => this.store.dispatch(LabActions.setCurrentPage({page: this.paginator.pageIndex})))
+            tap(() => this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex})))
         )
         .subscribe();
   }
@@ -62,7 +67,7 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
   }
 
   loadLabsPage() {
-    this.store.dispatch(LabActions.setCurrentPage({page: this.paginator.pageIndex}));
+    this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex}));
   }
 
   onDelete(id: string) {
