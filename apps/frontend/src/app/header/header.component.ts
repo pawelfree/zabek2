@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() public sidenavToggle = new EventEmitter();
   
 //------
-modulesList: Array<any>;
+menuList: Array<any>;
 enteredButton = false;
 isMatMenuOpen = false;
 isMatMenu2Open = false;
@@ -42,107 +42,72 @@ prevButtonTrigger;
       this.currentUser = user;
     });
 
-    this.modulesList = ModulesList;
+    this.menuList = ModulesList;
   }
 
-  //---------
-
+  menuenter() {
+    this.isMatMenuOpen = true;
+    if (this.isMatMenu2Open) {
+      this.isMatMenu2Open = false;
+    }
+  }
   
-    menuenter() {
-      console.log('menuenter')
-      this.isMatMenuOpen = true;
-      if (this.isMatMenu2Open) {
-        this.isMatMenu2Open = false;
+  menuLeave(trigger, button) {
+    setTimeout(() => {
+      if (!this.isMatMenu2Open && !this.enteredButton) {
+        this.isMatMenuOpen = false;
+        trigger.closeMenu();
+        this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
+        this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
+      } else {
+        this.isMatMenuOpen = false;
       }
-    }
+    }, 80)
+  }
   
-    menuLeave(trigger, button) {
-      setTimeout(() => {
-        if (!this.isMatMenu2Open && !this.enteredButton) {
-          this.isMatMenuOpen = false;
-          trigger.closeMenu();
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
-        } else {
-          this.isMatMenuOpen = false;
-        }
-      }, 80)
-    }
+  buttonEnter(trigger) {
+    setTimeout(() => {
+      if(this.prevButtonTrigger && this.prevButtonTrigger != trigger){
+        this.prevButtonTrigger.closeMenu();
+        this.prevButtonTrigger = trigger;
+        this.isMatMenuOpen = false;
+        this.isMatMenu2Open = false;
+        trigger.openMenu()
+      }
+      else if (!this.isMatMenuOpen) {
+        this.enteredButton = true;
+        this.prevButtonTrigger = trigger
+        trigger.openMenu()
+      }
+      else {
+        this.enteredButton = true;
+        this.prevButtonTrigger = trigger
+      }
+    })
+  }
   
-    menu2enter() {
-      this.isMatMenu2Open = true;
-    }
-  
-    menu2Leave(trigger1, trigger2, button) {
-      setTimeout(() => {
-        if (this.isMatMenu2Open) {
-          trigger1.closeMenu();
-          this.isMatMenuOpen = false;
-          this.isMatMenu2Open = false;
-          this.enteredButton = false;
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
-        } else {
-          this.isMatMenu2Open = false;
-          trigger2.closeMenu();
-        }
-      }, 100)
-    }
-  
-    buttonEnter(trigger) {
-      setTimeout(() => {
-        if(this.prevButtonTrigger && this.prevButtonTrigger != trigger){
-          this.prevButtonTrigger.closeMenu();
-          this.prevButtonTrigger = trigger;
-          this.isMatMenuOpen = false;
-          this.isMatMenu2Open = false;
-          trigger.openMenu()
-        }
-        else if (!this.isMatMenuOpen) {
-          this.enteredButton = true;
-          this.prevButtonTrigger = trigger
-          trigger.openMenu()
-        }
-        else {
-          this.enteredButton = true;
-          this.prevButtonTrigger = trigger
-        }
-      })
-    }
-  
-    buttonLeave(trigger, button) {
-      setTimeout(() => {
-        if (this.enteredButton && !this.isMatMenuOpen) {
-          trigger.closeMenu();
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
-        } if (!this.isMatMenuOpen) {
-          trigger.closeMenu();
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
-          this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
-        } else {
-          this.enteredButton = false;
-        }
-      }, 100)
-    }
-  
-  
-  //--------
+  buttonLeave(trigger, button) {
+    setTimeout(() => {
+      if (this.enteredButton && !this.isMatMenuOpen) {
+        trigger.closeMenu();
+        this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
+        this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
+      } if (!this.isMatMenuOpen) {
+        trigger.closeMenu();
+        this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-focused');
+        this.ren.removeClass(button['_elementRef'].nativeElement, 'cdk-program-focused');
+      } else {
+        this.enteredButton = false;
+      }
+    }, 100)
+  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  get isAdmin() {
-    return this.currentUser && (this.currentUser.role === Role.admin || this.currentUser.role === Role.sadmin);
-  }
-
-  get isSAdmin() {
-    return this.currentUser && this.currentUser.role === Role.sadmin;
-  }
-  
-  get isUser() {
-    return this.currentUser && !(this.currentUser.role === Role.doctor);
+  authorized(roles: string[]) {
+    return this.currentUser && (roles.indexOf(this.currentUser.role) !== -1);
   }
 
   get isLoggedIn() {

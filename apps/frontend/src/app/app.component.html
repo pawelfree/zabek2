@@ -1,11 +1,4 @@
-<!-- <mat-sidenav-container>
-  <mat-sidenav #sidenav role="navigation">
-    <zabek-side-nav (sidenavClose)="sidenav.close()"></zabek-side-nav>
-  </mat-sidenav>
-  <mat-sidenav-content> -->
-    <zabek-header (sidenavToggle)="sidenav.toggle()"></zabek-header>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-  <!-- </mat-sidenav-content>
-</mat-sidenav-container> -->
+<zabek-header></zabek-header>
+<main>
+  <router-outlet></router-outlet>
+</main>

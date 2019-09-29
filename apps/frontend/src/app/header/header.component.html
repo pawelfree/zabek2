@@ -1,101 +1,55 @@
 <mat-toolbar color="primary">
-  <div fxHide.gt-sm *ngIf="isSAdmin || isAdmin">
-      <button mat-icon-button (click)="onToogleSideNav()">
-          <mat-icon>menu</mat-icon>
-      </button>
-  </div>
   <span><a routerLink="/">Ząbek 2</a></span>
   <div fxFlex fxLayout fxLayoutAlign="end">
-    <div fxHide.lt-md>
-      <ul fxLayout fxLayoutGap="5px">
-
-
-          <ng-container *ngFor="let menuItem of modulesList">
-
-              <ng-container *ngIf="!menuItem.children">
-                <a class="nav-link">
-                  <span class="icon fa" [ngClass]="menuItem.icon"></span>
-                  <span class="text-holder">{{menuItem.label}}</span>
-                </a>
-              </ng-container>
-              <ng-container *ngIf="menuItem.children.length > 0">
-            <button #button mat-button [matMenuTriggerFor]="levelOne" #levelOneTrigger="matMenuTrigger" (mouseenter)="buttonEnter(levelOneTrigger)" (mouseleave)="buttonLeave(levelOneTrigger, button)" style="z-index:1050">
-                  <span class="icon fa" [ngClass]="menuItem.icon"></span>
-                  <span>{{menuItem.label}}
-                    <i class="fa fa-chevron-down"></i>
-                  </span>
-                </button>    
-            
-                <mat-menu #levelOne="matMenu" direction="down" yPosition="below">
-                  <span (mouseenter)="menuenter()" (mouseleave)="menuLeave(levelOneTrigger, button)">
-                  <ng-container *ngFor="let childL1 of menuItem.children">
-                    <li class="p-0" *ngIf="!childL1.children" mat-menu-item>
-                      <a class="nav-link">{{childL1.label}}
-                        <i *ngIf="childL1.icon" [ngClass]="childL1.icon"></i>
-                      </a>
-                    </li>
-                    <ng-container *ngIf="childL1.children && childL1.children.length > 0">
-                      <li mat-menu-item #levelTwoTrigger="matMenuTrigger" [matMenuTriggerFor]="levelTwo">
-                        <span class="icon fa" [ngClass]="childL1.icon"></span>
-                        <span>{{childL1.label}}</span>
-                      </li>
-            
-                      <mat-menu #levelTwo="matMenu">
-                        <span (mouseenter)="menu2enter()" (mouseleave)="menu2Leave(levelOneTrigger,levelTwoTrigger, button)">
-                        <ng-container *ngFor="let childL2 of childL1.children">
-                          <li class="p-0" mat-menu-item>
-                            <a class="nav-link">{{childL2.label}}
-                              <i *ngIf="childL2.icon" [ngClass]="childL2.icon"></i>
-                            </a>
-                          </li>
-                        </ng-container>
-                        </span>
-                      </mat-menu>
-                    </ng-container>
-                  </ng-container>
-                  </span>
-                </mat-menu>
-              </ng-container>
-            
-            </ng-container>
-
-            
-        <!-- <li *ngIf="isSAdmin">
-          <a mat-button routerLink="/admin/lab/list" routerLinkActive="mat-accent">Pracownie</a>
-        </li>
-        <li *ngIf="isSAdmin">
-          <a mat-button routerLink="/admin/lab/create" routerLinkActive="mat-accent">Nowa pracownia</a>
-        </li>
-        <li *ngIf="isAdmin">
-          <a mat-button routerLink="/admin/user/list" routerLinkActive="mat-accent">Użytkownicy</a>
-        </li>
-        <li *ngIf="isAdmin">
-          <a mat-button routerLink="/admin/user/create" routerLinkActive="mat-accent">Nowy użytkownik</a>
-        </li>
-        <li *ngIf="isUser">
-          <a mat-button routerLink="/doctorlist" routerLinkActive="mat-accent">Lekarze</a>
-        </li>
-        <li *ngIf="isAdmin">
-          <a mat-button routerLink="/admin/reports" routerLinkActive="mat-accent">Raporty</a>
-        </li> -->
-      </ul>
-    </div>
-    <ul>
+    <ul fxLayout fxLayoutGap="5px">
+      <ng-container *ngIf="isLoggedIn">
+        <ng-container *ngFor="let menuItem of menuList">
+          <ng-container *ngIf="!menuItem.children && authorized(menuItem.roles)">
+            <a mat-button [routerLink]="menuItem.routerLink" routerLinkActive="mat-accent">{{menuItem.label}}</a>
+          </ng-container>
+          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && authorized(menuItem.roles)">
+            <a #button 
+                mat-button 
+                [routerLink]="menuItem.routerLink"
+                [matMenuTriggerFor]="levelOne" 
+                #levelOneTrigger="matMenuTrigger" 
+                (mouseenter)="buttonEnter(levelOneTrigger)" 
+                (mouseleave)="buttonLeave(levelOneTrigger, button)"
+                style="z-index:1050">
+                {{menuItem.label}}
+            </a>     
+            <mat-menu #levelOne="matMenu" 
+                      direction="down" 
+                      yPosition="below">
+              <span (mouseenter)="menuenter()" 
+                    (mouseleave)="menuLeave(levelOneTrigger, button)">
+                <ng-container *ngFor="let childL1 of menuItem.children">
+                  <li *ngIf="!childL1.children">
+                      <a mat-menu-item [routerLink]="childL1.routerLink" routerLinkActive="mat-accent">{{childL1.label}}</a>
+                  </li>
+                </ng-container>
+              </span>
+            </mat-menu>
+          </ng-container>
+        </ng-container>
+      </ng-container>
       <li *ngIf="currentUser">
         <a mat-button (click)="logout()" >Logout ({{ currentUser.email }})</a>
-        <!-- <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
+      </li>
+      <li *ngIf="currentUser">
+        <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
           <mat-icon
           aria-label="Więcej"
           title="Więcej" 
           alt="Więcej">more_vert</mat-icon>
-        </button> -->
+        </a>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="openChangePasswordDialog()">
+            <mat-icon>person</mat-icon>
+            <span>Zmień hasło</span>
+          </button>
+        </mat-menu>  
       </li>
     </ul>
-    <!-- <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="openChangePasswordDialog()">
-        <mat-icon>person</mat-icon>
-        <span>Zmień hasło</span>
-      </button>
-    </mat-menu>   -->
   </div>
 </mat-toolbar>

@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthComponent } from './auth/login/auth.component';
 import { HeaderComponent } from './header/header.component';
-import { SideNavComponent } from './side-nav/side-nav.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common-dialogs';
@@ -31,7 +30,6 @@ registerLocaleData(localePl, 'pl');
   declarations: [ 
     AppComponent, 
     HeaderComponent,
-    SideNavComponent,
     AuthComponent,
     DoctorRegisterComponent,
     ErrorComponent,
