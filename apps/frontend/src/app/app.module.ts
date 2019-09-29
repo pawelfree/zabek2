@@ -45,7 +45,14 @@ registerLocaleData(localePl, 'pl');
     HttpClientModule,
     AppRoutingModule,
     AngularMaterialModule,
-    StoreModule.forRoot(appReducer),
+    StoreModule.forRoot(appReducer, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+      },
+    }),
     EffectsModule.forRoot([AuthEffects, LabEffects, UserEffects]),
     FlexLayoutModule,
     //TODO odkomentowac na produkcji
