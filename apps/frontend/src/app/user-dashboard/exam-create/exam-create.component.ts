@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService, DoctorService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -9,6 +9,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material
 import { Doctor } from '../../_models';
 import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -31,11 +32,12 @@ import { InfoComponent } from '../../common-dialogs';
     }
   ],
 })
-export class ExamCreateComponent implements OnInit {
+export class ExamCreateComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
   private mode = 'create';
   private _id: string;
+  private doctorsSub: Subscription = null;
   
   // pobrać z serwisu lekarzy. Wszystkich? A jak ich będzie 2000?
   // Tylko tych zarejestrowanych w danej pracowni?
@@ -65,9 +67,16 @@ export class ExamCreateComponent implements OnInit {
     private readonly dialog: MatDialog
   ) {}
 
+  ngOnDestroy() {
+    if (this.doctorsSub) {
+      this.doctorsSub.unsubscribe();
+      this.doctorsSub = null;
+    }
+  }
+
   ngOnInit() {
     this.isLoading = true;
-    this.doctorService.getAllDoctors().subscribe(res => {
+    this.doctorsSub = this.doctorService.getAllDoctors().subscribe(res => {
       this.doctors = res;
       this.isLoading = false;
     },
@@ -77,7 +86,6 @@ export class ExamCreateComponent implements OnInit {
       this.isLoading = false;
     })
     
-
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
         validators: [Validators.required]
