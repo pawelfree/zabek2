@@ -1,38 +1,48 @@
 import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { LabService } from '../../_services';
 import { MatPaginator, MatDialogRef } from '@angular/material';
 import { tap } from 'rxjs/operators';
-import { LabListDataSource } from '../_datasource/lab-list.datasource';
+import { LabListDataSource } from '../lab/lab-list/lab-list.datasource';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.reducer';
+import * as LabActions from '../lab/store/lab.actions';
 
 @Component({
   templateUrl: './select-lab.component.html',
   styleUrls: ['./select-lab.component.css']
 })
 export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
-  labsPerPage = 5;
-  currentPage = 0;
-
   displayedColumns = ['name', 'address'];
   dataSource: LabListDataSource;
-  paginatorSub: Subscription = null;
-
+  private paginatorSub: Subscription = null;
+  private storeSub: Subscription = null;
+  public isLoading = false;
+  public count = 0; 
+  public labsPerPage = 10;
+  
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   
   constructor (
-    private readonly labService: LabService,
     private readonly dialogRef: MatDialogRef<SelectLabComponent>, 
+    private readonly store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.dataSource = new LabListDataSource(this.labService, this.labsPerPage);   
-    this.dataSource.loadLabs(this.currentPage, this.labsPerPage);
+    this.store.dispatch(LabActions.setLabsPerPage({labsPerPage: 5}));
+
+    this.storeSub = this.store.select('lab').subscribe(state => {
+      this.isLoading = state.loading;
+      this.count = state.count;
+      this.labsPerPage = state.labsPerPage;
+    });
+    this.dataSource = new LabListDataSource(this.store);   
+    this.store.dispatch(LabActions.fetchLabs({page: 0}))
   }
 
   ngAfterViewInit() {
     this.paginatorSub = this.paginator.page
         .pipe(
-            tap(() => this.loadLabsPage())
+            tap(() => this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex})))
         )
         .subscribe();
   }
@@ -42,10 +52,14 @@ export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
       this.paginatorSub.unsubscribe();
       this.paginatorSub = null;
     }
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+      this.storeSub = null;
+    }
   }
 
   loadLabsPage() {
-    this.dataSource.loadLabs( this.paginator.pageIndex, this.paginator.pageSize);
+    this.store.dispatch(LabActions.fetchLabs({page: this.paginator.pageIndex}));
   }
 
   onRowClicked(row){

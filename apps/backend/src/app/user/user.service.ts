@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto, ChangePasswordInternalDto } from './dto';
+import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto, ResetPasswordDto } from './dto';
 import { Role } from '../shared/role';
 
 @Injectable()
@@ -27,7 +27,6 @@ export class UserService {
 
   async findAllDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {
     const options = {role: Role.doctor };
-    //TODO dodac sadminowi lab
     console.warn('dodac sadminowi lab');
     if (labId) {
       options['lab'] = labId;
@@ -39,7 +38,6 @@ export class UserService {
 
   async findAllUsers( pageSize: number, currentPage: number, labId: string): Promise<{ users: User[]; count: number }> {
     const options = {role: { $in: [Role.admin, Role.user]}};
-    //TODO dodac sadminowi lab
     console.warn('dodac sadminowi lab');
     if (labId) {
       options['lab'] = labId;
@@ -53,7 +51,7 @@ export class UserService {
     return await this.userModel.deleteOne({ _id });
   }
 
-  async update(updateUserDto: UpdateUserInternalDto | ChangePasswordInternalDto) {
+  async update(updateUserDto: UpdateUserInternalDto | ResetPasswordDto)  {
     return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
   }
 }

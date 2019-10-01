@@ -6,7 +6,10 @@ import { User, Role } from '../../_models';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../../_services';
+import { AuthenticationService } from '../authentication.service';
+import { environment } from '../../../environments/environment';
+
+const BACKEND_URL = environment.apiUrl + '/api/auth/';
 
 const handleError = (errorRes: any) => {
   let error = 'An unknown error occurred!';
@@ -29,6 +32,36 @@ const handleError = (errorRes: any) => {
 
 @Injectable()
 export class AuthEffects {
+
+  passwordResetRequest$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.sendPasswordResetRequest),
+    switchMap(props => {
+      return this.http.post(BACKEND_URL+'passwordreset/'+props.token, {password: props.password}).pipe(
+        map(res=> AuthActions.passwordChanged()),
+        catchError(error => of(AuthActions.passwordChangeError({error})))
+      )
+    })
+  ));
+
+  sendPasswordResetRequest$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.sendPasswordResetTokenRequest),
+    switchMap(props => {
+      return this.http.post(BACKEND_URL+'passwordreset', props).pipe(
+        map(res => AuthActions.passwordResetTokenRequestSent()),
+        catchError(error => of(AuthActions.passwordChangeError({error})))
+      )
+    })
+  ));
+
+  changePassword$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.changePassword),
+    switchMap(props => {
+      return this.http.post(BACKEND_URL+'passwordreset', props).pipe(
+        map(res => AuthActions.passwordChanged()),
+        catchError(error => of(AuthActions.passwordChangeError({error})))
+      );
+    })
+  ));
 
   authAutoLogin$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.autoLogin),
@@ -57,7 +90,7 @@ export class AuthEffects {
   authLogin$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginStart),
     switchMap((authData) => {
-      return this.http.post<User>('/api/user/authenticate', { 
+      return this.http.post<User>(BACKEND_URL + 'authenticate', { 
         email: authData.email, 
         password: authData.password })
       .pipe(

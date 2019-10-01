@@ -6,7 +6,6 @@ import {
   HttpEvent
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { AuthenticationService } from '../_services';
 import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { ErrorComponent } from '../common-dialogs';
@@ -30,7 +29,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError(err => {
         const error = err.error.message || err.statusText;
-        if ([401, 500].indexOf(err.status) !== -1) {
+        if ([500].indexOf(err.status) !== -1) {
           this.store.dispatch(AuthActions.logout());
           let errorMessage = 'Wystąpił nieznany błąd';
           if (err.error.message) {
@@ -38,8 +37,12 @@ export class ErrorInterceptor implements HttpInterceptor {
           }
           this.openErrorDialog(errorMessage, err.statusText);
           this.router.navigate(['/']);
-        } else if ([401, 404].indexOf(err.status) !== -1) {
-          this.openErrorDialog(err.error.message, err.statusText);
+        } else if ([404].indexOf(err.status) !== -1) {
+          let errorMessage = 'Wystąpił nieznany błąd';
+          if (err.error.message) {
+            errorMessage = err.error.message;
+          }
+          this.openErrorDialog(errorMessage, err.statusText);
         }
         return throwError(error);
       })

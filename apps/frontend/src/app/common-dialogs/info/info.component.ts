@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 
 @Component({
@@ -8,7 +8,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class InfoComponent {
 
-  constructor(private readonly dialogRef: MatDialogRef<InfoComponent>,
-              @Inject(MAT_DIALOG_DATA) public readonly data: string) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public readonly data: string) {}
 
 }

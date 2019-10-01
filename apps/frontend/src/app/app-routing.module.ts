@@ -3,7 +3,8 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { AuthComponent } from './auth/login/auth.component';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { NgModule } from '@angular/core';
-import { AuthGuard } from './_guards';
+import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
+import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
 
 const routes: Routes = [
     {
@@ -32,6 +33,15 @@ const routes: Routes = [
         component: DoctorRegisterComponent
     },
     {
+        path: 'resetpassword/:id',
+        resolve: {token: ResetPasswordResolver},
+        component: ResetPasswordComponent
+    },
+    {
+        path: 'resetpassword',
+        component: ResetPasswordComponent
+    },
+    {
         path: "doctorlist",
         loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule), 
     },
@@ -44,7 +54,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
+//    imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}

@@ -3,7 +3,7 @@
   <form [formGroup]="form" (submit)="onSaveLab()" *ngIf="!isLoading">
     <mat-form-field>
       <input matInput type="text" formControlName="name" placeholder="Nazwa pracowni">
-      <mat-error *ngIf="form.get('name').invalid">Wprowadź nazwę pracowni (3 - 20 znaków).</mat-error>
+      <mat-error *ngIf="form.get('name').invalid">Wprowadź nazwę pracowni (5 - 20 znaków).</mat-error>
     </mat-form-field>
     <mat-form-field>
         <input matInput type="text" formControlName="email" placeholder="Email pracowni">

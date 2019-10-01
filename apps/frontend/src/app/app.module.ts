@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthComponent } from './auth/login/auth.component';
 import { HeaderComponent } from './header/header.component';
-import { SideNavComponent } from './side-nav/side-nav.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent, InfoComponent, ChangePasswordComponent } from './common-dialogs';
@@ -22,6 +21,9 @@ import { environment } from '../environments/environment';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
+import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
+import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
+import { UserEffects } from './admin-dashboard/user/store/user.effects';
 
 registerLocaleData(localePl, 'pl');
 
@@ -29,9 +31,9 @@ registerLocaleData(localePl, 'pl');
   declarations: [ 
     AppComponent, 
     HeaderComponent,
-    SideNavComponent,
     AuthComponent,
     DoctorRegisterComponent,
+    ResetPasswordComponent,
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent
@@ -45,8 +47,15 @@ registerLocaleData(localePl, 'pl');
     HttpClientModule,
     AppRoutingModule,
     AngularMaterialModule,
-    StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    StoreModule.forRoot(appReducer, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+        strictStateSerializability: true,
+        strictActionSerializability: true,
+      },
+    }),
+    EffectsModule.forRoot([AuthEffects,LabEffects,UserEffects]),
     FlexLayoutModule,
     //TODO odkomentowac na produkcji
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

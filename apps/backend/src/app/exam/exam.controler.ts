@@ -12,8 +12,8 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Roles } from '../auth/roles.decorator';
-import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../shared/security/roles.decorator';
+import { RolesGuard } from '../shared/security/roles.guard';
 import { ExamService } from './exam.service';
 import { CreateExamDto,UpdateExamDto } from './dto';
 import { Exam } from './exam.interface';

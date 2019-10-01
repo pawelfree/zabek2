@@ -11,8 +11,8 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Roles } from '../auth/roles.decorator';
-import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../shared/security/roles.decorator';
+import { RolesGuard } from '../shared/security/roles.guard';
 import { LabService } from './lab.service';
 import { CreateLabDto, UpdateLabDto } from './dto';
 import { Lab } from './lab.interface';
@@ -41,7 +41,7 @@ export class LabController {
       if (lab) {
         throw new BadRequestException('Pracownia już istnieje');
       }
-      return await this.labService.add(createLabDto);
+      return await this.labService.add({ ...createLabDto, usersCount: 0});
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -62,15 +62,17 @@ export class LabController {
     @Roles('sadmin')
     @Get(':id')
     async getLab(@Param('id') id: string) {
-      return this.labService.findById(id);
+      return await this.labService.findById(id);
     }   
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
     @Delete(':id')
     async deleteLab(@Param('id') id: string) {
-      //TODO zabronic usuwania takich z uzytkownikami i badaniami
-      return this.labService.delete(id);
+      
+      if (!await this.labService.delete(id)) {
+        throw new BadRequestException('Nie można usunąć pracowni, która ma użytkowników');
+      }
     }
 
 }
