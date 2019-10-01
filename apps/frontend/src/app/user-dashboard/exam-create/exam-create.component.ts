@@ -63,7 +63,15 @@ export class ExamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.doctors[]= this.doctorService.getAllDoctors();
+    this.doctorService.getAllDoctors().subscribe(res => {
+      const x = res;
+      this.doctors = res;
+    },
+    error => {
+      console.log('error', error);
+      this.doctors = [];
+    })
+    
 
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {

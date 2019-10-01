@@ -25,6 +25,6 @@ export class DoctorService {
  
   // zwraca listę wszystkich lekarzy - na dropdowna
   getAllDoctors() {
-    return this.http.get<{ doctors: Doctor[]}>(BACKEND_URL);
+      return this.http.get<Doctor[]>(BACKEND_URL);
   }
 }
