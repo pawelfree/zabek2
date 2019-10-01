@@ -9,8 +9,7 @@ import {
   InternalServerErrorException,
   Get,
   Query,
-  Request
-} from '@nestjs/common';
+  Request} from '@nestjs/common';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
 import { User } from './user.interface';
@@ -57,10 +56,8 @@ export class DoctorController {
 
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
-    console.warn('wymusic polityke haseł');
-    const user: User = await this.userService.findByEmail(
-      createDoctorDto.email
-    );
+    console.warn('wymusic polityke haseł')
+    const user: User = await this.userService.findByEmail(createDoctorDto.email);
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
@@ -86,7 +83,7 @@ export class DoctorController {
       lab: lab,
       role: Role.doctor,
       password: await this.authService.hash(createDoctorDto.password)
-    };
+    } 
     //TODO ten lodash to trzeba zmienic na cos innego
     console.warn('zrobic cos z lodashem');
     return _.pick(await this.userService.addDoctor(_createDoctorDto), [
