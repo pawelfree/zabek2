@@ -22,4 +22,9 @@ export class DoctorService {
     const queryParams = `?pagesize=${doctorsPerPage}&page=${currentPage}`;
     return this.http.get<{ doctors: Doctor[]; count: number }>(BACKEND_URL + queryParams);
   }
+ 
+  // zwraca listę wszystkich lekarzy - na dropdowna
+  getAllDoctors() {
+    return this.http.get<{ doctors: Doctor[]}>(BACKEND_URL);
+  }
 }

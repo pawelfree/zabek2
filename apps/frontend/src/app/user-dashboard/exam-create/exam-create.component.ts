@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ExamService } from '../../_services';
+import { ExamService, DoctorService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../_validators';
 
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { Doctor } from '../../_models';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -33,16 +34,40 @@ export class ExamCreateComponent implements OnInit {
   form: FormGroup;
   private mode = 'create';
   private _id: string;
+  
+  // pobrać z serwisu lekarzy. Wszystkich? A jak ich będzie 2000?
+  // Tylko tych zarejestrowanych w danej pracowni?
+  // a czy pracownia może zarejestrować lekarza, który jest w innej pracowni zarejestrowany? 
+  doctors: Doctor[]; // ['Jan Kowalski', 'Janina Nowak', 'Romuald Kisiel']; 
+  
+  // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
+  examTypes: string[] = [
+    'AP czaszki',
+    'cefalometryczne',
+    'pantomograficzne',
+    'pantomograficzne i cefalometryczne',
+    'pantomograficzne z opisem',
+    'punktowe',
+    'tomografia 5x5',
+    'tomografia 8x9 i tomografia 12x9 (zatoki)',
+    'tomografia 12x9',
+    'tomografia 12x9 i pantomograficzne',
+    'tomografia 16x9',
+    'inne'
+  ];
 
   constructor(
     public examService: ExamService,
+    public doctorService: DoctorService,
     public route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.doctors[]= this.doctorService.getAllDoctors();
+
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
-        validators: [Validators.required] // chyba potrzebny jest validator na date w formacie polskim
+        validators: [Validators.required]
       }),
       examinationType: new FormControl(null, {
         validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
@@ -100,9 +125,9 @@ export class ExamCreateComponent implements OnInit {
         this.mode = "create";
         this._id = null;       
       }
-    });
-  }
-
+    }); 
+  }  
+ 
   onSaveExam() {
     if (this.form.invalid) {
       return;
@@ -126,7 +151,6 @@ export class ExamCreateComponent implements OnInit {
     } else {
       this.examService.updateExam(exam);
     }
-    this.isLoading = false;
-    this.form.reset();
+    this.isLoading = false;    
   }
 }
