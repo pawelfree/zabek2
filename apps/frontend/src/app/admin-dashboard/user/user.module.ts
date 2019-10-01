@@ -11,7 +11,7 @@ import { UserCreateComponent } from './user-create/user-create.component';
     CommonModule, 
     AngularMaterialModule, 
     ReactiveFormsModule,
-    UserRoutingModule
+    UserRoutingModule,
   ],
   declarations: [
     UserListComponent,

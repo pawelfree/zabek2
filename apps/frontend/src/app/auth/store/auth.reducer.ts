@@ -22,7 +22,10 @@ const _authReducer = createReducer(initialState,
   on(AuthActions.authenticateClearError, state => ({...state, error: null, loading: false})),
   on(AuthActions.changePassword, (state ,{oldPassword, newPassword}) => ({...state, error: null, loading: true})),
   on(AuthActions.passwordChanged, state => ({...state, error: null, loading: false})),
-  on(AuthActions.passwordChangeError, (state, {error}) => ({...state, error, loading: false}))
+  on(AuthActions.passwordChangeError, (state, {error}) => ({...state, error, loading: false})),
+  on(AuthActions.sendPasswordResetTokenRequest, (state, {email}) => ({...state, loading: true, error: null})),
+  on(AuthActions.passwordResetTokenRequestSent, (state) => ({...state, error: null, loading: false})),
+  on(AuthActions.sendPasswordResetRequest,(state, {token, password}) => ({...state, error: null, loading: true})),
 );
 
 export function authReducer(state, action ) {

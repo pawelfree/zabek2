@@ -21,8 +21,9 @@ import { environment } from '../environments/environment';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
+import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
-import { UserEffects } from './admin-dashboard/user/store/user.effects'
+import { UserEffects } from './admin-dashboard/user/store/user.effects';
 
 registerLocaleData(localePl, 'pl');
 
@@ -32,6 +33,7 @@ registerLocaleData(localePl, 'pl');
     HeaderComponent,
     AuthComponent,
     DoctorRegisterComponent,
+    ResetPasswordComponent,
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent
@@ -53,7 +55,7 @@ registerLocaleData(localePl, 'pl');
         strictActionSerializability: true,
       },
     }),
-    EffectsModule.forRoot([AuthEffects, LabEffects, UserEffects]),
+    EffectsModule.forRoot([AuthEffects,LabEffects,UserEffects]),
     FlexLayoutModule,
     //TODO odkomentowac na produkcji
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

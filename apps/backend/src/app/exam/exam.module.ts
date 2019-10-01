@@ -15,6 +15,6 @@ import { ExamService } from './exam.service';
   ],
   providers: [
     ExamService
-  ],
+  ]
 })
 export class ExamModule {}

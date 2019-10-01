@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../shared/security/auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './user.schema';
 import { DoctorController } from './doctor.controller';

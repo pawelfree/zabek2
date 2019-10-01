@@ -20,9 +20,17 @@ export class ConfigService {
         }
 
         if (process.env.LOGIN_EXPIRES_IN) {
-            Object.assign(this.envConfig, process.env.LOGIN_EXPIRES_IN);
+            Object.assign(this.envConfig, {LOGIN_EXPIRES_IN: process.env.LOGIN_EXPIRES_IN});
         }
 
+        if (process.env.ZABEK_SENDGRID_API_KEY) {
+            Object.assign(this.envConfig, { ZABEK_SENDGRID_API_KEY: process.env.ZABEK_SENDGRID_API_KEY});
+        }
+
+        if (process.env.RESET_TOKEN_EXPIRES_IN) {
+            Object.assign(this.envConfig, { RESET_TOKEN_EXPIRES_IN: process.env.RESET_TOKEN_EXPIRES_IN});
+        }
+        
     }
 
     get(key: string): string {

@@ -37,3 +37,5 @@ const _userReducer = createReducer(initialState,
 export function userReducer(state, action ) {
   return _userReducer(state, action);
 }
+
+export const userFeatureKey = 'user';

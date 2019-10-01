@@ -37,3 +37,5 @@ const _labReducer = createReducer(initialState,
 export function labReducer(state, action ) {
   return _labReducer(state, action);
 }
+
+export const labFeatureKey = 'lab';

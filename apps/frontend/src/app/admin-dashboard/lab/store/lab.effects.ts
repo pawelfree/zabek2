@@ -6,9 +6,9 @@ import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
 import { Lab } from '../../../_models';
 import { environment } from '../../../../environments/environment';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { AppState } from '../../../store/app.reducer';
 
 const BACKEND_URL = environment.apiUrl + '/api/lab/';
 

@@ -11,8 +11,8 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Roles } from '../auth/roles.decorator';
-import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../shared/security/roles.decorator';
+import { RolesGuard } from '../shared/security/roles.guard';
 import { LabService } from './lab.service';
 import { CreateLabDto, UpdateLabDto } from './dto';
 import { Lab } from './lab.interface';

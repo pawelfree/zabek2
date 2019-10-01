@@ -3,6 +3,8 @@ import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { AuthComponent } from './auth/login/auth.component';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { NgModule } from '@angular/core';
+import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
+import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
 
 const routes: Routes = [
     {
@@ -29,6 +31,15 @@ const routes: Routes = [
     {
         path: 'register',
         component: DoctorRegisterComponent
+    },
+    {
+        path: 'resetpassword/:id',
+        resolve: {token: ResetPasswordResolver},
+        component: ResetPasswordComponent
+    },
+    {
+        path: 'resetpassword',
+        component: ResetPasswordComponent
     },
     {
         path: "doctorlist",

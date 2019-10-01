@@ -9,27 +9,26 @@ import { Controller,
   Get,
   Query,
   Request} from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
 import { User } from './user.interface';
 import { AuthGuard } from '@nestjs/passport';
-import { Roles } from '../auth/roles.decorator';
-import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../shared/security/roles.decorator';
+import { RolesGuard } from '../shared/security/roles.guard';
 import { UpdateUserInternalDto, CreateDoctorDto } from './dto';
 import { Role } from '../shared/role';
 import { LabService } from '../lab/lab.service';
 import { Lab } from '../lab/lab.interface';
+import { AuthService } from '../shared/security/auth.service';
 
 @Controller('doctor')
 export class DoctorController {
 
   constructor(
+    private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly labService: LabService
   ) {}
-
-  static SALT = 10;
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin, Role.user)
@@ -44,6 +43,7 @@ export class DoctorController {
 
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
+    console.warn('wymusic polityke haseł')
     const user: User = await this.userService.findByEmail(createDoctorDto.email);
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
@@ -60,13 +60,13 @@ export class DoctorController {
       throw new BadRequestException('Pracownia przypisana do obsługi lekarza nie istnieje')
     }
     await this.labService.incrementUsers(createDoctorDto.lab._id);
-    const salt = await bcrypt.genSalt(DoctorController.SALT);
+
     const _createDoctorDto: CreateDoctorDto = {
       ...createDoctorDto,
       active: false,
       lab: lab,
       role: Role.doctor,
-      password: await bcrypt.hash(createDoctorDto.password, salt)
+      password: await this.authService.hash(createDoctorDto.password)
     } 
     //TODO ten lodash to trzeba zmienic na cos innego
     console.warn('zrobic cos z lodashem')

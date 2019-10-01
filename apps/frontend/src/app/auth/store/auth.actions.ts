@@ -10,3 +10,6 @@ export const authenticateClearError = createAction('[Auth] Clear error');
 export const changePassword = createAction('[Auth] Change password', props<{oldPassword: string, newPassword: string}>());
 export const passwordChanged = createAction('[Auth] Password changed');
 export const passwordChangeError = createAction('[Auth] Password change error', props<{error: any}>());
+export const sendPasswordResetTokenRequest = createAction('[Auth] Send password reset token request', props<{email: string}>());
+export const passwordResetTokenRequestSent = createAction('[Auth] Password reset token request sent');
+export const sendPasswordResetRequest = createAction('[Auth] Send password reset request', props<{token: string, password: string}>());
