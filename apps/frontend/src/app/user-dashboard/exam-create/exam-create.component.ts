@@ -7,6 +7,8 @@ import { PeselValidator, CustomValidator } from '../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { Doctor } from '../../_models';
+import { MatDialog } from '@angular/material';
+import { InfoComponent } from '../../common-dialogs';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -57,18 +59,20 @@ export class ExamCreateComponent implements OnInit {
   ];
 
   constructor(
-    public examService: ExamService,
-    public doctorService: DoctorService,
-    public route: ActivatedRoute
+    private readonly examService: ExamService,
+    private readonly doctorService: DoctorService,
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.doctorService.getAllDoctors().subscribe(res => {
-      const x = res;
       this.doctors = res;
+      this.isLoading = false;
     },
     error => {
-      console.log('error', error);
+      this.dialog.open(InfoComponent, { data:  error });
       this.doctors = [];
     })
     
