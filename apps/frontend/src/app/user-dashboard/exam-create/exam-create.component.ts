@@ -63,11 +63,11 @@ export class ExamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.doctors[]= this.doctorService.getAllDoctors;
+    this.doctors[]= this.doctorService.getAllDoctors();
 
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
-        validators: [Validators.required] // chyba potrzebny jest validator na date w formacie polskim
+        validators: [Validators.required]
       }),
       examinationType: new FormControl(null, {
         validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
