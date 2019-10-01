@@ -17,6 +17,15 @@
       <mat-error *ngIf="form.get('examinationType').invalid">Wprowadź rodzaj badania.</mat-error>
     </mat-form-field>
 
+    <mat-form-field>
+      <mat-label>Rodzaj badania</mat-label>
+      <mat-select formControlName="examinationType">
+        <mat-option  *ngFor="let examType of examTypes" [value]="examType">
+          {{ examType }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('examinationType').invalid">Wybierz rodzaj badania.</mat-error>
+    </mat-form-field>
 
     <mat-form-field>
       <input matInput type="text" formControlName="patientFullName" placeholder="Pacjent">
@@ -41,11 +50,15 @@
       <mat-error *ngIf="form.get('patientAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
       Zgoda pacjenta na badania online
     </mat-checkbox>
-
+    
     <mat-form-field>
-      <input matInput type="text" formControlName="doctorFullName" placeholder="Lekarz zlecający">
-      <mat-error *ngIf="form.get('doctorFullName').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).
-      </mat-error>
+      <mat-label>Lekarz zlecający</mat-label>
+      <mat-select formControlName="doctorFullName">
+        <mat-option  *ngFor="let doctor of doctors" [value]="doctor">
+          {{ doctor }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('doctorFullName').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).</mat-error>
     </mat-form-field>
 
     <mat-form-field>
