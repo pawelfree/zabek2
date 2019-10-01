@@ -74,6 +74,7 @@ export class ExamCreateComponent implements OnInit {
     error => {
       this.dialog.open(InfoComponent, { data:  error });
       this.doctors = [];
+      this.isLoading = false;
     })
     
 
