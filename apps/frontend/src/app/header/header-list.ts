@@ -19,6 +19,16 @@ export const ModulesList =
         routerLink: '/admin/user/create'}]
   },
   {
+    label: 'Badania',
+    routerLink: '/user/examinations',
+    roles: ['admin', 'user'],
+    children: [
+      { label: 'Lista',
+        routerLink: '/user/examinations'},
+      { label: 'Nowe badanie',
+        routerLink: '/user/examcreate'}]
+  },
+  {
     label: 'Lekarze',
     routerLink: '/doctorlist',
     roles: [ 'sadmin', 'admin', 'user' ]
