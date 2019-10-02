@@ -48,8 +48,8 @@ export class DoctorController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.admin, Role.user)
   @Get('all')
-  async getAllDoctors() {
-    return await this.userService.findReallyAllDoctors();
+  async getAllDoctors(@Request() req) {
+    return await this.userService.findDoctorsForLab(req.user.lab);
   }
 
   @Post()

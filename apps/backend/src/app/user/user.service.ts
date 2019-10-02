@@ -37,8 +37,11 @@ export class UserService {
   }
 
 // TODO to się oczywiście inaczej musi nazywac
-  async findReallyAllDoctors(): Promise<User[]>  {
-    const options = { role: Role.doctor };
+  async findDoctorsForLab(labId: string): Promise<User[]>  {
+    const options = {role: Role.doctor };
+    if (labId) {
+      options['lab'] = labId;
+    } //a co jeśli labid jest null?
     return await this.userModel.find(options).then(doctors => doctors);
   }
 

@@ -40,10 +40,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
   private _id: string;
   private doctorsSub: Subscription = null;
   
-  // pobrać z serwisu lekarzy. Wszystkich? A jak ich będzie 2000?
-  // Tylko tych zarejestrowanych w danej pracowni?
-  // a czy pracownia może zarejestrować lekarza, który jest w innej pracowni zarejestrowany? 
-  doctors: Doctor[]; // ['Jan Kowalski', 'Janina Nowak', 'Romuald Kisiel']; 
+  doctors: Doctor[];
   
   // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
   examTypes: string[] = [
