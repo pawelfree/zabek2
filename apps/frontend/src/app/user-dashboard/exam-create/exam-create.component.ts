@@ -112,9 +112,6 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       doctorFullName: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)] //to pole powinno być z listy wyboru, najlepiej typu autocomplete
       }),
-      doctorQualificationsNo: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(7), Validators.maxLength(7)]
-      }),
       sendEmailTo: new FormControl(null, {
         validators: [Validators.required, Validators.email] // ten email powinien się podpowiadac z profilu lekarza, ale user moze go zmienic
       })
