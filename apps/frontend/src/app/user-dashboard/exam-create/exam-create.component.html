@@ -11,12 +11,6 @@
       <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę badania.</mat-error>
     </mat-form-field>
 
-
-    <mat-form-field>
-      <input matInput type="text" formControlName="examinationType" placeholder="Rodzaj badania">
-      <mat-error *ngIf="form.get('examinationType').invalid">Wprowadź rodzaj badania.</mat-error>
-    </mat-form-field>
-
     <mat-form-field>
       <mat-label>Rodzaj badania</mat-label>
       <mat-select formControlName="examinationType">
@@ -59,12 +53,6 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="form.get('doctorFullName').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).</mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput type="text" formControlName="doctorQualificationsNo" placeholder="Nr uprawnień">
-      <mat-error *ngIf="form.get('doctorQualificationsNo').invalid">Wprowadź poprawny numer uprawnień lekarza (7
-        znaków).</mat-error>
     </mat-form-field>
 
     <mat-form-field>
