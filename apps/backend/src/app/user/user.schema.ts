@@ -78,5 +78,10 @@ export const UserSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
     default: false
+  },
+  rulesAccepted: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 });

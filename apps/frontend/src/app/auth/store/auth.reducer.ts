@@ -16,6 +16,7 @@ const initialState: State = {
 
 const _authReducer = createReducer(initialState,
   on(AuthActions.authenticateSuccess, (state, {user, redirect, returnUrl} ) => ({...state, error: null, user, loading: false})),
+  on(AuthActions.acceptRules, (state, {user, redirect, returnUrl} ) => ({...state, error: null, user, loading: false})),
   on(AuthActions.authenticateFail, (state, {error}) => ({...state, user: null, error: error, loading: false})),
   on(AuthActions.loginStart, state => ({...state, error: null, loading: true})),
   on(AuthActions.logout, state => ({...state, error: null, user: null, loading: false})),

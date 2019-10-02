@@ -46,11 +46,9 @@ export class DoctorController {
   }
   
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.sadmin, Role.admin, Role.user)
-  @Get()
-  async getAllDoctors( 
-    @Request() req
-  ) {
+  @Roles(Role.admin, Role.user)
+  @Get('all')
+  async getAllDoctors() {
     return await this.userService.findReallyAllDoctors();
   }
 
@@ -105,18 +103,45 @@ export class DoctorController {
       .then(async (user: User) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
-        } else if (user.active) {
-          error = new BadRequestException('Lekarz jest już aktywny.');
         } else {
           const _updateUserInternalDto: UpdateUserInternalDto = {
             _id: user._id,
             email: user.email,
             role: user.role,
-            active: !user.active
+            active: true
           };
-          const { n, nModified, ok } = await this.userService.update(
-            _updateUserInternalDto
-          );
+          const { n, nModified, ok } = await this.userService.update(_updateUserInternalDto);
+          if (n !== 1 || nModified !== 1 || ok !== 1) {
+            error = new InternalServerErrorException('Nieznany błąd.');
+          }
+        }
+      })
+      .catch(err => {
+        error = new BadRequestException(err);
+      });
+    if (error) {
+      throw error;
+    }
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.doctor)
+  @Put('/acceptrules/:id')
+  async acceptRules(@Param('id') id: string) {
+    let error;
+    await this.userService
+      .findById(id)
+      .then(async (user: User) => {
+        if (!user) {
+          error = new BadRequestException('Lekarz nie istnieje.');
+        } else {
+          const _updateUserInternalDto: UpdateUserInternalDto = {
+            _id: user._id,
+            email: user.email,
+            role: user.role,
+            rulesAccepted: true
+          };
+          const { n, nModified, ok } = await this.userService.update(_updateUserInternalDto);
           if (n !== 1 || nModified !== 1 || ok !== 1) {
             error = new InternalServerErrorException('Nieznany błąd.');
           }

@@ -10,6 +10,7 @@ import { Doctor } from '../../_models';
 import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -122,12 +123,13 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       })
     });
 
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+    this.route.paramMap.pipe(take(1)).
+      subscribe((paramMap: ParamMap) => {
       if (paramMap.has("examId")) {
         this.mode = "edit";
         this._id = paramMap.get("examId");
         this.isLoading = true;
-        this.examService.getExam(this._id).subscribe(examData => {
+        this.examService.getExam(this._id).pipe(take(1)).subscribe(examData => {
           this.isLoading = false;
           this.form.setValue({
             examinationDate:  examData.examinationDate,
@@ -141,6 +143,10 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
             doctorQualificationsNo: examData.doctorQualificationsNo,
             sendEmailTo:      examData.sendEmailTo
           });
+        },
+        error => {
+          this.dialog.open(InfoComponent, { data:  error });
+          this.isLoading = false;          
         });
       } else {
         this.mode = "create";

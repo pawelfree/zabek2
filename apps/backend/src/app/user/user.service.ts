@@ -35,14 +35,12 @@ export class UserService {
     const count = await this.userModel.countDocuments(findallQuery);
     return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(doctors => ({ doctors, count }) );
   }
+
 // TODO to się oczywiście inaczej musi nazywac
-  async findReallyAllDoctors(): Promise<{ doctors: User[] }>  {
-    const options = {role: Role.doctor };
-    const findallQuery = this.userModel.find(options);    
-    return await findallQuery.then(doctors => ({ doctors}) );
+  async findReallyAllDoctors(): Promise<User[]>  {
+    const options = { role: Role.doctor };
+    return await this.userModel.find(options).then(doctors => doctors);
   }
-
-
 
   async findAllUsers( pageSize: number, currentPage: number, labId: string): Promise<{ users: User[]; count: number }> {
     const options = {role: { $in: [Role.admin, Role.user]}};

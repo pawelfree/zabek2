@@ -10,38 +10,33 @@ export class EmailService {
   constructor(
     private readonly configService: ConfigService
   ) {
-    try {
-      this.API_KEY = configService.get('ZABEK_SENDGRID_API_KEY');
-    }
-    catch (error) {
-      console.warn("Can't get API_KEY", error.message ? error.message : error);
-    }
+    this.API_KEY = configService.get('ZABEK_SENDGRID_API_KEY');
     this.sendGrid = require('sendgrid')(this.API_KEY);
   }
 
   sendResetTokenSuccesEmail(email: string, token: string) {
-    if (this.API_KEY) {
+    if (this.API_KEY === 'local') {
+      console.log('Reset token generated for',email);
+      console.log(token);
+    } else {
       const from = 'zabek@herokuapp.com';
       const to = email;
       const subject = 'Resetowanie hasła dla ząbek';
       const plain_content = 'https://zabek.herokuapp.com/resetpassword/'+token;
       this.send(from, to, subject, plain_content);
-    } else {
-      console.log('Reset token generated for',email);
-      console.log(token);
     }
 
   }
 
   sendResetTokenSuccesFailureEmail(email: string) {
-    if (this.API_KEY) {
+    if (this.API_KEY === 'local') {
+      console.log('Reset token NOT generated for', email);
+    } else {
       const from = 'zabek@herokuapp.com';
       const to = email;
       const subject = 'Resetowanie hasła dla ząbek';
       const plain_content = 'Coś poszło nie tak.\n Nie jesteś naszym użytkownikiem lub posiadasz u nas inny adres email';
       this.send(from, to, subject, plain_content);
-    } else {
-      console.log('Reset token NOT generated for', email);
     }
   }
 

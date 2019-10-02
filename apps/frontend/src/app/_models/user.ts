@@ -11,8 +11,8 @@ export class User {
     public expiresIn?: number, 
     private _tokenExpirationDate?: Date,
     private _token?: string,
-    public active?: boolean
-
+    public active?: boolean, //to tylko po to zeby mozna bylo sprawdzac pola doktora przy logowaniu
+    public rulesAccepted?: boolean //to tylko po to zeby mozna bylo sprawdzac pola doktora przy logowaniu
   ){}
 
     get token() {
