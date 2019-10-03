@@ -134,7 +134,6 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
             patientAge:       examData.patientAge,
             patientAck:       examData.patientAck,
             doctorFullName:   examData.doctorFullName,
-            //doctorQualificationsNo: examData.doctorQualificationsNo,
             sendEmailTo:      examData.sendEmailTo
           });
         },
@@ -164,8 +163,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       patientAge:       this.form.value.patientAge,
       patientAck:       this.form.value.patientAck,
       sendEmailTo:      this.form.value.sendEmailTo,
-      doctorFullName:   this.form.value.doctorFullName,
-      doctorQualificationsNo: this.form.value.doctorQualificationsNo
+      doctorFullName:   this.form.value.doctorFullName     
     }
     if (this.mode === "create") {
       this.examService.addExam(exam);
