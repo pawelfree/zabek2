@@ -59,8 +59,6 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy  {
   }
 
   onDelete(id) {
-    console.log(JSON.stringify(id));
-    //TODO obsluga bledow
     this.examService.deleteExam(id)
       .subscribe(res => {
         if (this.dataSource.itemsOnPage === 1 ) {

@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { getAge } from '@zabek/util';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -39,7 +40,8 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
   private mode = 'create';
   private _id: string;
   private doctorsSub: Subscription = null;
-  
+  public selectedDoctor;
+
   doctors: Doctor[];
   
   // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
@@ -84,37 +86,6 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       this.isLoading = false;
     })
     
-
-    this.route.paramMap.pipe(take(1)).
-      subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("examId")) {
-        this.mode = "edit";
-        this._id = paramMap.get("examId");
-        this.isLoading = true;
-        this.examService.getExam(this._id).pipe(take(1)).subscribe(examData => {
-          this.isLoading = false;
-          this.form.setValue({
-            examinationDate:  examData.examinationDate,
-            examinationType:  examData.examinationType,
-            examinationFile:  examData.examinationFile,
-            patientFullName:  examData.patientFullName,
-            patientPesel:     examData.patientPesel,
-            patientAge:       examData.patientAge,
-            patientAck:       examData.patientAck,
-            doctor:           examData.doctor,
-            sendEmailTo:      examData.sendEmailTo
-          });
-        },
-        error => {
-          this.dialog.open(InfoComponent, { data:  error });
-          this.isLoading = false;          
-        });
-      } else {
-        this.mode = "create";
-        this._id = null;       
-      }
-    }); 
-
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
         validators: [Validators.required]
@@ -148,7 +119,38 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       })
     });
 
-
+    this.route.paramMap.pipe(take(1)).
+      subscribe((paramMap: ParamMap) => {
+      if (paramMap.has("examId")) {
+        this.mode = "edit";
+        this._id = paramMap.get("examId");
+        this.isLoading = true;
+        this.examService.getExam(this._id).pipe(take(1)).subscribe(examData => {
+          this.isLoading = false;
+          this.selectedDoctor = examData.doctor;
+          this.form.setValue({
+            examinationDate:  examData.examinationDate,
+            examinationType:  examData.examinationType,
+            examinationFile:  examData.examinationFile,
+            patientFullName:  examData.patientFullName,
+            patientPesel:     examData.patientPesel,
+            patientAge:       examData.patientAge,
+            patientAck:       examData.patientAck,
+            doctor:           examData.doctor,
+            sendEmailTo:      examData.sendEmailTo,
+          });
+        },
+        error => {
+          this.dialog.open(InfoComponent, { data:  error });
+          this.isLoading = false;          
+          this.selectedDoctor = null;
+        });
+      } else {
+        this.mode = "create";
+        this._id = null;       
+        this.selectedDoctor = null;
+      }
+    }); 
   }  
  
   onSaveExam() {
@@ -174,5 +176,13 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       this.examService.updateExam(exam);
     }
     this.isLoading = false;    
+  }
+
+  compareDoctors(o1: any, o2: any): boolean {
+    return  o1._id === o2._id;
+  }
+
+  peselChanged() {
+    this.form.patchValue({patientAge: getAge(this.form.value.patientPesel)})
   }
 }
