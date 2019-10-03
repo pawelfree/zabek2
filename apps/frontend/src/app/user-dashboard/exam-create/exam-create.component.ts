@@ -134,7 +134,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
             patientAge:       examData.patientAge,
             patientAck:       examData.patientAck,
             doctorFullName:   examData.doctorFullName,
-            doctorQualificationsNo: examData.doctorQualificationsNo,
+            //doctorQualificationsNo: examData.doctorQualificationsNo,
             sendEmailTo:      examData.sendEmailTo
           });
         },
