@@ -18,7 +18,6 @@ import {
   MatMenuModule,
   MatCheckboxModule,
   MatAutocompleteModule,
-  MatAutocomplete
 } from '@angular/material';
 
 @NgModule({
@@ -40,7 +39,7 @@ import {
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ]
 })
 export class AngularMaterialModule {}

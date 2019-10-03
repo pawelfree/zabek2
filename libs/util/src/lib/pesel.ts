@@ -82,8 +82,13 @@ const getDateOfBirth = (pesel: string): string => {
 	return `${firstDigitsofTheYear}${year}/${formattedMonth < 10 ? `0${formattedMonth}` : formattedMonth}/${day}`;
 };
 
+const getAge = (pesel: string): number => {
+	return new Date().getFullYear() - +getDateOfBirth(pesel).slice(0,4);
+};
+
 export {
 	isValidPesel,
 	isFemale,
-	getDateOfBirth
+	getDateOfBirth,
+	getAge
 };

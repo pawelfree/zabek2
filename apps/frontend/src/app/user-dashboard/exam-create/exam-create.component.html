@@ -28,7 +28,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="text" formControlName="patientPesel" placeholder="PESEL">
+      <input matInput type="text" formControlName="patientPesel" placeholder="PESEL" (change)="peselChanged()">
       <mat-error *ngIf="form.get('patientPesel').hasError('required')">PESEL jest wymagany.</mat-error>
       <mat-error *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL musi mieć 11 znaków.</mat-error>
       <mat-error *ngIf="form.get('patientPesel').hasError('onlyNumbers')">PESEL może składać się tylko z cyfr.</mat-error>
@@ -47,12 +47,12 @@
     
     <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
-      <mat-select formControlName="doctor">
+      <mat-select [compareWith]="compareDoctors" formControlName="doctor" [value]="selectedDoctor">
         <mat-option  *ngFor="let doctor of doctors" [value]="doctor">
           {{ doctor.firstName }}, {{ doctor.lastName}} -  PWZ:{{ doctor.qualificationsNo }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="form.get('doctor').invalid">Wprowadź imię i nazwisko lekarza (max 50 znaków).</mat-error>
+      <mat-error *ngIf="form.get('doctor').invalid">Wybierz lekarza z listy.</mat-error>
     </mat-form-field>
 
     <mat-form-field>
