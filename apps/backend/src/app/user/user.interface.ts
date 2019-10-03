@@ -16,4 +16,5 @@ export interface User extends Document {
   readonly examFormat?: string;
   readonly tomographyWithViewer?: boolean;
   readonly active?: boolean;
+  readonly rulesAccepted?: boolean;
 }

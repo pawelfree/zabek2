@@ -36,6 +36,15 @@ export class UserService {
     return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(doctors => ({ doctors, count }) );
   }
 
+// TODO to się oczywiście inaczej musi nazywac
+  async findDoctorsForLab(labId: string): Promise<User[]>  {
+    const options = {role: Role.doctor };
+    if (labId) {
+      options['lab'] = labId;
+    } //a co jeśli labid jest null?
+    return await this.userModel.find(options).then(doctors => doctors);
+  }
+
   async findAllUsers( pageSize: number, currentPage: number, labId: string): Promise<{ users: User[]; count: number }> {
     const options = {role: { $in: [Role.admin, Role.user]}};
     console.warn('dodac sadminowi lab');

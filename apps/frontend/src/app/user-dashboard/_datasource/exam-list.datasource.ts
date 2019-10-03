@@ -39,6 +39,7 @@ export class ExamListDataSource extends DataSource<Examination> {
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe(({exams, count}) => {
+        console.log(exams[0])
         this.itemsOnPage = exams.length;
         this.dataCount = count;
         this.examsSubject.next([...exams])

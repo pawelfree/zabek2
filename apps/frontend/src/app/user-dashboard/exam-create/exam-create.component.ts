@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ExamService } from '../../_services';
+import { ExamService, DoctorService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../_validators';
 
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { Doctor } from '../../_models';
+import { MatDialog } from '@angular/material';
+import { InfoComponent } from '../../common-dialogs';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -28,21 +33,91 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material
     }
   ],
 })
-export class ExamCreateComponent implements OnInit {
+export class ExamCreateComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
   private mode = 'create';
   private _id: string;
+  private doctorsSub: Subscription = null;
+  
+  doctors: Doctor[];
+  
+  // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
+  examTypes: string[] = [
+    'AP czaszki',
+    'cefalometryczne',
+    'pantomograficzne',
+    'pantomograficzne i cefalometryczne',
+    'pantomograficzne z opisem',
+    'punktowe',
+    'tomografia 5x5',
+    'tomografia 8x9 i tomografia 12x9 (zatoki)',
+    'tomografia 12x9',
+    'tomografia 12x9 i pantomograficzne',
+    'tomografia 16x9',
+    'inne'
+  ];
 
   constructor(
-    public examService: ExamService,
-    public route: ActivatedRoute
+    private readonly examService: ExamService,
+    private readonly doctorService: DoctorService,
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog
   ) {}
 
+  ngOnDestroy() {
+    if (this.doctorsSub) {
+      this.doctorsSub.unsubscribe();
+      this.doctorsSub = null;
+    }
+  }
+
   ngOnInit() {
+    this.isLoading = true;
+    this.doctorsSub = this.doctorService.getAllDoctors().subscribe(res => {
+      this.doctors = res;
+      this.isLoading = false;
+    },
+    error => {
+      this.dialog.open(InfoComponent, { data:  error });
+      this.doctors = [];
+      this.isLoading = false;
+    })
+    
+
+    this.route.paramMap.pipe(take(1)).
+      subscribe((paramMap: ParamMap) => {
+      if (paramMap.has("examId")) {
+        this.mode = "edit";
+        this._id = paramMap.get("examId");
+        this.isLoading = true;
+        this.examService.getExam(this._id).pipe(take(1)).subscribe(examData => {
+          this.isLoading = false;
+          this.form.setValue({
+            examinationDate:  examData.examinationDate,
+            examinationType:  examData.examinationType,
+            examinationFile:  examData.examinationFile,
+            patientFullName:  examData.patientFullName,
+            patientPesel:     examData.patientPesel,
+            patientAge:       examData.patientAge,
+            patientAck:       examData.patientAck,
+            doctor:           examData.doctor,
+            sendEmailTo:      examData.sendEmailTo
+          });
+        },
+        error => {
+          this.dialog.open(InfoComponent, { data:  error });
+          this.isLoading = false;          
+        });
+      } else {
+        this.mode = "create";
+        this._id = null;       
+      }
+    }); 
+
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
-        validators: [Validators.required] // chyba potrzebny jest validator na date w formacie polskim
+        validators: [Validators.required]
       }),
       examinationType: new FormControl(null, {
         validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
@@ -65,44 +140,17 @@ export class ExamCreateComponent implements OnInit {
       patientAck: new FormControl(false, {
         validators: [Validators.required]
       }),
-      doctorFullName: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)] //to pole powinno być z listy wyboru, najlepiej typu autocomplete
-      }),
-      doctorQualificationsNo: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(7), Validators.maxLength(7)]
+      doctor: new FormControl(null, {
+        validators: [Validators.required ]
       }),
       sendEmailTo: new FormControl(null, {
         validators: [Validators.required, Validators.email] // ten email powinien się podpowiadac z profilu lekarza, ale user moze go zmienic
       })
     });
 
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("examId")) {
-        this.mode = "edit";
-        this._id = paramMap.get("examId");
-        this.isLoading = true;
-        this.examService.getExam(this._id).subscribe(examData => {
-          this.isLoading = false;
-          this.form.setValue({
-            examinationDate:  examData.examinationDate,
-            examinationType:  examData.examinationType,
-            examinationFile:  examData.examinationFile,
-            patientFullName:  examData.patientFullName,
-            patientPesel:     examData.patientPesel,
-            patientAge:       examData.patientAge,
-            patientAck:       examData.patientAck,
-            doctorFullName:   examData.doctorFullName,
-            doctorQualificationsNo: examData.doctorQualificationsNo,
-            sendEmailTo:      examData.sendEmailTo
-          });
-        });
-      } else {
-        this.mode = "create";
-        this._id = null;       
-      }
-    });
-  }
 
+  }  
+ 
   onSaveExam() {
     if (this.form.invalid) {
       return;
@@ -118,15 +166,13 @@ export class ExamCreateComponent implements OnInit {
       patientAge:       this.form.value.patientAge,
       patientAck:       this.form.value.patientAck,
       sendEmailTo:      this.form.value.sendEmailTo,
-      doctorFullName:   this.form.value.doctorFullName,
-      doctorQualificationsNo: this.form.value.doctorQualificationsNo
+      doctor:           this.form.value.doctor     
     }
     if (this.mode === "create") {
       this.examService.addExam(exam);
     } else {
       this.examService.updateExam(exam);
     }
-    this.isLoading = false;
-    this.form.reset();
+    this.isLoading = false;    
   }
 }

@@ -133,9 +133,12 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         return;
       }
       if (!this.queryParams) {
-        console.warn('zrobic lepsza weryfikacje id pracowni po stronie frontendu')
-        //var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$")
-        this.dialog.open(InfoComponent, { data:  'Niepoprawny identyfikator pracowni' });
+        this.dialog.open(InfoComponent, { data: 'Niepoprawny (brak) identyfikator pracowni' });
+        return;
+      }
+      const checkForLabId = new RegExp("^[0-9a-fA-F]{24}$")
+      if (!checkForLabId.test(this.queryParams.id)) {
+        this.dialog.open(InfoComponent, { data: 'Niepoprawny identyfikator pracowni' });
         return;
       }
       this.isLoading = true;
@@ -153,7 +156,8 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         this.form.value.sameAddresses ? this.form.value.officeAddress : this.form.value.officeCorrespondenceAddress,
         this.form.value.examFormat,
         this.form.value.tomographyWithViewer,
-        false);
+        false,
+        true);
 
       this.doctorService.addDoctor(doctor).subscribe(
         res => this.goOut(),

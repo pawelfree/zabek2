@@ -19,7 +19,8 @@ export class Doctor extends User {
     public officeCorrespondenceAddres: string = "",
     public examFormat: string = "tiff",
     public tomographyWithViewer: boolean = false,
-    public active: boolean = false
+    public active: boolean = false,
+    public rulesAccepted: boolean = false
     ){
       super(_id, email, "doctor", { _id: lab, email: null, address: null, name: null }, password, expiresIn, _tokenExpirationDate, _token);
     }

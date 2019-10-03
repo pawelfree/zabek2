@@ -18,8 +18,7 @@ export class ExamService {
     return await this.examModel.findOne({ name }).select('-__v');
   }
 
-  async add(createDto: CreateExamInternalDto): Promise<Exam> {
-    console.log('createDto', createDto)
+  async add(createDto: CreateExamInternalDto): Promise<Exam> {s
     return await new this.examModel(createDto).save();
   }
 
@@ -36,7 +35,7 @@ export class ExamService {
     } 
     const findallQuery = this.examModel.find<Exam>(options);
     const count = await this.examModel.countDocuments(findallQuery);   
-    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(exams => ({ exams, count }) );
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).populate('doctor').then(exams => ({ exams, count }) );
   }
 
   async update(updateExamDto: UpdateExamDto) {

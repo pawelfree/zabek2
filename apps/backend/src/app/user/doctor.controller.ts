@@ -1,5 +1,6 @@
-import { Controller, 
-  Post, 
+import {
+  Controller,
+  Post,
   Body,
   BadRequestException,
   Put,
@@ -23,7 +24,6 @@ import { AuthService } from '../shared/security/auth.service';
 
 @Controller('doctor')
 export class DoctorController {
-
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
@@ -38,7 +38,18 @@ export class DoctorController {
     @Query('page') page: number = 10,
     @Request() req
   ) {
-    return await this.userService.findAllDoctors(+pagesize, +page, req.user.lab);
+    return await this.userService.findAllDoctors(
+      +pagesize,
+      +page,
+      req.user.lab
+    );
+  }
+  
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.admin, Role.user)
+  @Get('all')
+  async getAllDoctors(@Request() req) {
+    return await this.userService.findDoctorsForLab(req.user.lab);
   }
 
   @Post()
@@ -48,16 +59,19 @@ export class DoctorController {
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
-    const lab: Lab = await this.labService.findById(createDoctorDto.lab._id).catch(err =>
-      { 
+    const lab: Lab = await this.labService
+      .findById(createDoctorDto.lab._id)
+      .catch(err => {
         let error = err.message;
         if (err.name === 'CastError' && err.path === '_id') {
           error = 'Błędny identyfikator pracowni ' + createDoctorDto.lab._id;
         }
-        throw new BadRequestException(error) }
-    );
-    if(! lab) {
-      throw new BadRequestException('Pracownia przypisana do obsługi lekarza nie istnieje')
+        throw new BadRequestException(error);
+      });
+    if (!lab) {
+      throw new BadRequestException(
+        'Pracownia przypisana do obsługi lekarza nie istnieje'
+      );
     }
     await this.labService.incrementUsers(createDoctorDto.lab._id);
 
@@ -69,9 +83,13 @@ export class DoctorController {
       password: await this.authService.hash(createDoctorDto.password)
     } 
     //TODO ten lodash to trzeba zmienic na cos innego
-    console.warn('zrobic cos z lodashem')
+    console.warn('zrobic cos z lodashem');
     return _.pick(await this.userService.addDoctor(_createDoctorDto), [
-      'email', 'role', 'firstName', 'lastName', 'qualificationsNo'
+      'email',
+      'role',
+      'firstName',
+      'lastName',
+      'qualificationsNo'
     ]);
   }
 
@@ -80,26 +98,25 @@ export class DoctorController {
   @Put('/activate/:id')
   async activateUser(@Param('id') id: string) {
     let error;
-    await this.userService.findById(id)
+    await this.userService
+      .findById(id)
       .then(async (user: User) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
-        } else if (user.active) {
-          error = new BadRequestException('Lekarz jest już aktywny.');
         } else {
           const _updateUserInternalDto: UpdateUserInternalDto = {
             _id: user._id,
             email: user.email,
             role: user.role,
-            active: !user.active
+            active: true
           };
-          const {n, nModified, ok} = await this.userService.update(_updateUserInternalDto);
-          if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
+          const { n, nModified, ok } = await this.userService.update(_updateUserInternalDto);
+          if (n !== 1 || nModified !== 1 || ok !== 1) {
             error = new InternalServerErrorException('Nieznany błąd.');
-          }        
+          }
         }
       })
-     .catch(err => {
+      .catch(err => {
         error = new BadRequestException(err);
       });
     if (error) {
@@ -107,4 +124,34 @@ export class DoctorController {
     }
   }
 
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.doctor)
+  @Put('/acceptrules/:id')
+  async acceptRules(@Param('id') id: string) {
+    let error;
+    await this.userService
+      .findById(id)
+      .then(async (user: User) => {
+        if (!user) {
+          error = new BadRequestException('Lekarz nie istnieje.');
+        } else {
+          const _updateUserInternalDto: UpdateUserInternalDto = {
+            _id: user._id,
+            email: user.email,
+            role: user.role,
+            rulesAccepted: true
+          };
+          const { n, nModified, ok } = await this.userService.update(_updateUserInternalDto);
+          if (n !== 1 || nModified !== 1 || ok !== 1) {
+            error = new InternalServerErrorException('Nieznany błąd.');
+          }
+        }
+      })
+      .catch(err => {
+        error = new BadRequestException(err);
+      });
+    if (error) {
+      throw error;
+    }
+  }
 }

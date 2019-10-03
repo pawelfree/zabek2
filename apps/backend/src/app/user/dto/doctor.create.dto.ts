@@ -14,4 +14,5 @@ export class CreateDoctorDto {
   readonly examFormat: string;
   readonly tomographyWithViewer: boolean;
   readonly active: boolean;
+  readonly rulesAccepted: boolean;
 }
