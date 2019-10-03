@@ -10,7 +10,7 @@ export class ExamService {
   constructor(@InjectModel('Exam') private readonly examModel: Model<Exam>) {}
 
   async findById(id: string): Promise<Exam> {
-    return await this.examModel.findById(id).select('-__v');
+    return await this.examModel.findById(id).populate('doctor').select('-__v');
   }
 
   // TODO zmienic z name na na przykład patientFullName
@@ -19,7 +19,10 @@ export class ExamService {
   }
 
   async add(createDto: CreateExamInternalDto): Promise<Exam> {
+<<<<<<< HEAD
     console.log('createDto', createDto)
+=======
+>>>>>>> b20ed55... automatyczne ustawianie wieku na podstawie pesel i wyswietlanie lekarza na podczas edycji
     return await new this.examModel(createDto).save();
   }
 
