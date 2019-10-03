@@ -84,6 +84,37 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       this.isLoading = false;
     })
     
+
+    this.route.paramMap.pipe(take(1)).
+      subscribe((paramMap: ParamMap) => {
+      if (paramMap.has("examId")) {
+        this.mode = "edit";
+        this._id = paramMap.get("examId");
+        this.isLoading = true;
+        this.examService.getExam(this._id).pipe(take(1)).subscribe(examData => {
+          this.isLoading = false;
+          this.form.setValue({
+            examinationDate:  examData.examinationDate,
+            examinationType:  examData.examinationType,
+            examinationFile:  examData.examinationFile,
+            patientFullName:  examData.patientFullName,
+            patientPesel:     examData.patientPesel,
+            patientAge:       examData.patientAge,
+            patientAck:       examData.patientAck,
+            doctor:           examData.doctor,
+            sendEmailTo:      examData.sendEmailTo
+          });
+        },
+        error => {
+          this.dialog.open(InfoComponent, { data:  error });
+          this.isLoading = false;          
+        });
+      } else {
+        this.mode = "create";
+        this._id = null;       
+      }
+    }); 
+
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
         validators: [Validators.required]
@@ -109,43 +140,15 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       patientAck: new FormControl(false, {
         validators: [Validators.required]
       }),
-      doctorFullName: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(50)] //to pole powinno być z listy wyboru, najlepiej typu autocomplete
+      doctor: new FormControl(null, {
+        validators: [Validators.required ]
       }),
       sendEmailTo: new FormControl(null, {
         validators: [Validators.required, Validators.email] // ten email powinien się podpowiadac z profilu lekarza, ale user moze go zmienic
       })
     });
 
-    this.route.paramMap.pipe(take(1)).
-      subscribe((paramMap: ParamMap) => {
-      if (paramMap.has("examId")) {
-        this.mode = "edit";
-        this._id = paramMap.get("examId");
-        this.isLoading = true;
-        this.examService.getExam(this._id).pipe(take(1)).subscribe(examData => {
-          this.isLoading = false;
-          this.form.setValue({
-            examinationDate:  examData.examinationDate,
-            examinationType:  examData.examinationType,
-            examinationFile:  examData.examinationFile,
-            patientFullName:  examData.patientFullName,
-            patientPesel:     examData.patientPesel,
-            patientAge:       examData.patientAge,
-            patientAck:       examData.patientAck,
-            doctorFullName:   examData.doctorFullName,
-            sendEmailTo:      examData.sendEmailTo
-          });
-        },
-        error => {
-          this.dialog.open(InfoComponent, { data:  error });
-          this.isLoading = false;          
-        });
-      } else {
-        this.mode = "create";
-        this._id = null;       
-      }
-    }); 
+
   }  
  
   onSaveExam() {
@@ -163,7 +166,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       patientAge:       this.form.value.patientAge,
       patientAck:       this.form.value.patientAck,
       sendEmailTo:      this.form.value.sendEmailTo,
-      doctorFullName:   this.form.value.doctorFullName     
+      doctor:           this.form.value.doctor     
     }
     if (this.mode === "create") {
       this.examService.addExam(exam);
