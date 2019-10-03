@@ -18,8 +18,7 @@ export class ExamService {
     return await this.examModel.findOne({ name }).select('-__v');
   }
 
-  async add(createDto: CreateExamInternalDto): Promise<Exam> {
-    console.log('createDto', createDto)
+  async add(createDto: CreateExamInternalDto): Promise<Exam> {s
     return await new this.examModel(createDto).save();
   }
 
