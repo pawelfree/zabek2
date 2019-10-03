@@ -36,7 +36,7 @@ export class ExamService {
     } 
     const findallQuery = this.examModel.find<Exam>(options);
     const count = await this.examModel.countDocuments(findallQuery);   
-    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).then(exams => ({ exams, count }) );
+    return await findallQuery.skip(pageSize * currentPage).limit(pageSize).populate('doctor').then(exams => ({ exams, count }) );
   }
 
   async update(updateExamDto: UpdateExamDto) {

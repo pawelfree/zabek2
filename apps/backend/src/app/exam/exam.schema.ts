@@ -27,19 +27,10 @@ export const ExamSchema = new mongoose.Schema({
     required: false,
     default: false
   },
-  doctorFullName: {
-    type: String,
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User',
     requred: true,
-    minLength: 5,
-    maxLength: 50,
-    unique: false
-  },
-  doctorQualificationsNo: {
-    type: String,
-    requred: true,
-    minLength: 7,
-    maxLength: 7,
-    unique: false
   },
   sendEmailTo: {
     type: String,

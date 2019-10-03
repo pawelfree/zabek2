@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs';
 import { InfoComponent } from '../../common-dialogs';
 import { MatDialog } from '@angular/material';
 import { Actions, ofType } from '@ngrx/effects';
-import { FnParam } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'zabek-auth',
