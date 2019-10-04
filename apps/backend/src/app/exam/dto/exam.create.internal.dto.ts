@@ -2,6 +2,7 @@ export class CreateExamInternalDto {
   patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
   patientPesel: string; //pesel pacjenta ze skierowania
   patientAge: number; //z pesela - wyliczane automatycznie
+  patientIsFemale: boolean; //z pesela - wyliczane automatycznie
   patientAck: boolean; //zgoda pacjenta na przetwarzanie badania
   doctorFullName: string; // imię i nazwisko lekarza ze skierowania
   doctorQualificationsNo: string; // numer uprawnien lekarza

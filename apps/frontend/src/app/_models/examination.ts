@@ -5,6 +5,7 @@ export class Examination {
   patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
   patientPesel: string; //pesel pacjenta ze skierowania
   patientAge: number; //z pesela - wyliczane automatycznie
+  patientIsFemale : boolean; // czy pacjent jest kobietą, z pesel
   patientAck: boolean; //zgoda pacjenta na przetwarzanie badania
   doctor: Doctor; 
   sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania

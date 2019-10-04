@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { getAge } from '@zabek/util';
+import { getAge, isFemale } from '@zabek/util';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -108,6 +108,9 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       patientAge: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
       }),
+      patientIsFemale: new FormControl(null, {
+        validators: [Validators.required]
+      }),
       patientAck: new FormControl(false, {
         validators: [Validators.required]
       }),
@@ -135,6 +138,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
             patientFullName:  examData.patientFullName,
             patientPesel:     examData.patientPesel,
             patientAge:       examData.patientAge,
+            patientIsFemale:  examData.patientIsFemale,
             patientAck:       examData.patientAck,
             doctor:           examData.doctor,
             sendEmailTo:      examData.sendEmailTo,
@@ -166,6 +170,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       patientFullName:  this.form.value.patientFullName,
       patientPesel:     this.form.value.patientPesel,
       patientAge:       this.form.value.patientAge,
+      patientIsFemale:  this.form.value.patientIsFemale,
       patientAck:       this.form.value.patientAck,
       sendEmailTo:      this.form.value.sendEmailTo,
       doctor:           this.form.value.doctor     
@@ -183,6 +188,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
   }
 
   peselChanged() {
-    this.form.patchValue({patientAge: getAge(this.form.value.patientPesel)})
+    this.form.patchValue({patientAge: getAge(this.form.value.patientPesel)});
+    this.form.patchValue({patientIsFemale: isFemale(this.form.value.patientPesel)});
   }
 }
