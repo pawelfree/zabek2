@@ -22,6 +22,11 @@ export const ExamSchema = new mongoose.Schema({
     maxLength: 3,
     unique: false
   },
+  patientIsFemale: {
+    type: Boolean,
+    required: false,
+    default: false
+  },  
   patientAck: {
     type: Boolean,
     required: false,

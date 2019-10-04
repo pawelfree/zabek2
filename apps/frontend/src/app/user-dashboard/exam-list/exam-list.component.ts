@@ -19,6 +19,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy  {
                       'patientFullName',
                       'patientPesel', 
                       'patientAge', 
+                      'patientIsFemale',
                       'patientAck',
                       'doctorFullName',
                       'doctorQualificationsNo',
@@ -67,6 +68,11 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy  {
         this.loadExamsPage();
       }
     );
+  }
+
+  onSendNotificationToDoctor(id) {
+    // TODO
+    console.log("Not implemented yet. Wyślij powiadomienie email do lekarza, o gotowości badania do pobrania.");
   }
 
 }

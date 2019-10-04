@@ -24,6 +24,7 @@ import localePl from '@angular/common/locales/pl';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
 import { UserEffects } from './admin-dashboard/user/store/user.effects';
+import { MatSelectInfiniteScrollModule } from './_directives/select-infinite-scroll/selectinfinitescroll.module';
 
 registerLocaleData(localePl, 'pl');
 

@@ -3,7 +3,10 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-card-content>
       <mat-form-field>
-        <input matInput type="text" formControlName="email" placeholder="Email">
+        <input matInput type="text" 
+          formControlName="email" 
+          [value]="form.get('email').value | lowercase"
+          placeholder="Email">
         <mat-error *ngIf="form.get('email').invalid">Email jest wymagany.</mat-error>
       </mat-form-field>
       <mat-form-field>

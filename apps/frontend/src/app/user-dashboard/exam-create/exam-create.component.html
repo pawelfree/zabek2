@@ -3,9 +3,8 @@
   <form [formGroup]="form" (submit)="onSaveExam()" *ngIf="!isLoading">
 
     <mat-form-field>
-      <input matInput formControlName="examinationDate" [matDatepicker]="examinationDatePicker"               
-             placeholder="Data badania"
-             >
+      <input matInput formControlName="examinationDate" [matDatepicker]="examinationDatePicker"
+        placeholder="Data badania">
       <mat-datepicker-toggle matSuffix [for]="examinationDatePicker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #examinationDatePicker></mat-datepicker>
       <mat-error *ngIf="form.get('examinationDate').invalid">Wprowadź poprawną datę badania.</mat-error>
@@ -14,7 +13,7 @@
     <mat-form-field>
       <mat-label>Rodzaj badania</mat-label>
       <mat-select formControlName="examinationType">
-        <mat-option  *ngFor="let examType of examTypes" [value]="examType">
+        <mat-option *ngFor="let examType of examTypes" [value]="examType">
           {{ examType }}
         </mat-option>
       </mat-select>
@@ -27,11 +26,15 @@
       </mat-error>
     </mat-form-field>
 
+
     <mat-form-field>
       <input matInput type="text" formControlName="patientPesel" placeholder="PESEL" (change)="peselChanged()">
       <mat-error *ngIf="form.get('patientPesel').hasError('required')">PESEL jest wymagany.</mat-error>
-      <mat-error *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL musi mieć 11 znaków.</mat-error>
-      <mat-error *ngIf="form.get('patientPesel').hasError('onlyNumbers')">PESEL może składać się tylko z cyfr.</mat-error>
+      <mat-error
+        *ngIf="form.get('patientPesel').hasError('minlength') || form.get('patientPesel').hasError('maxlength')">PESEL
+        musi mieć 11 znaków.</mat-error>
+      <mat-error *ngIf="form.get('patientPesel').hasError('onlyNumbers')">PESEL może składać się tylko z cyfr.
+      </mat-error>
       <mat-error *ngIf="form.get('patientPesel').hasError('validPesel')">PESEL jest niepoprawny.</mat-error>
     </mat-form-field>
 
@@ -40,15 +43,26 @@
       <mat-error *ngIf="form.get('patientAge').invalid">Wprowadź wiek pacjenta.</mat-error>
     </mat-form-field>
 
+    <mat-checkbox formControlName="patientIsFemale">
+      <mat-error *ngIf="form.get('patientIsFemale').invalid"></mat-error>
+      Kobieta?
+      <!-- TODO: dodać validator i error, to pole powinno być powiązane z PESELem lub 
+          manualnie obsługiwane przez pracownika laboratorium jeśli pacjentem jest osoba 
+          na przykład obcokrajowiec, który posługuje się paszportem lub innym dowodem tożsamości.
+          TODO: dodać pole na inny dokument tożsamości. -->
+    </mat-checkbox>
+    <div style="width: 100px"></div>
     <mat-checkbox formControlName="patientAck">
       <mat-error *ngIf="form.get('patientAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
-      Zgoda pacjenta na badania online
+      Zgoda na badania online
     </mat-checkbox>
-    
+
     <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
-      <mat-select [compareWith]="compareDoctors" formControlName="doctor" [value]="selectedDoctor">
-        <mat-option  *ngFor="let doctor of doctors" [value]="doctor">
+      <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch()" [complete]="endOfData" 
+        [compareWith]="compareDoctors"
+        formControlName="doctor" [value]="selectedDoctor">
+        <mat-option  *ngFor="let doctor of doctors$ | async" [value]="doctor">
           {{ doctor.firstName }}, {{ doctor.lastName}} -  PWZ:{{ doctor.qualificationsNo }}
         </mat-option>
       </mat-select>

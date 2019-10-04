@@ -3,6 +3,7 @@ export class UpdateExamDto {
   readonly patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
   readonly patientPesel: string; //pesel pacjenta ze skierowania
   readonly patientAge: number; //z pesela - wyliczane automatycznie
+  readonly patientIsFemale: boolean; //z pesela - wyliczane automatycznie
   readonly patientAck: boolean; //zgoda pacjenta na przetwarzanie badania
   readonly doctorFullName: string; // imię i nazwisko lekarza ze skierowania
   readonly doctorQualificationsNo: string; // numer uprawnien lekarza
