@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  LOGIN_EXPIRES_IN: 1900, //sekundy
+  LOGIN_EXPIRES_IN: 3600, //sekundy
   MONGODB_URI: 'mongodb://localhost/zabek',
   JWT_PRIVATE_KEY: 'secret_jwt_key',
   RESET_TOKEN_EXPIRES_IN: 300, //sekundy

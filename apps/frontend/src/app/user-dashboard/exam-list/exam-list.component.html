@@ -48,10 +48,10 @@
     <td mat-cell *matCellDef="let element"> {{element.sendEmailTo}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="patientAck">
+  <ng-container matColumnDef="patientProcessingAck">
     <th mat-header-cell *matHeaderCellDef style="text-align: center">Zgoda na <br /> wyniki online</th>
     <td mat-cell *matCellDef="let element" style="text-align: center">
-      <mat-checkbox [checked]="element.patientAck" disabled="true"></mat-checkbox>
+      <mat-checkbox [checked]="element.patientProcessingAck" disabled="true"></mat-checkbox>
     </td>
   </ng-container>
 

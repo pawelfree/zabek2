@@ -27,11 +27,16 @@ export const ExamSchema = new mongoose.Schema({
     required: false,
     default: false
   },  
-  patientAck: {
+  patientProcessingAck: {
     type: Boolean,
     required: false,
     default: false
   },
+  patientMarketingAck: {
+    type: Boolean,
+    required: false,
+    default: false
+  },  
   doctor: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',

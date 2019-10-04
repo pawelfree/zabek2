@@ -44,13 +44,6 @@ export class DoctorController {
       req.user.lab
     );
   }
-  
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.admin, Role.user)
-  @Get('all')
-  async getAllDoctors(@Request() req) {
-    return await this.userService.findDoctorsForLab(req.user.lab);
-  }
 
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {

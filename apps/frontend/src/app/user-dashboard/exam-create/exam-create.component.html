@@ -52,14 +52,19 @@
           TODO: dodać pole na inny dokument tożsamości. -->
     </mat-checkbox>
     <div style="width: 100px"></div>
-    <mat-checkbox formControlName="patientAck">
-      <mat-error *ngIf="form.get('patientAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
+    <mat-checkbox formControlName="patientProcessingAck">
+      <mat-error *ngIf="form.get('patientProcessingAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
       Zgoda na badania online
     </mat-checkbox>
-
+    <div style="width: 100px"></div>
+    <mat-checkbox formControlName="patientMarketingAck">
+        <mat-error *ngIf="form.get('patientMarketingAck').invalid">Zaznacz zgodę pacjenta na marketing.</mat-error>
+        Zgoda na ofety marketingowe.
+    </mat-checkbox>
+  
     <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
-      <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch()" [complete]="endOfData" 
+      <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)" [complete]="endOfData" 
         [compareWith]="compareDoctors"
         formControlName="doctor" [value]="selectedDoctor">
         <mat-option  *ngFor="let doctor of doctors$ | async" [value]="doctor">

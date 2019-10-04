@@ -10,7 +10,7 @@ export class SelectInfiniteScroll implements OnInit, OnDestroy, AfterViewInit {
 
   @Output() infiniteScroll = new EventEmitter();
   @Input() complete: boolean; 
-  @Input() threshold = '5%';
+  @Input() threshold = '15%';
 
   private gracePx = 0;
   private gracePc = 0;
@@ -19,7 +19,7 @@ export class SelectInfiniteScroll implements OnInit, OnDestroy, AfterViewInit {
   private scrollSub: Subscription;
   private onDestroy = new Subject();
 
-  constructor(private readonly: ElementRef, private readonly matSelect: MatSelect) {}
+  constructor(private readonly matSelect: MatSelect) {}
 
   ngOnInit() {
     this.complete = false
@@ -49,7 +49,7 @@ export class SelectInfiniteScroll implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() { 
     this.openedChangeSub = this.matSelect.openedChange.subscribe(opened => {
-      if (opened) {        
+      if (opened) { 
         this.registerScrollListener();
       }
     });
@@ -66,14 +66,13 @@ export class SelectInfiniteScroll implements OnInit, OnDestroy, AfterViewInit {
     if (this.complete) {
       return;
     }
-    const scrollDistance = this.getSelectItemHeightPx() * this.matSelect.options.length
+    
+    const scrollDistance = this.getSelectItemHeightPx() * this.matSelect.options.length;
     const threshold = this.gracePc !== 0 ? (scrollDistance * this.gracePc) : this.gracePx;
-
     const distanceToScroll = this.panel.clientHeight + event.target.scrollTop;
 
-
     if ((distanceToScroll + threshold) >= scrollDistance) {
-      this.infiniteScroll.emit(null);
+      this.infiniteScroll.emit();
     }
   }
 

@@ -20,7 +20,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy  {
                       'patientPesel', 
                       'patientAge', 
                       'patientIsFemale',
-                      'patientAck',
+                      'patientProcessingAck',
                       'doctorFullName',
                       'doctorQualificationsNo',
                       'sendEmailTo',
