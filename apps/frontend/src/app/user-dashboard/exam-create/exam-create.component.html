@@ -47,8 +47,10 @@
     
     <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
-      <mat-select [compareWith]="compareDoctors" formControlName="doctor" [value]="selectedDoctor">
-        <mat-option  *ngFor="let doctor of doctors" [value]="doctor">
+      <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch()" [complete]="endOfData" 
+        [compareWith]="compareDoctors"
+        formControlName="doctor" [value]="selectedDoctor">
+        <mat-option  *ngFor="let doctor of doctors$ | async" [value]="doctor">
           {{ doctor.firstName }}, {{ doctor.lastName}} -  PWZ:{{ doctor.qualificationsNo }}
         </mat-option>
       </mat-select>

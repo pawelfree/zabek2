@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   styleUrls: [ './doctor-list.component.css' ]
 })
 export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
-  doctorsPerPage = 2;
+  doctorsPerPage = 10;
   currentPage = 0;
 
   displayedColumns = ['firstName', 'lastName', 'email', 'actions'];
