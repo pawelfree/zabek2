@@ -7,7 +7,8 @@ export interface Exam extends Document {
   readonly patientPesel: string; //pesel pacjenta ze skierowania
   readonly patientAge: number; //z pesela - wyliczane automatycznie
   readonly patientIsFemale: boolean; //z pesela - wyliczane automatycznie
-  readonly patientAck: boolean; //zgoda pacjenta na przetwarzanie badania
+  readonly patientProcessingAck: boolean; //zgoda pacjenta na przetwarzanie badania
+  readonly patientMarketingAck: boolean; //zgoda pacjenta na działania marketingowe
   readonly doctor: User; // imię i nazwisko lekarza ze skierowania
   readonly sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   readonly examinationDate: string; //data wykonania badania
