@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExamService, DoctorService } from '../../_services';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -10,8 +10,9 @@ import { Doctor } from '../../_models';
 import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { take, tap, scan, map } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -34,15 +35,18 @@ import { getAge, isFemale } from '@zabek/util';
     }
   ],
 })
-export class ExamCreateComponent implements OnInit, OnDestroy {
+export class ExamCreateComponent implements OnInit {
   isLoading = false;
   form: FormGroup;
   private mode = 'create';
   private _id: string;
-  private doctorsSub: Subscription = null;
   public selectedDoctor;
 
-  doctors: Doctor[];
+  endOfData: boolean; 
+  doctors$: Observable<Doctor[]>;
+  doctors = new BehaviorSubject<Doctor[]>([]);
+  private page = 0;
+  private pageLen = 10;
   
   // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
   examTypes: string[] = [
@@ -65,26 +69,32 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
     private readonly doctorService: DoctorService,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog
-  ) {}
+  ) {
+    this.doctors$ = this.doctors.asObservable().pipe(
+      scan((acc, curr) => {
+        return [...acc, ...curr];
+      }, [])
+    );
+  }
 
-  ngOnDestroy() {
-    if (this.doctorsSub) {
-      this.doctorsSub.unsubscribe();
-      this.doctorsSub = null;
+  getNextDoctorsBatch(){
+    if (!this.endOfData) {
+
+      this.doctorService.getDoctors(this.pageLen, this.page).pipe(
+        take(1),
+        tap(res => {
+          this.endOfData = res.doctors.length < this.pageLen;
+          this.page += 1;
+        }),
+        map(res => res.doctors)
+      ).subscribe(res => this.doctors.next(res));
     }
   }
 
+
   ngOnInit() {
-    this.isLoading = true;
-    this.doctorsSub = this.doctorService.getAllDoctors().subscribe(res => {
-      this.doctors = res;
-      this.isLoading = false;
-    },
-    error => {
-      this.dialog.open(InfoComponent, { data:  error });
-      this.doctors = [];
-      this.isLoading = false;
-    })
+
+    this.getNextDoctorsBatch();
     
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {

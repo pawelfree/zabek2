@@ -5,7 +5,8 @@ import { UserDashboardRoutingModule } from './user-dashboard-routing.module';
 import { ExamListComponent } from './exam-list/exam-list.component';
 import { ExamCreateComponent } from './exam-create/exam-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectInfiniteScrollModule } from '../_directives/select-infinite-scroll/selectinfinitescroll.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
         AngularMaterialModule,
         UserDashboardRoutingModule,
         ReactiveFormsModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatSelectInfiniteScrollModule
     ],
     declarations: [
         ExamListComponent,
