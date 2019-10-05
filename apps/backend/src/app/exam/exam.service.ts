@@ -19,10 +19,6 @@ export class ExamService {
   }
 
   async add(createDto: CreateExamInternalDto): Promise<Exam> {
-<<<<<<< HEAD
-    console.log('createDto', createDto)
-=======
->>>>>>> b20ed55... automatyczne ustawianie wieku na podstawie pesel i wyswietlanie lekarza na podczas edycji
     return await new this.examModel(createDto).save();
   }
 

@@ -93,7 +93,6 @@ export class ExamCreateComponent implements OnInit {
       switchMap(arr => from(arr).pipe(
         distinct(single => single._id),
         toArray(),
-        tap(console.log)
       ))
     );
 
