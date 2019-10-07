@@ -4,6 +4,7 @@ export class Examination {
   _id: string;
   patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
   patientPesel: string; //pesel pacjenta ze skierowania
+  patientOtherID: string; //Inny dokument tożsamości
   patientAge: number; //z pesela - wyliczane automatycznie
   patientIsFemale : boolean; // czy pacjent jest kobietą, z pesel
   patientProcessingAck: boolean; //zgoda pacjenta na przetwarzanie badania

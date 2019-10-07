@@ -115,6 +115,8 @@ export class ExamCreateComponent implements OnInit {
                       CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
                       PeselValidator.validPesel ]
       }),
+      patientOtherID: new FormControl(null, {
+      }),     
       patientAge: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(1), Validators.maxLength(3)]
       }),
@@ -150,6 +152,7 @@ export class ExamCreateComponent implements OnInit {
             examinationFile:  examData.examinationFile,
             patientFullName:  examData.patientFullName,
             patientPesel:     examData.patientPesel,
+            patientOtherID:   examData.patientOtherID,            
             patientAge:       examData.patientAge,
             patientIsFemale:  examData.patientIsFemale,
             patientProcessingAck: examData.patientProcessingAck,
@@ -183,6 +186,7 @@ export class ExamCreateComponent implements OnInit {
       examinationFile:  this.form.value.examinationFile,
       patientFullName:  this.form.value.patientFullName,
       patientPesel:     this.form.value.patientPesel,
+      patientOtherID:   this.form.value.patientOtherID,
       patientAge:       this.form.value.patientAge,
       patientIsFemale:  this.form.value.patientIsFemale,
       patientProcessingAck: this.form.value.patientProcessingAck,
@@ -206,4 +210,9 @@ export class ExamCreateComponent implements OnInit {
     this.form.patchValue({patientAge: getAge(this.form.value.patientPesel)});
     this.form.patchValue({patientIsFemale: isFemale(this.form.value.patientPesel)});
   }
+
+  doctorChanged() {
+    this.form.patchValue({sendEmailTo: this.selectedDoctor.email});    
+  }
+
 }

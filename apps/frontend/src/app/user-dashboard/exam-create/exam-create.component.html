@@ -37,6 +37,10 @@
       </mat-error>
       <mat-error *ngIf="form.get('patientPesel').hasError('validPesel')">PESEL jest niepoprawny.</mat-error>
     </mat-form-field>
+    
+    <mat-form-field>
+      <input matInput type="text" formControlName="patientOtherID" placeholder="Inny dokument tożsamości">
+    </mat-form-field>
 
     <mat-form-field>
       <input matInput type="text" formControlName="patientAge" placeholder="Wiek pacjenta">
@@ -66,7 +70,7 @@
       <mat-label>Lekarz zlecający</mat-label>
       <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch()" [complete]="endOfData" 
         [compareWith]="compareDoctors"
-        formControlName="doctor" [value]="selectedDoctor">
+        formControlName="doctor" [value]="selectedDoctor" (selectionChange)="doctorChanged()">
         <mat-option  *ngFor="let doctor of doctors$ | async" [value]="doctor">
           {{ doctor.firstName }}, {{ doctor.lastName}} -  PWZ:{{ doctor.qualificationsNo }}
         </mat-option>

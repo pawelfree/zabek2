@@ -1,6 +1,7 @@
 export class CreateExamDto {
   patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
   patientPesel: string; //pesel pacjenta ze skierowania
+  patientOtherID: string; //Inny dokument tożsamości
   patientAge: number; //z pesela - wyliczane automatycznie
   patientIsFemale: boolean; //z pesela - wyliczane automatycznie
   patientProcessingAck: boolean; //zgoda pacjenta na przetwarzanie badania

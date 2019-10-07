@@ -15,6 +15,13 @@ export const ExamSchema = new mongoose.Schema({
     maxLength: 11,
     unique: false
   },
+  patientOtherID: {
+    type: String,
+    required: false,
+    minLength: 0,
+    maxLength: 50,
+    unique: false
+  },
   patientAge: {
     type: String,
     required: false,
