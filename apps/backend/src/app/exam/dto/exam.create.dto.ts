@@ -6,6 +6,8 @@ export class CreateExamDto {
   patientIsFemale: boolean; //z pesela - wyliczane automatycznie
   patientProcessingAck: boolean; //zgoda pacjenta na przetwarzanie badania
   patientMarketingAck: boolean; //zgoda pacjenta na marketing
+  patientEmail: string;
+  patientPhone: string;
   doctorFullName: string; // imię i nazwisko lekarza ze skierowania
   doctorQualificationsNo: string; // numer uprawnien lekarza
   sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania

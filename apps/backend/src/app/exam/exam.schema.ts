@@ -43,7 +43,21 @@ export const ExamSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
     default: false
-  },  
+  },
+  patientEmail: {
+    type: String,
+    requred: false,
+    minLength: 5,
+    maxLength: 100,
+    unique: false
+  },
+  patientPhone: {
+    type: String,
+    requred: false,
+    minLength: 0,
+    maxLength: 50,
+    unique: false
+  },      
   doctor: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',

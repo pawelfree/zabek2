@@ -134,8 +134,12 @@ export class ExamCreateComponent implements OnInit {
       patientProcessingAck: new FormControl(false, {
         validators: [Validators.required]
       }),
-      patientMarketingAck: new FormControl(false, {
-        
+      patientMarketingAck: new FormControl(false, {        
+      }),
+      patientEmail: new FormControl(null, {
+        validators: [Validators.email]
+      }),
+      patientPhone: new FormControl(null, {        
       }),
       doctor: new FormControl(null, {
         validators: [Validators.required ]
@@ -165,6 +169,8 @@ export class ExamCreateComponent implements OnInit {
             patientIsFemale:  examData.patientIsFemale,
             patientProcessingAck: examData.patientProcessingAck,
             patientMarketingAck: examData.patientMarketingAck,
+            patientEmail:       examData.patientEmail,
+            patientPhone:       examData.patientPhone,
             doctor:           examData.doctor,
             sendEmailTo:      examData.sendEmailTo,
           });
@@ -202,6 +208,8 @@ export class ExamCreateComponent implements OnInit {
       patientIsFemale:  this.form.value.patientIsFemale,
       patientProcessingAck: this.form.value.patientProcessingAck,
       patientMarketingAck: this.form.value.patientMarketingAck,
+      patientEmail:       this.form.value.patientEmail,
+      patientPhone:       this.form.value.patientPhone,      
       sendEmailTo:      this.form.value.sendEmailTo,
       doctor:           this.form.value.doctor     
     }

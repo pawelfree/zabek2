@@ -9,6 +9,8 @@ export class Examination {
   patientIsFemale : boolean; // czy pacjent jest kobietą, z pesel
   patientProcessingAck: boolean; //zgoda pacjenta na przetwarzanie badania
   patientMarketingAck: boolean; //zgoda pacjenta na marketing
+  patientEmail: string;
+  patientPhone: string;
   doctor: Doctor; 
   sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   examinationDate: string; //data wykonania badania

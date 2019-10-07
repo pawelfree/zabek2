@@ -61,6 +61,15 @@
     </mat-checkbox>
   
     <mat-form-field>
+      <input matInput type="text" formControlName="patientEmail" placeholder="Email pacjenta">
+      <mat-error *ngIf="form.get('patientEmail').invalid">Wprowadź poprawny email użytkownika.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="text" formControlName="patientPhone" placeholder="Telefon pacjenta">
+    </mat-form-field>
+
+    <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
       <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)" [complete]="endOfData" 
         [compareWith]="compareDoctors"
