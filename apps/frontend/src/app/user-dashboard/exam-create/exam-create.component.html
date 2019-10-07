@@ -48,13 +48,7 @@
     </mat-form-field>
 
     <mat-checkbox formControlName="patientIsFemale">
-      <mat-error *ngIf="form.get('patientIsFemale').invalid"></mat-error>
-      Kobieta?
-      <!-- TODO: dodać validator i error, to pole powinno być powiązane z PESELem lub 
-          manualnie obsługiwane przez pracownika laboratorium jeśli pacjentem jest osoba 
-          na przykład obcokrajowiec, który posługuje się paszportem lub innym dowodem tożsamości.
-          TODO: dodać pole na inny dokument tożsamości. -->
-    </mat-checkbox>
+      <mat-error *ngIf="form.get('patientIsFemale').invalid"></mat-error>Kobieta?</mat-checkbox>
     <div style="width: 100px"></div>
     <mat-checkbox formControlName="patientProcessingAck">
       <mat-error *ngIf="form.get('patientProcessingAck').invalid">Zaznacz zgodę pacjenta na badania online.</mat-error>
@@ -68,9 +62,9 @@
   
     <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
-      <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch()" [complete]="endOfData" 
+      <mat-select SelectInfiniteScroll (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)" [complete]="endOfData" 
         [compareWith]="compareDoctors"
-        formControlName="doctor" [value]="selectedDoctor" (selectionChange)="doctorChanged()">
+        formControlName="doctor" [value]="selectedDoctor">
         <mat-option  *ngFor="let doctor of doctors$ | async" [value]="doctor">
           {{ doctor.firstName }}, {{ doctor.lastName}} -  PWZ:{{ doctor.qualificationsNo }}
         </mat-option>

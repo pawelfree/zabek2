@@ -9,10 +9,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material
 import { Doctor } from '../../_models';
 import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
-import { Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, from } from 'rxjs';
+import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { take, tap, scan, map } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -47,7 +46,6 @@ export class ExamCreateComponent implements OnInit {
   doctors = new BehaviorSubject<Doctor[]>([]);
   private page = 0;
   private pageLen = 10;
-  
   // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
   examTypes: string[] = [
     'AP czaszki',
@@ -77,25 +75,35 @@ export class ExamCreateComponent implements OnInit {
     );
   }
 
-  getNextDoctorsBatch(){
+  getNextDoctorsBatch() {
     if (!this.endOfData) {
-
       this.doctorService.getDoctors(this.pageLen, this.page).pipe(
         take(1),
+        map(res => res.doctors),
         tap(res => {
-          this.endOfData = res.doctors.length < this.pageLen;
+          this.endOfData = res.length < this.pageLen;
           this.page += 1;
         }),
-        map(res => res.doctors)
       ).subscribe(res => this.doctors.next(res));
     }
   }
 
 
   ngOnInit() {
+    
+    this.endOfData = false;
+    this.doctors$ = this.doctors.asObservable().pipe (
+      scan((acc, curr) => {
+        return [...acc, ...curr];
+      }, <Doctor[]>[]),
+      switchMap(arr => from(arr).pipe(
+        distinct(single => single._id),
+        toArray(),
+      ))
+    );
 
     this.getNextDoctorsBatch();
-    
+
     this.form = new FormGroup({      
       examinationDate: new FormControl(new Date(), {
         validators: [Validators.required]
@@ -160,6 +168,8 @@ export class ExamCreateComponent implements OnInit {
             doctor:           examData.doctor,
             sendEmailTo:      examData.sendEmailTo,
           });
+          setTimeout(() => this.doctors.next([this.selectedDoctor]),1)
+          
         },
         error => {
           this.dialog.open(InfoComponent, { data:  error });
@@ -172,6 +182,7 @@ export class ExamCreateComponent implements OnInit {
         this.selectedDoctor = null;
       }
     }); 
+
   }  
  
   onSaveExam() {
@@ -199,7 +210,7 @@ export class ExamCreateComponent implements OnInit {
     } else {
       this.examService.updateExam(exam);
     }
-    this.isLoading = false;    
+    this.isLoading = false;
   }
 
   compareDoctors(o1: any, o2: any): boolean {
