@@ -88,7 +88,6 @@ export class ExamCreateComponent implements OnInit {
     }
   }
 
-
   ngOnInit() {
     
     this.endOfData = false;
@@ -109,7 +108,7 @@ export class ExamCreateComponent implements OnInit {
         validators: [Validators.required]
       }),
       examinationType: new FormControl(null, {
-        validators: [Validators.required] // Czy potrzebny jest customwoy validator, ktory sprawdzi czy wartosc jest elementem ze slownika?
+        validators: [Validators.required]
      }),      
       examinationFile: new FormControl(null, { 
       }),
@@ -145,7 +144,7 @@ export class ExamCreateComponent implements OnInit {
         validators: [Validators.required ]
       }),
       sendEmailTo: new FormControl(null, {
-        validators: [Validators.required, Validators.email] // ten email powinien się podpowiadac z profilu lekarza, ale user moze go zmienic
+        validators: [Validators.required, Validators.email]
       })
     });
 
@@ -174,8 +173,7 @@ export class ExamCreateComponent implements OnInit {
             doctor:           examData.doctor,
             sendEmailTo:      examData.sendEmailTo,
           });
-          setTimeout(() => this.doctors.next([this.selectedDoctor]),1)
-          
+          setTimeout(() => this.doctors.next([this.selectedDoctor]),1)          
         },
         error => {
           this.dialog.open(InfoComponent, { data:  error });
@@ -188,7 +186,6 @@ export class ExamCreateComponent implements OnInit {
         this.selectedDoctor = null;
       }
     }); 
-
   }  
  
   onSaveExam() {
@@ -230,8 +227,10 @@ export class ExamCreateComponent implements OnInit {
     this.form.patchValue({patientIsFemale: isFemale(this.form.value.patientPesel)});
   }
 
-  doctorChanged() {
-    this.form.patchValue({sendEmailTo: this.selectedDoctor.email});    
+  doctorChanged(event) {
+    if(event.isUserInput) {      
+      this.form.patchValue({sendEmailTo: event.source.value.email});
+    }       
   }
 
 }
