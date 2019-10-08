@@ -57,12 +57,16 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { email: user.email, _id: user._id, role: user.role, lab: user.lab};
+    const payload = { email: user.email,
+       _id: user._id, 
+       role: user.role, 
+       lab: user.lab};
     return { 
       _id: user._id,
       email: user.email,
       role: user.role,
       expiresIn: +this.configService.get('LOGIN_EXPIRES_IN'),
+      rulesAccepted: user.rulesAccepted === null ? false : user.rulesAccepted,
       token: jsonwebtoken.sign(payload, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn: +this.configService.get('LOGIN_EXPIRES_IN') })
     };
   }
