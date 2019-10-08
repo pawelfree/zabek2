@@ -25,7 +25,7 @@ import { ResetPasswordComponent } from './auth/reset-password/resetpassword.comp
 import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
 import { UserEffects } from './admin-dashboard/user/store/user.effects';
 import { MatSelectInfiniteScrollModule } from './_directives/select-infinite-scroll/selectinfinitescroll.module';
-
+import { ConfirmationComponent } from './common-dialogs/confirmation/confirmation.component';
 registerLocaleData(localePl, 'pl');
 
 @NgModule({
@@ -37,7 +37,8 @@ registerLocaleData(localePl, 'pl');
     ResetPasswordComponent,
     ErrorComponent,
     ChangePasswordComponent,
-    InfoComponent
+    InfoComponent,
+    ConfirmationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "zabek"}), 
@@ -69,7 +70,8 @@ registerLocaleData(localePl, 'pl');
   entryComponents: [
     ErrorComponent,
     ChangePasswordComponent,
-    InfoComponent
+    InfoComponent,
+    ConfirmationComponent
   ]
 })
 export class AppModule {
