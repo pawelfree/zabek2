@@ -1,0 +1,16 @@
+:host {
+    display: block;
+    margin-top: 1rem;
+  }
+  
+  mat-paginator {
+    margin-top: 1rem;
+  }
+  
+  table {
+    width: 100%;
+  }
+
+  mat-spinner {
+      margin: auto;
+  }
