@@ -5,6 +5,7 @@ import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.
 import { NgModule } from '@angular/core';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
+import { RulesGuard } from './_guards';
 
 const routes: Routes = [
     {
@@ -22,6 +23,7 @@ const routes: Routes = [
     },
     {
         path: 'doctor',
+        canActivate: [RulesGuard],
         loadChildren: './doctor-dashboard/doctor-dashboard.module#DoctorDashboardModule'
     },
     {

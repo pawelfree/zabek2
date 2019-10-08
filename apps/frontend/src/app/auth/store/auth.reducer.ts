@@ -16,7 +16,6 @@ const initialState: State = {
 
 const _authReducer = createReducer(initialState,
   on(AuthActions.authenticateSuccess, (state, {user, redirect, returnUrl} ) => ({...state, error: null, user, loading: false})),
-  on(AuthActions.acceptRules, (state, {user, redirect, returnUrl} ) => ({...state, error: null, user, loading: false})),
   on(AuthActions.authenticateFail, (state, {error}) => ({...state, user: null, error: error, loading: false})),
   on(AuthActions.loginStart, state => ({...state, error: null, loading: true})),
   on(AuthActions.logout, state => ({...state, error: null, user: null, loading: false})),
@@ -27,6 +26,11 @@ const _authReducer = createReducer(initialState,
   on(AuthActions.sendPasswordResetTokenRequest, (state, {email}) => ({...state, loading: true, error: null})),
   on(AuthActions.passwordResetTokenRequestSent, (state) => ({...state, error: null, loading: false})),
   on(AuthActions.sendPasswordResetRequest,(state, {token, password}) => ({...state, error: null, loading: true})),
+  on(AuthActions.rulesAccepted, (state) => {
+      const user = state.user;
+      user.rulesAccepted = true;
+      return {...state, error: null, loading: false, user}
+    })
 );
 
 export function authReducer(state, action ) {

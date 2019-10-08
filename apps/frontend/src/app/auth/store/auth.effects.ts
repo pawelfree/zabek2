@@ -33,11 +33,6 @@ const handleError = (errorRes: any) => {
 @Injectable()
 export class AuthEffects {
 
-  authAcceptRules$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.acceptRules),
-    map(() => AuthActions.logout())
-  ))
-
   authPasswordResetRequest$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.sendPasswordResetRequest),
     switchMap(props => {
@@ -87,11 +82,7 @@ export class AuthEffects {
         if (user && user.token) {
           const expirationDuration = user.tokenExpirationDate.getTime() - new Date().getTime();
           this.authService.setLogoutTimer(expirationDuration);
-          if (user.role !== Role.doctor || user.rulesAccepted) {
-            return AuthActions.authenticateSuccess({user, redirect: false, returnUrl: '/'});   
-          } else {
-            return AuthActions.acceptRules({user, redirect: true, returnUrl: '/'});           
-          }
+          return AuthActions.authenticateSuccess({user, redirect: false, returnUrl: '/'});   
         }
       }
       return { type: 'DUMMY' }
@@ -123,12 +114,8 @@ export class AuthEffects {
               resData.token,
               resData.active,
               resData.rulesAccepted);
-            localStorage.setItem('currentUser', JSON.stringify(user));        
-            if (resData.role !== Role.doctor || resData.rulesAccepted) {
+              localStorage.setItem('currentUser', JSON.stringify(user));        
               return AuthActions.authenticateSuccess({user, redirect: true, returnUrl: authData.returnUrl});
-            } else {
-              return AuthActions.acceptRules({user, redirect: true, returnUrl: authData.returnUrl});
-            }
         }),
         catchError(error => {
           return (handleError(error))

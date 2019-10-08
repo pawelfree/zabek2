@@ -1,0 +1,16 @@
+  <h1 mat-dialog-title>Uwaga</h1>
+  <div mat-dialog-content>
+    <p>Musisz zaakceptować regulamin aby kontynuować.</p>
+    <span >
+      <mat-checkbox #regulationsAccepted>Akceptuję</mat-checkbox>
+      <a style="margin-left:0.2rem; text-decoration: underline;" (click)="showRegulations()" >regulamin</a>
+    </span>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button 
+      [mat-dialog-close]="true"
+      [disabled]="!regulationsAccepted.checked"
+      cdkFocusInitial>Tak</button>
+    <span class="spacer"></span>
+    <button mat-button (click)="onNoClick()">Rezygnuję</button>
+  </div>

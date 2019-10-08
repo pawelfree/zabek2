@@ -24,8 +24,9 @@ import localePl from '@angular/common/locales/pl';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
 import { UserEffects } from './admin-dashboard/user/store/user.effects';
-import { MatSelectInfiniteScrollModule } from './_directives/select-infinite-scroll/selectinfinitescroll.module';
 import { ConfirmationComponent } from './common-dialogs/confirmation/confirmation.component';
+import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules.component';
+
 registerLocaleData(localePl, 'pl');
 
 @NgModule({
@@ -38,7 +39,8 @@ registerLocaleData(localePl, 'pl');
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    AcceptRulesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "zabek"}), 
@@ -71,7 +73,8 @@ registerLocaleData(localePl, 'pl');
     ErrorComponent,
     ChangePasswordComponent,
     InfoComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
+    AcceptRulesComponent
   ]
 })
 export class AppModule {

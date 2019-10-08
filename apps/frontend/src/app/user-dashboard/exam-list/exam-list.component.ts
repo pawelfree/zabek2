@@ -8,7 +8,7 @@ import {
 import { MatPaginator, MatDialog } from '@angular/material';
 import { ExamListDataSource } from '../_datasource/exam-list.datasource';
 import { ExamService } from '../../_services';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
 
@@ -76,7 +76,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
       width: '350px',
       data: 'Czy na pewno chcesz usunąć badanie?'
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         console.log('Yes clicked'); 
         // TODO: usuwac badanie powinien admin pracowni. Zrobić tylko adminowi, 

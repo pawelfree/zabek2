@@ -26,7 +26,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   private storeSub: Subscription;
   private closeSub: Subscription;
-  private rulesSub: Subscription;
 
   queryParams: Params = { id: '0' };
 
@@ -61,15 +60,6 @@ export class AuthComponent implements OnInit, OnDestroy {
       }
     });
 
-    
-    this.rulesSub = this.actions$.pipe(
-      ofType(AuthActions.acceptRules),
-      tap(param => {
-        this.dialog.open(InfoComponent,{ data: 'Musisz zaakceptowac regulamin. Trzeba dokonczyc ta funkcjonalnosc' });   
-         this.store.dispatch(AuthActions.logout());
-      }),
-    ).subscribe();
-
     this.route.queryParams.pipe(
       take(1)
     ).subscribe(params => {
@@ -88,9 +78,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
     if (this.closeSub) {
       this.closeSub.unsubscribe();
-    }
-    if (this.rulesSub) {
-      this.rulesSub.unsubscribe();
     }
   }
 
