@@ -13,11 +13,11 @@ import { Subscription } from 'rxjs';
 import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
 
 @Component({
-  selector: 'zabek-exam-list',
+  selector: 'zabek-doctor-exam-list',
   templateUrl: './exam-list.component.html',
   styleUrls: ['./exam-list.component.css']
 })
-export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
+export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   examsPerPage = 10;
   currentPage = 0;
   title = 'angular-confirmation-dialog';
