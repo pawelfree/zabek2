@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ExamSchema } from './exam.schema';
 import { ExamController } from './exam.controler';
 import { ExamService } from './exam.service';
+import { DoctorExamController } from './doctor-exam.controler';
 
 
 @Module({
@@ -11,7 +12,8 @@ import { ExamService } from './exam.service';
     MongooseModule.forFeature([{name: 'Exam', schema: ExamSchema }])
   ],
   controllers: [
-    ExamController
+    ExamController,
+    DoctorExamController
   ],
   providers: [
     ExamService

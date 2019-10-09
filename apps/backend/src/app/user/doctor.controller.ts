@@ -21,13 +21,15 @@ import { Role } from '../shared/role';
 import { LabService } from '../lab/lab.service';
 import { Lab } from '../lab/lab.interface';
 import { AuthService } from '../shared/security/auth.service';
+import { EmailService } from '../shared/email/email.service';
 
 @Controller('doctor')
 export class DoctorController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly labService: LabService
+    private readonly labService: LabService,
+    private readonly emailService: EmailService
   ) {}
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -107,6 +109,7 @@ export class DoctorController {
           if (n !== 1 || nModified !== 1 || ok !== 1) {
             error = new InternalServerErrorException('Nieznany błąd.');
           }
+          this.emailService.sendUserActivatedEmail(user.email);
         }
       })
       .catch(err => {

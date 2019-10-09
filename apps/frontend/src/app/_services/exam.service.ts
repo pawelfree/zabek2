@@ -24,6 +24,19 @@ export class ExamService {
     });
   }
 
+  getExamsForDoctor(
+    examsPerPage: number,
+    currentPage: number
+  ): Observable<{ exams: Examination[]; count: number }> {
+    let params = new HttpParams();
+    params = params.append('pagesize', '' + examsPerPage);
+    params = params.append('page', '' + currentPage);
+
+    return this.http.get<{ exams: Examination[]; count: number }>(BACKEND_URL, {
+      params
+    });
+  }
+
   getExam(id: string): Observable<Examination> {
     return this.http.get<Examination>(BACKEND_URL + id);
   }

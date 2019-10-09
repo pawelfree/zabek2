@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { ExamService } from '../../_services';
+import { DoctorExamService } from '../../_services';
 import { Examination } from '../../_models';
 import { catchError, finalize, map , tap} from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ export class ExamListDataSource extends DataSource<Examination> {
   public loading$ = this.loadingSubject.asObservable();
 
   constructor (
-    private readonly examService: ExamService, 
+    private readonly doctorExamService: DoctorExamService, 
     private readonly pageSize
   ) {
     super();
@@ -33,7 +33,7 @@ export class ExamListDataSource extends DataSource<Examination> {
     this.loadingSubject.next(true);
     this.examsSubject.subscribe();
 
-    this.examService.getExams(pageSize, pageIndex) 
+    this.doctorExamService.getExams(pageSize, pageIndex) 
       .pipe(
         catchError(() => of<{exams: Examination[], count: number}>({exams: [], count: 0})),
         finalize(() => this.loadingSubject.next(false))

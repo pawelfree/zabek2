@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatPaginator, MatDialog } from '@angular/material';
 import { ExamListDataSource } from '../_datasource/exam-list.datasource';
-import { ExamService } from '../../_services';
+import { DoctorExamService } from '../../_services';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
@@ -37,11 +37,11 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private readonly examService: ExamService, public dialog: MatDialog) {}
+  constructor(private readonly doctorExamService: DoctorExamService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.dataSource = new ExamListDataSource(
-      this.examService,
+      this.doctorExamService,
       this.examsPerPage
     );
     this.dataSource.loadExams(this.currentPage, this.examsPerPage);

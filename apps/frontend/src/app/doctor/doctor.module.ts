@@ -4,6 +4,7 @@ import { DoctorListComponent } from './doctor-list/doctor-list.component';
 import { CommonModule } from '@angular/common';
 import { AngularMaterialModule } from '../angular-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DoctorCreateComponent } from './doctor-create/doctor-create.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ],
   declarations: [
-    DoctorListComponent
+    DoctorListComponent,
+    DoctorCreateComponent
   ]
 })
 export class DoctorModule {}

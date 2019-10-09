@@ -29,7 +29,7 @@ const routes: Routes = [
       component: ExamCreateComponent,
       canActivate: [AuthGuard],
       data: { roles: [Role.user] }
-    }
+    }   
 ];
 
 @NgModule({
