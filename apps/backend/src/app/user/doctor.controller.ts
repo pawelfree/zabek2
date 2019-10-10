@@ -47,6 +47,13 @@ export class DoctorController {
     );
   }
 
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.sadmin, Role.admin, Role.user)
+  @Get(':id')
+  async getDoctor(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
+
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
     console.warn('wymusic polityke haseł')

@@ -4,7 +4,7 @@ import { CustomValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '../../_models';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog } from '@angular/material';
@@ -16,12 +16,14 @@ import { InfoComponent } from '../../common-dialogs';
   styleUrls: ['./doctor-create.component.css']
 })
 export class DoctorCreateComponent implements OnInit, OnDestroy {
+  isLoading = false;
   form: FormGroup;
+  private mode = 'create';
+  private _id: string;
 
   sameAddresses$: Observable<boolean>;
   private officeAddressSubs: Subscription;
 
-  isLoading: boolean;
   //private queryParams: Params = null;
 
   constructor(
@@ -32,7 +34,6 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log('hello from doctor-create componnet');
     this.isLoading = false;
     this.form = new FormGroup(
       {
@@ -70,37 +71,69 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
         }),
         sameAddresses: new FormControl(true),
         officeCorrespondenceAddress: new FormControl(null),
-        examFormat: new FormControl('tiff', {
+        examFormat: new FormControl('jpeg', {
           validators: [Validators.required]
         }),
         tomographyWithViewer: new FormControl(false),
-        password1: new FormControl(null, {
-          validators: [
-            Validators.required,
-            Validators.minLength(8),
-            CustomValidator.patternMatch(/\d/, { hasNumber: true }),
-            CustomValidator.patternMatch(/[A-Z]/, { hasCapitalCase: true }),
-            CustomValidator.patternMatch(/[a-z]/, { hasSmallCase: true }),
-            CustomValidator.patternMatch(
-              /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
-              { hasSpecialCharacters: true }
-            )
-          ]
-        }),
-        password2: new FormControl(null, {
-          validators: [Validators.required]
-        })
+        // password1: new FormControl(null, {
+        //   validators: [
+        //     Validators.required,
+        //     Validators.minLength(8),
+        //     CustomValidator.patternMatch(/\d/, { hasNumber: true }),
+        //     CustomValidator.patternMatch(/[A-Z]/, { hasCapitalCase: true }),
+        //     CustomValidator.patternMatch(/[a-z]/, { hasSmallCase: true }),
+        //     CustomValidator.patternMatch(
+        //       /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
+        //       { hasSpecialCharacters: true }
+        //     )
+        //   ]
+        // }),
+        // password2: new FormControl(null, {
+        //   validators: [Validators.required]
+        // })
       },
-      {
-        validators: CustomValidator.mustMatch('password1', 'password2')
-      }
+      // {
+      //   validators: CustomValidator.mustMatch('password1', 'password2')
+      // }
     );
 
-    // this.route.queryParams.pipe(
-    //   take(1)
-    // ).subscribe(params => {
-    //   this.queryParams = params['id'] ? {id: params['id']} : null;
-    // });
+    this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('doctorId')) {
+        this.mode = 'edit';
+        this._id = paramMap.get('doctorId');
+        this.isLoading = true;
+        this.doctorService
+          .getDoctor(this._id)
+          .pipe(take(1))
+          .subscribe(
+            examData => {
+              this.isLoading = false;
+              this.form.setValue({
+                email: examData.email,
+                firstName: examData.firstName,
+                lastName: examData.lastName,
+                qualificationsNo: examData.qualificationsNo,
+                officeName: examData.officeName,
+                sameAddresses: this.form.value.sameAddresses ? this.form.value.officeAddress : this.form.value.officeCorrespondenceAddress,
+                officeAddress: examData.officeAddress,                
+                officeCorrespondenceAddress: examData.officeCorrespondenceAddres,
+                examFormat: examData.examFormat,
+                tomographyWithViewer: examData.tomographyWithViewer,
+                //password: null,
+                //password1: null,
+                //password2: null
+              });              
+            },
+            error => {
+              this.dialog.open(InfoComponent, { data: error });
+              this.isLoading = false;              
+            }
+          );
+      } else {
+        this.mode = 'create';
+        this._id = null;
+      }
+    });
 
     this.officeAddressSubs = this.form.controls.sameAddresses.valueChanges
       .pipe(
@@ -134,24 +167,11 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
-    // if (!this.queryParams) {
-    //   this.dialog.open(InfoComponent, {
-    //     data: 'Niepoprawny (brak) identyfikator pracowni'
-    //   });
-    //   return;
-    // }
-    // const checkForLabId = new RegExp('^[0-9a-fA-F]{24}$');
-    // if (!checkForLabId.test(this.queryParams.id)) {
-    //   this.dialog.open(InfoComponent, {
-    //     data: 'Niepoprawny identyfikator pracowni'
-    //   });
-    //   return;
-    // }
+
     this.isLoading = true;
     const doctor = new Doctor(
       null,
       this.form.value.email,
-//      this.queryParams['id'],
       this.form.value.password1,
       null,
       null,
