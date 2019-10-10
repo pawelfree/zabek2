@@ -4,6 +4,7 @@ import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { ExamListComponent } from './exam-list/exam-list.component';
 import { ExamCreateComponent } from './exam-create/exam-create.component';
+import { DoctorCreateComponent } from '../doctor/doctor-create/doctor-create.component';
 
 
 const routes: Routes = [
