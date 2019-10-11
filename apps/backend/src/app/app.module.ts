@@ -26,7 +26,8 @@ import { AuthModule } from './auth/auth.module';
         uri: configService.get('MONGODB_URI'),
         useNewUrlParser: true,
         useFindAndModify: false,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
       }),
       inject: [ConfigService],
     })
