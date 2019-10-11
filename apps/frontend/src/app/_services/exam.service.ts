@@ -54,7 +54,6 @@ export class ExamService {
   }
 
   updateExam(exam: Examination) {
-    //TODO nawigacja
     this.http
       .put<{ message: string; exam: Examination }>(BACKEND_URL + exam._id, exam)
       .subscribe(responseData => {

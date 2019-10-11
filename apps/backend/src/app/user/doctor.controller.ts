@@ -16,7 +16,7 @@ import { User } from './user.interface';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
-import { UpdateUserInternalDto, CreateDoctorDto } from './dto';
+import { UpdateUserInternalDto, CreateDoctorDto, UpdateDoctorDto } from './dto';
 import { Role } from '../shared/role';
 import { LabService } from '../lab/lab.service';
 import { Lab } from '../lab/lab.interface';
@@ -93,6 +93,27 @@ export class DoctorController {
       'lastName',
       'qualificationsNo'
     ]);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('admin','user')
+  @Put(':id')
+  async updateDoctor(@Body() updateDoctorDto: UpdateDoctorDto, @Param('id') id: string, @Request() req) {
+    console.log('API updateDoctor called');
+    console.log(updateDoctorDto);
+    if (id !== updateDoctorDto._id ) {
+      throw new BadRequestException('Błędne dane lekarza i żądania');        
+    }
+    const doctor: User = await this.userService.findById(id);
+
+    if (!doctor) {
+      throw new BadRequestException('Lekarz nie istnieje');
+    } 
+    const _updateDoctorDto: UpdateDoctorDto = {
+      ...updateDoctorDto,
+      lab :  req.user.lab,
+    }    
+    return await this.userService.update(_updateDoctorDto);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
