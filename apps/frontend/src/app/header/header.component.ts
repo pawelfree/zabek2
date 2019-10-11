@@ -67,7 +67,7 @@ prevButtonTrigger;
   
   buttonEnter(trigger) {
     setTimeout(() => {
-      if(this.prevButtonTrigger && this.prevButtonTrigger != trigger){
+      if(this.prevButtonTrigger && this.prevButtonTrigger !== trigger){
         this.prevButtonTrigger.closeMenu();
         this.prevButtonTrigger = trigger;
         this.isMatMenuOpen = false;

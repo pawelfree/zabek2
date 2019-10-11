@@ -55,7 +55,7 @@
   [pageSize]="examsPerPage"
 ></mat-paginator>
 </div>
-<p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && !(dataSource.loading$ | async)">
+<p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
   Brak wprowadzonych badań.
 </p>
 <mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>
