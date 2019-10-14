@@ -158,7 +158,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
     const doctor = new Doctor(
       this._id ? this._id : null,
       this.form.value.email,
-      null, //id laba
+      this.form.value.lab,
       null, //password
       null, //expiresIn
       null, //_tokenExpirationDate?

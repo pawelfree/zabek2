@@ -4,7 +4,7 @@ export class UpdateDoctorDto {
   readonly _id: string;
   readonly email: string;
   readonly lab: Lab;
-  readonly password: string;
+  readonly password?: string;
   readonly role: string;
   readonly firstName: string;
   readonly lastName: string;	
