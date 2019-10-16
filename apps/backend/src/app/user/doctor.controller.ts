@@ -99,8 +99,6 @@ export class DoctorController {
   @Roles('admin','user')
   @Put(':id')
   async updateDoctor(@Body() updateDoctorDto: UpdateDoctorDto, @Param('id') id: string, @Request() req) {
-    console.log('API updateDoctor called');
-    console.log(updateDoctorDto);
     if (id !== updateDoctorDto._id ) {
       throw new BadRequestException('Błędne dane lekarza i żądania');        
     }
@@ -124,11 +122,23 @@ export class DoctorController {
         'Pracownia przypisana do obsługi lekarza nie istnieje'
       );
     }
-
+    
     const _updateDoctorDto: UpdateDoctorDto = {
-      ...updateDoctorDto,
-      lab :  laboratory,
-    }    
+      _id: updateDoctorDto._id,
+      email: updateDoctorDto.email,
+      role: updateDoctorDto.role,
+      active: updateDoctorDto.active,
+      rulesAccepted: updateDoctorDto.rulesAccepted,
+      firstName: updateDoctorDto.firstName,
+      lastName: updateDoctorDto.lastName,
+      officeName: updateDoctorDto.officeName,   
+      officeAddress: updateDoctorDto.officeAddress,
+      qualificationsNo: updateDoctorDto.qualificationsNo,
+      officeCorrespondenceAddres: updateDoctorDto.officeCorrespondenceAddres,
+      examFormat: updateDoctorDto.examFormat,
+      tomographyWithViewer: updateDoctorDto.tomographyWithViewer,
+      lab :  laboratory
+    } 
     return await this.userService.update(_updateDoctorDto);
   }
 
