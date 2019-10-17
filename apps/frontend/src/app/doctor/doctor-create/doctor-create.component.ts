@@ -37,7 +37,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
       }),
-      lab: new FormControl(null),      
+      lab: new FormControl(null),
       firstName: new FormControl(null, {
         validators: [
           Validators.required,
@@ -74,7 +74,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       }),
       tomographyWithViewer: new FormControl(false),
       active: new FormControl(null),
-      rulesAccepted: new FormControl(null),
+      rulesAccepted: new FormControl(null)
     });
 
     this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
@@ -104,11 +104,11 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
                 officeCorrespondenceAddress:
                   examData.officeCorrespondenceAddres,
                 examFormat: examData.examFormat,
-                tomographyWithViewer: examData.tomographyWithViewer,              
+                tomographyWithViewer: examData.tomographyWithViewer,
                 active: examData.active,
                 rulesAccepted: examData.rulesAccepted
               });
-              console.log(this.form);              
+              console.log(this.form);
             },
             error => {
               this.dialog.open(InfoComponent, { data: error });
@@ -173,8 +173,8 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
         : this.form.value.officeCorrespondenceAddress,
       this.form.value.examFormat,
       this.form.value.tomographyWithViewer,
-      this.form.value.active, 
-      this.form.value.rulesAccepted 
+      this.form.value.active,
+      this.form.value.rulesAccepted
     );
 
     if (this.mode === 'create') {
@@ -184,17 +184,18 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
           this.dialog.open(InfoComponent, { data: err });
         }
       );
-      this.router.navigate(['/doctor/list']);
-    } else {
-      // TODO: dodać subscribe na err jak powyżej     
-      this.doctorService.updateDoctor(doctor);
-      this.router.navigate(['/doctor/list']);
+    } else {     
+      this.doctorService.updateDoctor(doctor).subscribe(
+        res => this.goOut(),
+        err => {
+          this.dialog.open(InfoComponent, { data: err });
+        }
+      );
     }
-
     this.isLoading = false;
   }
 
   private goOut() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/doctorlist']);
   }
 }

@@ -17,11 +17,7 @@ export class DoctorService {
   }
   
   updateDoctor(doctor:  Doctor) {
-    return this.http
-    .put<{ message: string; doctor: Doctor }>(BACKEND_URL + doctor._id, doctor)
-    .subscribe(responseData => {
-      //this.router.navigate(['doctorlist']);
-    });
+    return this.http.put<{ message: string; doctor: Doctor }>(BACKEND_URL + doctor._id, doctor);
   }
 
   activate(userId: string) {
