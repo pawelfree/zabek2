@@ -17,10 +17,10 @@ export class DoctorService {
   }
   
   updateDoctor(doctor:  Doctor) {
-    this.http
+    return this.http
     .put<{ message: string; doctor: Doctor }>(BACKEND_URL + doctor._id, doctor)
     .subscribe(responseData => {
-      this.router.navigate(['dooctorlist']);
+      //this.router.navigate(['doctorlist']);
     });
   }
 

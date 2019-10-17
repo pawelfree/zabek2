@@ -184,10 +184,11 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
           this.dialog.open(InfoComponent, { data: err });
         }
       );
+      this.router.navigate(['/doctor/list']);
     } else {
       // TODO: dodać subscribe na err jak powyżej     
       this.doctorService.updateDoctor(doctor);
-      this.router.navigate(['/doctorlist']);
+      this.router.navigate(['/doctor/list']);
     }
 
     this.isLoading = false;

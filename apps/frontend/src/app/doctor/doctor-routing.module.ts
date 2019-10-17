@@ -10,6 +10,8 @@ const routes: Routes = [
   {
     path: '',
     component: DoctorListComponent,
+    //redirectTo: 'examinations',
+    pathMatch: 'full',
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin, Role.admin, Role.user] }
   },
@@ -24,7 +26,13 @@ const routes: Routes = [
     component: DoctorCreateComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin, Role.admin, Role.user]  }
-  }
+  }, 
+  {
+    path: 'list',
+    component: DoctorListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.sadmin, Role.admin, Role.user] }
+  },
 ];
 
 @NgModule({
