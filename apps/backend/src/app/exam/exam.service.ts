@@ -32,8 +32,6 @@ export class ExamService {
     lab: Lab = null
   ): Promise<{ exams: Exam[]; count: number }> {
     const options = {};
-    //TODO dodac sadminowi lab
-    console.warn('dodac sadminowi lab');
     if (lab) {
       options['lab'] = lab;
     }
@@ -53,8 +51,7 @@ export class ExamService {
     doctor: User
   ): Promise<{ exams: Exam[]; count: number }> {
     const options = {};
-    //TODO dodac sadminowi lab
-    console.warn('dodac sadminowi lab');
+
     options['doctor'] = doctor._id; //aktualny user id
 
     const findallQuery = this.examModel.find<Exam>(options);
