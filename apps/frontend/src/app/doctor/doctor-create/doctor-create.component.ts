@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator } from '../../_validators';
+import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '../../_models';
@@ -61,6 +61,23 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
           PwzValidator.validPwz
         ]
       }),
+      pesel: new FormControl(null, {
+        validators: [ //Validators.required, 
+          Validators.minLength(11), 
+          Validators.maxLength(11), 
+          CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
+          PeselValidator.validPesel ]
+
+      }),
+      nip: new FormControl(null, {
+        validators: [
+          //Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true }),
+          NIPValidator.validNIP
+        ]
+      }),
       officeName: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(5)]
       }),
@@ -106,7 +123,9 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
                 examFormat: examData.examFormat,
                 tomographyWithViewer: examData.tomographyWithViewer,
                 active: examData.active,
-                rulesAccepted: examData.rulesAccepted
+                rulesAccepted: examData.rulesAccepted,
+                nip:  examData.nip,
+                pesel:  examData.pesel
               });
               console.log(this.form);
             },
@@ -174,7 +193,9 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       this.form.value.examFormat,
       this.form.value.tomographyWithViewer,
       this.form.value.active,
-      this.form.value.rulesAccepted
+      this.form.value.rulesAccepted,
+      this.form.value.nip,
+      this.form.value.pesel
     );
 
     if (this.mode === 'create') {

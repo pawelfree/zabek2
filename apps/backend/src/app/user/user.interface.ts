@@ -17,4 +17,6 @@ export interface User extends Document {
   readonly tomographyWithViewer?: boolean;
   readonly active?: boolean;
   readonly rulesAccepted?: boolean;
+  readonly nip: string;
+  readonly pesel: string;
 }

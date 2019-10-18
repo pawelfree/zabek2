@@ -15,12 +15,12 @@ export const UserSchema = new mongoose.Schema({
     minlength: 8,
     maxLength: 300
   },
-  role: { 
+  role: {
     type: String,
     required: true
   },
   lab: {
-    type: mongoose.Schema.Types.ObjectId, 
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Lab',
     required: false
   },
@@ -39,7 +39,9 @@ export const UserSchema = new mongoose.Schema({
   qualificationsNo: {
     type: String,
     validate: {
-      validator: function(value) { return isValidPwz(value); },
+      validator: function(value) {
+        return isValidPwz(value);
+      },
       message: props => `${props.value} nie jest poprawnym numerem PWZ`
     },
     required: false,
@@ -83,5 +85,19 @@ export const UserSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
     default: false
+  },
+  nip: {
+    type: String,
+    required: false,
+    minLength: 10,
+    maxLength: 10,
+    unique: false
+  },
+  pesel: {
+    type: String,
+    required: false,
+    minLength: 11,
+    maxLength: 11,
+    unique: false
   }
 });
