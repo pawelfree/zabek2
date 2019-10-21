@@ -2,7 +2,11 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" (submit)="onSaveUser()" *ngIf="!isLoading">
     <mat-form-field>
-      <input matInput type="text" formControlName="email" placeholder="Email użytkownika">
+      <input matInput 
+        type="email" 
+        formControlName="email" 
+        placeholder="Email użytkownika"          
+        [value]="form.get('email').value | lowercase">
       <mat-error *ngIf="form.get('email').invalid">Wprowadź email użytkownika.</mat-error>
     </mat-form-field>
     <mat-form-field>

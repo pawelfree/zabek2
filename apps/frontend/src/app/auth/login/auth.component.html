@@ -9,6 +9,7 @@
             placeholder="Email użytkownika"
             type="text"
             formControlName="username"
+            [value]="loginForm.get('username').value | lowercase"
             autofocus
           />
           <mat-error *ngIf="loginForm.get('username').invalid">Wymagany jest poprawny email.</mat-error
