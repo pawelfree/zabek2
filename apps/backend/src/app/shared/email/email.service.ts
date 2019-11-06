@@ -13,6 +13,7 @@ export class EmailService {
   private PASSWORD_RESET_TEMPLATE_ID = null;
   private PASSWORD_RESET_ERROR_TEMPLATE_ID = null;
   private DOCTOR_ACTIVATION_TEMPLATE_ID = null;
+  private COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID = null;
 
   constructor(
     private readonly configService: ConfigService,
@@ -28,6 +29,8 @@ export class EmailService {
     this.PASSWORD_RESET_ERROR_TEMPLATE_ID = configService.get('PASSWORD_RESET_ERROR_TEMPLATE_ID');
 
     this.DOCTOR_ACTIVATION_TEMPLATE_ID = configService.get('DOCTOR_ACTIVATION_TEMPLATE_ID');
+
+    this.COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID = configService.get('COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID')
 
   }
 
