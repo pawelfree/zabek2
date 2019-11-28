@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor } from '../../_models';
+import { Doctor, Lab } from '../../_models';
 import { Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
@@ -20,6 +20,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
   form: FormGroup;
   private mode = 'create';
   private _id: string;
+  private lab: Lab;
 
   sameAddresses$: Observable<boolean>;
   private officeAddressSubs: Subscription;
@@ -62,16 +63,15 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
         ]
       }),
       pesel: new FormControl(null, {
-        validators: [ //Validators.required, 
-          Validators.minLength(11), 
-          Validators.maxLength(11), 
-          CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
-          PeselValidator.validPesel ]
+        // validators: [  
+        //   Validators.minLength(11), 
+        //   Validators.maxLength(11), 
+        //   CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
+        //   PeselValidator.validPesel ]
 
       }),
       nip: new FormControl(null, {
-        validators: [
-          //Validators.required,
+        validators: [         
           Validators.minLength(10),
           Validators.maxLength(10),
           CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true }),
@@ -127,6 +127,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
                 nip:  examData.nip,
                 pesel:  examData.pesel
               });
+              console.log(examData);
               console.log(this.form);
             },
             error => {
@@ -137,6 +138,8 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       } else {
         this.mode = 'create';
         this._id = null;
+        const user = this.route.snapshot.data.user;
+        this.lab = user.lab;
       }
     });
 
@@ -177,7 +180,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
     const doctor = new Doctor(
       this._id ? this._id : null,
       this.form.value.email,
-      this.form.value.lab,
+      this.form.value.lab, //jeśli null to weź z profilu uera
       null, //password
       null, //expiresIn
       null, //_tokenExpirationDate?
@@ -197,7 +200,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       this.form.value.nip,
       this.form.value.pesel
     );
-
+      console.log(doctor);
     if (this.mode === 'create') {
       this.doctorService.addDoctor(doctor).subscribe(
         res => this.goOut(),

@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
 import { RulesGuard } from './_guards';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 const routes: Routes = [
     {
@@ -43,6 +44,10 @@ const routes: Routes = [
         path: 'resetpassword',
         component: ResetPasswordComponent
     },
+    {
+        path: 'doctor/feedback',
+        component: FeedbackComponent
+    },    
     {
         path: "doctorlist",
         loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule), 

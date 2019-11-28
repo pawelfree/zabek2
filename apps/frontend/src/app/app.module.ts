@@ -26,6 +26,7 @@ import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
 import { UserEffects } from './admin-dashboard/user/store/user.effects';
 import { ConfirmationComponent } from './common-dialogs/confirmation/confirmation.component';
 import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 registerLocaleData(localePl, 'pl');
 
@@ -40,7 +41,8 @@ registerLocaleData(localePl, 'pl');
     ChangePasswordComponent,
     InfoComponent,
     ConfirmationComponent,
-    AcceptRulesComponent
+    AcceptRulesComponent,
+    FeedbackComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "zabek"}), 
