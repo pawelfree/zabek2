@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { ReportsComponent } from './reports/reports.component';
-import { FeedbackListComponent } from './feedback/feedback-list/feedback-list.component';
 
 const routes: Routes = [
   {
@@ -21,9 +20,7 @@ const routes: Routes = [
   },
   {   
     path: "feedbacks", 
-    component: FeedbackListComponent,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.admin, Role.sadmin] }
+    loadChildren: './feedback/feedback.module#FeedbackModule'
   },
   {
     path: 'reports',
