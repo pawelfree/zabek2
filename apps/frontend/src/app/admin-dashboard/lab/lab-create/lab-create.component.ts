@@ -30,7 +30,7 @@ export class LabCreateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = new FormGroup({
       name: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(5), Validators.maxLength(20)]
+        validators: [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
       }),
       address: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(20)]

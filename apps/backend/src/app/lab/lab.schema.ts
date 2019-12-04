@@ -5,7 +5,7 @@ export const LabSchema = new mongoose.Schema({
     type: String,
     requred: [true, 'Nazwa pracowni jest wymagana.'],
     minLength: 5,
-    maxLength: 20,
+    maxLength: 100,
     unique: true
   },
   email: {

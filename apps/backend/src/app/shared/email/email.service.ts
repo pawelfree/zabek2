@@ -16,7 +16,7 @@ export class EmailService {
   private COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID = null;
 
   constructor(
-    private readonly configService: ConfigService,
+    readonly configService: ConfigService,
     private readonly http: HttpService
   ) {
     this.API_KEY = configService.get('ZABEK_SENDGRID_API_KEY');
@@ -53,7 +53,7 @@ export class EmailService {
           }
         }],
         "from": {
-          "email": "noreply@zabek.pl"
+          "email": "noreply@rtgcloud.pl"
         },
         "template_id": this.PASSWORD_RESET_TEMPLATE_ID
       },{
@@ -84,7 +84,7 @@ export class EmailService {
           }
         }],
         "from": {
-          "email": "noreply@zabek.pl"
+          "email": "noreply@rtgcloud.pl"
         },
         "template_id": this.PASSWORD_RESET_ERROR_TEMPLATE_ID
       },{
@@ -115,7 +115,7 @@ export class EmailService {
           }
         }],
         "from": {
-          "email": "noreply@zabek.pl"
+          "email": "noreply@rtgcloud.pl"
         },
         "template_id": this.DOCTOR_ACTIVATION_TEMPLATE_ID
       },{
@@ -146,7 +146,7 @@ export class EmailService {
           }
         }],
         "from": {
-          "email": "noreply@zabek.pl"
+          "email": "noreply@rtgcloud.pl"
         },
         "template_id": this.COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID
       },{

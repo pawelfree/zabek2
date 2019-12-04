@@ -5,7 +5,7 @@ export const environment = {
 
   //mail templates config
   SYSTEM_NAME: "RTG cloud",
-  APP_SERVER: "https://zabek.herokuapp.com",
+  APP_SERVER: "https://rtgcloud.herokuapp.com",
 
   PASSWORD_RESET_PATH: "resetpassword",
   PASSWORD_RESET_TEMPLATE_ID: "d-7d0e1ca1065841748b069ffff3cc5413",

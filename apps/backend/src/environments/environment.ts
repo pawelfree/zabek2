@@ -12,8 +12,8 @@ export const environment = {
   SALT: 10, //'ala_ma_kota@kot#to%ali&pies'
 
   //mail templates config
-  SYSTEM_NAME: "Ząbek",
-  APP_SERVER: "https://zabek.herokuapp.com",
+  SYSTEM_NAME: "RTG Cloud",
+  APP_SERVER: "https://rtgcloud.herokuapp.com",
 
   PASSWORD_RESET_PATH: "resetpassword/",
   PASSWORD_RESET_TEMPLATE_ID: "d-7d0e1ca1065841748b069ffff3cc5413",
