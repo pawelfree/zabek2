@@ -32,7 +32,4 @@ export class FeedbackService {
       .then(feedbacks => ({ feedbacks, count }));
   }
 
-  // async sendFeedback(feedback: string) {
-  //   return await this.examModel.deleteOne({ _id });
-  // }
 }

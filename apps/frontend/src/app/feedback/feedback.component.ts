@@ -55,12 +55,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     // TODO:
     // 1. [DONE] Zapisz feedback w bazie
-    // 2. Wyślij email z info o zarejestrowaniu feedbacku na adres email użytkownika
+    // 2. [DONE] Wyślij email z info o zarejestrowaniu feedbacku na adres email użytkownika
     // 3. Wyslij email o zarejestrowaniu feedbacku na adres email pracowni/admina pracowni?
-
-    //id uzytkownika - lekarza, ktory dal feedback
-    console.log(this.currentUser._id + ' ' + this.currentUser.email);
-    console.log('Feedback: ' + this.form.value.feedback);
 
     const userFeedback = {
       _id: null,
@@ -69,9 +65,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       createdAt: this.formattedNow()
     };
 
-    //zapisz feedback w bazie
+    //zapisz feedback w bazie i wyslij email z potwierdzeniem
     this.feedbackService.addFeedback(userFeedback);
-    // TODO wyslij email/e
     this.isLoading = false;
   }
 
@@ -86,13 +81,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   get isLoggedIn() {
     return this.currentUser;
   }
-  
-  //TODO gdzie przekierowac po zapisaniu i wysaniu?
-  private goOut() {
-    this.router.navigate(['/doctor/feedbackconfirmation']);
-  }
-  
-  // TODO do utilsów, zrobić leading 0
+
+  // TODO do utilsów, zrobić leading 0 dla dni i miesięcy < 10
   private formattedNow() {
     const d = new Date();
     const curr_date = d.getDate();

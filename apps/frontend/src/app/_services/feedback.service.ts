@@ -14,7 +14,6 @@ export class FeedbackService {
   //stores doctor's provided feedback
   addFeedback(feedback: Feedback) {
     //TODO do I need to parse/sanitize/htmlescape it?
-
     this.http
       .post<{ message: string; feedback: Feedback }>(BACKEND_URL, feedback)
       .subscribe(responseData => {
@@ -36,7 +35,4 @@ export class FeedbackService {
     });
   }
 
-  sendFeedbackToLabEmail(feedback: string) {
-    return this.http.put(BACKEND_URL + 'send/' + feedback, {});
-  }
 }
