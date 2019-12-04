@@ -9,6 +9,7 @@ import { ExamModule } from './exam/exam.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
   imports: [ 
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     LabModule,
     ExamModule,
     UserModule,
+    FeedbackModule,
     ServeStaticModule.forRoot({
         rootPath: join(__dirname, '..', '../../dist/apps/frontend/')
     }),

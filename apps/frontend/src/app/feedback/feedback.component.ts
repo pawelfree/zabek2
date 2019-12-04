@@ -1,15 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User, Role } from '../_models';
+import { User, Role, Feedback } from '../_models';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
 import { map, tap } from 'rxjs/operators';
-import * as AuthActions from '../auth/store/auth.actions';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { InfoComponent } from '../common-dialogs';
 import { MatDialog } from '@angular/material';
-import { stringToKeyValue } from '@angular/flex-layout/extended/typings/style/style-transforms';
+import { FeedbackService } from '../_services';
 
 @Component({
   selector: 'zabek-feedback',
@@ -22,14 +20,11 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
 
-  sendTo: string;
-  subject: string;
-  body: string;
-
   constructor(
     private router: Router,
     private readonly store: Store<AppState>,
     private readonly dialog: MatDialog,
+    private readonly feedbackService: FeedbackService
   ) {}
 
   ngOnInit() {
@@ -58,20 +53,25 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     }
 
     this.isLoading = true;
-    //wyślij feedback na adres email
+    // TODO:
+    // 1. [DONE] Zapisz feedback w bazie
+    // 2. Wyślij email z info o zarejestrowaniu feedbacku na adres email użytkownika
+    // 3. Wyslij email o zarejestrowaniu feedbacku na adres email pracowni/admina pracowni?
 
-    console.log(this.form);
-    // this.emailService.send(sendTo, subject, body).subscribe(
-    //   res => this.goOut(),
-    //   tap(() => {
-    //     this.dialog.open(InfoComponent,{ data: 'Twoje uwagi zostały wysłane.' });
-    //     this.router.navigate(['/doctor/examinations']);
-    //   }),
-    //   err => {
-    //     this.dialog.open(InfoComponent, { data: err });
-    //   }
-    // );
+    //id uzytkownika - lekarza, ktory dal feedback
+    console.log(this.currentUser._id + ' ' + this.currentUser.email);
+    console.log('Feedback: ' + this.form.value.feedback);
 
+    const userFeedback = {
+      _id: null,
+      content: this.form.value.feedback,
+      createdBy: this.currentUser.email,
+      createdAt: this.formattedNow()
+    };
+
+    //zapisz feedback w bazie
+    this.feedbackService.addFeedback(userFeedback);
+    // TODO wyslij email/e
     this.isLoading = false;
   }
 
@@ -86,8 +86,18 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   get isLoggedIn() {
     return this.currentUser;
   }
-
+  
+  //TODO gdzie przekierowac po zapisaniu i wysaniu?
   private goOut() {
     this.router.navigate(['/doctor/feedbackconfirmation']);
+  }
+  
+  // TODO do utilsów, zrobić leading 0
+  private formattedNow() {
+    const d = new Date();
+    const curr_date = d.getDate();
+    const curr_month = d.getMonth() + 1; //Months are zero based
+    const curr_year = d.getFullYear();
+    return (curr_year + '-' + curr_month +  '-' + curr_date);
   }
 }

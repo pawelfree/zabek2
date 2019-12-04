@@ -5,6 +5,7 @@ import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
 import { ReportsComponent } from './reports/reports.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SelectLabComponent } from './select-lab/select-lab.component';
+import { FeedbackListComponent } from './feedback/feedback-list/feedback-list.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { SelectLabComponent } from './select-lab/select-lab.component';
   ],
   declarations: [
     ReportsComponent,
+    FeedbackListComponent,
     SelectLabComponent
   ],
   entryComponents: [

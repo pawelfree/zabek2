@@ -40,5 +40,9 @@ export const ModulesList =
   { label: 'Zgłoś uwagi',
   routerLink: '/doctor/feedback',
   roles: [ 'doctor']
-  }  
+  },
+  { label: 'Uwagi',
+    routerLink: '/admin/feedbacks',
+    roles: [ 'sadmin']
+  },
 ];
