@@ -22,6 +22,7 @@ import { LabService } from '../lab/lab.service';
 import { Lab } from '../lab/lab.interface';
 import { AuthService } from '../shared/security/auth.service';
 import { EmailService } from '../shared/email/email.service';
+import * as  crypto from 'crypto';
 
 @Controller('doctor')
 export class DoctorController {
@@ -62,11 +63,11 @@ export class DoctorController {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
     const lab: Lab = await this.labService
-      .findById(createDoctorDto.lab._id)
+      .findById(createDoctorDto.lab)
       .catch(err => {
         let error = err.message;
         if (err.name === 'CastError' && err.path === '_id') {
-          error = 'Błędny identyfikator pracowni ' + createDoctorDto.lab._id;
+          error = 'Błędny identyfikator pracowni ' + createDoctorDto.lab;
         }
         throw new BadRequestException(error);
       });
@@ -75,14 +76,15 @@ export class DoctorController {
         'Pracownia przypisana do obsługi lekarza nie istnieje'
       );
     }
-    await this.labService.incrementUsers(createDoctorDto.lab._id);
+    await this.labService.incrementUsers(createDoctorDto.lab);
 
     const _createDoctorDto: CreateDoctorDto = {
       ...createDoctorDto,
       active: false,
-      lab: lab,
+      lab: lab._id,
       role: Role.doctor,
-      password: await this.authService.hash(createDoctorDto.password)
+      //TODO przy tworzeniu lekarza nie ma hasla przeciez - nigdy tego nie przetestowales
+      password: createDoctorDto.password ? await this.authService.hash(createDoctorDto.password) : await this.authService.hash(crypto.randomBytes(20).toString('hex'))
     } 
     //TODO ten lodash to trzeba zmienic na cos innego
     console.warn('zrobic cos z lodashem');

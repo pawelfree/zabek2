@@ -25,6 +25,16 @@
         <mat-error *ngIf="form.get('qualificationsNo').hasError('validPwz')">PWZ jest niepoprawny.</mat-error>
       </mat-form-field>
       <mat-form-field>
+        <input matInput type="text" formControlName="pesel" placeholder="PESEL">
+        <mat-error *ngIf="form.get('pesel').hasError('onlyNumbers')">PESEL może zawierać tylko cyfry.</mat-error>
+        <mat-error *ngIf="form.get('pesel').hasError('validPesel')">PESEL jest nieprawidłowy.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" formControlName="nip" placeholder="NIP">
+        <mat-error *ngIf="form.get('nip').hasError('onlyNumbers')">NIP może zawierać tylko cyfry.</mat-error>
+        <mat-error *ngIf="form.get('pesel').hasError('validNIP')">NIP jest nieprawidłowy.</mat-error>
+      </mat-form-field>        
+      <mat-form-field>
         <input matInput type="text" formControlName="officeName" placeholder="Nazwa gabinetu">
         <mat-error *ngIf="form.get('officeName').invalid">Nazwa gabinetu jest wymagana.</mat-error>
       </mat-form-field>

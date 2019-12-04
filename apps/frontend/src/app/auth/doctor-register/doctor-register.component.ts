@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator } from '../../_validators';
+import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '../../_models';
@@ -56,6 +56,22 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
                       CustomValidator.patternMatch(/^[0-9]{7}$/, {onlyNumbers : true}),
                       PwzValidator.validPwz ]
       }),  
+      pesel: new FormControl(null, {
+        validators: [  
+          Validators.minLength(11), 
+          Validators.maxLength(11), 
+          CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
+          PeselValidator.validPesel ]
+
+      }),
+      nip: new FormControl(null, {
+        validators: [         
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true }),
+          NIPValidator.validNIP
+        ]
+      }),
       officeName: new FormControl(null, {
         validators: [ Validators.required,
                       Validators.minLength(5)]
@@ -157,7 +173,9 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         this.form.value.examFormat,
         this.form.value.tomographyWithViewer,
         false,
-        true);
+        true,
+        this.form.value.pesel,
+        this.form.value.nip);
 
       this.doctorService.addDoctor(doctor).subscribe(
         res => this.goOut(),

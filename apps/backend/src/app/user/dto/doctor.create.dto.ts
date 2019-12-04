@@ -2,7 +2,7 @@ import { Lab } from '../../lab/lab.interface';
 
 export class CreateDoctorDto {
   readonly email: string;
-  readonly lab: Lab;
+  readonly lab: string;
   readonly password: string;
   readonly role: string;
   readonly firstName: string;

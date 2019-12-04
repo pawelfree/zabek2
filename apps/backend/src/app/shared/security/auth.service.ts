@@ -65,8 +65,10 @@ export class AuthService {
       _id: user._id,
       email: user.email,
       role: user.role,
+      lab: user.lab,
       expiresIn: +this.configService.get('LOGIN_EXPIRES_IN'),
       rulesAccepted: user.rulesAccepted === null ? false : user.rulesAccepted,
+      active: user.active === null ? false : user.active,
       token: jsonwebtoken.sign(payload, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn: +this.configService.get('LOGIN_EXPIRES_IN') })
     };
   }

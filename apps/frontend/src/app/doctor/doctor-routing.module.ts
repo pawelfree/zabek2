@@ -10,7 +10,6 @@ const routes: Routes = [
   {
     path: '',
     component: DoctorListComponent,
-    //redirectTo: 'examinations',
     pathMatch: 'full',
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin, Role.admin, Role.user] }
