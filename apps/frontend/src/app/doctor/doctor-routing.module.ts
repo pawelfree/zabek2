@@ -22,13 +22,13 @@ const routes: Routes = [
     path: 'create',
     component: DoctorCreateComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.sadmin, Role.admin, Role.user]  }
+    data: { roles: [Role.admin, Role.user]  }
   },
   {
     path: 'edit/:doctorId',
     component: DoctorCreateComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.sadmin, Role.admin, Role.user]  }
+    data: { roles: [Role.admin, Role.user]  }
   }
 
 ];
