@@ -36,7 +36,7 @@
 ></mat-paginator>
 </div>
 <p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
-  Jeszcze nie ma zdefiniowanych badań!
+  Jeszcze nie ma zarejestrowanych uwag od lekarzy.
 </p>
 <mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>
 <div style="right: 85px; bottom: 5px; position: fixed">
