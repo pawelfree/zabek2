@@ -229,6 +229,6 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
   }
 
   private goOut() {
-    this.router.navigate(['/doctorlist']);
+    this.router.navigate(['/admin/doctor/list']);
   }
 }

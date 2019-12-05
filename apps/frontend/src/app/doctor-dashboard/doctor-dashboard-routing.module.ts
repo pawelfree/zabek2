@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { DoctorExamListComponent } from './exam-list/exam-list.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,13 @@ const routes: Routes = [
       component: DoctorExamListComponent,
       canActivate: [ AuthGuard ],
       data: { roles: [ Role.doctor ] }
-  }
+    },
+    {
+        path: 'feedback',
+        component: FeedbackComponent,
+        canActivate: [ AuthGuard ],
+        data: { roles: [ Role.doctor ] }
+    },  
 ];
 
 @NgModule({

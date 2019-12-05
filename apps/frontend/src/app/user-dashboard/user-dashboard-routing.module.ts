@@ -15,19 +15,19 @@ const routes: Routes = [
         path: 'examinations',
         component: ExamListComponent,
         canActivate: [ AuthGuard ],
-        data: { roles: [ Role.user ] }
+        data: { roles: [ Role.admin, Role.user ] }
     },
     {
       path: 'examcreate',
       component: ExamCreateComponent,
       canActivate: [AuthGuard],
-      data: { roles: [Role.user] }
+      data: { roles: [Role.admin, Role.user] }
     },
     {
       path: 'examedit/:examId',
       component: ExamCreateComponent,
       canActivate: [AuthGuard],
-      data: { roles: [Role.user] }
+      data: { roles: [Role.admin, Role.user] }
     }   
 ];
 

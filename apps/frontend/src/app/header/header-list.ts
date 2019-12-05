@@ -30,7 +30,7 @@ export const ModulesList =
   },
   {
     label: 'Lekarze',
-    routerLink: '/doctorlist',
+    routerLink: '/admin/doctor/list',
     roles: [ 'sadmin', 'admin', 'user' ]
   },
   { label: 'Raporty',

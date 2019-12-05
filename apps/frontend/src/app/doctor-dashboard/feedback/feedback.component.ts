@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User, Role, Feedback } from '../_models';
+import { User } from '../../_models';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/app.reducer';
+import { AppState } from '../../store/app.reducer';
 import { map, tap } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { FeedbackService } from '../_services';
+import { FeedbackService } from '../../_services';
 
 @Component({
   selector: 'zabek-feedback',
