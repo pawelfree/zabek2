@@ -2,6 +2,10 @@ mat-form-field {
   width: 100%;
 }
 
+.drSelector {
+  width: 80%;
+}
+
 mat-spinner {
   margin: auto;
 }

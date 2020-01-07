@@ -61,11 +61,11 @@ export const ExamSchema = new mongoose.Schema({
   doctor: {
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User',
-    requred: true,
+    requred: false,
   },
   sendEmailTo: {
     type: String,
-    requred: true,
+    requred: false,
     minLength: 5,
     maxLength: 50,
     unique: false

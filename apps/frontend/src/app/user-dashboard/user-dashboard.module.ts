@@ -7,6 +7,8 @@ import { ExamCreateComponent } from './exam-create/exam-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectInfiniteScrollModule } from '../_directives/select-infinite-scroll/selectinfinitescroll.module';
+import { MatDialogModule } from "@angular/material";
+import { DoctorCreateDlgComponent } from './doctor-create-dlg/doctor-create-dlg.component';
 
 
 @NgModule({
@@ -16,11 +18,14 @@ import { MatSelectInfiniteScrollModule } from '../_directives/select-infinite-sc
         UserDashboardRoutingModule,
         ReactiveFormsModule,
         MatDatepickerModule,
-        MatSelectInfiniteScrollModule
+        MatSelectInfiniteScrollModule,
+        MatDialogModule
     ],
     declarations: [
         ExamListComponent,
-        ExamCreateComponent
-    ]
+        ExamCreateComponent,
+        DoctorCreateDlgComponent
+    ],
+    entryComponents: [DoctorCreateDlgComponent]
 })
 export class UserDashboardModule {}
