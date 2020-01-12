@@ -8,13 +8,14 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor, User } from '../../_models';
-import { Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
+import { ActivatedRoute, Params, ParamMap, Router } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
+
 
 @Component({
   selector: 'zabek-doctor-create-dlg',
@@ -23,7 +24,7 @@ import { AppState } from '../../store/app.reducer';
 })
 export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
   isLoading = false;
-  form: FormGroup;
+  dialogForm: FormGroup;
   private mode = 'create';
   private _id: string;
   private user: User;
@@ -33,12 +34,12 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
   private storeSub: Subscription = null;
 
   constructor(
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService,
     private readonly store: Store<AppState>,
-    private readonly createDoctorDlgRef: MatDialogRef<DoctorCreateDlgComponent>
+    private readonly createDoctorDlgRef: MatDialogRef<DoctorCreateDlgComponent>,
+    private readonly router: Router,
   ) {}
 
   ngOnInit() {
@@ -47,9 +48,9 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
     });
 
     this.isLoading = false;
-    this.form = new FormGroup({
+    this.dialogForm = new FormGroup({
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email]
+        validators: [Validators.email]
       }),
       lab: new FormControl(null),
       firstName: new FormControl(null, {
@@ -68,10 +69,6 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       }),
       qualificationsNo: new FormControl(null, {
         validators: [
-          Validators.required,
-          Validators.minLength(7),
-          Validators.maxLength(7),
-          CustomValidator.patternMatch(/^[0-9]{7}$/, { onlyNumbers: true }),
           PwzValidator.validPwz
         ]
       }),
@@ -92,15 +89,15 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
         ]
       }),
       officeName: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(5)]
+        validators: [Validators.minLength(5)]
       }),
       officeAddress: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(5)]
+        validators: [Validators.minLength(5)]
       }),
       sameAddresses: new FormControl(true),
       officeCorrespondenceAddress: new FormControl(null),
       examFormat: new FormControl('jpeg', {
-        validators: [Validators.required]
+        validators: []
       }),
       tomographyWithViewer: new FormControl(false),
       active: new FormControl(null),
@@ -118,7 +115,7 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
           .subscribe(
             examData => {
               this.isLoading = false;
-              this.form.setValue({
+              this.dialogForm.setValue({
                 email: examData.email,
                 firstName: examData.firstName,
                 lastName: examData.lastName,
@@ -126,8 +123,8 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
                 qualificationsNo: examData.qualificationsNo,
                 officeName: examData.officeName,
                 sameAddresses:
-                  this.form.value.officeAddress ===
-                  this.form.value.officeCorrespondenceAddress
+                  this.dialogForm.value.officeAddress ===
+                  this.dialogForm.value.officeCorrespondenceAddress
                     ? true
                     : false,
                 officeAddress: examData.officeAddress,
@@ -152,25 +149,41 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.officeAddressSubs = this.form.controls.sameAddresses.valueChanges
+    this.officeAddressSubs = this.dialogForm.controls.sameAddresses.valueChanges
       .pipe(
         startWith(true),
         tap(value => {
           if (!value) {
-            this.form.controls.officeCorrespondenceAddress.setValidators([
+            this.dialogForm.controls.officeCorrespondenceAddress.setValidators([
               Validators.required,
               Validators.minLength(5)
             ]);
           } else {
-            this.form.controls.officeCorrespondenceAddress.clearValidators();
+            this.dialogForm.controls.officeCorrespondenceAddress.clearValidators();
           }
-          this.form.controls.officeCorrespondenceAddress.updateValueAndValidity(
+          this.dialogForm.controls.officeCorrespondenceAddress.updateValueAndValidity(
             { onlySelf: true, emitEvent: false }
           );
           this.sameAddresses$ = value;
         })
       )
       .subscribe();
+
+    this.createDoctorDlgRef.keydownEvents().subscribe(event => {
+      if (event.key === 'Escape') {
+        this.onCancel();
+      }
+    });
+
+    this.createDoctorDlgRef.backdropClick().subscribe(event => {
+      this.onCancel();
+    });
+  }
+
+  onCancel(): void {
+    console.log('ESC button pressed');
+    this.dialogForm.value.cancel = true;
+    this.createDoctorDlgRef.close(this.dialogForm.value);
   }
 
   ngOnDestroy() {
@@ -188,36 +201,36 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
   // TODO: na poprzednim widoku - formularzu tworzenia badania,
   // ustawić nowo utworzonego lekarza jako wybranego z listy
   save() {
-    if (this.form.invalid) {
+    if (this.dialogForm.invalid) {
       return;
-    }    
+    }
     const doctor = new Doctor(
       null, //id
-      this.form.value.email,
-      this.form.value.lab ? this.form.value.lab : this.user.lab,
+      this.dialogForm.value.email,
+      this.dialogForm.value.lab ? this.dialogForm.value.lab : this.user.lab,
       null, //password
       null, //expiresIn
       null, //_tokenExpirationDate?
       null, //_token
-      this.form.value.firstName,
-      this.form.value.lastName,
-      this.form.value.officeName,
-      this.form.value.officeAddress,
-      this.form.value.qualificationsNo,
-      this.form.value.sameAddresses
-        ? this.form.value.officeAddress
-        : this.form.value.officeCorrespondenceAddress,
-      this.form.value.examFormat,
-      this.form.value.tomographyWithViewer,
-      this.form.value.active,
-      this.form.value.rulesAccepted,
-      this.form.value.pesel,
-      this.form.value.nip
+      this.dialogForm.value.firstName,
+      this.dialogForm.value.lastName,
+      this.dialogForm.value.officeName,
+      this.dialogForm.value.officeAddress,
+      this.dialogForm.value.qualificationsNo,
+      this.dialogForm.value.sameAddresses
+        ? this.dialogForm.value.officeAddress
+        : this.dialogForm.value.officeCorrespondenceAddress,
+      this.dialogForm.value.examFormat,
+      this.dialogForm.value.tomographyWithViewer,
+      this.dialogForm.value.active,
+      this.dialogForm.value.rulesAccepted,
+      this.dialogForm.value.pesel,
+      this.dialogForm.value.nip
     );
     this.isLoading = true;
     this.doctorService.addDoctor(doctor).subscribe(
-      // do metody close() poniżej przekażemy id utworzonego właśnie lekarza, który ma być ustawiony na liście wyboru    
-      res => this.createDoctorDlgRef.close(this.form.value),
+      // do metody close() poniżej przekażemy id utworzonego właśnie lekarza, który ma być ustawiony na liście wyboru
+      res => this.createDoctorDlgRef.close(this.dialogForm.value),
       err => {
         this.dialog.open(InfoComponent, { data: err });
       }
@@ -226,6 +239,11 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
   }
 
   close() {
+    console.log("doctor-create-dlg.close() called.");
     this.createDoctorDlgRef.close();
   }
+
+  goToparent(){
+    this.router.navigate(['parentpageroute']);
+    }
 }

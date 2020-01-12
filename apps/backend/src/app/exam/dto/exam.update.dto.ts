@@ -9,8 +9,8 @@ export class UpdateExamDto {
   readonly patientMarketingAck: boolean; //zgoda pacjenta na marketing
   readonly patientEmail: string;
   readonly patientPhone: string;
-  readonly doctorFullName: string; // imię i nazwisko lekarza ze skierowania
-  readonly doctorQualificationsNo: string; // numer uprawnien lekarza
+  readonly doctorFullName?: string; // imię i nazwisko lekarza ze skierowania
+  readonly doctorQualificationsNo?: string; // numer uprawnien lekarza
   readonly sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   readonly examinationDate: string; //data wykonania badania
   readonly examinationType: string; //rodzaj badania

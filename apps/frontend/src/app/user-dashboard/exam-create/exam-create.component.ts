@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExamService, DoctorService } from '../../_services';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../_validators';
-
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
   DateAdapter,
@@ -59,6 +58,7 @@ export class ExamCreateComponent implements OnInit {
   private mode = 'create';
   private _id: string;
   public selectedDoctor;
+  formDoctorValue = null; //jesli 'Brak' to null
 
   endOfData: boolean;
   doctors$: Observable<Doctor[]>;
@@ -85,6 +85,7 @@ export class ExamCreateComponent implements OnInit {
     private readonly examService: ExamService,
     private readonly doctorService: DoctorService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly dialog: MatDialog
   ) {
     this.doctors$ = this.doctors.asObservable().pipe(
@@ -94,41 +95,7 @@ export class ExamCreateComponent implements OnInit {
     );
   }
 
-  getNextDoctorsBatch() {
-    if (!this.endOfData) {
-      this.doctorService
-        .getDoctors(this.pageLen, this.page)
-        .pipe(
-          take(1),
-          map(res => res.doctors),
-          tap(res => {
-            this.endOfData = res.length < this.pageLen;
-            this.page += 1;
-          })
-        )
-        .subscribe(res => this.doctors.next(res));
-    }
-  }
-
   ngOnInit() {
-    this.endOfData = false;
-    this.doctors$ = this.doctors.asObservable().pipe(
-      scan(
-        (acc, curr) => {
-          return [...acc, ...curr];
-        },
-        <Doctor[]>[]
-      ),
-      switchMap(arr =>
-        from(arr).pipe(
-          distinct(single => single._id),
-          toArray()
-        )
-      )
-    );
-
-    this.getNextDoctorsBatch();
-
     this.form = new FormGroup({
       examinationDate: new FormControl(new Date(), {
         validators: [Validators.required]
@@ -178,6 +145,26 @@ export class ExamCreateComponent implements OnInit {
       })
     });
 
+    if (this.form.value.doctor != null) {
+      this.endOfData = false;
+      this.doctors$ = this.doctors.asObservable().pipe(
+        scan(
+          (acc, curr) => {
+            return [...acc, ...curr];
+          },
+          <Doctor[]>[]
+        ),
+        switchMap(arr =>
+          from(arr).pipe(
+            distinct(single => single._id),
+            toArray()
+          )
+        )
+      );
+    }
+
+    this.getNextDoctorsBatch();
+
     this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
       if (paramMap.has('examId')) {
         this.mode = 'edit';
@@ -220,12 +207,36 @@ export class ExamCreateComponent implements OnInit {
         this.selectedDoctor = null;
       }
     });
+    console.log(this.form);
+  }
+
+  getNextDoctorsBatch() {
+    if (!this.endOfData) {
+      this.doctorService
+        .getDoctors(this.pageLen, this.page)
+        .pipe(
+          take(1),
+          map(res => res.doctors),
+          tap(res => {
+            this.endOfData = res.length < this.pageLen;
+            this.page += 1;
+          })
+        )
+        .subscribe(res => this.doctors.next(res));
+    }
   }
 
   onSaveExam() {
     if (this.form.invalid) {
       return;
     }
+
+    // if ((this.form.value.doctor = '0')) {
+    //   this.formDoctorValue = null;
+    // } else {
+    //   this.formDoctorValue = this.form.value.doctor;
+    // }
+
     this.isLoading = true;
     const exam = {
       _id: this._id ? this._id : null,
@@ -242,9 +253,10 @@ export class ExamCreateComponent implements OnInit {
       patientEmail: this.form.value.patientEmail,
       patientPhone: this.form.value.patientPhone,
       sendEmailTo: this.form.value.sendEmailTo,
-      doctor: this.form.value.doctor
+      doctor: this.form.value.doctor//this.formDoctorValue
     };
     if (this.mode === 'create') {
+      console.log(exam);
       this.examService.addExam(exam);
     } else {
       this.examService.updateExam(exam);
@@ -263,6 +275,8 @@ export class ExamCreateComponent implements OnInit {
     });
   }
 
+  // TODO: jak zaktualizować sendEmail jesli: najpierw wybiore jakiegos lekarza (ustawi sie jego emsila w sendTo), a potem wybiore Brak
+  // teraz jest bug bo w sendtTo zostanie ostatni email lekarza, a powinno być pusto
   doctorChanged(event) {
     if (event.isUserInput) {
       this.form.patchValue({ sendEmailTo: event.source.value.email });
@@ -277,9 +291,10 @@ export class ExamCreateComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DoctorCreateDlgComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(
-        data => console.log("DEBUG: Doctor create dialog output:", data)
-    ); 
-    
+    // TODO: BUG: zamkniecie modala nie powinno zamykac formualrza tworzenia/edycji badania. Teraz zamyka i wraca do listy badan.
+    dialogRef.afterClosed().subscribe(data => {
+      console.log('DEBUG: Doctor create dialog output:', data);
+      this.router.navigate(['.'], { relativeTo: this.route });
+    });
   }
 }

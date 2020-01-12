@@ -14,7 +14,7 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email });
+    return await this.userModel.findOne({ email }); //TODO: ale teraz mogą być userzy z pustym emailem - lekarze....
   }
 
   async addDoctor(createDoctorDto: CreateDoctorDto): Promise<User> {

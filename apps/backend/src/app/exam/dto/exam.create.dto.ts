@@ -8,8 +8,8 @@ export class CreateExamDto {
   patientMarketingAck: boolean; //zgoda pacjenta na marketing
   patientEmail: string;
   patientPhone: string;
-  doctorFullName: string; // imię i nazwisko lekarza ze skierowania
-  doctorQualificationsNo: string; // numer uprawnien lekarza
+  doctorFullName?: string; // imię i nazwisko lekarza ze skierowania
+  doctorQualificationsNo?: string; // numer uprawnien lekarza
   sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   examinationDate: string; //data wykonania badania
   examinationType: string; //rodzaj badania

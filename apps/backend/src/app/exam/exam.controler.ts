@@ -41,6 +41,7 @@ import { Exam } from './exam.interface';
     @Roles('admin','user')
     @Post()
     async addExam(@Body() createExamDto: CreateExamDto, @Request() req) {
+      console.log(createExamDto);
       return await this.examService.add({...createExamDto, lab: req.user.lab});
     }
 

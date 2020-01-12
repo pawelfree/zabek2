@@ -12,7 +12,7 @@ export interface Exam extends Document {
   readonly patientMarketingAck: boolean; //zgoda pacjenta na działania marketingowe
   readonly patientEmail: string;
   readonly patientPhone: string;
-  readonly doctor: User; // imię i nazwisko lekarza ze skierowania
+  readonly doctor?: User; // imię i nazwisko lekarza ze skierowania
   readonly sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   readonly examinationDate: string; //data wykonania badania
   readonly examinationType: string; //rodzaj badania

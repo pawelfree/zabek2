@@ -38,15 +38,15 @@ export const UserSchema = new mongoose.Schema({
   },
   qualificationsNo: {
     type: String,
-    validate: {
-      validator: function(value) {
-        return isValidPwz(value);
-      },
-      message: props => `${props.value} nie jest poprawnym numerem PWZ`
-    },
+    // validate: {
+    //   validator: function(value) {
+    //     return isValidPwz(value);
+    //   },
+    //   message: props => `${props.value} nie jest poprawnym numerem PWZ`
+    // },
     required: false,
-    minLength: 5,
-    maxLength: 25
+    // minLength: 5,
+    // maxLength: 25
   },
   officeName: {
     type: String,
@@ -101,3 +101,9 @@ export const UserSchema = new mongoose.Schema({
     unique: false
   }
 });
+
+UserSchema.path('qualificationsNo').validate(function (value) {
+
+  isValidPwz(value);
+
+}, 'To nie jest poprawny numer PWZ');

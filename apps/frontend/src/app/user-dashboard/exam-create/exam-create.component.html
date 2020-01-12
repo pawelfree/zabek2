@@ -129,41 +129,47 @@
       />
     </mat-form-field>
 
-    <mat-form-field >
+    <mat-form-field>
       <mat-label>Lekarz zlecający</mat-label>
       <div>
         <mat-select
-        SelectInfiniteScroll
-        (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)"
-        [complete]="endOfData"
-        [compareWith]="compareDoctors"
-        formControlName="doctor"
-        [value]="selectedDoctor"     
-        style="width: 90%" 
-      >
-        <mat-option value="brak">Brak</mat-option>
-        <mat-option
-          *ngFor="let doctor of (doctors$ | async)"
-          [value]="doctor"
-          (onSelectionChange)="doctorChanged($event)"
+          SelectInfiniteScroll
+          (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)"
+          [complete]="endOfData"
+          [compareWith]="compareDoctors"
+          formControlName="doctor"
+          [value]="selectedDoctor"
+          style="width: 90%"
         >
-          {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{ doctor.qualificationsNo }}
-        </mat-option>
-      </mat-select>
- 
-      <button        
-        color="accent"
-        aria-label="Dodaj lekarza"
-        title="Dodaj nowego lekarza"
-        alt="Dodaj nowego lekarza"      
-        style="float: right"
-        (click)="openDoctorCreateDialog()"
-      >
-        <mat-icon>add</mat-icon>
-      </button>
-      
+          <mat-option>Brak</mat-option>
+          <mat-option
+            *ngFor="let doctor of (doctors$ | async)"
+            [value]="doctor"
+            (onSelectionChange)="doctorChanged($event)"
+          >
+            <ng-container *ngIf="doctor; else defaultValue">
+              {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{
+                doctor.qualificationsNo
+              }}
+            </ng-container>
+            <ng-template #defaultValue>
+              Brak
+            </ng-template>
+          </mat-option>
+        </mat-select>
+
+        <button type="button"
+          color="accent"
+          aria-label="Dodaj lekarza"
+          title="Dodaj nowego lekarza"
+          alt="Dodaj nowego lekarza"
+          style="float: right"
+          routerLink="parentpageroute"
+          (click)="openDoctorCreateDialog()"          
+        >
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
-      <mat-error *ngIf="form.get('doctor').invalid">Wybierz lekarza z listy.</mat-error> <!-- Do usunięcia, skoro lekarz jest opcjonalny -->
     </mat-form-field>
 
     <mat-form-field>

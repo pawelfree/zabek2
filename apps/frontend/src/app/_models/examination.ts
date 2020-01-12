@@ -11,7 +11,7 @@ export class Examination {
   patientMarketingAck: boolean; //zgoda pacjenta na marketing
   patientEmail: string;
   patientPhone: string;
-  doctor: Doctor; 
+  doctor?: Doctor; 
   sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   examinationDate: string; //data wykonania badania
   examinationType: string; //rodzaj badania

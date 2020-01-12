@@ -58,10 +58,11 @@ export class DoctorController {
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
     console.warn('wymusic polityke haseł')
-    const user: User = await this.userService.findByEmail(createDoctorDto.email);
-    if (user) {
-      throw new BadRequestException('Lekarz jest już zarejestrowany');
-    }
+    // TODO: Poniewaz nie wiemy co u lekarza jest wymagane, to mozna na razie stworzyc takich samych lekarzy
+    // const user: User = await this.userService.findByEmail(createDoctorDto.email);
+    // if (user) {
+    //   throw new BadRequestException('Lekarz jest już zarejestrowany');
+    // }
     const lab: Lab = await this.labService
       .findById(createDoctorDto.lab)
       .catch(err => {
