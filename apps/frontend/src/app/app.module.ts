@@ -16,8 +16,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
 import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
@@ -26,6 +24,8 @@ import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
 import { UserEffects } from './admin-dashboard/user/store/user.effects';
 import { ConfirmationComponent } from './common-dialogs/confirmation/confirmation.component';
 import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules.component';
+import { environment } from '../environments/environment';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 registerLocaleData(localePl, 'pl');
 
@@ -43,7 +43,7 @@ registerLocaleData(localePl, 'pl');
     AcceptRulesComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: "zabek"}), 
+    BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -61,8 +61,7 @@ registerLocaleData(localePl, 'pl');
     }),
     EffectsModule.forRoot([AuthEffects,LabEffects,UserEffects]),
     FlexLayoutModule,
-    //TODO odkomentowac na produkcji
-    //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

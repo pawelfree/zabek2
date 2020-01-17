@@ -1,23 +1,24 @@
 import { Component, Renderer2, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { User, Role } from '../_models';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material';
 import { ChangePasswordComponent } from '../common-dialogs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
-import { map } from 'rxjs/operators';
-import * as AuthActions from '../auth/store/auth.actions';
+import { map, switchMapTo } from 'rxjs/operators';
+import { AuthActions } from '../auth/store/auth.action-types';
 import { ModulesList } from './header-list';
+import { currentUser } from '../auth/store/auth.selectors';
 
 @Component({
   selector: 'zabek-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-  currentUser: User;
-  subscription: Subscription;
+export class HeaderComponent implements OnInit {
+  currentUser$: Observable<User>;
+
   @Output() public sidenavToggle = new EventEmitter();
   
 //------
@@ -36,12 +37,7 @@ prevButtonTrigger;
   ) {}
 
   ngOnInit() {
-    this.subscription = this.store.select('auth').pipe(
-      map(authState => authState.user)
-    ).subscribe(user => {
-      this.currentUser = user;
-    });
-
+    this.currentUser$ = this.store.pipe(select(currentUser));
     this.menuList = ModulesList;
   }
 
@@ -102,16 +98,8 @@ prevButtonTrigger;
     }, 100)
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  authorized(roles: string[]) {
-    return this.currentUser && (roles.indexOf(this.currentUser.role) !== -1);
-  }
-
-  get isLoggedIn() {
-    return this.currentUser;
+  authorized(role: string, roles: string[]) {
+    return roles.indexOf(role) !== -1;
   }
 
   logout() {

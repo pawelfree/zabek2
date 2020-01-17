@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
   <span><a routerLink="/">RTG cloud</a></span>
   <div fxFlex fxLayout fxLayoutAlign="end">
-    <ul fxLayout fxLayoutGap="5px">
-      <ng-container *ngIf="isLoggedIn">
+    <ul fxLayout fxLayoutGap="5px" *ngIf="(currentUser$ | async) as user">
+      <ng-container >
         <ng-container *ngFor="let menuItem of menuList">
-          <ng-container *ngIf="!menuItem.children && authorized(menuItem.roles)">
+          <ng-container *ngIf="!menuItem.children && authorized(user.role, menuItem.roles)">
             <a mat-button [routerLink]="menuItem.routerLink" routerLinkActive="mat-accent">{{menuItem.label}}</a>
           </ng-container>
-          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && authorized(menuItem.roles)">
+          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && authorized(user.role, menuItem.roles)">
             <a #button 
                 mat-button 
                 [routerLink]="menuItem.routerLink"
@@ -33,10 +33,10 @@
           </ng-container>
         </ng-container>
       </ng-container>
-      <li *ngIf="currentUser">
-        <a mat-button (click)="logout()" >Logout ({{ currentUser.email }})</a>
+      <li>
+        <a mat-button (click)="logout()" >Logout ({{ user.email }})</a>
       </li>
-      <li *ngIf="currentUser">
+      <li>
         <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">
           <mat-icon
           aria-label="Więcej"
