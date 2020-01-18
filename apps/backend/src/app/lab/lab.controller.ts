@@ -9,6 +9,7 @@ import {
     Put,
     Query,
     UseGuards,
+    ParseIntPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
@@ -27,10 +28,10 @@ export class LabController {
     @Roles('sadmin', 'admin')
     @Get()
     async allLabs(
-      @Query('pagesize') pagesize: number,
-      @Query('page') page: number
+      @Query('pagesize', new ParseIntPipe()) pagesize: number,
+      @Query('page', new ParseIntPipe()) page: number
     ) {
-      return await this.labService.findAll(+pagesize, +page);
+      return await this.labService.findAll(pagesize, page);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)

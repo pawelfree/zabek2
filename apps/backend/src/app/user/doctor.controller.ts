@@ -9,7 +9,8 @@ import {
   InternalServerErrorException,
   Get,
   Query,
-  Request} from '@nestjs/common';
+  Request,
+  ParseIntPipe} from '@nestjs/common';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
 import { User } from './user.interface';
@@ -37,13 +38,13 @@ export class DoctorController {
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Get()
   async allUsers(
-    @Query('pagesize') pagesize: number = 0,
-    @Query('page') page: number = 10,
+    @Query('pagesize', new ParseIntPipe()) pagesize: number = 0,
+    @Query('page', new ParseIntPipe()) page: number = 10,
     @Request() req
   ) {
     return await this.userService.findAllDoctors(
-      +pagesize,
-      +page,
+      pagesize,
+      page,
       req.user.lab
     );
   }

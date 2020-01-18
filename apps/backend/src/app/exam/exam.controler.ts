@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
   Request,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
@@ -30,11 +31,11 @@ import { Exam } from './exam.interface';
     @Roles('sadmin','admin','user')
     @Get()
     async allExams(
-      @Query('pagesize') pagesize: number,
-      @Query('page') page: number,
+      @Query('pagesize', new ParseIntPipe()) pagesize: number,
+      @Query('page', new ParseIntPipe()) page: number,
       @Request() req
     ) {
-      return await this.examService.findAllExams(+pagesize, +page, req.user.lab);
+      return await this.examService.findAllExams(pagesize, page, req.user.lab);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)

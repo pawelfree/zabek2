@@ -10,7 +10,8 @@ import {
   Delete,
   Param,
   Put,
-  InternalServerErrorException
+  InternalServerErrorException,
+  ParseIntPipe
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
@@ -49,13 +50,13 @@ export class UserController {
   @Roles(Role.sadmin, Role.admin)
   @Get()
   async allUsers(
-    @Query('pagesize') pagesize: number = 0,
-    @Query('page') page: number = 10,
+    @Query('pagesize', new ParseIntPipe()) pagesize: number = 0,
+    @Query('page', new ParseIntPipe()) page: number = 10,
     @Request() req
   ) {
     //TODO dodac sadminowi lab
     console.warn('Dodac sadminowi lab');
-    return await this.userService.findAllUsers(+pagesize, +page, req.user.lab);
+    return await this.userService.findAllUsers(pagesize, page, req.user.lab);
   }
   
   @UseGuards(AuthGuard('jwt'), RolesGuard)

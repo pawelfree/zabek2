@@ -9,7 +9,8 @@ import {
   Put,
   Query,
   UseGuards,
-  Request
+  Request,
+  ParseIntPipe
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
@@ -28,11 +29,11 @@ export class FeedbackController {
   @Roles('sadmin')
   @Get()
   async allFeedbacks(
-    @Query('pagesize') pagesize: number,
-    @Query('page') page: number,
+    @Query('pagesize', new ParseIntPipe()) pagesize: number,
+    @Query('page', new ParseIntPipe()) page: number,
     @Request() req
   ) {
-    return await this.feedbackService.findAllFeedbacks(+pagesize, +page, req.user.lab);
+    return await this.feedbackService.findAllFeedbacks(pagesize, page, req.user.lab);
   }
 
   // Zapisanie uwag uytkownika w bazie oraz wysanie wiadomosci email do uzytkownika
