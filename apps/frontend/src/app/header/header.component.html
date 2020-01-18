@@ -2,37 +2,41 @@
   <span><a routerLink="/">RTG cloud</a></span>
   <div fxFlex fxLayout fxLayoutAlign="end">
     <ul fxLayout fxLayoutGap="5px" *ngIf="(currentUser$ | async) as user">
-      <ng-container >
-        <ng-container *ngFor="let menuItem of menuList">
-          <ng-container *ngIf="!menuItem.children && authorized(user.role, menuItem.roles)">
-            <a mat-button [routerLink]="menuItem.routerLink" routerLinkActive="mat-accent">{{menuItem.label}}</a>
-          </ng-container>
-          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && authorized(user.role, menuItem.roles)">
-            <a #button 
-                mat-button 
-                [routerLink]="menuItem.routerLink"
-                [matMenuTriggerFor]="levelOne" 
-                #levelOneTrigger="matMenuTrigger" 
-                (mouseenter)="buttonEnter(levelOneTrigger)" 
-                (mouseleave)="buttonLeave(levelOneTrigger, button)"
-                style="z-index:1050">
-                {{menuItem.label}}
-            </a>     
-            <mat-menu #levelOne="matMenu" 
-                      direction="down" 
-                      yPosition="below">
-              <span (mouseenter)="menuenter()" 
-                    (mouseleave)="menuLeave(levelOneTrigger, button)">
-                <ng-container *ngFor="let childL1 of menuItem.children">
-                  <li *ngIf="!childL1.children">
-                      <a mat-menu-item [routerLink]="childL1.routerLink" routerLinkActive="mat-accent">{{childL1.label}}</a>
-                  </li>
-                </ng-container>
-              </span>
-            </mat-menu>
-          </ng-container>
-        </ng-container>
-      </ng-container>
+      <li *ngIf="authorized(user.role, ['sadmin'])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/admin/lab/list">Pracownie</a>
+      </li>
+      <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/admin/user/list">Użytkownicy</a>
+      </li>
+      <li *ngIf="authorized(user.role, ['admin', 'user'])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/user/examinations">Badania</a>
+      </li>
+      <li *ngIf="authorized(user.role, [ 'sadmin', 'admin', 'user' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/admin/doctor/list">Lekarze</a>
+      </li>
+      <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/admin/reports">Raporty</a>
+      </li>
+      <li *ngIf="authorized(user.role, [ 'doctor' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/doctor/feedback">Zgłoś uwagi</a>
+      </li>
+      <li *ngIf="authorized(user.role, [ 'sadmin' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/admin/feedbacks">Uwagi</a>
+      </li>
       <li>
         <a mat-button (click)="logout()" >Logout ({{ user.email }})</a>
       </li>

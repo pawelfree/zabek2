@@ -5,15 +5,6 @@ a {
     text-align: start;
 }
 
-a.mat-menu-item {
-    color: #3f51b5;
-}
-
-a.mat-menu-item.mat-accent {
-    color: #FF4081;
-    background-color: #bcc4f3; 
-}
-
 ul {
     list-style: none;
     padding: 0;

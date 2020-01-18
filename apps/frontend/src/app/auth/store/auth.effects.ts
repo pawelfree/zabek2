@@ -1,7 +1,7 @@
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, catchError, map, tap } from 'rxjs/operators'; 
-import { AuthActions } from './auth.action-types';
+import { AuthActions } from '.';
 import { User, Role } from '../../_models';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
