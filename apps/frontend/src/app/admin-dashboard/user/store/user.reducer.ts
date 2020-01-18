@@ -2,7 +2,7 @@ import { User } from '../../../_models';
 import * as UserActions from './user.actions'; 
 import { createReducer, on } from '@ngrx/store';
 
-export interface State {
+export interface UserState {
   users: User[];
   count: number;
   loading: boolean;
@@ -12,7 +12,7 @@ export interface State {
   error: string
 }
 
-const initialState: State = {
+const initialState: UserState = {
   users: [],
   count: 0,
   loading: false,
@@ -37,5 +37,3 @@ const _userReducer = createReducer(initialState,
 export function userReducer(state, action ) {
   return _userReducer(state, action);
 }
-
-export const userFeatureKey = 'user';

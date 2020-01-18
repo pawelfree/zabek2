@@ -7,10 +7,9 @@ import { MatDialog } from '@angular/material';
 import { SelectLabComponent } from '../../select-lab/select-lab.component';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
-import * as UserActions from '../store/user.actions';
+import { UserState } from '../store/user.reducer';
+import { UserActions }from '../store';
 import { InfoComponent } from '../../../common-dialogs';
-
 
 @Component({
   selector: 'zabek-user-create',
@@ -26,7 +25,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   private storeSub: Subscription = null;
 
   constructor(    
-    private readonly store: Store<AppState>,
+    private readonly store: Store<UserState>,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog
   ) {}
@@ -63,7 +62,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         validators: CustomValidator.mustMatch('password1', 'password2')
     });
 
-    this.storeSub = this.store.select('user').subscribe(state => {
+    this.storeSub = this.store.subscribe(state => {
       this.isLoading = state.loading;
       if (state.error) {
         this.dialog.open(InfoComponent, { data:  state.error });

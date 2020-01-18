@@ -2,7 +2,7 @@ import { Lab } from '../../../_models';
 import * as LabActions from './lab.actions'; 
 import { createReducer, on } from '@ngrx/store';
 
-export interface State {
+export interface LabState {
   labs: Lab[];
   count: number;
   loading: boolean;
@@ -12,7 +12,7 @@ export interface State {
   error: string
 }
 
-const initialState: State = {
+const initialState: LabState = {
   labs: [],
   count: 0,
   loading: false,
@@ -37,5 +37,3 @@ const _labReducer = createReducer(initialState,
 export function labReducer(state, action ) {
   return _labReducer(state, action);
 }
-
-export const labFeatureKey = 'lab';

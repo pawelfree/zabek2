@@ -5,13 +5,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LabCreateComponent } from './lab-create/lab-create.component';
 import { LabListComponent } from './lab-list/lab-list.component';
 import { LabRoutingModule } from './lab-routing.module';
+import { EffectsModule } from '@ngrx/effects';
+import { LabEffects } from './store/lab.effects';
+import { labReducer } from './store/lab.reducer';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   imports: [
     CommonModule, 
     AngularMaterialModule, 
     ReactiveFormsModule,
-    LabRoutingModule
+    LabRoutingModule,
+    EffectsModule.forFeature([LabEffects]),
+    StoreModule.forFeature('lab', labReducer)
   ],
   declarations: [
     LabListComponent,

@@ -20,8 +20,6 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
-import { LabEffects } from './admin-dashboard/lab/store/lab.effects';
-import { UserEffects } from './admin-dashboard/user/store/user.effects';
 import { ConfirmationComponent } from './common-dialogs/confirmation/confirmation.component';
 import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules.component';
 import { environment } from '../environments/environment';
@@ -59,7 +57,7 @@ registerLocaleData(localePl, 'pl');
         strictActionSerializability: true,
       },
     }),
-    EffectsModule.forRoot([AuthEffects,LabEffects,UserEffects]),
+    EffectsModule.forRoot([AuthEffects]),
     FlexLayoutModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],

@@ -3,9 +3,9 @@ import { MatPaginator, MatDialog } from '@angular/material';
 import { UserListDataSource } from './user-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
-import * as UserActions from '../store/user.actions';
+import { Store, select } from '@ngrx/store';
+import { UserState } from '../store/user.reducer';
+import { UserActions, selectUserState } from '../store';
 import { InfoComponent } from '../../../common-dialogs';
 
 @Component({
@@ -25,12 +25,12 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
-    private readonly store: Store<AppState>,
+    private readonly store: Store<UserState>,
     private readonly dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.storeSub = this.store.select('user').subscribe(state => {
+    this.storeSub = this.store.pipe(select(selectUserState)).subscribe(state => {
       this.isLoading = state.loading;
       this.count = state.count;
       this.usersPerPage = state.usersPerPage;

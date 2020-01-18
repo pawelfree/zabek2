@@ -3,9 +3,8 @@ import { MatPaginator, MatDialog } from '@angular/material';
 import { LabListDataSource } from './lab-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
-import * as LabActions from '../store/lab.actions';
+import { Store, select } from '@ngrx/store';
+import { LabState, LabActions, selectLabState} from '../store';
 import { InfoComponent } from '../../../common-dialogs';
 
 @Component({
@@ -25,12 +24,12 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
-    private readonly store: Store<AppState>,
+    private readonly store: Store<LabState>,
     private readonly dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.storeSub = this.store.select('lab').subscribe(state => {
+    this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
       this.isLoading = state.loading;
       this.count = state.count;
       this.labsPerPage = state.labsPerPage;

@@ -1,14 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import * as UserActions from './user.actions';
-import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
+import { UserActions } from '.';
+import { map, switchMap, withLatestFrom, catchError, tap } from 'rxjs/operators';
 import { User } from '../../../_models';
 import { environment } from '../../../../environments/environment';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { AppState } from '../../../store/app.reducer';
+import { UserState } from '../store/user.reducer';
+import { selectUserState } from './user.selectors';
 
 const BACKEND_URL = environment.apiUrl + '/api/user/';
 
@@ -29,12 +30,12 @@ export class UserEffects {
 
   addUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.addUser),
-    withLatestFrom(this.store),
+    withLatestFrom(this.store.pipe(select(selectUserState))),
     switchMap(([props, store]) => {
       return this.http.post<User>(BACKEND_URL, props.user).pipe(
         map(() => {
           this.router.navigate(['/admin/user/list']);
-          return UserActions.fetchUsers({page: store.user.page});
+          return UserActions.fetchUsers({page: store.page});
         }),
         catchError(error => of(UserActions.errorUser({error})))
       )
@@ -43,12 +44,12 @@ export class UserEffects {
 
   updateUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.updateUser),
-    withLatestFrom(this.store),
+    withLatestFrom(this.store.pipe(select(selectUserState))),
     switchMap(([props, store]) => {
       return this.http.put<User>(BACKEND_URL+props.user._id, props.user).pipe(
         map(() => {
           this.router.navigate(['/admin/user/list']);
-          return UserActions.fetchUsers({page: store.user.page});
+          return UserActions.fetchUsers({page: store.page});
         }),
         catchError(error => of(UserActions.errorUser({error})))
       );
@@ -57,11 +58,11 @@ export class UserEffects {
 
   fetchUsers$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.fetchUsers),
-    withLatestFrom(this.store),
+    withLatestFrom(this.store.pipe(select(selectUserState))),
     switchMap(([props, store]) => {
       let params = new HttpParams();
-      params = params.append('pagesize', ""+store.user.usersPerPage);
-      params = params.append('page', ""+store.user.page);
+      params = params.append('pagesize', ""+store.usersPerPage);
+      params = params.append('page', ""+store.page);
       return this.http.get<{users: User[], count: number}>(BACKEND_URL,{ params }).pipe(
         map(res => UserActions.setUsers({users: res.users, count: res.count})),
         catchError(error => of(UserActions.errorUser({error})))
@@ -76,12 +77,12 @@ export class UserEffects {
         catchError(error => of(UserActions.errorUser({error})))
       )
     }),
-    withLatestFrom(this.store),
+    withLatestFrom(this.store.pipe(select(selectUserState))),
     map(([props, store]) => {
-      if (store.user.users.length === 1) {
-        return UserActions.fetchUsers({page: store.user.page === 0 ? 0 : store.user.page - 1 });
+      if (store.users.length === 1) {
+        return UserActions.fetchUsers({page: store.page === 0 ? 0 : store.page - 1 });
       } else {
-        return UserActions.fetchUsers({page: store.user.page});
+        return UserActions.fetchUsers({page: store.page});
       }
     })
   ));
@@ -90,5 +91,5 @@ export class UserEffects {
     private readonly http: HttpClient,
     private readonly actions$: Actions,    
     private readonly router: Router,
-    private readonly store: Store<AppState>){}
+    private readonly store: Store<UserState>){}
 }

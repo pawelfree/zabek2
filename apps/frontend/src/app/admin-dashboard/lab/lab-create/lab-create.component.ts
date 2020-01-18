@@ -3,11 +3,11 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
 import { InfoComponent } from '../../../common-dialogs';
 import { MatDialog } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
-import * as LabActions from '../store/lab.actions';
 import { Lab } from '../../../_models';
 import { Subscription } from 'rxjs';
+import { LabActions, selectLabState } from '../store';
 
 @Component({
   selector: 'zabek-lab-create',
@@ -40,7 +40,7 @@ export class LabCreateComponent implements OnInit, OnDestroy {
       }),
     });
 
-    this.storeSub = this.store.select('lab').subscribe(state => {
+    this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
       this.isLoading = state.loading;
       if (state.error) {
         this.dialog.open(InfoComponent, { data:  state.error });
