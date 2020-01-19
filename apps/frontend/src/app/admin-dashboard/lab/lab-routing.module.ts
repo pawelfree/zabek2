@@ -5,7 +5,7 @@ import { LabListComponent } from './lab-list/lab-list.component';
 import { LabCreateComponent } from './lab-create/lab-create.component';
 import { AuthGuard } from '../../_guards';
 import { Role } from '../../_models';
-import { LabEditResolver } from './lab-create/lab-create.resolver';
+import { LabsResolver } from './services';
 
 const routes: Routes = [
     {
@@ -17,20 +17,24 @@ const routes: Routes = [
         path: 'list',
         component: LabListComponent,
         canActivate: [AuthGuard],
+        resolve: {labs: LabsResolver},
         data: { roles: [Role.sadmin] }
     },
     {
       path: 'create',
       component: LabCreateComponent,
       canActivate: [AuthGuard],
-      data: { roles: [Role.sadmin] }
+      data: { 
+        mode: 'create',
+        roles: [Role.sadmin] }
     },
     {
-      path: 'edit/:labId',
+      path: 'edit/:labid',
       component: LabCreateComponent,
-      resolve: {lab: LabEditResolver},
       canActivate: [AuthGuard],
-      data: { roles: [Role.sadmin] }
+      data: { 
+        mode: 'edit',
+        roles: [Role.sadmin] }
     },
 ];
 

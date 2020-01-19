@@ -38,8 +38,8 @@ export class DoctorController {
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Get()
   async allUsers(
-    @Query('pagesize', new ParseIntPipe()) pagesize: number = 0,
-    @Query('page', new ParseIntPipe()) page: number = 10,
+    @Query('pagesize', new ParseIntPipe()) pagesize: number = 10,
+    @Query('page', new ParseIntPipe()) page: number = 0,
     @Request() req
   ) {
     return await this.userService.findAllDoctors(

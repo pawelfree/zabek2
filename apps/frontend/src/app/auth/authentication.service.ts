@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
-import * as AuthActions from './store/auth.actions';
+import { AuthActions } from './store';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {

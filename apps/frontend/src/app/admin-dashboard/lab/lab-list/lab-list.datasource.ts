@@ -1,16 +1,15 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Lab } from '../../../_models';
-import { switchMap } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { LabState, selectLabState } from '../store';
 
 export class LabListDataSource extends DataSource<Lab> {
 
-  constructor ( private readonly store: Store<LabState>) { super(); }
+  constructor ( private readonly labs$: Observable<Lab[]>) { 
+    super(); 
+  }
 
   connect(collectionViewer: CollectionViewer): Observable<Lab[] | readonly Lab[]> {
-    return this.store.pipe(select(selectLabState)).pipe(switchMap(state => of(state.labs)));
+    return this.labs$;
   }  
   
   disconnect(collectionViewer: CollectionViewer): void {}

@@ -1,30 +1,30 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InfoComponent } from '../../../common-dialogs';
 import { MatDialog } from '@angular/material';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store/app.reducer';
 import { Lab } from '../../../_models';
-import { Subscription } from 'rxjs';
-import { LabActions, selectLabState } from '../store';
+import { LabEntityService } from '../services';
+import { map, first, catchError, tap } from 'rxjs/operators';
+import { noop, of } from 'rxjs';
+import { EntityActionFactory, EntityOp } from '@ngrx/data';
 
 @Component({
   selector: 'zabek-lab-create',
   templateUrl: './lab-create.component.html',
   styleUrls: ['./lab-create.component.css']
 })
-export class LabCreateComponent implements OnInit, OnDestroy {
-  isLoading = false;
+export class LabCreateComponent implements OnInit {
+
   form: FormGroup;
-  private mode = 'create';
-  private _id: string;
-  private storeSub: Subscription = null;
+  mode: 'create' | 'edit';
+  lab: Lab;
 
   constructor(
-    private readonly store: Store<AppState>,
-    private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog
+    private readonly labEntityService: LabEntityService,
+    private readonly router: Router,
+    private readonly dialog: MatDialog,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -40,32 +40,20 @@ export class LabCreateComponent implements OnInit, OnDestroy {
       }),
     });
 
-    this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
-      this.isLoading = state.loading;
-      if (state.error) {
-        this.dialog.open(InfoComponent, { data:  state.error });
-      }
-    });
+    let lab_id = ''; 
+    this.mode = this.route.snapshot.data.mode;
 
-    const lab = this.route.snapshot.data.lab;
-    if (lab) {
-      this.mode = 'edit';
-      this._id = lab._id;
-      this.form.setValue({
-            name: lab.name,
-            email: lab.email,
-            address: lab.address
-          });
-    } else {
-      this._id = null;
-      this.mode = 'create';
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.storeSub) {
-      this.storeSub.unsubscribe();
-      this.storeSub = null;
+    if (this.mode === 'edit') {
+      lab_id = this.route.snapshot.paramMap.get('labid');
+      this.labEntityService.entities$.pipe(
+        map(labs => labs.find(lab => lab._id === lab_id )),
+        first()
+      ).subscribe(
+        lab => {
+          this.lab = lab;
+          this.form.setValue({address: lab.address, name: lab.name, email: lab.email })
+        }
+      )
     }
   }
 
@@ -73,12 +61,40 @@ export class LabCreateComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
-    if (this.mode === "create") {
-      const lab: Lab = {...this.form.value, id: null };
-      this.store.dispatch(LabActions.addLab({lab}));
-    } else {
-      const lab: Lab = { _id: this._id, ...this.form.value};
-      this.store.dispatch(LabActions.updateLab({lab}));
+
+    if (this.form.untouched) {
+      //TODO ustawic wlasciwy adres nawigacji - wewnatrz nodulu
+      this.router.navigate(['/admin/lab/list']);
+      return;
+    }
+
+    const lab: Lab = {
+      ...this.lab,
+      ...this.form.value
+    }
+
+    if (this.mode === 'edit' && this.lab.name !== lab.name && this.lab.address !== lab.address) {
+      this.labEntityService.update(lab).subscribe(
+        noop,
+        err => {
+          console.log(err)
+          const entityActionFactory = new EntityActionFactory();
+          const action = entityActionFactory.create('Lab',EntityOp.UNDO_ONE, lab._id)
+          this.labEntityService.dispatch(action)
+        }
+      );
+      //TODO ustawic wlasciwy adres nawigacji - wewnatrz nodulu
+      this.router.navigate(['/admin/lab/list']);
+    } else if (this.mode === 'create') {
+      this.labEntityService.add(lab).subscribe(
+        newLab => {
+          //TODO ustawic wlasciwy adres nawigacji - wewnatrz nodulu
+          this.router.navigate(['/admin/lab/list']);
+        },
+        err => {
+          this.dialog.open(InfoComponent, { data:  err.error });
+        }
+      )
     }
   }
 }

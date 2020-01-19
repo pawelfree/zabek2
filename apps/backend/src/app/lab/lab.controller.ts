@@ -7,9 +7,7 @@ import {
     Param,
     Post,
     Put,
-    Query,
     UseGuards,
-    ParseIntPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
@@ -23,16 +21,6 @@ export class LabController {
   constructor(
     private readonly labService: LabService
   ) {}
-
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin', 'admin')
-    @Get()
-    async allLabs(
-      @Query('pagesize', new ParseIntPipe()) pagesize: number,
-      @Query('page', new ParseIntPipe()) page: number
-    ) {
-      return await this.labService.findAll(pagesize, page);
-    }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin')
@@ -52,9 +40,13 @@ export class LabController {
       if (id !== updateLabDto._id ) {
         throw new BadRequestException('Błędne dane pracowni i żądania');        
       }
-      const lab: Lab = await this.labService.findById(id);
+      let lab: Lab = await this.labService.findById(id);
       if (!lab) {
         throw new BadRequestException('Pracownia nie istnieje');
+      }
+      lab = await this.labService.findByName(updateLabDto.name)
+      if (lab && lab._id.toString() !== updateLabDto._id) {
+        throw new BadRequestException('Istnieje inna pracownia o tej nazwie');
       }
       return await this.labService.update(updateLabDto);
     }

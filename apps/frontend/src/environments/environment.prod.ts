@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: ''
+  apiUrl: '',
+
+  LAB_PAGESIZE: 10
 };

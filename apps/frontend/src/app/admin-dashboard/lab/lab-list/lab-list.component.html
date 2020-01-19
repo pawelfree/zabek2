@@ -1,4 +1,4 @@
-<div [hidden]="count <= 0 || isLoading">
+<div [hidden]="isEmpty$ | async">
 <table mat-table [dataSource]='dataSource' class='mat-elevation-z2' >
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Nazwa pracowni </th>
@@ -27,7 +27,7 @@
         color="warn" 
         title="Usuń" 
         alt="Usuń" 
-        (click)="onDelete(element._id)">
+        (click)="onDelete(element)">
         <mat-icon aria-label="Usuń">delete</mat-icon>
       </button>
     </td>
@@ -36,15 +36,14 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <mat-paginator
-  [length]="count"
+  [length]="(totalCount$ | async)"
   [hidePageSize]="true"
-  [pageSize]="labsPerPage"
+  [pageSize]="(pagesize$ | async)"
 ></mat-paginator>
 </div>
-<p class="info-text mat-body-1" *ngIf="count <= 0 && !isLoading">
+<p class="info-text mat-body-1" *ngIf="isEmpty$ | async">
   Jeszcze nie ma zdefiniowanych pracowni!
 </p>
-<mat-spinner *ngIf="isLoading"></mat-spinner>
 <div style="right: 15px; bottom: 5px; position: fixed">
   <button
     mat-fab
@@ -63,7 +62,7 @@
       md-fab-bottom-right
       aria-label="Odśwież"
       title="Odśwież" alt="Odśwież"
-      (click)="loadLabsPage()">
+      (click)="reload()">
       <mat-icon>refresh</mat-icon>
     </button>
   </div>

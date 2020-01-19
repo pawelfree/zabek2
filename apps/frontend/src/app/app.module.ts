@@ -24,6 +24,9 @@ import { ConfirmationComponent } from './common-dialogs/confirmation/confirmatio
 import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules.component';
 import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EntityDataModule, EntityCollectionReducerMethodsFactory, PersistenceResultHandler } from '@ngrx/data';
+import { RtgCloudEntityCollectionReducerMethodsFactory } from './store/reducer.service';
+import { RtgCloudPersistenceResultHandler } from './store/persistence-result-handler.service';
 
 registerLocaleData(localePl, 'pl');
 
@@ -53,17 +56,27 @@ registerLocaleData(localePl, 'pl');
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
-        strictStateSerializability: true,
-        strictActionSerializability: true,
+        //TODO naprawic 
+        // strictStateSerializability: true,
+        // strictActionSerializability: true,
       },
     }),
     EffectsModule.forRoot([AuthEffects]),
     FlexLayoutModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EntityDataModule.forRoot({}),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    {
+      provide: EntityCollectionReducerMethodsFactory,
+      useClass: RtgCloudEntityCollectionReducerMethodsFactory
+    },
+    { 
+      provide: PersistenceResultHandler, 
+      useClass: RtgCloudPersistenceResultHandler
+    },
   ],
   bootstrap: [AppComponent],
   entryComponents: [
