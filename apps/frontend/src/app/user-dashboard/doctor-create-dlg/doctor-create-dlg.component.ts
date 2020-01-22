@@ -214,20 +214,9 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       this.form.value.nip
     );
     this.isLoading = true;
-    this.doctorService.addDoctor(doctor).subscribe(
-      // do metody close() poniżej przekażemy id utworzonego właśnie lekarza, który ma być ustawiony na liście wyboru
-      res => this.createDoctorDlgRef.close(this.form.value),
-      err => {
-        this.dialog.open(InfoComponent, { data: err });
-      }
-    );
+    this.doctorService.addDoctor(doctor); // jak dodać obsługę błedów
+    console.log(doctor);
     this.isLoading = false;
   }
-
-  close() {
-    console.log("doctor-create-dlg.close() called.");
-    this.createDoctorDlgRef.close();
-  }
-
  
 }

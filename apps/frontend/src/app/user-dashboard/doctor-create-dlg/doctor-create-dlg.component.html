@@ -1,5 +1,5 @@
 <div mat-dialog-container>
-  <form [formGroup]="form" (submit)="onAddNewDoctor()" >
+  <form [formGroup]="form"  (submit)="onAddNewDoctor()">
     <h1 mat-dialog-title>Nowy lekarz</h1>
     <div mat-dialog-content>
       <mat-form-field>
@@ -62,7 +62,7 @@
       <mat-checkbox formControlName="tomographyWithViewer">Tomografia razem z czytnikiem</mat-checkbox>
     </div>
     <mat-dialog-actions>
-      <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz lekarza</button>
+      <button mat-raised-button mat-dialog-close color="accent" type="submit" [disabled]="form.invalid" (click)="onAddNewDoctor()" >Zapisz lekarza</button>
       <span style="width: 1em;"></span>
       <button mat-button mat-dialog-close cdkFocusInitial>Zamknij</button>
     </mat-dialog-actions>

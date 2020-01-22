@@ -268,8 +268,13 @@ export class ExamCreateComponent implements OnInit {
   // TODO: jak zaktualizować sendEmail jesli: najpierw wybiore jakiegos lekarza (ustawi sie jego emsila w sendTo), a potem wybiore Brak
   // teraz jest bug bo w sendtTo zostanie ostatni email lekarza, a powinno być pusto
   doctorChanged(event) {
+    console.log("doctorChanged(event) called");
     if (event.isUserInput) {
       this.form.patchValue({ sendEmailTo: event.source.value.email });
+    }
+    console.log(this.form.value.doctor);
+    if (this.form.value.doctor === undefined) {
+      this.form.patchValue({ sendEmailTo: '' });
     }
   }
 
