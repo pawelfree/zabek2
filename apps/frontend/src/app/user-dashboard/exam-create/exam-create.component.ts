@@ -253,7 +253,7 @@ export class ExamCreateComponent implements OnInit {
       patientEmail: this.form.value.patientEmail,
       patientPhone: this.form.value.patientPhone,
       sendEmailTo: this.form.value.sendEmailTo,
-      doctor: this.form.value.doctor//this.formDoctorValue
+      doctor: this.form.value.doctor === undefined ? null : this.form.value.doctor
     };
     if (this.mode === 'create') {
       console.log(exam);
