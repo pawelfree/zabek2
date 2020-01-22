@@ -38,8 +38,8 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
     private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService,
     private readonly store: Store<AppState>,
-    private readonly createDoctorDlgRef: MatDialogRef<DoctorCreateDlgComponent>,
-    private readonly router: Router,
+//    private readonly createDoctorDlgRef: MatDialogRef<DoctorCreateDlgComponent>,
+
   ) {}
 
   ngOnInit() {
@@ -169,20 +169,7 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.createDoctorDlgRef.keydownEvents().subscribe(event => {
-      if (event.key === 'Escape') {
-        this.onCancel();
-      }
-    });
 
-    this.createDoctorDlgRef.backdropClick().subscribe(event => {
-      this.onCancel();
-    });
-  }
-
-  onCancel(): void {
-    this.form.value.cancel = true;
-    this.createDoctorDlgRef.close(this.form.value);
   }
 
   ngOnDestroy() {

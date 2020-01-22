@@ -128,50 +128,58 @@
         placeholder="Telefon pacjenta"
       />
     </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Lekarz zlecający</mat-label>
-      <div>
-        <mat-select
-          SelectInfiniteScroll
-          (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)"
-          [complete]="endOfData"
-          [compareWith]="compareDoctors"
-          formControlName="doctor"
-          [value]="selectedDoctor"
-          style="width: 90%"
-        >
-          <mat-option>Brak</mat-option>
-          <mat-option
-            *ngFor="let doctor of (doctors$ | async)"
-            [value]="doctor"
-            (onSelectionChange)="doctorChanged($event)"
-          >
-            <ng-container *ngIf="doctor; else defaultValue">
-              {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{
-                doctor.qualificationsNo
-              }}
-            </ng-container>
-            <ng-template #defaultValue>
-              Brak
-            </ng-template>
-          </mat-option>
-        </mat-select>
-        
-        <button type="button"
+  
+    <table style="width: 100%;">
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>Lekarz zlecający</mat-label>
+    
+            <mat-select
+              SelectInfiniteScroll
+              (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)"
+              [complete]="endOfData"
+              [compareWith]="compareDoctors"
+              formControlName="doctor"
+              [value]="selectedDoctor"
+              
+            >
+              <mat-option>Brak</mat-option>
+              <mat-option
+                *ngFor="let doctor of doctors$ | async"
+                [value]="doctor"
+                (onSelectionChange)="doctorChanged($event)"
+              >
+                <ng-container *ngIf="doctor; else defaultValue">
+                  {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{
+                    doctor.qualificationsNo
+                  }}
+                </ng-container>
+                <ng-template #defaultValue>
+                  Brak
+                </ng-template>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    
+        </td>
+        <td style="width: 2em;">
+          <button
+          type="button"       
           color="accent"
           aria-label="Dodaj lekarza"
           title="Dodaj nowego lekarza"
           alt="Dodaj nowego lekarza"
           style="float: right"
-
-          (click)="openDoctorCreateDialog()"          
+          (click)="openDoctorCreateDialog()"
         >
           <mat-icon>add</mat-icon>
         </button>
-      </div>
-    </mat-form-field>
 
+
+        </td>
+      </tr>
+  </table>
     <mat-form-field>
       <input
         matInput
