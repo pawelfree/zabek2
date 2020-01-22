@@ -58,7 +58,6 @@ export class ExamCreateComponent implements OnInit {
   private mode = 'create';
   private _id: string;
   public selectedDoctor;
-  formDoctorValue = null; //jesli 'Brak' to null
 
   endOfData: boolean;
   doctors$: Observable<Doctor[]>;
@@ -148,12 +147,9 @@ export class ExamCreateComponent implements OnInit {
     if (this.form.value.doctor != null) {
       this.endOfData = false;
       this.doctors$ = this.doctors.asObservable().pipe(
-        scan(
-          (acc, curr) => {
-            return [...acc, ...curr];
-          },
-          <Doctor[]>[]
-        ),
+        scan((acc, curr) => {
+          return [...acc, ...curr];
+        }, <Doctor[]>[]),
         switchMap(arr =>
           from(arr).pipe(
             distinct(single => single._id),
@@ -207,7 +203,6 @@ export class ExamCreateComponent implements OnInit {
         this.selectedDoctor = null;
       }
     });
-    console.log(this.form);
   }
 
   getNextDoctorsBatch() {
@@ -231,12 +226,6 @@ export class ExamCreateComponent implements OnInit {
       return;
     }
 
-    // if ((this.form.value.doctor = '0')) {
-    //   this.formDoctorValue = null;
-    // } else {
-    //   this.formDoctorValue = this.form.value.doctor;
-    // }
-
     this.isLoading = true;
     const exam = {
       _id: this._id ? this._id : null,
@@ -253,7 +242,8 @@ export class ExamCreateComponent implements OnInit {
       patientEmail: this.form.value.patientEmail,
       patientPhone: this.form.value.patientPhone,
       sendEmailTo: this.form.value.sendEmailTo,
-      doctor: this.form.value.doctor === undefined ? null : this.form.value.doctor
+      doctor:
+        this.form.value.doctor === undefined ? null : this.form.value.doctor
     };
     if (this.mode === 'create') {
       console.log(exam);
@@ -284,17 +274,8 @@ export class ExamCreateComponent implements OnInit {
   }
 
   openDoctorCreateDialog() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(DoctorCreateDlgComponent, dialogConfig);
-
-    // TODO: BUG: zamkniecie modala nie powinno zamykac formualrza tworzenia/edycji badania. Teraz zamyka i wraca do listy badan.
-    dialogRef.afterClosed().subscribe(data => {
-      console.log('DEBUG: Doctor create dialog output:', data);
-      this.router.navigate(['.'], { relativeTo: this.route });
+    this.dialog.open(DoctorCreateDlgComponent, {
+      disableClose: true
     });
   }
 }
