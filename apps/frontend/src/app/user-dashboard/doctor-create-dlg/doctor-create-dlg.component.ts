@@ -38,7 +38,7 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
     private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService,
     private readonly store: Store<AppState>,
-//    private readonly createDoctorDlgRef: MatDialogRef<DoctorCreateDlgComponent>,
+    private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>
 
   ) {}
 
@@ -213,8 +213,19 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       this.form.value.pesel,
       this.form.value.nip
     );
-    this.isLoading = true;
-    this.doctorService.addDoctor(doctor); // jak dodać obsługę błedów
+    // this.isLoading = true;
+    // this.doctorService.addDoctor(doctor); // jak dodać obsługę błedów
+
+    this.doctorService.addDoctor(doctor).subscribe(
+      res => {
+        this.dialog.open(InfoComponent,{ data: 'Nowy lekarz został dodany.' });
+        this.dialogRef.close();
+      },
+      err => {
+        this.dialog.open(InfoComponent, { data: err });
+      }
+    );
+
     console.log(doctor);
     this.isLoading = false;
   }
