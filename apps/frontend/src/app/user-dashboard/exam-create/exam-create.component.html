@@ -141,23 +141,18 @@
               [complete]="endOfData"
               [compareWith]="compareDoctors"
               formControlName="doctor"
-              [value]="selectedDoctor"
-              
-            >
-              <!-- <mat-option>Brak</mat-option> -->
+              [value]="selectedDoctor">
+              <mat-option [value]='emptyDoctor'
+                (onSelectionChange)="doctorChanged($event)">Brak</mat-option>
               <mat-option
                 *ngFor="let doctor of doctors$ | async"
                 [value]="doctor"
-                (onSelectionChange)="doctorChanged($event)"
-              >
-                <ng-container *ngIf="doctor; else defaultValue">
+                (onSelectionChange)="doctorChanged($event)">
+                <ng-container *ngIf="doctor">
                   {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{
                     doctor.qualificationsNo
                   }}
                 </ng-container>
-                <ng-template #defaultValue>
-                  Brak
-                </ng-template>
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -206,8 +201,7 @@
       mat-raised-button
       color="accent"
       type="submit"
-      [disabled]="form.invalid"
-    >
+      [disabled]="form.invalid">
       Zapisz badanie
     </button>
   </form>

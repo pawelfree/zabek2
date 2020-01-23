@@ -77,6 +77,7 @@ export class UserController {
       password: await this.authService.hash(createUserDto.password)
     } 
     return _.pick(await this.userService.addUser(_createUserDto), [
+      '_id',
       'email',
       'role',
       'lab'

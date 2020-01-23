@@ -1,27 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExamService, DoctorService } from '../../_services';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE
-} from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Doctor } from '../../_models';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
-import { Observable, BehaviorSubject, from } from 'rxjs';
-import {
-  take,
-  tap,
-  map,
-  scan,
-  switchMap,
-  distinct,
-  toArray
-} from 'rxjs/operators';
+import { BehaviorSubject, from } from 'rxjs';
+import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
 import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg.component';
 
@@ -60,8 +48,21 @@ export class ExamCreateComponent implements OnInit {
   public selectedDoctor;
 
   endOfData: boolean;
-  doctors$: Observable<Doctor[]>;
   doctors = new BehaviorSubject<Doctor[]>([]);
+  doctors$ = this.doctors.asObservable().pipe(
+    scan((acc, curr) => {
+      return [...acc, ...curr];
+    }, <Doctor[]>[]),
+    switchMap(arr =>
+      from(arr).pipe(
+        distinct(single => single._id),
+        toArray()
+      )
+    )
+  );
+
+  emptyDoctor = { _id: 0, email: null }
+
   private page = 0;
   private pageLen = 10;
   // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
@@ -84,15 +85,8 @@ export class ExamCreateComponent implements OnInit {
     private readonly examService: ExamService,
     private readonly doctorService: DoctorService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly dialog: MatDialog
-  ) {
-    this.doctors$ = this.doctors.asObservable().pipe(
-      scan((acc, curr) => {
-        return [...acc, ...curr];
-      }, [])
-    );
-  }
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -144,21 +138,7 @@ export class ExamCreateComponent implements OnInit {
       })
     });
 
-    if (this.form.value.doctor != null) {
-      this.endOfData = false;
-      this.doctors$ = this.doctors.asObservable().pipe(
-        scan((acc, curr) => {
-          return [...acc, ...curr];
-        }, <Doctor[]>[]),
-        switchMap(arr =>
-          from(arr).pipe(
-            distinct(single => single._id),
-            toArray()
-          )
-        )
-      );
-    }
-
+    this.endOfData = false;
     this.getNextDoctorsBatch();
 
     this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
@@ -189,7 +169,14 @@ export class ExamCreateComponent implements OnInit {
                 doctor: examData.doctor,
                 sendEmailTo: examData.sendEmailTo
               });
-              setTimeout(() => this.doctors.next([this.selectedDoctor]), 1);
+              setTimeout(() => { 
+                if (this.selectedDoctor) {
+                  this.doctors.next([this.selectedDoctor]);
+                }
+                else {
+                  this.selectedDoctor = this.emptyDoctor;
+                }
+              }, 1);
             },
             error => {
               this.dialog.open(InfoComponent, { data: error });
@@ -243,10 +230,9 @@ export class ExamCreateComponent implements OnInit {
       patientPhone: this.form.value.patientPhone,
       sendEmailTo: this.form.value.sendEmailTo,
       doctor:
-        this.form.value.doctor === undefined ? null : this.form.value.doctor
+        (this.form.value.doctor === null || undefined) || (this.form.value.doctor._id === 0) ? null : this.form.value.doctor
     };
     if (this.mode === 'create') {
-      console.log(exam);
       this.examService.addExam(exam);
     } else {
       this.examService.updateExam(exam);
@@ -260,27 +246,29 @@ export class ExamCreateComponent implements OnInit {
 
   peselChanged() {
     this.form.patchValue({ patientAge: getAge(this.form.value.patientPesel) });
-    this.form.patchValue({
-      patientIsFemale: isFemale(this.form.value.patientPesel)
-    });
+    this.form.patchValue({ patientIsFemale: isFemale(this.form.value.patientPesel) });
   }
 
-  // TODO: jak zaktualizować sendEmail jesli: najpierw wybiore jakiegos lekarza (ustawi sie jego emsila w sendTo), a potem wybiore Brak
-  // teraz jest bug bo w sendtTo zostanie ostatni email lekarza, a powinno być pusto
   doctorChanged(event) {
-    console.log("doctorChanged(event) called");
-    if (event.isUserInput) {
+    if (event.isUserInput) {   
       this.form.patchValue({ sendEmailTo: event.source.value.email });
-    }
-    console.log(this.form.value.doctor);
-    if (this.form.value.doctor === undefined) {
-      this.form.patchValue({ sendEmailTo: '' });
     }
   }
 
   openDoctorCreateDialog() {
-    this.dialog.open(DoctorCreateDlgComponent, {
+    const dialogRef = this.dialog.open(DoctorCreateDlgComponent, {
       disableClose: true
     });
+    const subs = dialogRef.componentInstance.onAdd.subscribe(
+      (res: Doctor) => this.doctors.next([res]),
+      err => console.log('cos poszlo nie tak')
+    );
+
+    dialogRef.afterClosed().subscribe(() => {
+      if (subs) {
+        subs.unsubscribe();
+      }
+    });
+
   }
 }

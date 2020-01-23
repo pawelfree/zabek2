@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { InjectModel } from '@nestjs/mongoose';
@@ -18,7 +18,7 @@ export class UserService {
   }
 
   async addDoctor(createDoctorDto: CreateDoctorDto): Promise<User> {
-    return await new this.userModel(createDoctorDto).save();
+    return await new this.userModel({...createDoctorDto, _id: new Types.ObjectId()}).save();
   }
 
   async addUser(createUserInternalDto: CreateUserInternalDto): Promise<User> {

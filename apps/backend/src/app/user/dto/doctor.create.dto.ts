@@ -1,4 +1,3 @@
-import { Lab } from '../../lab/lab.interface';
 
 export class CreateDoctorDto {
   readonly email: string;

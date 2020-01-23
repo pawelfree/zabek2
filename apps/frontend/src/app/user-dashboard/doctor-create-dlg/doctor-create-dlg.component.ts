@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   CustomValidator,
@@ -8,7 +8,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor, User } from '../../_models';
-import { ActivatedRoute, Params, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -25,6 +25,8 @@ import { AppState } from '../../store/app.reducer';
 export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
   isLoading = false;
   form: FormGroup;
+
+  onAdd = new EventEmitter();
 
   private _id: string;
   private user: User;
@@ -217,16 +219,15 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
     // this.doctorService.addDoctor(doctor); // jak dodać obsługę błedów
 
     this.doctorService.addDoctor(doctor).subscribe(
-      res => {
+      (res: Doctor) => {
         this.dialog.open(InfoComponent,{ data: 'Nowy lekarz został dodany.' });
+        this.onAdd.emit(res);
         this.dialogRef.close();
       },
       err => {
         this.dialog.open(InfoComponent, { data: err });
       }
     );
-
-    console.log(doctor);
     this.isLoading = false;
   }
  
