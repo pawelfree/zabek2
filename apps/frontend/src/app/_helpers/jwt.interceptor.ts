@@ -11,6 +11,9 @@ export class JwtInterceptor implements HttpInterceptor{
     constructor(private readonly store: Store<AppState>) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (req.url.includes('amazon')) {
+            return next.handle(req);
+        }
         return this.store.select('auth').pipe(
             take(1),
             map(authState => authState.user),

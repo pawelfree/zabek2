@@ -5,7 +5,9 @@ import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.
 import { NgModule } from '@angular/core';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
-import { RulesGuard } from './_guards';
+import { RulesGuard, AuthGuard } from './_guards';
+import { FilesComponent } from './files/files.component';
+import { Role } from './_models';
 
 const routes: Routes = [
     {
@@ -43,10 +45,12 @@ const routes: Routes = [
         path: 'resetpassword',
         component: ResetPasswordComponent
     },
-    // {
-    //     path: "doctorlist",
-    //     loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule), 
-    // },
+    {
+        path: "files",
+        canActivate: [AuthGuard],
+        data: { roles: [Role.user] },
+        component: FilesComponent
+    },
     {
         path: '**',
         redirectTo: 'login'

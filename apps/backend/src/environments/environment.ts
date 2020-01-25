@@ -11,6 +11,8 @@ export const environment = {
   ZABEK_SENDGRID_API_KEY: 'local',
   SALT: 10, //'ala_ma_kota@kot#to%ali&pies'
 
+  ACCESS_KEY_ID: 'AKIAZNH67RLHXBQPPT6Z',
+
   //mail templates config
   SYSTEM_NAME: "RTG Cloud",
   APP_SERVER: "https://rtgcloud.herokuapp.com",

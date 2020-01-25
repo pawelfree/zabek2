@@ -12,6 +12,11 @@
             routerLinkActive="mat-accent"
             routerLink="/admin/user/list">Użytkownicy</a>
       </li>
+      <li *ngIf="authorized(user.role, [ 'user' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/files">Pliki</a>
+      </li>
       <li *ngIf="authorized(user.role, ['admin', 'user'])">
         <a mat-button 
             routerLinkActive="mat-accent"

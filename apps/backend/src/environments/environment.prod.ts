@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   SALT: 10,//'ala_ma_kota@kot#to%ali&pies',
 
+  ACCESS_KEY_ID: 'AKIAZNH67RLHXBQPPT6Z',
 
   //mail templates config
   SYSTEM_NAME: "RTG cloud",

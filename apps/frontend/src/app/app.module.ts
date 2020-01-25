@@ -24,6 +24,7 @@ import { ConfirmationComponent } from './common-dialogs/confirmation/confirmatio
 import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules.component';
 import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { FilesComponent } from './files/files.component';
 
 registerLocaleData(localePl, 'pl');
 
@@ -38,7 +39,8 @@ registerLocaleData(localePl, 'pl');
     ChangePasswordComponent,
     InfoComponent,
     ConfirmationComponent,
-    AcceptRulesComponent
+    AcceptRulesComponent,
+    FilesComponent
   ],
   imports: [
     BrowserModule,

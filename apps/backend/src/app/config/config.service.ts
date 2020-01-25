@@ -30,6 +30,10 @@ export class ConfigService {
         if (process.env.RESET_TOKEN_EXPIRES_IN) {
             Object.assign(this.envConfig, { RESET_TOKEN_EXPIRES_IN: process.env.RESET_TOKEN_EXPIRES_IN});
         }
+
+        if (process.env.SECRET_API_KEY) {
+            Object.assign(this.envConfig, { SECRET_API_KEY: process.env.SECRET_API_KEY});
+        }
         
     }
 

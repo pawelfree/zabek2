@@ -4,3 +4,4 @@ export * from './lab';
 export * from './examination';
 export * from './doctor';
 export * from './feedback';
+export * from './fileupload';

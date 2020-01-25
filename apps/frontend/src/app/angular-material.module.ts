@@ -18,6 +18,7 @@ import {
   MatMenuModule,
   MatCheckboxModule,
   MatAutocompleteModule,
+  MatProgressBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -40,6 +41,7 @@ import {
     MatTableModule,
     MatToolbarModule,
     MatAutocompleteModule,
+    MatProgressBarModule
   ]
 })
 export class AngularMaterialModule {}
