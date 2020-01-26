@@ -18,6 +18,6 @@
 <input type="file" id="fileUpload" name="fileUpload" accept="{{accept}}" style="display:none;"/>
 
 <mat-card *ngFor="let file of (files$ | async)">
-  <mat-card-title>{{file.name}}</mat-card-title>
+  <mat-card-title (click)="openLink(file.key)">{{file.name}}</mat-card-title>
 <mat-card-content>{{file.key}} {{file.size}} kB</mat-card-content>
 </mat-card>

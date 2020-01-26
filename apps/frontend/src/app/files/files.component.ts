@@ -120,6 +120,10 @@ export class FilesComponent implements OnInit {
   retryFile(file: FileUploadModel) {
     this.uploadFile(file);
   }
+
+  openLink(link: string) {
+    window.open('https://s3.eu-central-1.amazonaws.com/rtgcloud-pawel.f.dudek/'+link, "_blank");
+  }
 }
 
 export class FileUploadModel {
