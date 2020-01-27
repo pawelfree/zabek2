@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { LabController } from './lab.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { LabSchema } from './lab.schema';
+import { LabSchema } from '@zabek/data';
 import { LabService } from './lab.service';
 
 

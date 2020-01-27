@@ -8,7 +8,7 @@ import { Controller,
         Param} from "@nestjs/common";
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
-import { Role } from '../shared/role';
+import { Role } from '@zabek/data';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { ChangePasswordDto } from './dto';
 import { AuthService } from '../shared/security/auth.service';

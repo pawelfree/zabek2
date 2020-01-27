@@ -1,10 +1,8 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Lab } from '../lab/lab.interface';
-import { User } from '../user/user.interface';
 import { CreateFeedbackDto } from './dto/feedback.create.dto';
-import { Feedback } from './feedback.interface';
+import { Feedback, Lab } from '@zabek/data';
 
 @Injectable()
 export class FeedbackService {

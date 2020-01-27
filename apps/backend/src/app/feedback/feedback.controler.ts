@@ -1,12 +1,8 @@
 import {
-  BadRequestException,
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
   Post,
-  Put,
   Query,
   UseGuards,
   Request,
@@ -14,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
-import { Role } from '../shared/role';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/feedback.create.dto';

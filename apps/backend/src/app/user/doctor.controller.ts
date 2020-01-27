@@ -13,14 +13,12 @@ import {
   ParseIntPipe} from '@nestjs/common';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
-import { User } from './user.interface';
+import { IUser, Lab, Role } from '@zabek/data';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { UpdateUserInternalDto, CreateDoctorDto, UpdateDoctorDto } from './dto';
-import { Role } from '../shared/role';
 import { LabService } from '../lab/lab.service';
-import { Lab } from '../lab/lab.interface';
 import { AuthService } from '../shared/security/auth.service';
 import { EmailService } from '../shared/email/email.service';
 import * as crypto from 'crypto';
@@ -59,7 +57,7 @@ export class DoctorController {
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
     console.warn('wymusic polityke haseł')
-    const user: User = await this.userService.findByEmail(createDoctorDto.email);
+    const user: IUser = await this.userService.findByEmail(createDoctorDto.email);
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
@@ -106,7 +104,7 @@ export class DoctorController {
     if (id !== updateDoctorDto._id ) {
       throw new BadRequestException('Błędne dane lekarza i żądania');        
     }
-    const doctor: User = await this.userService.findById(id);
+    const doctor: IUser = await this.userService.findById(id);
 
     if (!doctor) {
       throw new BadRequestException('Lekarz nie istnieje');
@@ -153,7 +151,7 @@ export class DoctorController {
     let error;
     await this.userService
       .findById(id)
-      .then(async (user: User) => {
+      .then(async (user: IUser) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
@@ -185,7 +183,7 @@ export class DoctorController {
     let error;
     await this.userService
       .findById(id)
-      .then(async (user: User) => {
+      .then(async (user: IUser) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {

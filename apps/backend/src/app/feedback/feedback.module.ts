@@ -3,7 +3,7 @@ import { Module, HttpModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FeedbackService } from './feedback.service';
 import { FeedbackController } from './feedback.controler';
-import { FeedbackSchema } from './feedback.schema';
+import { FeedbackSchema } from '@zabek/data';
 import { EmailService } from '../shared/email/email.service';
 
 

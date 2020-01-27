@@ -1,4 +1,4 @@
-import { Lab } from '../../lab/lab.interface';
+import { Lab } from '@zabek/data';
 
 export class CreateUserDto {
     readonly email: string; 

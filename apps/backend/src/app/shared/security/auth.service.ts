@@ -1,11 +1,9 @@
-
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../../user/user.service';
 import * as bcrypt from 'bcrypt';
 import * as jsonwebtoken from 'jsonwebtoken';
-import { User } from '../../user/user.interface';
+import { IUser, Role } from '@zabek/data';
 import { ConfigService } from '../../config/config.service';
-import { Role } from '../role';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +38,7 @@ export class AuthService {
     return bcrypt.hash(data, salt);
   }
 
-  async validateUser(email: string, pass: string): Promise<{user: User, message: string}> {
+  async validateUser(email: string, pass: string): Promise<{user: IUser, message: string}> {
     const user = await this.userService.findByEmail(email);
 
     if (user) {
@@ -56,7 +54,7 @@ export class AuthService {
     return { user: null, message: 'EMAIL_NOT_FOUND' };
   }
 
-  async login(user: User) {
+  async login(user: IUser) {
     const payload = { email: user.email,
        _id: user._id, 
        role: user.role, 

@@ -1,4 +1,4 @@
-import { Lab } from '../../lab/lab.interface';
+import { Lab } from '@zabek/data';
 
 export class UpdateUserDto {
   readonly _id: string;

@@ -7,7 +7,7 @@ import { UserService } from '../../user/user.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from '../../user/user.schema';
+import { UserSchema } from '@zabek/data';
 import { ConfigModule } from '../../config/config.module';
 import { ConfigService } from '../../config/config.service';
 

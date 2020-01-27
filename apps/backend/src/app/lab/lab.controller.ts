@@ -16,7 +16,7 @@ import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { LabService } from './lab.service';
 import { CreateLabDto, UpdateLabDto } from './dto';
-import { Lab } from './lab.interface';
+import { Lab } from '@zabek/data';
 
 @Controller('lab')
 export class LabController {

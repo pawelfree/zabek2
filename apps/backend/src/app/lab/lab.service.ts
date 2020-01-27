@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Lab } from './lab.interface';
+import { Lab } from '@zabek/data';
 import { CreateLabDto, UpdateLabDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
 

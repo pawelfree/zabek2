@@ -1,5 +1,3 @@
-import { Lab } from '../../lab/lab.interface';
-
 export class UpdateDoctorDto {
   readonly _id: string;
   readonly email: string;

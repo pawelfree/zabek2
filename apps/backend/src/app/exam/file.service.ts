@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FileUpload } from './fileupload.interface';
+import { FileUpload } from '@zabek/data';
 import { CreateFileUploadDto } from './dto/fileupload.create.dto';
 
 @Injectable()

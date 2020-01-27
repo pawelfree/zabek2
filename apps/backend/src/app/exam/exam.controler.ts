@@ -17,7 +17,7 @@ import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { ExamService } from './exam.service';
 import { CreateExamDto,UpdateExamDto } from './dto';
-import { Exam } from './exam.interface';
+import { Examination } from '@zabek/data';
   
   @Controller('exam')
   export class ExamController {
@@ -53,7 +53,7 @@ import { Exam } from './exam.interface';
       if (id !== updateExamDto._id ) {
         throw new BadRequestException('Błędne dane badania i żądania');        
       }
-      const exam: Exam = await this.examService.findById(id);
+      const exam: Examination = await this.examService.findById(id);
       if (!exam) {
         throw new BadRequestException('Badanie nie istnieje');
       }

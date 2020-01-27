@@ -62,7 +62,8 @@ export class FilesComponent implements OnInit {
     this.fileService.getFileUrl().subscribe(
       res => {
         file.inProgress = true;
-        const fileDisplay: FileUpload = { 
+        const fileDisplay: FileUpload = {
+          _id: null,
           name: file.data.name, 
           key: res.key, 
           size: Number((file.data.size / 1024).toFixed(2)) };

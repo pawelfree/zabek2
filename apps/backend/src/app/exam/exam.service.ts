@@ -1,16 +1,14 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Exam } from './exam.interface';
+import { Examination, Lab, IUser } from '@zabek/data';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateExamDto, CreateExamInternalDto } from './dto';
-import { Lab } from '../lab/lab.interface';
-import { User } from '../user/user.interface';
 
 @Injectable()
 export class ExamService {
-  constructor(@InjectModel('Exam') private readonly examModel: Model<Exam>) {}
+  constructor(@InjectModel('Exam') private readonly examModel: Model<Examination>) {}
 
-  async findById(id: string): Promise<Exam> {
+  async findById(id: string): Promise<Examination> {
     return await this.examModel
       .findById(id)
       .populate('doctor')
@@ -18,11 +16,11 @@ export class ExamService {
   }
 
   // TODO zmienic z name na na przykład patientFullName
-  async findByName(name: string): Promise<Exam> {
+  async findByName(name: string): Promise<Examination> {
     return await this.examModel.findOne({ name }).select('-__v');
   }
 
-  async add(createDto: CreateExamInternalDto): Promise<Exam> {
+  async add(createDto: CreateExamInternalDto): Promise<Examination> {
     return await new this.examModel(createDto).save();
   }
 
@@ -30,12 +28,12 @@ export class ExamService {
     pageSize: number = 10,
     currentPage: number = 0,
     lab: Lab = null
-  ): Promise<{ exams: Exam[]; count: number }> {
+  ): Promise<{ exams: Examination[]; count: number }> {
     const options = {};
     if (lab) {
       options['lab'] = lab;
     }
-    const findallQuery = this.examModel.find<Exam>(options);
+    const findallQuery = this.examModel.find<Examination>(options);
     const count = await this.examModel.countDocuments(findallQuery);
     return await findallQuery
       .skip(pageSize * currentPage)
@@ -48,13 +46,13 @@ export class ExamService {
   async findAllExamsForDoctor(
     pageSize: number = 10,
     currentPage: number = 0,
-    doctor: User
-  ): Promise<{ exams: Exam[]; count: number }> {
+    doctor: IUser
+  ): Promise<{ exams: Examination[]; count: number }> {
     const options = {};
 
     options['doctor'] = doctor._id; //aktualny user id
 
-    const findallQuery = this.examModel.find<Exam>(options);
+    const findallQuery = this.examModel.find<Examination>(options);
     const count = await this.examModel.countDocuments(findallQuery);
     return await findallQuery
       .skip(pageSize * currentPage)

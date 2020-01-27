@@ -5,6 +5,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FeedbackService } from '../../_services';
 import { currentUser } from '../../auth/store';
 import { tap, take } from 'rxjs/operators';
+import { Feedback } from '@zabek/data';
+// import { Feedback } from '@zabek/data';
 
 @Component({
   selector: 'zabek-feedback',
@@ -47,7 +49,7 @@ export class FeedbackComponent implements OnInit {
     // 2. [DONE] Wyślij email z info o zarejestrowaniu feedbacku na adres email użytkownika
     // 3. Wyslij email o zarejestrowaniu feedbacku na adres email pracowni/admina pracowni?
 
-    const userFeedback = {
+    const userFeedback: Feedback = {
       _id: null,
       content: this.form.value.feedback,
       createdBy: this.currentUserEmail,

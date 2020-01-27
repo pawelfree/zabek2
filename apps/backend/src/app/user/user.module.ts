@@ -4,10 +4,9 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { AuthService } from '../shared/security/auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from './user.schema';
+import { UserSchema, LabSchema } from '@zabek/data';
 import { DoctorController } from './doctor.controller';
 import { LabService } from '../lab/lab.service';
-import { LabSchema } from '../lab/lab.schema';
 import { EmailService } from '../shared/email/email.service';
 
 @Module({
