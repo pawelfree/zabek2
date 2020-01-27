@@ -4,6 +4,8 @@ import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { ExamListComponent } from './exam-list/exam-list.component';
 import { ExamCreateComponent } from './exam-create/exam-create.component';
+import { ExaminationListResolver } from './exam-list/exam-list.resolver';
+import { ExamEditResolver } from './exam-create/exam-create.resolver';
 
 const routes: Routes = [
     { 
@@ -14,6 +16,7 @@ const routes: Routes = [
     {
         path: 'examinations',
         component: ExamListComponent,
+        resolve: { examinations : ExaminationListResolver },
         canActivate: [ AuthGuard ],
         data: { roles: [ Role.admin, Role.user ] }
     },
@@ -26,6 +29,7 @@ const routes: Routes = [
     {
       path: 'examedit/:examId',
       component: ExamCreateComponent,
+      resolve: { examination: ExamEditResolver },
       canActivate: [AuthGuard],
       data: { roles: [Role.admin, Role.user] }
     }   

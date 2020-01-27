@@ -1,4 +1,4 @@
-<div [hidden]="count <= 0 || isLoading">
+<div [hidden]="count <= 0">
   <table mat-table [dataSource]='dataSource' class='mat-elevation-z2' >
     <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef> Email </th>
@@ -30,7 +30,7 @@
           <mat-icon aria-label="Usuń">delete</mat-icon>
         </button>
       </td>
-    </ng-container>  
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
@@ -40,10 +40,9 @@
     [pageSize]="usersPerPage"
   ></mat-paginator>
   </div>
-  <p class="info-text mat-body-1" *ngIf="count <= 0 && !isLoading">
+  <p class="info-text mat-body-1" *ngIf="count <= 0">
     Jeszcze nie ma zdefiniowanych użytkowników!
   </p>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
   <div style="right: 15px; bottom: 5px; position: fixed">
     <button
       mat-fab

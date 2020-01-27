@@ -12,8 +12,8 @@ export class ExamService {
   constructor(private readonly http: HttpClient, private router: Router) {}
 
   getExams(
-    examsPerPage: number,
-    currentPage: number
+    examsPerPage: number = 0,
+    currentPage: number = 10
   ): Observable<{ exams: Examination[]; count: number }> {
     let params = new HttpParams();
     params = params.append('pagesize', '' + examsPerPage);
@@ -49,7 +49,7 @@ export class ExamService {
     this.http
       .post<{ message: string; exam: Examination }>(BACKEND_URL, exam)
       .subscribe(responseData => {
-        this.router.navigate(['examinations']);
+        this.router.navigate(['/user']);
       });
   }
 
@@ -57,7 +57,7 @@ export class ExamService {
     this.http
       .put<{ message: string; exam: Examination }>(BACKEND_URL + exam._id, exam)
       .subscribe(responseData => {
-        this.router.navigate(['examinations']);
+        this.router.navigate(['/user']);
       });
   }
 }

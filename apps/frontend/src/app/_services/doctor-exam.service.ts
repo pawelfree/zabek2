@@ -9,19 +9,18 @@ const BACKEND_URL = environment.apiUrl + '/api/doctor-exam/';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorExamService {
+  
   constructor(private readonly http: HttpClient, private router: Router) {}
 
   getExams(
-    examsPerPage: number,
-    currentPage: number
+    examsPerPage: number = 0,
+    currentPage: number = 10
   ): Observable<{ exams: Examination[]; count: number }> {
     let params = new HttpParams();
     params = params.append('pagesize', '' + examsPerPage);
     params = params.append('page', '' + currentPage);
 
-    return this.http.get<{ exams: Examination[]; count: number }>(BACKEND_URL, {
-      params
-    });
+    return this.http.get<{ exams: Examination[]; count: number }>(BACKEND_URL, { params });
   }
 
   getExam(id: string): Observable<Examination> {

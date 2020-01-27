@@ -5,7 +5,6 @@ import { createReducer, on } from '@ngrx/store';
 export interface UserState {
   users: User[];
   count: number;
-  loading: boolean;
   usersPerPage: number;
   page: number;
   user: User;
@@ -15,7 +14,6 @@ export interface UserState {
 const initialState: UserState = {
   users: [],
   count: 0,
-  loading: false,
   usersPerPage: 10,
   page: 0,
   user: null,
@@ -24,14 +22,14 @@ const initialState: UserState = {
 
 const _userReducer = createReducer(initialState,
   on(UserActions.setUsersPerPage, (state, {usersPerPage}) => ({...state, usersPerPage})),
-  on(UserActions.setUsers, (state, {users, count} ) => ({...state, users, count, loading: false, error: null})),
-  on(UserActions.fetchUsers, (state, {page}) => ({...state, labs:[], page, count: 0, loading: true, error: null})),
-  on(UserActions.deleteUser, (state, {_id})=> ({...state, error: null, loading: false})),
-  on(UserActions.addUser,(state, {user}) => ({...state, user, error: null, loading: true})),
-  on(UserActions.setUser, (state, {user}) => ({...state, user, error: null, loading: false})),
-  on(UserActions.updateUser, (state, {user}) => ({...state, user, error: null, loading: true})),
-  on(UserActions.errorUser, (state, {error}) => ({...state, error, loading: false})),
-  on(UserActions.getUser, (state, {_id}) => ({...state, error: null, loading: true}))
+  on(UserActions.setUsers, (state, {users, count} ) => ({...state, users, count, error: null})),
+  on(UserActions.fetchUsers, (state, {page}) => ({...state, labs:[], page, count: 0, error: null})),
+  on(UserActions.deleteUser, (state, {_id})=> ({...state, error: null})),
+  on(UserActions.addUser,(state, {user}) => ({...state, user, error: null})),
+  on(UserActions.setUser, (state, {user}) => ({...state, user, error: null})),
+  on(UserActions.updateUser, (state, {user}) => ({...state, user, error: null})),
+  on(UserActions.errorUser, (state, {error}) => ({...state, error})),
+  on(UserActions.getUser, (state, {_id}) => ({...state, error: null}))
 );
 
 export function userReducer(state, action ) {

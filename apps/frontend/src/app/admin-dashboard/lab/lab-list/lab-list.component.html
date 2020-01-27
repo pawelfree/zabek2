@@ -1,4 +1,4 @@
-<div [hidden]="count <= 0 || isLoading">
+<div [hidden]="count <= 0">
 <table mat-table [dataSource]='dataSource' class='mat-elevation-z2' >
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Nazwa pracowni </th>
@@ -41,10 +41,9 @@
   [pageSize]="labsPerPage"
 ></mat-paginator>
 </div>
-<p class="info-text mat-body-1" *ngIf="count <= 0 && !isLoading">
+<p class="info-text mat-body-1" *ngIf="count <= 0">
   Jeszcze nie ma zdefiniowanych pracowni!
 </p>
-<mat-spinner *ngIf="isLoading"></mat-spinner>
 <div style="right: 15px; bottom: 5px; position: fixed">
   <button
     mat-fab

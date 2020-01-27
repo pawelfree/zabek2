@@ -5,6 +5,8 @@ import { DoctorListComponent } from './doctor-list/doctor-list.component';
 import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { DoctorCreateComponent } from './doctor-create/doctor-create.component';
+import { DoctorListResolver } from './doctor-list/doctor-list.resolver';
+import { DoctorEditResolver } from './doctor-create/doctor-edit.resolver';
 
 const routes: Routes = [
   {
@@ -15,6 +17,7 @@ const routes: Routes = [
   {
     path: 'list',
     component: DoctorListComponent,
+    resolve: { doctors: DoctorListResolver },
     canActivate: [AuthGuard],
     data: { roles: [Role.sadmin, Role.admin, Role.user] }
   },
@@ -27,6 +30,7 @@ const routes: Routes = [
   {
     path: 'edit/:doctorId',
     component: DoctorCreateComponent,
+    resolve: {doctor: DoctorEditResolver },
     canActivate: [AuthGuard],
     data: { roles: [Role.admin, Role.user]  }
   }

@@ -1,9 +1,11 @@
 import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatPaginator } from '@angular/material';
-import { DoctorListDataSource } from '../_datasource/doctor-list.datasource';
+import { DoctorListDataSource } from './doctor-list.datasource';
 import { DoctorService } from '../../_services';
-import { tap } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { tap, catchError, map, take } from 'rxjs/operators';
+import { Subscription, of, Observable, BehaviorSubject } from 'rxjs';
+import { Doctor } from '../../_models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'zabek-doctor-list',
@@ -11,20 +13,29 @@ import { Subscription } from 'rxjs';
   styleUrls: [ './doctor-list.component.css' ]
 })
 export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
+
   doctorsPerPage = 10;
   currentPage = 0;
+  dataCount = 0; 
 
+  private doctors = new BehaviorSubject<Doctor[]>([]);
+  private doctors$ = this.doctors.asObservable();
+  
   displayedColumns = ['firstName', 'lastName', 'email', 'actions'];
   dataSource: DoctorListDataSource;
   paginatorSub: Subscription = null;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor( private readonly doctorService: DoctorService ) {}
+  constructor(private readonly doctorService: DoctorService,
+              private readonly route: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.dataSource = new DoctorListDataSource(this.doctorService, this.doctorsPerPage);   
-    this.dataSource.loadDoctors(this.currentPage, this.doctorsPerPage);
+  ngOnInit() {  
+    this.dataSource = new DoctorListDataSource(this.doctors$);
+
+    const data = this.route.snapshot.data.doctors;
+    this.dataCount = data.count;
+    this.doctors.next(data.doctors);
   }
 
   ngAfterViewInit() {
@@ -43,7 +54,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
   }
 
   loadDoctorsPage() {
-    this.dataSource.loadDoctors( this.paginator.pageIndex, this.paginator.pageSize);
+    this.loadDoctors( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   onActivate(id: string) {
@@ -51,6 +62,18 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
       .subscribe(res => {
         this.loadDoctorsPage();
       });
+  }
+
+  loadDoctors(pageIndex = 0, pageSize = this.doctorsPerPage) {
+    return this.doctorService.getDoctors(pageSize, pageIndex) 
+      .pipe(
+        take(1),
+        tap(result => {
+          this.dataCount = result.count;
+          this.doctors.next(result.doctors);
+        }),
+        catchError(() => of<Doctor[]>([])),
+      ).subscribe();
   }
 
 }

@@ -10,6 +10,8 @@ import { Store } from '@ngrx/store';
 import { UserState } from '../store/user.reducer';
 import { UserActions }from '../store';
 import { InfoComponent } from '../../../common-dialogs';
+import { LoadingService } from '../../../_services';
+import { AppActions } from '../../../store';
 
 @Component({
   selector: 'zabek-user-create',
@@ -17,7 +19,6 @@ import { InfoComponent } from '../../../common-dialogs';
   styleUrls: ['./user-create.component.css']
 })
 export class UserCreateComponent implements OnInit, OnDestroy {
-  isLoading = false;
   form: FormGroup;
   roles = [Role.admin, Role.user];
   private mode = 'create';
@@ -63,7 +64,6 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     });
 
     this.storeSub = this.store.subscribe(state => {
-      this.isLoading = state.loading;
       if (state.error) {
         this.dialog.open(InfoComponent, { data:  state.error });
       }
@@ -111,7 +111,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
-    this.isLoading = true;
+    this.store.dispatch(AppActions.loadingStart());
     const user = new User(
       this._id ? this._id : null,
       this.form.value.email,

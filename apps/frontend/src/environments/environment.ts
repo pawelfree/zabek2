@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3001'
+  apiUrl: 'http://localhost:3001',
+  s3AcceptFileTypes: 'image/jpeg,image/tiff,image/heic',
+  s3BucketAddress: 'https://s3.eu-central-1.amazonaws.com/rtgcloud-pawel.f.dudek/'
 };
 
 /*

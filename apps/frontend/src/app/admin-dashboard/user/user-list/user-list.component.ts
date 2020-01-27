@@ -18,7 +18,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource: UserListDataSource;
   private paginatorSub: Subscription = null;
   private storeSub: Subscription = null;
-  public isLoading = false;
   public count = 0;
   public usersPerPage = 10;
 
@@ -31,7 +30,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.storeSub = this.store.pipe(select(selectUserState)).subscribe(state => {
-      this.isLoading = state.loading;
       this.count = state.count;
       this.usersPerPage = state.usersPerPage;
       if (state.error) {
@@ -43,8 +41,6 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.dataSource = new UserListDataSource(this.store);  
-     
-    this.store.dispatch(UserActions.fetchUsers({page: 0}))
   
   }
 

@@ -1,6 +1,5 @@
 <mat-card>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form [formGroup]="form" (submit)="onSaveLab()" *ngIf="!isLoading">
+  <form [formGroup]="form" (submit)="onSaveLab()">
     <mat-form-field>
       <input matInput type="text" formControlName="name" placeholder="Nazwa pracowni">
       <mat-error *ngIf="form.get('name').invalid">Wprowadź nazwę pracowni (5 - 100 znaków).</mat-error>

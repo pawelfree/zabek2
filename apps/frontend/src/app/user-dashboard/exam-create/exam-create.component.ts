@@ -5,13 +5,14 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Doctor } from '../../_models';
+import { Doctor, Examination } from '../../_models';
 import { MatDialog } from '@angular/material';
-import { InfoComponent } from '../../common-dialogs';
 import { BehaviorSubject, from } from 'rxjs';
 import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
 import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg.component';
+import { AppActions, AppState } from '../../store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -41,9 +42,8 @@ import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg
   ]
 })
 export class ExamCreateComponent implements OnInit {
-  isLoading = false;
   form: FormGroup;
-  private mode = 'create';
+  private mode: 'edit' | 'create' = 'create';
   private _id: string;
   public selectedDoctor;
 
@@ -85,7 +85,8 @@ export class ExamCreateComponent implements OnInit {
     private readonly examService: ExamService,
     private readonly doctorService: DoctorService,
     private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly store: Store<AppState>
   ) {}
 
   ngOnInit() {
@@ -141,55 +142,39 @@ export class ExamCreateComponent implements OnInit {
     this.endOfData = false;
     this.getNextDoctorsBatch();
 
-    this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
-      if (paramMap.has('examId')) {
-        this.mode = 'edit';
-        this._id = paramMap.get('examId');
-        this.isLoading = true;
-        this.examService
-          .getExam(this._id)
-          .pipe(take(1))
-          .subscribe(
-            examData => {
-              this.isLoading = false;
-              this.selectedDoctor = examData.doctor;
-              this.form.setValue({
-                examinationDate: examData.examinationDate,
-                examinationType: examData.examinationType,
-                examinationFile: examData.examinationFile,
-                patientFullName: examData.patientFullName,
-                patientPesel: examData.patientPesel,
-                patientOtherID: examData.patientOtherID,
-                patientAge: examData.patientAge,
-                patientIsFemale: examData.patientIsFemale,
-                patientProcessingAck: examData.patientProcessingAck,
-                patientMarketingAck: examData.patientMarketingAck,
-                patientEmail: examData.patientEmail,
-                patientPhone: examData.patientPhone,
-                doctor: examData.doctor,
-                sendEmailTo: examData.sendEmailTo
-              });
-              setTimeout(() => { 
-                if (this.selectedDoctor) {
-                  this.doctors.next([this.selectedDoctor]);
-                }
-                else {
-                  this.selectedDoctor = this.emptyDoctor;
-                }
-              }, 1);
-            },
-            error => {
-              this.dialog.open(InfoComponent, { data: error });
-              this.isLoading = false;
-              this.selectedDoctor = null;
-            }
-          );
-      } else {
-        this.mode = 'create';
-        this._id = null;
-        this.selectedDoctor = null;
-      }
-    });
+    const exam: Examination = this.route.snapshot.data.examination;
+    if (exam) {
+      this.mode = 'edit';
+      this._id = exam._id;
+      this.selectedDoctor = exam.doctor;
+      this.form.setValue({
+        examinationDate: exam.examinationDate,
+        examinationType: exam.examinationType,
+        examinationFile: exam.examinationFile,
+        patientFullName: exam.patientFullName,
+        patientPesel: exam.patientPesel,
+        patientOtherID: exam.patientOtherID,
+        patientAge: exam.patientAge,
+        patientIsFemale: exam.patientIsFemale,
+        patientProcessingAck: exam.patientProcessingAck,
+        patientMarketingAck: exam.patientMarketingAck,
+        patientEmail: exam.patientEmail,
+        patientPhone: exam.patientPhone,
+        doctor: exam.doctor,
+        sendEmailTo: exam.sendEmailTo
+      });
+      setTimeout(() => { 
+        if (this.selectedDoctor) {
+          this.doctors.next([this.selectedDoctor]);
+        }
+        else {
+          this.selectedDoctor = this.emptyDoctor;
+        }
+      }, 1);
+    } else {
+      this.mode = 'create';
+      this._id = null;
+    }
   }
 
   getNextDoctorsBatch() {
@@ -212,8 +197,7 @@ export class ExamCreateComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-
-    this.isLoading = true;
+    this.store.dispatch(AppActions.loadingStart());
     const exam = {
       _id: this._id ? this._id : null,
       examinationDate: this.form.value.examinationDate,
@@ -237,7 +221,6 @@ export class ExamCreateComponent implements OnInit {
     } else {
       this.examService.updateExam(exam);
     }
-    this.isLoading = false;
   }
 
   compareDoctors(o1: any, o2: any): boolean {

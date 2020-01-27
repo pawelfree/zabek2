@@ -4,6 +4,7 @@ import { AuthGuard } from '../_guards';
 import { Role } from '../_models';
 import { DoctorExamListComponent } from './exam-list/exam-list.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { ExaminationListResolver } from './exam-list/exam-list.resolver';
 
 
 const routes: Routes = [
@@ -15,14 +16,15 @@ const routes: Routes = [
     {
       path: 'examinations',
       component: DoctorExamListComponent,
+      resolve: { examinations: ExaminationListResolver },
       canActivate: [ AuthGuard ],
       data: { roles: [ Role.doctor ] }
     },
     {
-        path: 'feedback',
-        component: FeedbackComponent,
-        canActivate: [ AuthGuard ],
-        data: { roles: [ Role.doctor ] }
+      path: 'feedback',
+      component: FeedbackComponent,
+      canActivate: [ AuthGuard ],
+      data: { roles: [ Role.doctor ] }
     },  
 ];
 

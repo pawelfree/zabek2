@@ -28,7 +28,7 @@ export class DoctorService {
     return this.http.put(BACKEND_URL+"acceptrules/"+userId, {});
   }
 
-  getDoctors(doctorsPerPage: number, currentPage: number) {
+  getDoctors(doctorsPerPage: number = 0, currentPage: number = 10) {
     const queryParams = `?pagesize=${doctorsPerPage}&page=${currentPage}`;
     return this.http.get<{ doctors: Doctor[]; count: number }>(BACKEND_URL + queryParams);
   }

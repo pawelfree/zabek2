@@ -15,7 +15,6 @@ export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource: LabListDataSource;
   private paginatorSub: Subscription = null;
   private storeSub: Subscription = null;
-  public isLoading = false;
   public count = 0; 
   public labsPerPage = 10;
   
@@ -30,7 +29,6 @@ export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(LabActions.setLabsPerPage({labsPerPage: 5}));
 
     this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
-      this.isLoading = state.loading;
       this.count = state.count;
       this.labsPerPage = state.labsPerPage;
     });

@@ -8,6 +8,7 @@ import { AppState } from '../../../store/app.reducer';
 import { Lab } from '../../../_models';
 import { Subscription } from 'rxjs';
 import { LabActions, selectLabState } from '../store';
+import { LoadingService } from '../../../_services';
 
 @Component({
   selector: 'zabek-lab-create',
@@ -15,13 +16,13 @@ import { LabActions, selectLabState } from '../store';
   styleUrls: ['./lab-create.component.css']
 })
 export class LabCreateComponent implements OnInit, OnDestroy {
-  isLoading = false;
   form: FormGroup;
   private mode = 'create';
   private _id: string;
   private storeSub: Subscription = null;
 
   constructor(
+    private readonly loading: LoadingService,
     private readonly store: Store<AppState>,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog
@@ -41,7 +42,6 @@ export class LabCreateComponent implements OnInit, OnDestroy {
     });
 
     this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
-      this.isLoading = state.loading;
       if (state.error) {
         this.dialog.open(InfoComponent, { data:  state.error });
       }
@@ -73,6 +73,7 @@ export class LabCreateComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
+    this.loading.setLoading();
     if (this.mode === "create") {
       const lab: Lab = {...this.form.value, id: null };
       this.store.dispatch(LabActions.addLab({lab}));

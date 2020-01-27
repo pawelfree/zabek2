@@ -6,11 +6,12 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { MatPaginator, MatDialog } from '@angular/material';
-import { ExamListDataSource } from '../_datasource/exam-list.datasource';
+import { ExamListDataSource } from './exam-list.datasource';
 import { DoctorExamService } from '../../_services';
-import { tap } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
-import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
+import { tap, take, catchError } from 'rxjs/operators';
+import { Subscription, BehaviorSubject, of } from 'rxjs';
+import { Examination } from '../../_models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'zabek-doctor-exam-list',
@@ -20,6 +21,12 @@ import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirm
 export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   examsPerPage = 10;
   currentPage = 0;
+  dataCount = 0;
+  itemsOnPage
+  
+  private exams = new BehaviorSubject<Examination[]>([]);
+  private exams$ = this.exams.asObservable();
+  
   title = 'angular-confirmation-dialog';
   // order of columns on the view
   displayedColumns = [
@@ -37,14 +44,17 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private readonly doctorExamService: DoctorExamService, public dialog: MatDialog) {}
+  constructor(private readonly doctorExamService: DoctorExamService,
+              private readonly route: ActivatedRoute,
+              public dialog: MatDialog) {}
 
   ngOnInit() {
-    this.dataSource = new ExamListDataSource(
-      this.doctorExamService,
-      this.examsPerPage
-    );
-    this.dataSource.loadExams(this.currentPage, this.examsPerPage);
+    this.dataSource = new ExamListDataSource(this.exams$);
+
+    const data = this.route.snapshot.data.examinations;
+    this.dataCount = data.count;
+    this.itemsOnPage = data.exams.length
+    this.exams.next(data.exams);
   }
 
   ngAfterViewInit() {
@@ -61,9 +71,19 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
   }
 
   loadExamsPage() {
-    this.dataSource.loadExams(
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
+    this.loadExams( this.paginator.pageIndex, this.paginator.pageSize);
   }
+
+  loadExams(pageIndex = 0, pageSize = this.examsPerPage) {
+    return this.doctorExamService.getExams(pageSize, pageIndex) 
+      .pipe(
+        take(1),
+        tap(result => {
+          this.dataCount = result.count;
+          this.exams.next(result.exams);
+        }),
+        catchError(() => of<Examination[]>([])),
+      ).subscribe();
+  }
+
 }

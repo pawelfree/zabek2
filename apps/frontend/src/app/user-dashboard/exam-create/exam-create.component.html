@@ -1,6 +1,5 @@
 <mat-card>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form [formGroup]="form" (submit)="onSaveExam()" *ngIf="!isLoading">
+  <form [formGroup]="form" (submit)="onSaveExam()">
     <mat-form-field>
       <input
         matInput
@@ -137,7 +136,7 @@
     
             <mat-select
               SelectInfiniteScroll
-              (infiniteScroll)="getNextDoctorsBatch(selectedDoctor)"
+              (infiniteScroll)="getNextDoctorsBatch()"
               [complete]="endOfData"
               [compareWith]="compareDoctors"
               formControlName="doctor"

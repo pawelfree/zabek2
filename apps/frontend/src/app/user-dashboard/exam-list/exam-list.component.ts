@@ -6,11 +6,13 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { MatPaginator, MatDialog } from '@angular/material';
-import { ExamListDataSource } from '../_datasource/exam-list.datasource';
+import { ExamListDataSource } from './exam-list.datasource';
 import { ExamService } from '../../_services';
-import { tap, take } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { tap, take, catchError } from 'rxjs/operators';
+import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
+import { Examination } from '../../_models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'zabek-exam-list',
@@ -20,6 +22,12 @@ import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirm
 export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   examsPerPage = 10;
   currentPage = 0;
+  dataCount = 0;
+  itemsOnPage
+
+  private exams = new BehaviorSubject<Examination[]>([]);
+  private exams$ = this.exams.asObservable();
+
   title = 'angular-confirmation-dialog';
   // order of columns on the view
   displayedColumns = [
@@ -41,14 +49,17 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private readonly examService: ExamService, public dialog: MatDialog) {}
+  constructor(private readonly examService: ExamService, 
+              private readonly route: ActivatedRoute,
+              public dialog: MatDialog) {}
 
   ngOnInit() {
-    this.dataSource = new ExamListDataSource(
-      this.examService,
-      this.examsPerPage
-    );
-    this.dataSource.loadExams(this.currentPage, this.examsPerPage);
+    this.dataSource = new ExamListDataSource(this.exams$);
+
+    const data = this.route.snapshot.data.examinations;
+    this.dataCount = data.count;
+    this.itemsOnPage = data.exams.length
+    this.exams.next(data.exams);
   }
 
   ngAfterViewInit() {
@@ -65,7 +76,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   loadExamsPage() {
-    this.dataSource.loadExams(
+    this.loadExams(
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
@@ -83,7 +94,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
         // czy też może dwustopniowe usuwanie, pracownik zaznacza że do usunięcia,
         // a potem admin na swoim widoku widzi, i może usunąć fizycznie (z podaniem powodu).
         this.examService.deleteExam(id).subscribe(res => {
-          if (this.dataSource.itemsOnPage === 1) {
+          if (this.itemsOnPage === 1) {
             this.paginator.pageIndex = this.paginator.pageIndex - 1;
           }
           this.loadExamsPage();
@@ -98,4 +109,18 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
       'Not implemented yet. Wyślij powiadomienie email do lekarza, o gotowości badania do pobrania.'
     );
   }
+
+  loadExams(pageIndex = 0, pageSize = this.examsPerPage) {
+    this.examService.getExams(pageSize, pageIndex) 
+      .pipe(
+        take(1),
+        tap(result => {
+          this.dataCount = result.count;
+          this.exams.next(result.exams);
+        }),        
+        catchError(() => of<Examination[]>([])),
+      )
+      .subscribe();
+  }
+
 }

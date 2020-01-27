@@ -1,4 +1,4 @@
-<div [hidden]="dataSource.dataCount <= 0 || (dataSource.loading$ | async)">
+<div [hidden]="dataCount <= 0">
 <table mat-table [dataSource]='dataSource' class='mat-elevation-z2' >
 
   <ng-container matColumnDef="examinationDate" >
@@ -50,16 +50,14 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <mat-paginator
-  [length]="dataSource.dataCount"
+  [length]="dataCount"
   [hidePageSize]="true"
   [pageSize]="examsPerPage"
 ></mat-paginator>
 </div>
-<p class="info-text mat-body-1" *ngIf="dataSource.dataCount <= 0 && ((dataSource.loading$ | async) === false)">
+<p class="info-text mat-body-1" *ngIf="dataCount <= 0">
   Brak wprowadzonych badań.
 </p>
-<mat-spinner *ngIf="(dataSource.loading$ | async)"></mat-spinner>
-
 <div style="right: 85px; bottom: 5px; position: fixed">
     <button
       mat-fab

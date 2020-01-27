@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { tap, last, catchError, map, finalize, scan, take } from 'rxjs/operators';
 import { FilesService } from '../_services/files.service';
 import { FileUpload } from '../_models';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'zabek-files',
@@ -22,7 +23,7 @@ import { FileUpload } from '../_models';
 export class FilesComponent implements OnInit {
 
   text = 'Upload file to S3';
-  accept = 'image/jpeg'
+  accept = environment.s3AcceptFileTypes;
 
   file_to_upload: FileUploadModel;
   files = new BehaviorSubject<FileUpload[]>([]);
@@ -122,7 +123,7 @@ export class FilesComponent implements OnInit {
   }
 
   openLink(link: string) {
-    window.open('https://s3.eu-central-1.amazonaws.com/rtgcloud-pawel.f.dudek/'+link, "_blank");
+    window.open(environment.s3BucketAddress+link, "_blank");
   }
 }
 

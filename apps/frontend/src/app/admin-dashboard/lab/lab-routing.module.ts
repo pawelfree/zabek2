@@ -5,7 +5,7 @@ import { LabListComponent } from './lab-list/lab-list.component';
 import { LabCreateComponent } from './lab-create/lab-create.component';
 import { AuthGuard } from '../../_guards';
 import { Role } from '../../_models';
-import { LabEditResolver } from './lab-create/lab-create.resolver';
+import { LabEditResolver } from './lab-create/lab-edit.resolver';
 
 const routes: Routes = [
     {

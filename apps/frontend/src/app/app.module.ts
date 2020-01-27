@@ -25,6 +25,7 @@ import { AcceptRulesComponent } from './common-dialogs/accept-rules/accept-rules
 import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { FilesComponent } from './files/files.component';
+import { LoadingComponent } from './loading/loading.component';
 
 registerLocaleData(localePl, 'pl');
 
@@ -40,7 +41,8 @@ registerLocaleData(localePl, 'pl');
     InfoComponent,
     ConfirmationComponent,
     AcceptRulesComponent,
-    FilesComponent
+    FilesComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

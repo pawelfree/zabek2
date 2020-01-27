@@ -9,6 +9,7 @@ import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { LabState, selectLabState } from '.';
+import { LoadingService } from '../../../_services';
 
 
 const BACKEND_URL = environment.apiUrl + '/api/lab/';
@@ -34,6 +35,7 @@ export class LabEffects {
     switchMap(([props, store]) => {
       return this.http.post<Lab>(BACKEND_URL, props.lab).pipe(
         map(() => {
+          this.loading.clearLoading();
           this.router.navigate(['/admin/lab/list']);
           return LabActions.fetchLabs({page: store.page});
         }),
@@ -48,6 +50,7 @@ export class LabEffects {
     switchMap(([props, store]) => {
       return this.http.put<Lab>(BACKEND_URL+props.lab._id, props.lab).pipe(
         map(() => {
+          this.loading.clearLoading();
           this.router.navigate(['/admin/lab/list']);
           return LabActions.fetchLabs({page: store.page});
         }),
@@ -91,5 +94,6 @@ export class LabEffects {
     private readonly http: HttpClient,
     private readonly actions$: Actions,    
     private readonly router: Router,
-    private readonly store: Store<LabState>){}
+    private readonly store: Store<LabState>,
+    private readonly loading: LoadingService){}
 }

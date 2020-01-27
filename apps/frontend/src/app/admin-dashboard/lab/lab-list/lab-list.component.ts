@@ -17,7 +17,6 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
   dataSource: LabListDataSource;
   private paginatorSub: Subscription = null;
   private storeSub: Subscription = null;
-  public isLoading = false;
   public count = 0; 
   public labsPerPage = 10;
 
@@ -30,7 +29,6 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   ngOnInit() {
     this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
-      this.isLoading = state.loading;
       this.count = state.count;
       this.labsPerPage = state.labsPerPage;
       if (state.error) {

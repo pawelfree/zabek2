@@ -2,15 +2,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
-import { tap, startWith, take } from 'rxjs/operators';
+import { tap, startWith } from 'rxjs/operators';
 import { Doctor, User } from '../../_models';
-import { Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
+import { AppActions } from '../../store';
 
 @Component({
   selector: 'zabek-doctor-create',
@@ -18,9 +19,8 @@ import { AppState } from '../../store/app.reducer';
   styleUrls: ['./doctor-create.component.css']
 })
 export class DoctorCreateComponent implements OnInit, OnDestroy {
-  isLoading = false;
   form: FormGroup;
-  private mode = 'create';
+  private mode: 'create' | 'edit';
   private _id: string;
   private user: User;
 
@@ -42,7 +42,6 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       this.user = state.user;
     });
   
-    this.isLoading = false;
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
@@ -103,50 +102,35 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       rulesAccepted: new FormControl(null)
     });
 
-    this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
-      if (paramMap.has('doctorId')) {
-        this.mode = 'edit';
-        this._id = paramMap.get('doctorId');
-        this.isLoading = true;
-        this.doctorService
-          .getDoctor(this._id)
-          .pipe(take(1))
-          .subscribe(
-            examData => {
-              this.isLoading = false;
-              this.form.setValue({
-                email: examData.email,
-                firstName: examData.firstName,
-                lastName: examData.lastName,
-                lab: examData.lab._id,
-                qualificationsNo: examData.qualificationsNo,
-                officeName: examData.officeName,
-                sameAddresses:
-                  this.form.value.officeAddress ===
-                  this.form.value.officeCorrespondenceAddress
-                    ? true
-                    : false,
-                officeAddress: examData.officeAddress,
-                officeCorrespondenceAddress:
-                  examData.officeCorrespondenceAddres,
-                examFormat: examData.examFormat,
-                tomographyWithViewer: examData.tomographyWithViewer,
-                active: examData.active,
-                rulesAccepted: examData.rulesAccepted,
-                nip:  examData.nip,
-                pesel:  examData.pesel
-              });
-            },
-            error => {
-              this.dialog.open(InfoComponent, { data: error });
-              this.isLoading = false;
-            }
-          );
-      } else {
-        this.mode = 'create';
-        this._id = null;
-      }
-    });
+    const doctor = this.route.snapshot.data.doctor;
+    if (doctor) {
+      this.mode = 'edit';
+      this._id = doctor._id;
+      this.form.setValue({
+        email: doctor.email,
+        firstName: doctor.firstName,
+        lastName: doctor.lastName,
+        lab: doctor.lab._id,
+        qualificationsNo: doctor.qualificationsNo,
+        officeName: doctor.officeName,
+        sameAddresses:
+          this.form.value.officeAddress ===
+          this.form.value.officeCorrespondenceAddress
+            ? true
+            : false,
+        officeAddress: doctor.officeAddress,
+        officeCorrespondenceAddress: doctor.officeCorrespondenceAddres,
+        examFormat: doctor.examFormat,
+        tomographyWithViewer: doctor.tomographyWithViewer,
+        active: doctor.active,
+        rulesAccepted: doctor.rulesAccepted,
+        nip: doctor.nip,
+        pesel: doctor.pesel
+      });
+    } else {
+      this.mode = 'create';
+      this._id = null;
+    }
 
     this.officeAddressSubs = this.form.controls.sameAddresses.valueChanges
       .pipe(
@@ -186,7 +170,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.isLoading = true;
+    this.store.dispatch(AppActions.loadingStart());
     const doctor = new Doctor(
       this._id ? this._id : null,
       this.form.value.email,
@@ -225,7 +209,6 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
         }
       );
     }
-    this.isLoading = false;
   }
 
   private goOut() {

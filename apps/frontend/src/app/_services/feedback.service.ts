@@ -11,9 +11,7 @@ const BACKEND_URL = environment.apiUrl + '/api/feedback/';
 export class FeedbackService {
   constructor(private readonly http: HttpClient, private router: Router) {}
 
-  //stores doctor's provided feedback
   addFeedback(feedback: Feedback) {
-    //TODO do I need to parse/sanitize/htmlescape it?
     this.http
       .post<{ message: string; feedback: Feedback }>(BACKEND_URL, feedback)
       .subscribe(responseData => {
@@ -21,18 +19,15 @@ export class FeedbackService {
       });
   }
 
-  // lista feedbacków
   getFeedbacks(
-    feedbacksPerPage: number,
-    currentPage: number
+    feedbacksPerPage: number = 0,
+    currentPage: number = 10
   ): Observable<{ feedbacks: Feedback[]; count: number }> {
     let params = new HttpParams();
     params = params.append('pagesize', '' + feedbacksPerPage); //TODO refactor - to powinno byc wszedzie itemsPerPage
     params = params.append('page', '' + currentPage);
 
-    return this.http.get<{ feedbacks: Feedback[]; count: number }>(BACKEND_URL, {
-      params
-    });
+    return this.http.get<{ feedbacks: Feedback[]; count: number }>(BACKEND_URL, { params });
   }
 
 }

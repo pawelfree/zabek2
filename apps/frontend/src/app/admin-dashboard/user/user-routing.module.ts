@@ -6,6 +6,7 @@ import { Role } from '../../_models';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { UserEditResolver } from './user-create/user-create.resolver';
+import { UserListResolver } from './user-list/user-list.resolver';
 
 const routes: Routes = [
     {
@@ -14,10 +15,11 @@ const routes: Routes = [
       pathMatch: 'full'
     },
     {
-        path: 'list',
-        component: UserListComponent,
-        canActivate: [AuthGuard],
-        data: { roles: [Role.admin, Role.sadmin] }
+      path: 'list',
+      component: UserListComponent,
+      canActivate: [AuthGuard],
+      resolve: {users$ : UserListResolver },
+      data: { roles: [Role.admin, Role.sadmin] }
     },
     {
       path: 'create',
