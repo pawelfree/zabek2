@@ -1,5 +1,5 @@
 <div mat-dialog-container>
-  <form [formGroup]="form"  (submit)="onAddNewDoctor()">
+  <form [formGroup]="form" (submit)="onAddNewDoctor()">
     <h1 mat-dialog-title>Nowy lekarz</h1>
     <div mat-dialog-content>
       <mat-form-field>
@@ -46,7 +46,7 @@
       </mat-form-field>
       <mat-checkbox formControlName="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
       
-      <mat-form-field *ngIf="!sameAddresses$">
+      <mat-form-field *ngIf="!(sameAddresses$ | async)">
         <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres gabinetu">
         <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
       </mat-form-field>

@@ -2,31 +2,30 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable, Subscription } from 'rxjs';
-import { tap, startWith } from 'rxjs/operators';
+import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor, User } from '../../_models';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 import { AppActions } from '../../store';
+import { currentUser } from '../../auth/store';
 
 @Component({
   selector: 'zabek-doctor-create',
   templateUrl: './doctor-create.component.html',
   styleUrls: ['./doctor-create.component.css']
 })
-export class DoctorCreateComponent implements OnInit, OnDestroy {
+export class DoctorCreateComponent implements OnInit {
   form: FormGroup;
   private mode: 'create' | 'edit';
   private _id: string;
-  private user: User;
+  private lab_id: string;
 
   sameAddresses$: Observable<boolean>;
-  private officeAddressSubs: Subscription;
-  private storeSub: Subscription = null;
 
   constructor(
     private readonly router: Router,
@@ -38,10 +37,15 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
   
-    this.storeSub = this.store.select('auth').subscribe(state => {
-      this.user = state.user;
-    });
-  
+    this.store.pipe(
+      select(currentUser),
+      take(1),
+      tap(user => this.lab_id = user.lab)
+    ).subscribe();
+
+    const doctor = this.route.snapshot.data.doctor;
+    const sameAddresses = doctor ? (doctor.officeAddress === doctor.officeCorrespondenceAddres ? true : false) : true;
+
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
@@ -92,7 +96,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       officeAddress: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(5)]
       }),
-      sameAddresses: new FormControl(null),
+      sameAddresses: new FormControl(sameAddresses),
       officeCorrespondenceAddress: new FormControl(null),
       examFormat: new FormControl('jpeg', {
         validators: [Validators.required]
@@ -102,7 +106,6 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       rulesAccepted: new FormControl(null)
     });
 
-    const doctor = this.route.snapshot.data.doctor;
     if (doctor) {
       this.mode = 'edit';
       this._id = doctor._id;
@@ -110,14 +113,10 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
         email: doctor.email,
         firstName: doctor.firstName,
         lastName: doctor.lastName,
-        lab: doctor.lab._id,
+        lab: doctor.lab,
         qualificationsNo: doctor.qualificationsNo,
         officeName: doctor.officeName,
-        sameAddresses:
-          this.form.value.officeAddress ===
-          this.form.value.officeCorrespondenceAddress
-            ? true
-            : false,
+        sameAddresses,
         officeAddress: doctor.officeAddress,
         officeCorrespondenceAddress: doctor.officeCorrespondenceAddres,
         examFormat: doctor.examFormat,
@@ -132,9 +131,9 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
       this._id = null;
     }
 
-    this.officeAddressSubs = this.form.controls.sameAddresses.valueChanges
+    this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges
       .pipe(
-        startWith(true),
+        startWith(sameAddresses),
         tap(value => {
           if (!value) {
             this.form.controls.officeCorrespondenceAddress.setValidators([
@@ -147,22 +146,8 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
           this.form.controls.officeCorrespondenceAddress.updateValueAndValidity(
             { onlySelf: true, emitEvent: false }
           );
-          this.sameAddresses$ = value;
         })
-      )
-      .subscribe();
-  }
-
-  ngOnDestroy() {
-    if (this.officeAddressSubs) {
-      this.officeAddressSubs.unsubscribe();
-    }
-    this.officeAddressSubs = null;
-
-    if (this.storeSub) {
-      this.storeSub.unsubscribe();
-      this.storeSub = null;
-    }
+      );
   }
 
   onSubmit() {
@@ -174,7 +159,7 @@ export class DoctorCreateComponent implements OnInit, OnDestroy {
     const doctor = new Doctor(
       this._id ? this._id : null,
       this.form.value.email,
-      this.form.value.lab ? this.form.value.lab : this.user.lab, 
+      this.lab_id, 
       null, //password
       null, //expiresIn
       null, //_tokenExpirationDate?

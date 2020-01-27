@@ -1,5 +1,4 @@
 <mat-card>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-card-content>
       <mat-form-field>
@@ -43,12 +42,10 @@
         <mat-error *ngIf="form.get('officeAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
       </mat-form-field>
       <mat-checkbox formControlName="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
-      <!-- <div [hidden]="sameAddresses$"> -->
-        <mat-form-field *ngIf="!sameAddresses$">
-          <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres gabinetu">
-          <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
-        </mat-form-field>
-      <!-- </div> -->
+        <mat-form-field *ngIf="!(sameAddresses$ | async)">
+        <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres gabinetu">
+        <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
+      </mat-form-field>
       <mat-form-field>
         <mat-label>Domyślny format badania</mat-label>
         <mat-select formControlName="examFormat">
@@ -78,7 +75,7 @@
       <button mat-raised-button 
         color="accent" 
         type="submit" 
-        [disabled]="form.invalid || !regulationsAccepted$">Zarejstruj</button>
+        [disabled]="form.invalid || (!regulationsAccepted$ | async)">Zarejstruj</button>
       <button style="float: right;" type="button" mat-button routerLink="/login">Anuluj</button>
     </mat-card-title>
   </form>

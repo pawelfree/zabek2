@@ -3,7 +3,7 @@ import { Lab } from '../../lab/lab.interface';
 export class UpdateDoctorDto {
   readonly _id: string;
   readonly email: string;
-  readonly lab: Lab;
+  readonly lab: string;
   readonly password?: string;
   readonly role: string;
   readonly firstName: string;

@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '../../_models';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -16,13 +16,10 @@ import { InfoComponent } from '../../common-dialogs';
   templateUrl: './doctor-register.component.html',
   styleUrls: ['./doctor-register.component.css']
 })
-export class DoctorRegisterComponent implements OnInit, OnDestroy { 
+export class DoctorRegisterComponent implements OnInit { 
   form: FormGroup;
   regulationsAccepted$: Observable<boolean>;
-  sameAddresses$: Observable<boolean>;
-  private officeAddressSubs: Subscription;
-  private regulationsAcceptedSubs: Subscription;
-  isLoading: boolean;
+  sameAddresses$: Observable<any>;
   private queryParams: Params = null;
 
   constructor(
@@ -33,7 +30,6 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
   ){}
 
   ngOnInit() {
-    this.isLoading = false;
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [ Validators.required, 
@@ -105,42 +101,30 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
       });
 
       this.route.queryParams.pipe(
-        take(1)
-      ).subscribe(params => {
-        this.queryParams = params['id'] ? {id: params['id']} : null;
-      });
-
-      this.regulationsAcceptedSubs = this.form.controls.regulationsAccepted.valueChanges.pipe(
-        startWith(false),
-        tap(value => this.regulationsAccepted$ = value)
+        take(1),
+        tap(params => this.queryParams = params['id'] ? {id: params['id']} : null)
       ).subscribe();
 
-      this.officeAddressSubs = this.form.controls.sameAddresses.valueChanges.pipe(
+      this.regulationsAccepted$ = this.form.controls.regulationsAccepted.valueChanges.pipe(
+        startWith(false)
+      );
+
+      this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges.pipe(
         startWith(true),
         tap(value => {
           if (!value) {
-            this.form.controls.officeCorrespondenceAddress.setValidators(
-              [ Validators.required,
-                Validators.minLength(5)]);
+            this.form.controls.officeCorrespondenceAddress.setValidators([
+              Validators.required,
+              Validators.minLength(5)
+            ]);
           } else {
             this.form.controls.officeCorrespondenceAddress.clearValidators();
           }
-          this.form.controls.officeCorrespondenceAddress.updateValueAndValidity({ onlySelf: true, emitEvent: false});
-          this.sameAddresses$ = value;
+          this.form.controls.officeCorrespondenceAddress.updateValueAndValidity(
+            { onlySelf: true, emitEvent: false }
+          );
         })
-      ).subscribe();
-  }
-
-  ngOnDestroy() {
-    if (this.officeAddressSubs) {
-      this.officeAddressSubs.unsubscribe();
-    }
-    this.officeAddressSubs = null;
-
-    if (this.regulationsAcceptedSubs) {
-      this.regulationsAcceptedSubs.unsubscribe();
-    }
-    this.regulationsAcceptedSubs = null;
+      );
   }
 
   onSubmit() {
@@ -157,7 +141,6 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         this.dialog.open(InfoComponent, { data: 'Niepoprawny identyfikator pracowni' });
         return;
       }
-      this.isLoading = true;
       const doctor = new Doctor(
         null,
         this.form.value.email,
@@ -182,7 +165,6 @@ export class DoctorRegisterComponent implements OnInit, OnDestroy {
         err => {
           this.dialog.open(InfoComponent, { data:  err });
         });
-      this.isLoading = false;
   }
   
   private goOut() {

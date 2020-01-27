@@ -1,20 +1,20 @@
-import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   CustomValidator,
   PeselValidator,
   NIPValidator
 } from '../../_validators';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor, User } from '../../_models';
-import { ActivatedRoute, ParamMap, } from '@angular/router';
+import { Doctor } from '../../_models';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InfoComponent } from '../../common-dialogs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app.reducer';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../store';
+import { currentUser } from '../../auth/store';
 
 
 @Component({
@@ -22,34 +22,21 @@ import { AppState } from '../../store/app.reducer';
   templateUrl: './doctor-create-dlg.component.html',
   styleUrls: ['./doctor-create-dlg.component.css']
 })
-export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
-  isLoading = false;
+export class DoctorCreateDlgComponent implements OnInit {
   form: FormGroup;
 
   onAdd = new EventEmitter();
-
-  private _id: string;
-  private user: User;
-
-  sameAddresses$: Observable<boolean>;
-  private officeAddressSubs: Subscription;
-  private storeSub: Subscription = null;
+  sameAddresses$: Observable<any>;
+  private lab_id: string
 
   constructor(
-    private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService,
-    private readonly store: Store<AppState>,
-    private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>
-
+    private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>,
+    private readonly store: Store<AppState>
   ) {}
 
   ngOnInit() {
-    this.storeSub = this.store.select('auth').subscribe(state => {
-      this.user = state.user;
-    });
-
-    this.isLoading = false;
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.email]
@@ -106,54 +93,16 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       rulesAccepted: new FormControl(null)
     });
 
-    this.route.paramMap.pipe(take(1)).subscribe((paramMap: ParamMap) => {
-      if (paramMap.has('doctorId')) {
+    this.store.pipe(
+      select(currentUser),
+      take(1),
+      tap(user => this.lab_id = user.lab)
+    ).subscribe();
 
-        this._id = paramMap.get('doctorId');
-        this.isLoading = true;
-        this.doctorService
-          .getDoctor(this._id)
-          .pipe(take(1))
-          .subscribe(
-            examData => {
-              this.isLoading = false;
-              this.form.setValue({
-                email: examData.email,
-                firstName: examData.firstName,
-                lastName: examData.lastName,
-                lab: examData.lab._id,
-                qualificationsNo: examData.qualificationsNo,
-                officeName: examData.officeName,
-                sameAddresses:
-                  this.form.value.officeAddress ===
-                  this.form.value.officeCorrespondenceAddress
-                    ? true
-                    : false,
-                officeAddress: examData.officeAddress,
-                officeCorrespondenceAddress:
-                  examData.officeCorrespondenceAddres,
-                examFormat: examData.examFormat,
-                tomographyWithViewer: examData.tomographyWithViewer,
-                active: examData.active,
-                rulesAccepted: examData.rulesAccepted,
-                nip: examData.nip,
-                pesel: examData.pesel
-              });
-            },
-            error => {
-              this.dialog.open(InfoComponent, { data: error });
-              this.isLoading = false;
-            }
-          );
-      } else {
-
-        this._id = null;
-      }
-    });
-
-    this.officeAddressSubs = this.form.controls.sameAddresses.valueChanges
+    this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges
       .pipe(
         startWith(true),
+        tap(val => console.log('doctor create same adrees', val)),
         tap(value => {
           if (!value) {
             this.form.controls.officeCorrespondenceAddress.setValidators([
@@ -166,24 +115,8 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
           this.form.controls.officeCorrespondenceAddress.updateValueAndValidity(
             { onlySelf: true, emitEvent: false }
           );
-          this.sameAddresses$ = value;
         })
-      )
-      .subscribe();
-
-
-  }
-
-  ngOnDestroy() {
-    if (this.officeAddressSubs) {
-      this.officeAddressSubs.unsubscribe();
-    }
-    this.officeAddressSubs = null;
-
-    if (this.storeSub) {
-      this.storeSub.unsubscribe();
-      this.storeSub = null;
-    }
+      );
   }
 
   // TODO: na poprzednim widoku - formularzu tworzenia badania,
@@ -195,7 +128,7 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
     const doctor = new Doctor(
       null, //id
       this.form.value.email,
-      this.form.value.lab ? this.form.value.lab : this.user.lab,
+      this.lab_id,
       null, //password
       null, //expiresIn
       null, //_tokenExpirationDate?
@@ -215,8 +148,6 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
       this.form.value.pesel,
       this.form.value.nip
     );
-    // this.isLoading = true;
-    // this.doctorService.addDoctor(doctor); // jak dodać obsługę błedów
 
     this.doctorService.addDoctor(doctor).subscribe(
       (res: Doctor) => {
@@ -228,7 +159,6 @@ export class DoctorCreateDlgComponent implements OnInit, OnDestroy {
         this.dialog.open(InfoComponent, { data: err });
       }
     );
-    this.isLoading = false;
   }
  
 }

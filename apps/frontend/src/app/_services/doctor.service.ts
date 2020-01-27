@@ -3,14 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Doctor } from '../_models';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-
 const BACKEND_URL = environment.apiUrl + '/api/doctor/';
 
 @Injectable({ providedIn: 'root' })
 export class DoctorService {
 
-  constructor(private readonly http: HttpClient,private router: Router) {}
+  constructor(private readonly http: HttpClient) {}
 
   addDoctor(doctor:  Doctor) {
     return this.http.post(BACKEND_URL, doctor);

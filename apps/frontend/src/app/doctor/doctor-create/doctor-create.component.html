@@ -44,12 +44,10 @@
         <mat-error *ngIf="form.get('officeAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
       </mat-form-field>
       <mat-checkbox formControlName="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
-      <!-- <div [hidden]="sameAddresses$"> -->
-      <mat-form-field *ngIf="!sameAddresses$">
+      <mat-form-field *ngIf="!(sameAddresses$ | async)">
         <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres gabinetu">
         <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
       </mat-form-field>
-      <!-- </div> -->
       <mat-form-field>
         <mat-label>Domyślny format badania</mat-label>
         <mat-select formControlName="examFormat">

@@ -1,41 +1,31 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from '../../_models';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
-import { map, tap } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
 import { FeedbackService } from '../../_services';
+import { currentUser } from '../../auth/store';
+import { tap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.css']
 })
-export class FeedbackComponent implements OnInit, OnDestroy {
-  currentUser: User;
-  subscription: Subscription;
-  isLoading = false;
+export class FeedbackComponent implements OnInit {
+  private currentUserEmail: string;
   form: FormGroup;
 
   constructor(
-    private router: Router,
     private readonly store: Store<AppState>,
-    private readonly dialog: MatDialog,
     private readonly feedbackService: FeedbackService
   ) {}
 
   ngOnInit() {
-    this.subscription = this.store
-      .select('auth')
-      .pipe(map(authState => authState.user))
-      .subscribe(user => {
-        this.currentUser = user;
-      });
+    this.store.pipe(
+      select(currentUser),
+      take(1),
+      tap(user => this.currentUserEmail = user.email)).subscribe();
 
-    this.isLoading = false;
     this.form = new FormGroup({
       feedback: new FormControl(null, {
         validators: [
@@ -52,7 +42,6 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.isLoading = true;
     // TODO:
     // 1. [DONE] Zapisz feedback w bazie
     // 2. [DONE] Wyślij email z info o zarejestrowaniu feedbacku na adres email użytkownika
@@ -61,25 +50,12 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     const userFeedback = {
       _id: null,
       content: this.form.value.feedback,
-      createdBy: this.currentUser.email,
+      createdBy: this.currentUserEmail,
       createdAt: this.formattedNow()
     };
 
     //zapisz feedback w bazie i wyslij email z potwierdzeniem
     this.feedbackService.addFeedback(userFeedback);
-    this.isLoading = false;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  authorized(roles: string[]) {
-    return this.currentUser && roles.indexOf(this.currentUser.role) !== -1;
-  }
-
-  get isLoggedIn() {
-    return this.currentUser;
   }
 
   // TODO do utilsów, zrobić leading 0 dla dni i miesięcy < 10

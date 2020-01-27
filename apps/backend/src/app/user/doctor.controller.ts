@@ -23,7 +23,7 @@ import { LabService } from '../lab/lab.service';
 import { Lab } from '../lab/lab.interface';
 import { AuthService } from '../shared/security/auth.service';
 import { EmailService } from '../shared/email/email.service';
-import * as  crypto from 'crypto';
+import * as crypto from 'crypto';
 
 @Controller('doctor')
 export class DoctorController {
@@ -113,11 +113,11 @@ export class DoctorController {
     } 
 
     const laboratory: Lab = await this.labService
-      .findById(updateDoctorDto.lab._id)
+      .findById(updateDoctorDto.lab)
       .catch(err => {
         let error = err.message;
         if (err.name === 'CastError' && err.path === '_id') {
-          error = 'Błędny identyfikator pracowni ' + updateDoctorDto.lab._id;
+          error = 'Błędny identyfikator pracowni ' + updateDoctorDto.lab;
         }
         throw new BadRequestException(error);
       });
@@ -141,7 +141,7 @@ export class DoctorController {
       officeCorrespondenceAddres: updateDoctorDto.officeCorrespondenceAddres,
       examFormat: updateDoctorDto.examFormat,
       tomographyWithViewer: updateDoctorDto.tomographyWithViewer,
-      lab :  laboratory
+      lab :  laboratory._id
     } 
     return await this.userService.update(_updateDoctorDto);
   }

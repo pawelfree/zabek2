@@ -27,7 +27,7 @@ export class Doctor extends User {
       _id,
       email,
       'doctor',
-      { _id: lab, email: null, address: null, name: null },
+      lab,
       password,
       expiresIn,
       _tokenExpirationDate,
