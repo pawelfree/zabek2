@@ -5,7 +5,7 @@ import { InfoComponent } from '../../../common-dialogs';
 import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
-import { Lab } from '../../../_models';
+import { Lab } from '@zabek/data';
 import { Subscription } from 'rxjs';
 import { LabActions, selectLabState } from '../store';
 import { LoadingService } from '../../../_services';

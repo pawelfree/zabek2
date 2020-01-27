@@ -7,7 +7,7 @@ import {
 } from '../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor } from '../../_models';
+import { Doctor } from '@zabek/data';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog, MatDialogRef } from '@angular/material';

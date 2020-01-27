@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Doctor } from '../../_models'
+import { Doctor } from '@zabek/data'
 import { Observable } from 'rxjs';
 import { DoctorService } from '../../_services';
 

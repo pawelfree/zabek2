@@ -1,7 +1,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, of } from 'rxjs';
-import { User } from '../../../_models';
-import { switchMap, tap } from 'rxjs/operators';
+import { User } from '@zabek/data';
+import { switchMap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { UserState } from '../store/user.reducer';
 import { selectUserState } from '../store';

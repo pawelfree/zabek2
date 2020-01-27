@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from '../../../_models'
+import { User } from '@zabek/data';
 
 export const fetchUsers = createAction('[User] Fetch users', props<{page: number}>()); 
 export const setUsers = createAction('[User] Set users', props<{users: User[], count: number}>())

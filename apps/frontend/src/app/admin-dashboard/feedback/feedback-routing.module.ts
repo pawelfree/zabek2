@@ -5,7 +5,7 @@ import { FeedbackListComponent } from './feedback-list/feedback-list.component';
 import { FeedbackListResolver } from './feedback-list/feedback-list.resolver';
 
 import { AuthGuard } from '../../_guards';
-import { Role } from '../../_models';
+import { Role } from '@zabek/data';
 
 const routes: Routes = [
     {

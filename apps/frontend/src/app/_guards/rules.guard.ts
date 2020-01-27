@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
 import { take, map } from 'rxjs/operators';
-import { Role } from '../_models';
+import { Role } from '@zabek/data';
 import { MatDialog } from '@angular/material';
-import * as AuthActions from '../auth/store/auth.actions';
+import { AuthActions } from '../auth/store';
 import { DoctorService } from '../_services';
 import { AcceptRulesComponent } from '../common-dialogs/accept-rules/accept-rules.component';
 

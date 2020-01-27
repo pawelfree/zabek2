@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { take, exhaustMap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
-import { User } from '../_models';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor{

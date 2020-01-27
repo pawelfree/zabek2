@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Feedback } from '../../../_models';
+import { Feedback } from '@zabek/data';
 import { FeedbackService } from '../../../_services';
 import { Observable } from 'rxjs';
 

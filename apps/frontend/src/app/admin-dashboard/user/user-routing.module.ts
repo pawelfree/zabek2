@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes} from '@angular/router';
 
 import { AuthGuard } from '../../_guards';
-import { Role } from '../../_models';
+import { Role } from '@zabek/data';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { UserEditResolver } from './user-create/user-create.resolver';

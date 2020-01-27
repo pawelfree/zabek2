@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Lab } from '../../../_models'
+import { Lab } from '@zabek/data';
 
 export const fetchLabs = createAction('[Lab] Fetch labs', props<{page: number}>()); 
 export const setLabs = createAction('[Lab] Set labs', props<{labs: Lab[], count: number}>())

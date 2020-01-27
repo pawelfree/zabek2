@@ -1,4 +1,4 @@
-import { Doctor } from '../../_models';
+import { Doctor } from '@zabek/data';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { DoctorService } from '../../_services';

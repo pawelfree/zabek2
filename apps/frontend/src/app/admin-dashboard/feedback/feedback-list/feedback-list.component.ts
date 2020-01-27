@@ -10,7 +10,7 @@ import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, of } from 'rxjs';
 import { FeedbackListDataSource } from '../feedback-list.datasource';
 import { FeedbackService } from '../../../_services';
-import { Feedback } from '../../../_models';
+import { Feedback } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

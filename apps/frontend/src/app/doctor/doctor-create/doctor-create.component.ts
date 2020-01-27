@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor, User } from '../../_models';
+import { Doctor } from '@zabek/data';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';

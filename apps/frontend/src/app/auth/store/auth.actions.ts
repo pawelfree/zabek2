@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from '../../_models'
+import { User } from '@zabek/data'
 
 export const loginStart = createAction('[Auth] Login start', props<{email: string, password: string, returnUrl: string}>()); 
 export const authenticateSuccess = createAction('[Auth] Authenticate success', props<{user: User, redirect: boolean, returnUrl : string}>());

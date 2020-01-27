@@ -1,4 +1,4 @@
-import { Lab } from '../../../_models';
+import { Lab } from '@zabek/data';
 import * as LabActions from './lab.actions'; 
 import { createReducer, on } from '@ngrx/store';
 

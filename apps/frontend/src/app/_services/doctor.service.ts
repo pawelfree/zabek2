@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Doctor } from '../_models';
+import { Doctor } from '@zabek/data';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 const BACKEND_URL = environment.apiUrl + '/api/doctor/';

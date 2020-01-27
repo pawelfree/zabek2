@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
-import { Feedback } from '../../_models';
+import { Feedback } from '@zabek/data';
 
 export class FeedbackListDataSource extends DataSource<Feedback> {
 

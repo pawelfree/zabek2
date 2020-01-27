@@ -4,7 +4,7 @@ import { RouterModule, Routes} from '@angular/router';
 import { LabListComponent } from './lab-list/lab-list.component';
 import { LabCreateComponent } from './lab-create/lab-create.component';
 import { AuthGuard } from '../../_guards';
-import { Role } from '../../_models';
+import { Role } from '@zabek/data';
 import { LabEditResolver } from './lab-create/lab-edit.resolver';
 
 const routes: Routes = [

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_guards';
-import { Role } from '../_models';
+import { Role } from '@zabek/data';
 import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [

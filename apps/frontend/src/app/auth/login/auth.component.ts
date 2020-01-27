@@ -6,12 +6,12 @@ import { tap, take } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
-import * as AuthActions from '../store/auth.actions';
-import { Role } from '../../_models';
+import { AuthActions } from '../store';
+import { Role } from '@zabek/data';
 import { Subscription } from 'rxjs';
 import { InfoComponent } from '../../common-dialogs';
 import { MatDialog } from '@angular/material';
-import { Actions, ofType } from '@ngrx/effects';
+import { Actions } from '@ngrx/effects';
 
 @Component({
   selector: 'zabek-auth',

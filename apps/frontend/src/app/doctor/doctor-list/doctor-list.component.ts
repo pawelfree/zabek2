@@ -2,9 +2,9 @@ import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular
 import { MatPaginator } from '@angular/material';
 import { DoctorListDataSource } from './doctor-list.datasource';
 import { DoctorService } from '../../_services';
-import { tap, catchError, map, take } from 'rxjs/operators';
-import { Subscription, of, Observable, BehaviorSubject } from 'rxjs';
-import { Doctor } from '../../_models';
+import { tap, catchError, take } from 'rxjs/operators';
+import { Subscription, of, BehaviorSubject } from 'rxjs';
+import { Doctor } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

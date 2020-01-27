@@ -4,7 +4,7 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
 import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { tap, last, catchError, map, finalize, scan, take } from 'rxjs/operators';
 import { FilesService } from '../_services/files.service';
-import { FileUpload } from '../_models';
+import { FileUpload } from '@zabek/data';
 import { environment } from '../../environments/environment';
 
 @Component({

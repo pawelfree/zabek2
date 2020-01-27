@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from '../_guards';
-import { Role } from '../_models';
+import { Role } from '@zabek/data';
 import { ExamListComponent } from './exam-list/exam-list.component';
 import { ExamCreateComponent } from './exam-create/exam-create.component';
 import { ExaminationListResolver } from './exam-list/exam-list.resolver';

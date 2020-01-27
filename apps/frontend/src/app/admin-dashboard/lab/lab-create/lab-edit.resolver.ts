@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Lab } from '../../../_models';
+import { Lab } from '@zabek/data';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { take, map, catchError } from 'rxjs/operators';
-import * as LabActions from '../store/lab.actions';
+import { LabActions } from '../store/';
 import { Actions, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 

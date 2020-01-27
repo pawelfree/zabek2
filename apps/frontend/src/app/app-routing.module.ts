@@ -7,7 +7,7 @@ import { ResetPasswordComponent } from './auth/reset-password/resetpassword.comp
 import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
 import { RulesGuard, AuthGuard } from './_guards';
 import { FilesComponent } from './files/files.component';
-import { Role } from './_models';
+import { Role } from '@zabek/data';
 
 const routes: Routes = [
     {

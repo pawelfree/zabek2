@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { LabActions }  from '.';
 import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
-import { Lab } from '../../../_models';
+import { Lab } from '@zabek/data';
 import { environment } from '../../../../environments/environment';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';

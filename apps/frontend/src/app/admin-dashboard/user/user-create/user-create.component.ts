@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
 import { CustomValidator } from '../../../_validators';
-import { Role, Lab, User } from '../../../_models';
+import { Role, Lab, User } from '@zabek/data';
 import { MatDialog } from '@angular/material';
 import { SelectLabComponent } from '../../select-lab/select-lab.component';
 import { Subscription } from 'rxjs';

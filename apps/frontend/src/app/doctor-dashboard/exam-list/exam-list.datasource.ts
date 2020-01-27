@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
-import { Examination } from '../../_models';
+import { Examination } from '@zabek/data';
 
 export class ExamListDataSource extends DataSource<Examination> {
   

@@ -10,7 +10,7 @@ import { ExamListDataSource } from './exam-list.datasource';
 import { DoctorExamService } from '../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, of } from 'rxjs';
-import { Examination } from '../../_models';
+import { Examination } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

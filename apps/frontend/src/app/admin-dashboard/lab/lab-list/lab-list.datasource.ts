@@ -1,6 +1,6 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Observable, of } from 'rxjs';
-import { Lab } from '../../../_models';
+import { Lab } from '@zabek/data';
 import { switchMap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { LabState, selectLabState } from '../store';

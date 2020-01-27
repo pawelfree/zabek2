@@ -2,7 +2,7 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { switchMap, catchError, map, tap } from 'rxjs/operators'; 
 import { AuthActions } from '.';
-import { User, Role } from '../../_models';
+import { User, Role } from '@zabek/data';
 import { of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';

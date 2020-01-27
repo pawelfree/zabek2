@@ -11,7 +11,7 @@ import { ExamService } from '../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
-import { Examination } from '../../_models';
+import { Examination } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
