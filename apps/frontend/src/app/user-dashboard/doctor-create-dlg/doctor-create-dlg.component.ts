@@ -10,10 +10,9 @@ import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '@zabek/data';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { InfoComponent } from '../../common-dialogs';
+import { MatDialogRef } from '@angular/material';
 import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store';
+import { AppState, AppActions } from '../../store';
 import { currentUser } from '../../auth/store';
 
 
@@ -30,7 +29,6 @@ export class DoctorCreateDlgComponent implements OnInit {
   private lab_id: string
 
   constructor(
-    private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService,
     private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>,
     private readonly store: Store<AppState>
@@ -102,7 +100,6 @@ export class DoctorCreateDlgComponent implements OnInit {
     this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges
       .pipe(
         startWith(true),
-        tap(val => console.log('doctor create same adrees', val)),
         tap(value => {
           if (!value) {
             this.form.controls.officeCorrespondenceAddress.setValidators([
@@ -151,13 +148,11 @@ export class DoctorCreateDlgComponent implements OnInit {
 
     this.doctorService.addDoctor(doctor).subscribe(
       (res: Doctor) => {
-        this.dialog.open(InfoComponent,{ data: 'Nowy lekarz został dodany.' });
+        this.store.dispatch(AppActions.sendInfo({info: 'Nowy lekarz został dodany.'}))
         this.onAdd.emit(res);
         this.dialogRef.close();
       },
-      err => {
-        this.dialog.open(InfoComponent, { data: err });
-      }
+      err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
     );
   }
  

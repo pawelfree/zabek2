@@ -1,10 +1,20 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
-import { LoadingState } from './app.reducer';
+import { GlobalState } from './app.reducer';
 
 
-export const selectLoadingState = createFeatureSelector<LoadingState>('loading');
+export const selectGlobalState = createFeatureSelector<GlobalState>('global');
 
 export const selectLoading = createSelector(
-  selectLoadingState,
+  selectGlobalState,
   state => state.loading
+);
+
+export const selectError = createSelector(
+  selectGlobalState,
+  state => state.error
+);
+
+export const selectInfo = createSelector(
+  selectGlobalState,
+  state => state.info
 );

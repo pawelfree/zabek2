@@ -8,7 +8,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
 import { MatDialog } from '@angular/material';
-import { InfoComponent } from '../../common-dialogs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 import { AppActions } from '../../store';
@@ -181,17 +180,13 @@ export class DoctorCreateComponent implements OnInit {
     );
     if (this.mode === 'create') {
       this.doctorService.addDoctor(doctor).subscribe(
-        res => this.goOut(),
-        err => {
-          this.dialog.open(InfoComponent, { data: err });
-        }
+        () => this.goOut(),
+        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
       );
     } else {     
       this.doctorService.updateDoctor(doctor).subscribe(
-        res => this.goOut(),
-        err => {
-          this.dialog.open(InfoComponent, { data: err });
-        }
+        () => this.goOut(),
+        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
       );
     }
   }

@@ -4,32 +4,30 @@ import { createReducer, on } from '@ngrx/store';
 
 export interface State {
   user: User;
-  error: string;
   loading: boolean;
 }
 
 const initialState: State = {
   user: null,
-  error: null,
   loading: false
 };
 
 const _authReducer = createReducer(initialState,
-  on(AuthActions.authenticateSuccess, (state, {user, redirect, returnUrl} ) => ({...state, error: null, user, loading: false})),
-  on(AuthActions.authenticateFail, (state, {error}) => ({...state, user: null, error: error, loading: false})),
-  on(AuthActions.loginStart, state => ({...state, error: null, loading: true})),
-  on(AuthActions.logout, state => ({...state, error: null, user: null, loading: false})),
-  on(AuthActions.authenticateClearError, state => ({...state, error: null, loading: false})),
-  on(AuthActions.changePassword, (state ,{oldPassword, newPassword}) => ({...state, error: null, loading: true})),
-  on(AuthActions.passwordChanged, state => ({...state, error: null, loading: false})),
-  on(AuthActions.passwordChangeError, (state, {error}) => ({...state, error, loading: false})),
-  on(AuthActions.sendPasswordResetTokenRequest, (state, {email}) => ({...state, loading: true, error: null})),
-  on(AuthActions.passwordResetTokenRequestSent, (state) => ({...state, error: null, loading: false})),
-  on(AuthActions.sendPasswordResetRequest,(state, {token, password}) => ({...state, error: null, loading: true})),
+  on(AuthActions.authenticateSuccess, (state, {user, redirect, returnUrl} ) => ({...state, user, loading: false})),
+  on(AuthActions.authenticateFail, (state, {error}) => ({...state, user: null, loading: false})),
+  on(AuthActions.loginStart, state => ({...state, loading: true})),
+  on(AuthActions.logout, state => ({...state, user: null, loading: false})),
+  on(AuthActions.authenticateClearError, state => ({...state, loading: false})),
+  on(AuthActions.changePassword, (state ,{oldPassword, newPassword}) => ({...state, loading: true})),
+  on(AuthActions.passwordChanged, state => ({...state, loading: false})),
+  on(AuthActions.passwordChangeError, (state, {error}) => ({...state, loading: false})),
+  on(AuthActions.sendPasswordResetTokenRequest, (state, {email}) => ({...state, loading: true })),
+  on(AuthActions.passwordResetTokenRequestSent, (state) => ({...state, loading: false})),
+  on(AuthActions.sendPasswordResetRequest,(state, {token, password}) => ({...state, loading: true})),
   on(AuthActions.rulesAccepted, (state) => {
       const user = state.user;
       user.rulesAccepted = true;
-      return {...state, error: null, loading: false, user}
+      return {...state, loading: false, user}
     })
 );
 

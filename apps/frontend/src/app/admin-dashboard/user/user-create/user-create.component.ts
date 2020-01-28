@@ -9,8 +9,6 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { UserState } from '../store/user.reducer';
 import { UserActions }from '../store';
-import { InfoComponent } from '../../../common-dialogs';
-import { LoadingService } from '../../../_services';
 import { AppActions } from '../../../store';
 
 @Component({
@@ -65,7 +63,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
 
     this.storeSub = this.store.subscribe(state => {
       if (state.error) {
-        this.dialog.open(InfoComponent, { data:  state.error });
+        this.store.dispatch(AppActions.raiseError({message: state.error, status: null}));
       }
     });
 

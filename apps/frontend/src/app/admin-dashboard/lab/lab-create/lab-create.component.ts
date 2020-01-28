@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
-import { InfoComponent } from '../../../common-dialogs';
-import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { Lab } from '@zabek/data';
 import { Subscription } from 'rxjs';
 import { LabActions, selectLabState } from '../store';
 import { LoadingService } from '../../../_services';
+import { AppActions } from '../../../store';
 
 @Component({
   selector: 'zabek-lab-create',
@@ -24,8 +23,7 @@ export class LabCreateComponent implements OnInit, OnDestroy {
   constructor(
     private readonly loading: LoadingService,
     private readonly store: Store<AppState>,
-    private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -43,7 +41,8 @@ export class LabCreateComponent implements OnInit, OnDestroy {
 
     this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
       if (state.error) {
-        this.dialog.open(InfoComponent, { data:  state.error });
+        //TODO przeniesc do akcji
+        this.store.dispatch(AppActions.raiseError({message: state.error, status: null }))
       }
     });
 

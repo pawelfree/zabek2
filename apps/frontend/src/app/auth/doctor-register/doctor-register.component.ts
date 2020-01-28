@@ -7,8 +7,8 @@ import { Doctor } from '@zabek/data';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DoctorService } from '../../_services'
 import { PwzValidator } from '../../_validators';
-import { MatDialog } from '@angular/material';
-import { InfoComponent } from '../../common-dialogs';
+import { Store } from '@ngrx/store';
+import { AppState, AppActions } from '../../store';
 
 
 @Component({
@@ -25,8 +25,8 @@ export class DoctorRegisterComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog,
-    private readonly doctorService: DoctorService
+    private readonly doctorService: DoctorService,
+    private readonly store: Store<AppState>
   ){}
 
   ngOnInit() {
@@ -128,43 +128,41 @@ export class DoctorRegisterComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.form.invalid)  {
+      return;
+    }
+    if (!this.queryParams) {
+      this.store.dispatch(AppActions.sendInfo({info: 'Niepoprawny (brak) identyfikator pracowni' }));
+      return;
+    }
+    const checkForLabId = new RegExp("^[0-9a-fA-F]{24}$")
+    if (!checkForLabId.test(this.queryParams.id)) {
+      this.store.dispatch(AppActions.sendInfo({info: 'Niepoprawny identyfikator pracowni' }));
+      return;
+    }
+    const doctor = new Doctor(
+      null,
+      this.form.value.email,
+      this.queryParams['id'],
+      this.form.value.password1,
+      null,null,null,
+      this.form.value.firstName,
+      this.form.value.lastName,
+      this.form.value.officeName,
+      this.form.value.officeAddress,
+      this.form.value.qualificationsNo,
+      this.form.value.sameAddresses ? this.form.value.officeAddress : this.form.value.officeCorrespondenceAddress,
+      this.form.value.examFormat,
+      this.form.value.tomographyWithViewer,
+      false,
+      true,
+      this.form.value.pesel,
+      this.form.value.nip);
 
-      if (this.form.invalid)  {
-        return;
-      }
-      if (!this.queryParams) {
-        this.dialog.open(InfoComponent, { data: 'Niepoprawny (brak) identyfikator pracowni' });
-        return;
-      }
-      const checkForLabId = new RegExp("^[0-9a-fA-F]{24}$")
-      if (!checkForLabId.test(this.queryParams.id)) {
-        this.dialog.open(InfoComponent, { data: 'Niepoprawny identyfikator pracowni' });
-        return;
-      }
-      const doctor = new Doctor(
-        null,
-        this.form.value.email,
-        this.queryParams['id'],
-        this.form.value.password1,
-        null,null,null,
-        this.form.value.firstName,
-        this.form.value.lastName,
-        this.form.value.officeName,
-        this.form.value.officeAddress,
-        this.form.value.qualificationsNo,
-        this.form.value.sameAddresses ? this.form.value.officeAddress : this.form.value.officeCorrespondenceAddress,
-        this.form.value.examFormat,
-        this.form.value.tomographyWithViewer,
-        false,
-        true,
-        this.form.value.pesel,
-        this.form.value.nip);
-
-      this.doctorService.addDoctor(doctor).subscribe(
-        res => this.goOut(),
-        err => {
-          this.dialog.open(InfoComponent, { data:  err });
-        });
+    this.doctorService.addDoctor(doctor).subscribe(
+      res => this.goOut(),
+      err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+    );
   }
   
   private goOut() {

@@ -4,10 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidator } from '../../_validators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
-import * as AuthActions from '../store/auth.actions';
+import { AuthActions } from '../store/';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material';
-import { InfoComponent } from '../../common-dialogs';
 import { Actions, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
 
@@ -28,33 +26,24 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly store: Store<AppState>,
-    private readonly actions$: Actions,
-    private readonly dialog: MatDialog) {}
+    private readonly actions$: Actions) {}
 
   ngOnInit() {
 
     this.storeSub = this.store.select('auth').subscribe(state => {
       this.loading = state.loading;
-      if (state.error) {
-        this.dialog.open(InfoComponent, { data:  state.error });
-        this.store.dispatch(AuthActions.authenticateClearError());
-      }
     });
 
     this.sendTokenRequestSub = this.actions$.pipe(
       ofType(AuthActions.passwordResetTokenRequestSent),
       tap(() => {
-        this.dialog.open(InfoComponent,{ data: 'Żądanie zmiany hasła zostało wysłane. Sprawdź skrzynkę poczty.' });
         this.router.navigate(['/']);
       })
     ).subscribe();  
   
     this.sendResetRequestSub = this.actions$.pipe(
       ofType(AuthActions.passwordChanged),
-      tap(() => {
-        this.dialog.open(InfoComponent,{ data: 'Hasło zostało zmienione.' });
-        this.router.navigate(['/']);
-      })
+      tap(() => this.router.navigate(['/']))
     ).subscribe();  
 
     const token = this.route.snapshot.data.token;

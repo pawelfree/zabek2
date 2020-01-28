@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatDialog } from '@angular/material';
+import { MatPaginator } from '@angular/material';
 import { LabListDataSource } from './lab-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { LabState, LabActions, selectLabState} from '../store';
-import { InfoComponent } from '../../../common-dialogs';
+import { AppActions } from '../../../store';
 
 @Component({
   selector: 'zabek-lab-list',
@@ -22,17 +22,14 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(
-    private readonly store: Store<LabState>,
-    private readonly dialog: MatDialog
-  ) {}
+  constructor(private readonly store: Store<LabState>) {}
 
   ngOnInit() {
     this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
       this.count = state.count;
       this.labsPerPage = state.labsPerPage;
       if (state.error) {
-        this.dialog.open(InfoComponent, { data:  state.error });
+        this.store.dispatch(AppActions.raiseError({message: state.error, status: null}));
       }
       if (this.paginator && this.paginator.pageIndex !== state.page ) {
         this.paginator.pageIndex = state.page;

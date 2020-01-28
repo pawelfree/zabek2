@@ -26,7 +26,8 @@ import { environment } from '../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { FilesComponent } from './files/files.component';
 import { LoadingComponent } from './loading/loading.component';
-
+import { MessagesComponent } from './mesaages/messages.component';
+ 
 registerLocaleData(localePl, 'pl');
 
 @NgModule({
@@ -42,7 +43,8 @@ registerLocaleData(localePl, 'pl');
     ConfirmationComponent,
     AcceptRulesComponent,
     FilesComponent,
-    LoadingComponent
+    LoadingComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

@@ -8,11 +8,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../authentication.service';
 import { environment } from '../../../environments/environment';
+import { AppActions } from '../../store';
 
 const BACKEND_URL = environment.apiUrl + '/api/auth/';
 
 const handleError = (errorRes: any) => {
-  let error = 'An unknown error occurred!';
+  let error = 'Naprawdę nieznany błąd';
   if (!errorRes) {
     return of(AuthActions.authenticateFail({error}));
   }
@@ -32,7 +33,6 @@ const handleError = (errorRes: any) => {
 
 @Injectable()
 export class AuthEffects {
-
   authPasswordResetRequest$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.sendPasswordResetRequest),
     switchMap(props => {
@@ -42,6 +42,11 @@ export class AuthEffects {
       )
     })
   ));
+
+  authPassworResetTokenSent$ = this.actions$.pipe(
+    ofType(AuthActions.passwordResetTokenRequestSent),
+    map(() => AppActions.sendInfo({info: 'Żądanie zmiany hasła zostało wysłane. Sprawdź skrzynkę poczty.'}))
+  );
 
   authSendPasswordResetRequest$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.sendPasswordResetTokenRequest),
@@ -53,7 +58,22 @@ export class AuthEffects {
     })
   ));
 
-  autchChangePassword$ = createEffect(() => this.actions$.pipe(
+  authPasswordChanged$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.passwordChanged),
+    map(() => AppActions.sendInfo({info: "Hasło zostało zmienione"}))
+  ));
+
+  authPasswordChangeError$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.passwordChangeError),
+    switchMap(res => handleError(res.error))
+  ));
+
+  authAuthenticateFail$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.authenticateFail),
+    map(res => AppActions.raiseError({message: res.error, status: null}))
+  ));
+
+  authChangePassword$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.changePassword),
     switchMap(props => {
       return this.http.post(BACKEND_URL+'changepassword', props).pipe(

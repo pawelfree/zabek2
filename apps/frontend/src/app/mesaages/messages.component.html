@@ -1,0 +1,16 @@
+<!-- <div class="messages-frame" >
+  <div class="messages messages-error" *ngIf="(errors$ | async)?.length > 0">
+      <i class="md-icon close-icon" (click)="closeError()"><mat-icon>close</mat-icon></i>
+      <div class="messages-container">
+          <div *ngFor="let message of (errors$ | async)">{{message}}</div>
+      </div>
+  </div>
+  <div class="messages messages-info" *ngIf="(infos$ | async)?.length > 0"> 
+    <i class="md-icon close-icon" (click)="closeInfo()"><mat-icon>close</mat-icon></i>
+    <div class="messages-container">
+        <div *ngFor="let message of (infos$ | async)">{{message}}</div>
+    </div>
+  </div>
+</div> -->
+<ng-container *ngIf="errors$ | async"></ng-container>
+<ng-container *ngIf="infos$ | async"></ng-container>
