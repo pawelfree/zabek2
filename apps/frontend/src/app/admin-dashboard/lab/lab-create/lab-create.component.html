@@ -13,5 +13,6 @@
         <mat-error *ngIf="form.get('address').invalid">Wprowadź adres pracowni (min. 20 znaków).</mat-error>
     </mat-form-field>
     <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz pracownię</button>
+    <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/admin/lab/list">Anuluj</button>
   </form>
 </mat-card>

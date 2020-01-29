@@ -39,5 +39,6 @@
     <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
   </mat-form-field>
   <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz użytkownika</button>
+  <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/admin/user/list">Anuluj</button>
   </form>
 </mat-card>
