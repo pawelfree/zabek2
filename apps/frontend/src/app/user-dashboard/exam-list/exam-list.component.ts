@@ -89,7 +89,6 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
-        console.log('Yes clicked'); 
         // TODO: usuwac badanie powinien admin pracowni. Zrobić tylko adminowi, 
         // czy też może dwustopniowe usuwanie, pracownik zaznacza że do usunięcia,
         // a potem admin na swoim widoku widzi, i może usunąć fizycznie (z podaniem powodu).
@@ -108,6 +107,10 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     console.log(
       'Not implemented yet. Wyślij powiadomienie email do lekarza, o gotowości badania do pobrania.'
     );
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '350px',
+      data: 'Funkcjonalność w przygotowaniu.'
+    });
   }
 
   loadExams(pageIndex = 0, pageSize = this.examsPerPage) {

@@ -1,11 +1,12 @@
 import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MatDialog } from '@angular/material';
 import { DoctorListDataSource } from './doctor-list.datasource';
 import { DoctorService } from '../../_services';
 import { tap, catchError, take } from 'rxjs/operators';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { Doctor } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
 
 @Component({
   selector: 'zabek-doctor-list',
@@ -28,7 +29,8 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(private readonly doctorService: DoctorService,
-              private readonly route: ActivatedRoute) {}
+              private readonly route: ActivatedRoute,
+              public dialog: MatDialog) {}
 
   ngOnInit() {  
     this.dataSource = new DoctorListDataSource(this.doctors$);
@@ -58,11 +60,19 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
   }
 
   onActivate(id: string) {
-    //TODO zle unsubscribe
-    this.doctorService.activate(id)
-      .subscribe(res => {
-        this.loadDoctorsPage();
+      const dialogRef = this.dialog.open(ConfirmationComponent, {
+        width: '350px',
+        data: 'Czy na pewno chcesz aktywować konto online wybranego lekarza?'
       });
+      dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+        if (result) {
+          this.doctorService.activate(id).subscribe(res => {
+            this.loadDoctorsPage();
+          });
+        }
+      });
+
+
   }
 
   loadDoctors(pageIndex = 0, pageSize = this.doctorsPerPage) {
