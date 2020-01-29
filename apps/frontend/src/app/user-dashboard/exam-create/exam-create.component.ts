@@ -247,7 +247,7 @@ export class ExamCreateComponent implements OnInit {
       err => console.log('cos poszlo nie tak')
     );
 
-    dialogRef.afterClosed().subscribe(() => {
+    dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
       if (subs) {
         subs.unsubscribe();
       }

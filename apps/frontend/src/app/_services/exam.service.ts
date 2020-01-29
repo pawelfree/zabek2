@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Examination } from '@zabek/data';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 const BACKEND_URL = environment.apiUrl + '/api/exam/';
 
@@ -48,6 +49,7 @@ export class ExamService {
   addExam(exam: Examination) {
     this.http
       .post<{ message: string; exam: Examination }>(BACKEND_URL, exam)
+      .pipe(take(1))
       .subscribe(responseData => {
         this.router.navigate(['/user']);
       });
@@ -56,6 +58,7 @@ export class ExamService {
   updateExam(exam: Examination) {
     this.http
       .put<{ message: string; exam: Examination }>(BACKEND_URL + exam._id, exam)
+      .pipe(take(1))
       .subscribe(responseData => {
         this.router.navigate(['/user']);
       });

@@ -59,7 +59,7 @@ export class FilesComponent implements OnInit {
 
   private uploadFile(file: FileUploadModel) {    
 
-    this.fileService.getFileUrl().subscribe(
+    this.fileService.getFileUrl().pipe(take(1)).subscribe(
       res => {
         file.inProgress = true;
         const fileDisplay: FileUpload = {

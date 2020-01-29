@@ -146,7 +146,7 @@ export class DoctorCreateDlgComponent implements OnInit {
       this.form.value.nip
     );
 
-    this.doctorService.addDoctor(doctor).subscribe(
+    this.doctorService.addDoctor(doctor).pipe(take(1)).subscribe(
       (res: Doctor) => {
         this.store.dispatch(AppActions.sendInfo({info: 'Nowy lekarz został dodany.'}))
         this.onAdd.emit(res);

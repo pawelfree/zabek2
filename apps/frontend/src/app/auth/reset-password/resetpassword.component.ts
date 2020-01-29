@@ -7,7 +7,7 @@ import { AppState } from '../../store/app.reducer';
 import { AuthActions } from '../store/';
 import { Subscription } from 'rxjs';
 import { Actions, ofType } from '@ngrx/effects';
-import { tap } from 'rxjs/operators';
+import { tap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'zabek-resetpassword',
@@ -19,8 +19,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   reset = false;
   loading = false;
   private storeSub: Subscription = null;
-  private sendTokenRequestSub: Subscription = null;
-  private sendResetRequestSub: Subscription = null;
 
   constructor(
     private readonly router: Router,
@@ -34,15 +32,15 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.loading = state.loading;
     });
 
-    this.sendTokenRequestSub = this.actions$.pipe(
+    this.actions$.pipe(
       ofType(AuthActions.passwordResetTokenRequestSent),
-      tap(() => {
-        this.router.navigate(['/']);
-      })
+      take(1),
+      tap(() => this.router.navigate(['/']))
     ).subscribe();  
   
-    this.sendResetRequestSub = this.actions$.pipe(
+    this.actions$.pipe(
       ofType(AuthActions.passwordChanged),
+      take(1),
       tap(() => this.router.navigate(['/']))
     ).subscribe();  
 
@@ -84,14 +82,6 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     if (this.storeSub) {
       this.storeSub.unsubscribe();
       this.storeSub = null;
-    }
-    if (this.sendTokenRequestSub) {
-      this.sendTokenRequestSub.unsubscribe();
-      this.sendTokenRequestSub = null;
-    }
-    if (this.sendResetRequestSub) {
-      this.sendResetRequestSub.unsubscribe();
-      this.sendResetRequestSub = null;
     }
   }
 

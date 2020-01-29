@@ -58,6 +58,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
   }
 
   onActivate(id: string) {
+    //TODO zle unsubscribe
     this.doctorService.activate(id)
       .subscribe(res => {
         this.loadDoctorsPage();

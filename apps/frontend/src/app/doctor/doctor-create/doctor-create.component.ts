@@ -7,7 +7,6 @@ import { Doctor } from '@zabek/data';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../_services';
 import { PwzValidator } from '../../_validators';
-import { MatDialog } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/app.reducer';
 import { AppActions } from '../../store';
@@ -29,7 +28,6 @@ export class DoctorCreateComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog,
     private readonly doctorService: DoctorService,
     private readonly store: Store<AppState>
   ) {}
@@ -179,12 +177,12 @@ export class DoctorCreateComponent implements OnInit {
       this.form.value.nip
     );
     if (this.mode === 'create') {
-      this.doctorService.addDoctor(doctor).subscribe(
+      this.doctorService.addDoctor(doctor).pipe(take(1)).subscribe(
         () => this.goOut(),
         err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
       );
     } else {     
-      this.doctorService.updateDoctor(doctor).subscribe(
+      this.doctorService.updateDoctor(doctor).pipe(take(1)).subscribe(
         () => this.goOut(),
         err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
       );
