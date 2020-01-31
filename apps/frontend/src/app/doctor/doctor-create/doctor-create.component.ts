@@ -190,6 +190,6 @@ export class DoctorCreateComponent implements OnInit {
   }
 
   private goOut() {
-    this.router.navigate(['/admin/doctor/list']);
+    this.router.navigate(['/user/doctor/list']);
   }
 }

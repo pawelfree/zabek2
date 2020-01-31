@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { Lab } from '@zabek/data';
 import { Subscription } from 'rxjs';
-import { LabActions, selectLabState } from '../store';
+import { LabActions, selectLabState } from '../../store';
 import { LoadingService } from '../../../_services';
 import { AppActions } from '../../../store';
 

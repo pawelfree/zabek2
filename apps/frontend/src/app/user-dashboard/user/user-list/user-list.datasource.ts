@@ -3,8 +3,8 @@ import { Observable, of } from 'rxjs';
 import { User } from '@zabek/data';
 import { switchMap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { UserState } from '../store/user.reducer';
-import { selectUserState } from '../store';
+import { UserState } from '../../store/user.reducer';
+import { selectUserState } from '../../store';
 
 export class UserListDataSource extends DataSource<User> {
 

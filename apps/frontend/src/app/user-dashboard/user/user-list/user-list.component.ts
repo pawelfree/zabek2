@@ -4,8 +4,8 @@ import { UserListDataSource } from './user-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { UserState } from '../store/user.reducer';
-import { UserActions, selectUserState } from '../store';
+import { UserState } from '../../store/user.reducer';
+import { UserActions, selectUserState } from '../../store';
 import { AppActions } from '../../../store';
 
 @Component({

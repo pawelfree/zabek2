@@ -4,8 +4,8 @@ import { LabListDataSource } from './lab-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { LabState, LabActions, selectLabState} from '../store';
-import { AppActions } from '../../../store';
+import { LabActions, selectLabState} from '../../store';
+import { AppActions, AppState } from '../../../store';
 
 @Component({
   selector: 'zabek-lab-list',
@@ -22,7 +22,7 @@ export class LabListComponent implements AfterViewInit, OnInit, OnDestroy  {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private readonly store: Store<LabState>) {}
+  constructor(private readonly store: Store<AppState>) {}
 
   ngOnInit() {
     this.storeSub = this.store.pipe(select(selectLabState)).subscribe(state => {
