@@ -3,12 +3,14 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor } from '@zabek/data';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Doctor, User, Role } from '@zabek/data';
+import { Router, ActivatedRoute, Params, ResolveStart } from '@angular/router';
 import { DoctorService } from '../../_services'
 import { PwzValidator } from '../../_validators';
 import { Store } from '@ngrx/store';
 import { AppState, AppActions } from '../../store';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
+import { raiseError } from '../../store/app.actions';
 
 
 @Component({
@@ -140,29 +142,22 @@ export class DoctorRegisterComponent implements OnInit {
       this.store.dispatch(AppActions.sendInfo({info: 'Niepoprawny identyfikator pracowni' }));
       return;
     }
-    const doctor = new Doctor(
-      null,
-      this.form.value.email,
-      this.queryParams['id'],
-      this.form.value.password1,
-      null,null,null,
-      this.form.value.firstName,
-      this.form.value.lastName,
-      this.form.value.officeName,
-      this.form.value.officeAddress,
-      this.form.value.qualificationsNo,
-      this.form.value.sameAddresses ? this.form.value.officeAddress : this.form.value.officeCorrespondenceAddress,
-      this.form.value.examFormat,
-      this.form.value.tomographyWithViewer,
-      false,
-      true,
-      this.form.value.pesel,
-      this.form.value.nip);
+    const doctor: User = Object.assign( new User(),{
+      _id: null,
+      role: Role.doctor,
+      email: this.form.value.email,
+      lab: this.queryParams['id'],
+      password: this.form.value.password1,
+      active: false,
+      rulesAccepted: true,
+    });
 
-    this.doctorService.addDoctor(doctor).subscribe(
-      res => this.goOut(),
-      err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-    );
+    console.error('lekarz rejestruje sam siebie', doctor);
+    this.store.dispatch(raiseError({message: 'lekarz rejestruje sam siebie', status: JSON.stringify(doctor)}))
+    // this.doctorService.addDoctor(doctor).subscribe(
+    //   res => this.goOut(),
+    //   err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+    // );
   }
   
   private goOut() {

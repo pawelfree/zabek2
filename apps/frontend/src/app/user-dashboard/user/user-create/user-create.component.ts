@@ -110,12 +110,15 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       return;
     }
     this.store.dispatch(AppActions.loadingStart());
-    const user = new User(
-      this._id ? this._id : null,
-      this.form.value.email,
-      this.form.value.role,
-      this.form.value.lab,
-      this.form.value.password1);
+    const user: User = Object.assign(new User(), {
+      _id: this._id ? this._id : null,
+      email: this.form.value.email,
+      role: this.form.value.role,
+      lab: this.form.value.lab,
+      password: this.form.value.password1,
+      active: true,
+      rulesAccepted: false});
+      console.log('user',user)
     if (this.mode === "create") {
       this.store.dispatch(UserActions.addUser({user}));
     } else {

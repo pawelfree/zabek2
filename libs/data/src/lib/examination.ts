@@ -1,5 +1,5 @@
 import { Document, Schema } from 'mongoose';
-import { IUser } from '@zabek/data';
+import { Doctor } from '@zabek/data';
 
 export interface Examination extends Document {
   readonly _id: string;
@@ -12,7 +12,7 @@ export interface Examination extends Document {
   readonly patientMarketingAck: boolean; //zgoda pacjenta na działania marketingowe
   readonly patientEmail: string;
   readonly patientPhone: string;
-  readonly doctor?: IUser; // imię i nazwisko lekarza ze skierowania
+  readonly doctor?: Doctor; // imię i nazwisko lekarza ze skierowania
   readonly sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   readonly examinationDate: string; //data wykonania badania
   readonly examinationType: string; //rodzaj badania

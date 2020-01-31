@@ -18,7 +18,7 @@ import { UserService } from './user.service';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { IUser, Role } from '@zabek/data';
+import { User, Role } from '@zabek/data';
 import * as _ from 'lodash';
 import { UpdateUserInternalDto } from './dto';
 import { LabService } from '../lab/lab.service';
@@ -63,7 +63,7 @@ export class UserController {
   @Post()
   async addUser(@Body() createUserDto: CreateUserDto) {
     console.warn('wymusic polityke haseł')
-    const user: IUser = await this.userService.findByEmail(createUserDto.email);
+    const user: User = await this.userService.findByEmail(createUserDto.email);
     if (user) {
       throw new BadRequestException('Użytkownik już istnieje');
     }
@@ -89,7 +89,7 @@ export class UserController {
   async deleteUser(@Param('id') id: string, @Request() req) {
     //TODO kto moze usunac kogo
     console.warn('kto moze usunac kogo')
-    const user: IUser =  await this.userService.findById(id);
+    const user: User =  await this.userService.findById(id);
     if (user.role === Role.sadmin || user.role === Role.doctor) {
       throw new BadRequestException('Nie można usunąć użytkownika');
     }

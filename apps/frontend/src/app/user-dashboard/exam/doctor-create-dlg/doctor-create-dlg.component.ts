@@ -122,29 +122,11 @@ export class DoctorCreateDlgComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const doctor = new Doctor(
-      null, //id
-      this.form.value.email,
-      this.lab_id,
-      null, //password
-      null, //expiresIn
-      null, //_tokenExpirationDate?
-      null, //_token
-      this.form.value.firstName,
-      this.form.value.lastName,
-      this.form.value.officeName,
-      this.form.value.officeAddress,
-      this.form.value.qualificationsNo,
-      this.form.value.sameAddresses
+    const doctor: Doctor = { ...this.form.value, _id: null,
+      officeCorrespondenceAddress: this.form.value.sameAddresses
         ? this.form.value.officeAddress
         : this.form.value.officeCorrespondenceAddress,
-      this.form.value.examFormat,
-      this.form.value.tomographyWithViewer,
-      this.form.value.active,
-      this.form.value.rulesAccepted,
-      this.form.value.pesel,
-      this.form.value.nip
-    );
+    };
 
     this.doctorService.addDoctor(doctor).pipe(take(1)).subscribe(
       (res: Doctor) => {

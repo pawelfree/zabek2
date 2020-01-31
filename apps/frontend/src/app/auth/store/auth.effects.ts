@@ -88,17 +88,11 @@ export class AuthEffects {
     map(() => {
       const userData = JSON.parse(localStorage.getItem('currentUser'));
       if (userData) {
-        const user = new User(
-          userData._id, 
-          userData.email, 
-          userData.role, 
-          userData.lab,
-          "", 
-          userData.expiresIn,
-          new Date(userData._tokenExpirationDate),
-          userData._token,
-          userData.active,
-          userData.rulesAccepted) 
+        const user = Object.assign(new User(), {
+          ...userData, 
+          password: '',
+          _tokenExpirationDate: new Date(userData._tokenExpirationDate)});
+
         if (user && user.token) {
           const expirationDuration = user.tokenExpirationDate.getTime() - new Date().getTime();
           this.authService.setLogoutTimer(expirationDuration);
@@ -121,21 +115,18 @@ export class AuthEffects {
             this.authService.setLogoutTimer(resData.expiresIn * 1000)
           }
         }),
-        map(resData => {
+        map((resData: User) => {
             const expirationDate = new Date(new Date().getTime() + resData.expiresIn * 1000);
-            const user: User = new User (
-              resData._id, 
-              resData.email, 
-              resData.role, 
-              resData.lab,
-              "",
-              resData.expiresIn,
-              expirationDate,
-              resData.token,
-              resData.active,
-              resData.rulesAccepted);
-              localStorage.setItem('currentUser', JSON.stringify(user));        
-              return AuthActions.authenticateSuccess({user, redirect: true, returnUrl: authData.returnUrl});
+            const userTemplate = {
+              ...resData, 
+              token: '',
+              password: '',
+              _token: resData.token,
+              _tokenExpirationDate: expirationDate };
+            delete userTemplate.token
+            const user = Object.assign(new User(), userTemplate);
+            localStorage.setItem('currentUser', JSON.stringify(user));   
+            return AuthActions.authenticateSuccess({user, redirect: true, returnUrl: authData.returnUrl});
         }),
         catchError(error => {
           return (handleError(error))

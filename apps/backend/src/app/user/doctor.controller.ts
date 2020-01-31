@@ -13,7 +13,7 @@ import {
   ParseIntPipe} from '@nestjs/common';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
-import { IUser, Lab, Role } from '@zabek/data';
+import { User, Lab, Role } from '@zabek/data';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
@@ -57,7 +57,7 @@ export class DoctorController {
   @Post()
   async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
     console.warn('wymusic polityke haseł')
-    const user: IUser = await this.userService.findByEmail(createDoctorDto.email);
+    const user: User = await this.userService.findByEmail(createDoctorDto.email);
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
@@ -104,7 +104,7 @@ export class DoctorController {
     if (id !== updateDoctorDto._id ) {
       throw new BadRequestException('Błędne dane lekarza i żądania');        
     }
-    const doctor: IUser = await this.userService.findById(id);
+    const doctor: User = await this.userService.findById(id);
 
     if (!doctor) {
       throw new BadRequestException('Lekarz nie istnieje');
@@ -151,7 +151,7 @@ export class DoctorController {
     let error;
     await this.userService
       .findById(id)
-      .then(async (user: IUser) => {
+      .then(async (user: User) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
@@ -183,7 +183,7 @@ export class DoctorController {
     let error;
     await this.userService
       .findById(id)
-      .then(async (user: IUser) => {
+      .then(async (user: User) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
