@@ -27,6 +27,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { FilesComponent } from './files/files.component';
 import { LoadingComponent } from './loading/loading.component';
 import { MessagesComponent } from './mesaages/messages.component';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
  
 registerLocaleData(localePl, 'pl');
 
@@ -44,7 +45,7 @@ registerLocaleData(localePl, 'pl');
     AcceptRulesComponent,
     FilesComponent,
     LoadingComponent,
-    MessagesComponent
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +67,7 @@ registerLocaleData(localePl, 'pl');
     EffectsModule.forRoot([AuthEffects]),
     FlexLayoutModule,
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

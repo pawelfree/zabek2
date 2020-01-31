@@ -1,44 +1,45 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_guards';
 import { Role } from '@zabek/data';
-import { ExamListComponent } from './exam-list/exam-list.component';
-import { ExamCreateComponent } from './exam-create/exam-create.component';
-import { ExaminationListResolver } from './exam-list/exam-list.resolver';
-import { ExamEditResolver } from './exam-create/exam-create.resolver';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
-    { 
-      path: '', 
-      redirectTo: 'examinations',
-      pathMatch: 'full'
-    },
-    {
-        path: 'examinations',
-        component: ExamListComponent,
-        resolve: { examinations : ExaminationListResolver },
-        canActivate: [ AuthGuard ],
-        data: { roles: [ Role.admin, Role.user ] }
-    },
-    {
-      path: 'examcreate',
-      component: ExamCreateComponent,
-      canActivate: [AuthGuard],
-      data: { roles: [Role.admin, Role.user] }
-    },
-    {
-      path: 'examedit/:examId',
-      component: ExamCreateComponent,
-      resolve: { examination: ExamEditResolver },
-      canActivate: [AuthGuard],
-      data: { roles: [Role.admin, Role.user] }
-    }   
+  {
+    path: '',
+    redirectTo: 'doctor',
+    pathMatch: 'full'
+  },
+  {
+    path: "user",
+    loadChildren: './user/user.module#UserModule'
+  },
+  {   
+    path: "lab", 
+    loadChildren: './lab/lab.module#LabModule'
+  },
+  {
+    path: "doctor",
+    loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule), 
+  },
+  {
+    path: "exam",
+    loadChildren: () => import('./exam/exam.module').then(m => m.ExamModule), 
+  },
+  {   
+    path: "feedbacks", 
+    loadChildren: './feedback/feedback.module#FeedbackModule'
+  },
+  {
+    path: 'reports',
+    component: ReportsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.admin, Role.sadmin] }
+  }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class UserDashboardRoutingModule {}

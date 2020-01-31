@@ -1,0 +1,44 @@
+<mat-card>
+  <form [formGroup]="form" (submit)="onSaveUser()">
+    <mat-form-field>
+      <input matInput 
+        type="email" 
+        formControlName="email" 
+        placeholder="Email użytkownika"          
+        [value]="form.get('email').value | lowercase">
+      <mat-error *ngIf="form.get('email').invalid">Wprowadź email użytkownika.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Rola użytkownika</mat-label>
+      <mat-select formControlName="role">
+        <mat-option  *ngFor="let role of roles" [value]="role">
+          {{ role }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" formControlName="lab_name" placeholder="Pracownia użytkownika" readonly (click)="onSelectLab()">
+    </mat-form-field>
+    <div hidden="true">
+      <mat-form-field>
+        <input matInput type="text" formControlName="lab" readonly>
+      </mat-form-field>
+    </div>
+    <mat-form-field>
+      <input matInput type="password" formControlName="password1" placeholder="Hasło">
+      <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('minLength')">Hasło musi mieć minimum 8 znaków.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasNumber')">Hasło musi zawierać cyfrę.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasCapitalCase')">Hasło musi zawierać wielką literę.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasSmallCase')">Hasło musi zawierać małą literę.</mat-error>
+      <mat-error *ngIf="form.get('password1').hasError('hasSpecialCharacters')">Hasło musi zawierać znak specjalny.</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła">
+    <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz użytkownika</button>
+  <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/user/list">Anuluj</button>
+  </form>
+</mat-card>

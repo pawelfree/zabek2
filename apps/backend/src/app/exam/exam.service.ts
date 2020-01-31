@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Examination, Lab, IUser } from '@zabek/data';
+import { Examination, Lab, User } from '@zabek/data';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateExamDto, CreateExamInternalDto } from './dto';
 
@@ -46,7 +46,7 @@ export class ExamService {
   async findAllExamsForDoctor(
     pageSize: number = 10,
     currentPage: number = 0,
-    doctor: IUser
+    doctor: User
   ): Promise<{ exams: Examination[]; count: number }> {
     const options = {};
 
