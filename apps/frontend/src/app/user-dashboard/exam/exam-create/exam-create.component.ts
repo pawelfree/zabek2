@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ExamService, DoctorService } from '../../_services';
+import { ExamService, DoctorService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
-import { PeselValidator, CustomValidator } from '../../_validators';
+import { PeselValidator, CustomValidator } from '../../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Doctor, Examination } from '@zabek/data';
@@ -11,7 +11,7 @@ import { BehaviorSubject, from } from 'rxjs';
 import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
 import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg.component';
-import { AppActions, AppState } from '../../store';
+import { AppActions, AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -244,7 +244,7 @@ export class ExamCreateComponent implements OnInit {
     });
     const subs = dialogRef.componentInstance.onAdd.subscribe(
       (res: Doctor) => this.doctors.next([res]),
-      err => console.log('cos poszlo nie tak')
+      err => console.log('cos poszlo nie tak',err)
     );
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(() => {

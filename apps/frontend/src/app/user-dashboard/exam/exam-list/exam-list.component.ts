@@ -7,10 +7,10 @@ import {
 } from '@angular/core';
 import { MatPaginator, MatDialog } from '@angular/material';
 import { ExamListDataSource } from './exam-list.datasource';
-import { ExamService } from '../../_services';
+import { ExamService } from '../../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
-import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
+import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
 import { Examination } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 

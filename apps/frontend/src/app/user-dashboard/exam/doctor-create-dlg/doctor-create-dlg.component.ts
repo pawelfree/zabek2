@@ -4,16 +4,16 @@ import {
   CustomValidator,
   PeselValidator,
   NIPValidator
-} from '../../_validators';
+} from '../../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '@zabek/data';
-import { DoctorService } from '../../_services';
-import { PwzValidator } from '../../_validators';
+import { DoctorService } from '../../../_services';
+import { PwzValidator } from '../../../_validators';
 import { MatDialogRef } from '@angular/material';
 import { Store, select } from '@ngrx/store';
-import { AppState, AppActions } from '../../store';
-import { currentUser } from '../../auth/store';
+import { AppState, AppActions } from '../../../store';
+import { currentUser } from '../../../auth/store';
 
 
 @Component({

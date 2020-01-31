@@ -35,13 +35,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     .pipe(
       //TODO przerobic na actions
       tap(authData => {
-        const user = authData.user
+        const user = authData.user;  
         if (user) {
-          let role = user.role;
-          if (role === Role.sadmin) {
-            role = Role.admin;
+          if (user.role === Role.doctor) {
+            this.router.navigate([`/doctor`]);
+          } else {
+            this.router.navigate(['/user']);
           }
-          this.router.navigate([`/${role}`]);
         }
       })
     )

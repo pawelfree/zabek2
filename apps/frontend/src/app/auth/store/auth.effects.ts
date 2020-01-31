@@ -163,17 +163,14 @@ export class AuthEffects {
       if (!user) {
         this.router.navigate(['/']);
       } else {
-        let role = user.role;
-        if (role === Role.sadmin) {
-          role = Role.admin;
+        let navigate = '/user';
+        if (user.role === Role.doctor) {
+          navigate = '/doctor';
         }
-        if (redirect) {
-          if (returnUrl === '/') {
-            this.router.navigate([`/${role}`]);
-            } else {
-              this.router.navigate([returnUrl]);
-          }
+        if (redirect && returnUrl && (returnUrl !== '/')) {
+          navigate = returnUrl
         }
+        this.router.navigate([navigate]);
       }
     })
   ), 

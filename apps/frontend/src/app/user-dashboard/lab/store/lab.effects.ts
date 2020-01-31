@@ -1,14 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { LabActions }  from '.';
+import { LabActions }  from '../store';
 import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
 import { Lab } from '@zabek/data';
 import { environment } from '../../../../environments/environment';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { LabState, selectLabState } from '.';
+import { LabState, selectLabState } from '../store';
 import { LoadingService } from '../../../_services';
 
 

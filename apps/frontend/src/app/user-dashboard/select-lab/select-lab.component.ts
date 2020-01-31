@@ -4,7 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LabListDataSource } from '../lab/lab-list/lab-list.datasource';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { LabState, LabActions, selectLabState } from '../lab/store/';
+import { LabState, LabActions, selectLabState } from '../lab/store';
 
 @Component({
   templateUrl: './select-lab.component.html',

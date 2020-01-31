@@ -1,14 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { UserActions } from '.';
+import { UserActions } from '../store';
 import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
 import { User } from '@zabek/data';
 import { environment } from '../../../../environments/environment';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { UserState } from '../store/user.reducer';
+import { UserState } from './user.reducer';
 import { selectUserState } from './user.selectors';
 
 const BACKEND_URL = environment.apiUrl + '/api/user/';

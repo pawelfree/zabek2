@@ -19,7 +19,7 @@ import { AppActions } from '../../../store';
 export class UserCreateComponent implements OnInit, OnDestroy {
   form: FormGroup;
   roles = [Role.admin, Role.user];
-  private mode = 'create';
+  private mode: 'create' | 'edit' = 'create';
   private _id: string;
   private storeSub: Subscription = null;
 
