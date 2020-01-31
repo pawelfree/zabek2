@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { UserActions } from '../store';
+import { UserActions } from './index';
 import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
 import { User } from '@zabek/data';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -34,7 +34,7 @@ export class UserEffects {
     switchMap(([props, store]) => {
       return this.http.post<User>(BACKEND_URL, props.user).pipe(
         map(() => {
-          this.router.navigate(['/admin/user/list']);
+          this.router.navigate(['/user/user/list']);
           return UserActions.fetchUsers({page: store.page});
         }),
         catchError(error => of(UserActions.errorUser({error})))
@@ -48,7 +48,7 @@ export class UserEffects {
     switchMap(([props, store]) => {
       return this.http.put<User>(BACKEND_URL+props.user._id, props.user).pipe(
         map(() => {
-          this.router.navigate(['/admin/user/list']);
+          this.router.navigate(['/user/user/list']);
           return UserActions.fetchUsers({page: store.page});
         }),
         catchError(error => of(UserActions.errorUser({error})))

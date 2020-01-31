@@ -1,15 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { LabActions }  from '../store';
-import { map, switchMap, withLatestFrom, catchError } from 'rxjs/operators';
+import { LabActions }  from '.';
+import { map, switchMap, withLatestFrom, catchError, tap } from 'rxjs/operators';
 import { Lab } from '@zabek/data';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { LabState, selectLabState } from '../store';
-import { LoadingService } from '../../../_services';
+import { selectLabState } from '.';
+import { LoadingService } from '../../_services';
+import { AppState } from '../../store';
 
 
 const BACKEND_URL = environment.apiUrl + '/api/lab/';
@@ -36,7 +37,7 @@ export class LabEffects {
       return this.http.post<Lab>(BACKEND_URL, props.lab).pipe(
         map(() => {
           this.loading.clearLoading();
-          this.router.navigate(['/admin/lab/list']);
+          this.router.navigate(['/user/lab/list']);
           return LabActions.fetchLabs({page: store.page});
         }),
         catchError(error => of(LabActions.errorLab({error})))
@@ -51,7 +52,7 @@ export class LabEffects {
       return this.http.put<Lab>(BACKEND_URL+props.lab._id, props.lab).pipe(
         map(() => {
           this.loading.clearLoading();
-          this.router.navigate(['/admin/lab/list']);
+          this.router.navigate(['/user/lab/list']);
           return LabActions.fetchLabs({page: store.page});
         }),
         catchError(error => of(LabActions.errorLab({error})))
@@ -94,6 +95,6 @@ export class LabEffects {
     private readonly http: HttpClient,
     private readonly actions$: Actions,    
     private readonly router: Router,
-    private readonly store: Store<LabState>,
+    private readonly store: Store<AppState>,
     private readonly loading: LoadingService){}
 }

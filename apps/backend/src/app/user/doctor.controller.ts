@@ -6,7 +6,6 @@ import {
   Put,
   UseGuards,
   Param,
-  InternalServerErrorException,
   Get,
   Query,
   Request,

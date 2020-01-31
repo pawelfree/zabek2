@@ -4,7 +4,8 @@ import { tap } from 'rxjs/operators';
 import { LabListDataSource } from '../lab/lab-list/lab-list.datasource';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { LabState, LabActions, selectLabState } from '../lab/store';
+import { LabActions, selectLabState } from '../store';
+import { AppState } from '../../store';
 
 @Component({
   templateUrl: './select-lab.component.html',
@@ -22,7 +23,7 @@ export class SelectLabComponent implements OnInit, AfterViewInit, OnDestroy {
   
   constructor (
     private readonly dialogRef: MatDialogRef<SelectLabComponent>, 
-    private readonly store: Store<LabState>
+    private readonly store: Store<AppState>
   ) { }
 
   ngOnInit() {

@@ -4,7 +4,7 @@ import { Lab } from '@zabek/data';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { take, map, catchError } from 'rxjs/operators';
-import { LabActions } from '../store';
+import { LabActions } from '../../store';
 import { Actions, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 

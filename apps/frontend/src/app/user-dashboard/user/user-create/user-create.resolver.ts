@@ -4,7 +4,7 @@ import { User } from '@zabek/data';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { take, map, catchError } from 'rxjs/operators';
-import * as UserActions from '../store/user.actions';
+import * as UserActions from '../../store/user.actions';
 import { Actions, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 

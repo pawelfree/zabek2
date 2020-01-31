@@ -14,7 +14,6 @@ import { MatDialogRef } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { AppState, AppActions } from '../../../store';
 
-
 @Component({
   selector: 'zabek-doctor-create-dlg',
   templateUrl: './doctor-create-dlg.component.html',

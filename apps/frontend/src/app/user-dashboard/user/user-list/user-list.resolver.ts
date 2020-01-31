@@ -5,7 +5,7 @@ import { of, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Actions, ofType } from '@ngrx/effects';
-import { UserActions } from '../store';
+import { UserActions } from '../../store';
 import { take, map, catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' }) 
