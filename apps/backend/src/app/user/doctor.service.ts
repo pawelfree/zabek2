@@ -8,21 +8,9 @@ export class DoctorService {
   constructor(@InjectModel('Doctor') private readonly doctorModel: Model<Doctor>,
               @InjectModel('User') private readonly userModel: Model<User>) {}
 
-  // async findById(id: string): Promise<User> {
-  //   return await this.userModel.findById(id).populate('lab').select('-password -__v');
-  // }
-
-  // async findByEmail(email: string): Promise<User> {
-  //   return await this.userModel.findOne({ email }); //TODO: ale teraz mogą być userzy z pustym emailem - lekarze....
-  // }
-
-  // async addDoctor(doctorCreateDto: DoctorCreateDto): Promise<Doctor> {
-  //   return await new this.doctorModel({...doctorCreateDto, _id: new Types.ObjectId()}).save();
-  // }
-
-  // async addUser(userCreateDto: UserCreateDto): Promise<User> {
-  //   return await new this.userModel({...userCreateDto, _id: new Types.ObjectId()}).save();
-  // }
+  async addDoctor(doctor: Doctor): Promise<Doctor> {
+    return await new this.doctorModel({...doctor, _id: new Types.ObjectId()}).save();
+  }
 
   async findAllOnlineDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {
     const options = {role: Role.doctor };
@@ -38,11 +26,11 @@ export class DoctorService {
                             .then((doctors: User[]) => ({ doctors, count }) );
   }
 
-  // async delete(_id: string) {
-  //   return await this.userModel.deleteOne({ _id });
-  // }
+  async delete(_id: string) {
+    return await this.doctorModel.deleteOne({ _id });
+  }
 
-  // async update(updateUserDto: ResetPasswordDto | DoctorUpdateDto | UserUpdateDto)  {
-  //   return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
-  // }
+  async update(doctor: Doctor)  {
+    return await this.doctorModel.updateOne({_id: doctor._id}, doctor);
+  }
 }

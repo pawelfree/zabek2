@@ -1,8 +1,8 @@
 import { Model, Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { User, Role } from '@zabek/data';
+import { User, Role, Doctor } from '@zabek/data';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateUserInternalDto, CreateUserInternalDto, CreateDoctorDto, ResetPasswordDto, UpdateDoctorDto } from './dto';
+import { ResetPasswordDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -16,12 +16,12 @@ export class UserService {
     return await this.userModel.findOne({ email }); //TODO: ale teraz mogą być userzy z pustym emailem - lekarze....
   }
 
-  async addDoctor(createDoctorDto: CreateDoctorDto): Promise<User> {
-    return await new this.userModel({...createDoctorDto, _id: new Types.ObjectId()}).save();
+  async addDoctor(doctor: Doctor): Promise<User> {
+    return await new this.userModel({...doctor, _id: new Types.ObjectId()}).save();
   }
 
-  async addUser(createUserInternalDto: CreateUserInternalDto): Promise<User> {
-    return await new this.userModel(createUserInternalDto).save();
+  async addUser(user: User): Promise<User> {
+    return await new this.userModel(user).save();
   }
 
   async findAllDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {
@@ -50,7 +50,7 @@ export class UserService {
     return await this.userModel.deleteOne({ _id });
   }
 
-  async update(updateUserDto: UpdateUserInternalDto | ResetPasswordDto | UpdateDoctorDto)  {
+  async update(updateUserDto: ResetPasswordDto | User)  {
     return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
   }
 }

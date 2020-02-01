@@ -118,7 +118,6 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       password: this.form.value.password1,
       active: true,
       rulesAccepted: false});
-      console.log('user',user)
     if (this.mode === "create") {
       this.store.dispatch(UserActions.addUser({user}));
     } else {

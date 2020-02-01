@@ -17,12 +17,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
-import { CreateUserDto, UpdateUserDto } from './dto';
 import { User, Role } from '@zabek/data';
 import * as _ from 'lodash';
-import { UpdateUserInternalDto } from './dto';
 import { LabService } from '../lab/lab.service';
 import { AuthService } from '../shared/security/auth.service';
+import * as crypto from 'crypto';
+import { DoctorService } from './doctor.service';
 
 @Controller('user')
 export class UserController {
@@ -30,7 +30,8 @@ export class UserController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly labService: LabService
+    private readonly labService: LabService,
+    private readonly doctorService: DoctorService
   ) {
     console.log('UserController - przemyslec co kto moze zrobic - usunac/edytowac/dodawac');
   }
@@ -58,24 +59,41 @@ export class UserController {
     return await this.userService.findAllUsers(pagesize, page, req.user.lab);
   }
   
+  //TODO hash password on presave isModified or null
+//   userModel.pre('save', async function save(next) {
+//     if (!this.isModified('password')) return next();
+//     try {
+//       const salt = await bcrypt.genSalt(saltRounds);
+//       this.password = await bcrypt.hash(this.password, salt);
+//       return next();
+//     } catch (err) {
+//       return next(err);
+//     }
+// });
+
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin)
   @Post()
-  async addUser(@Body() createUserDto: CreateUserDto) {
+  async addUser(@Body() userToCreate: User) {
     console.warn('wymusic polityke haseł')
-    const user: User = await this.userService.findByEmail(createUserDto.email);
+    const user: User = await this.userService.findByEmail(userToCreate.email);
     if (user) {
       throw new BadRequestException('Użytkownik już istnieje');
     }
-    await this.labService.incrementUsers(createUserDto.lab._id);
-    const _createUserDto = {
-      email: createUserDto.email,
-      role: createUserDto.role,
-      lab: createUserDto.lab._id,
-      active: true,
-      password: await this.authService.hash(createUserDto.password)
-    } 
-    return _.pick(await this.userService.addUser(_createUserDto), [
+    //TODO to musi sie zadziac razem
+    await this.labService.incrementUsers(userToCreate.lab._id);
+    const doctor = userToCreate.doctor ? await this.doctorService.addDoctor(userToCreate.doctor) : null;
+    const newUser: User = Object.assign(new User(), {
+      _id: null,
+      doctor: doctor, 
+      email: userToCreate.email,
+      role: userToCreate.role,
+      lab: userToCreate.lab,
+      active: userToCreate.active,
+      rulesAccepted: userToCreate.rulesAccepted,
+      password: userToCreate.password ? await this.authService.hash(userToCreate.password) : await this.authService.hash(crypto.randomBytes(20).toString('hex'))
+    });
+    return _.pick(await this.userService.addUser(newUser), [
       '_id',
       'email',
       'role',
@@ -111,9 +129,9 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin)
   @Put(':id')
-  async updateUser(@Body() updateUserDto: UpdateUserDto, @Param('id') id: string) {
+  async updateUser(@Body() userToUpdate: User, @Param('id') id: string) {
     console.warn('wymusic polityke haseł')
-    if (id !== updateUserDto._id ) {
+    if (id !== userToUpdate._id ) {
       throw new BadRequestException('Błędne dane użytkownika i żądania');        
     }  
     let error;
@@ -122,17 +140,24 @@ export class UserController {
         if (!user) {
           error = new BadRequestException('Użytkownik nie istnieje');
         }  else {
-          const _updateUserInternalDto: UpdateUserInternalDto = {
-            _id: id,
-            password: await this.authService.hash(updateUserDto.password),
-            email: updateUserDto.email,
-            role: updateUserDto.role,
-            lab: updateUserDto.lab._id
-          };
-          const {n, nModified, ok} = await this.userService.update(_updateUserInternalDto);
-          if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
-            error = new InternalServerErrorException('Nieznany błąd');
-          }        
+
+          if (userToUpdate.password) {
+            const updatedUser: User = Object.assign(new User(), { ...user,
+            password: await this.authService.hash(userToUpdate.password)});
+            console.log('tylko zmiana hasla uzytkownika online')
+            const {n, nModified, ok} = await this.userService.update(updatedUser);
+            console.log(n,nModified, ok)
+            if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
+              error = new InternalServerErrorException('Nieznany błąd - zapis uzytkownika');
+            } 
+          } else {
+            console.log('zmiana danych lekarza', userToUpdate.doctor);
+            const {n, nModified, ok} = await this.doctorService.update(userToUpdate.doctor);
+            if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
+              error = new InternalServerErrorException('Nieznany błąd - zapis lekarza');
+            } 
+          }
+       
         }
       })
      .catch(err => {

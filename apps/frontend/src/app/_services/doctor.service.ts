@@ -38,6 +38,14 @@ export class DoctorService {
     return this.http.get<{ doctors: User[]; count: number }>(BACKEND_URL + 'online/' + queryParams);
   }
 
+  addUser(doctor: User) {
+    return this.http.post<User>(USER_BACKEND_URL,doctor);
+  }
+
+  updateUser(doctor: User) {
+    return this.http.put<User>(USER_BACKEND_URL + doctor._id, doctor)
+  }
+
   getOnlineDoctor(id: string) {
     return this.http.get<User>(USER_BACKEND_URL + id);
   }

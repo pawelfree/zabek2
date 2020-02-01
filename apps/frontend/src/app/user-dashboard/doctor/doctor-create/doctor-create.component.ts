@@ -10,7 +10,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { AppActions } from '../../../store';
 import { currentUser } from '../../../auth/store';
-import { User } from '@zabek/data';
+import { User, Doctor, Lab, Role } from '@zabek/data';
 
 @Component({
   selector: 'zabek-doctor-create',
@@ -20,8 +20,8 @@ import { User } from '@zabek/data';
 export class DoctorCreateComponent implements OnInit {
   form: FormGroup;
   private mode: 'create' | 'edit';
-  private _id: string;
-  private lab_id: string;
+  private lab: Lab;
+  private user: User;
 
   sameAddresses$: Observable<boolean>;
 
@@ -37,17 +37,16 @@ export class DoctorCreateComponent implements OnInit {
     this.store.pipe(
       select(currentUser),
       take(1),
-      tap(user => this.lab_id = user.lab._id)
+      tap(user => this.lab = user.lab)
     ).subscribe();
 
-    const doctor = this.route.snapshot.data.doctor;
-    const sameAddresses = doctor ? (doctor.doctor.officeAddress === doctor.doctor.officeCorrespondenceAddres ? true : false) : true;
+    this.user = this.route.snapshot.data.doctor;
+    const sameAddresses = this.user ? (this.user.doctor.officeAddress === this.user.doctor.officeCorrespondenceAddres ? true : false) : true;
 
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email]
       }),
-      lab: new FormControl(null),
       firstName: new FormControl(null, {
         validators: [
           Validators.required,
@@ -98,37 +97,27 @@ export class DoctorCreateComponent implements OnInit {
       examFormat: new FormControl('jpeg', {
         validators: [Validators.required]
       }),
-      tomographyWithViewer: new FormControl(false),
-      active: new FormControl(null),
-      rulesAccepted: new FormControl(null)
+      tomographyWithViewer: new FormControl(false)
     });
 
-    if (doctor) {
-      console.log('doctor',doctor);
-      
+    if (this.user) {      
       this.mode = 'edit';
-      this._id = doctor._id;
       this.form.setValue({
-        email: doctor.email,
-        firstName: doctor.doctor.firstName,
-        lastName: doctor.doctor.lastName,
-        lab: doctor.lab,
-        qualificationsNo: doctor.doctor.qualificationsNo,
-        officeName: doctor.doctor.officeName,
+        email: this.user.email,
+        firstName: this.user.doctor.firstName,
+        lastName: this.user.doctor.lastName,
+        qualificationsNo: this.user.doctor.qualificationsNo,
+        officeName: this.user.doctor.officeName,
         sameAddresses,
-        officeAddress: doctor.doctor.officeAddress,
-        officeCorrespondenceAddress: doctor.doctor.officeCorrespondenceAddres,
-        examFormat: doctor.doctor.examFormat,
-        tomographyWithViewer: doctor.doctor.tomographyWithViewer,
-        active: doctor.active,
-        rulesAccepted: doctor.rulesAccepted,
-        nip: doctor.doctor.nip,
-        pesel: doctor.doctor.pesel
+        officeAddress: this.user.doctor.officeAddress,
+        officeCorrespondenceAddress: this.user.doctor.officeCorrespondenceAddres,
+        examFormat: this.user.doctor.examFormat,
+        tomographyWithViewer: this.user.doctor.tomographyWithViewer,
+        nip: this.user.doctor.nip,
+        pesel: this.user.doctor.pesel
       });
     } else {
       this.mode = 'create';
-      this._id = null;
-      this.form.patchValue({lab: this.lab_id});
     }
 
     this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges
@@ -156,24 +145,43 @@ export class DoctorCreateComponent implements OnInit {
     }
 
     this.store.dispatch(AppActions.loadingStart());
-    const doctor: User = { ...this.form.value, _id: this._id ? this._id : null,
+    const newDoctor: Doctor = {
+      _id: this.user ? this.user.doctor._id : null,
+      firstName: this.form.value.firstName,
+      lastName: this.form.value.lastName,
+      pesel: this.form.value.pesel,
+      nip: this.form.value.nip,
+      qualificationsNo: this.form.value.qualificationsNo,
+      officeName: this.form.value.officeName,
+      officeAddress: this.form.value.officeAddress,
       officeCorrespondenceAddres: this.form.value.sameAddresses
-        ? this.form.value.officeAddress
-        : this.form.value.officeCorrespondenceAddress,
-    };
-    console.log('nie zaimplementowane dodawanie lekarza', doctor)
-    // if (this.mode === 'create') {
-    //   this.doctorService.addUser(doctor).pipe(take(1)).subscribe(
-    //     () => this.goOut(),
-    //     err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-    //   );
-    // } else {     
-      //TODO update doctor
-      // this.doctorService.updateDoctor(doctor).pipe(take(1)).subscribe(
-      //   () => this.goOut(),
-      //   err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-      // );
-    // }
+      ? this.form.value.officeAddress
+      : this.form.value.officeCorrespondenceAddress,
+      examFormat: this.form.value.examFormat,
+      tomographyWithViewer: this.form.value.tomographyWithViewer
+    }
+    const newUser: User = Object.assign(new User(),{ 
+      _id: this.user ? this.user._id : null,
+      email: this.form.value.email,
+      role: Role.doctor,
+      rulesAccepted: this.user ? this.user.rulesAccepted : false,
+      active: this.user ? this.user.active : false,
+      lab: this.user ? this.user.lab : this.lab,
+      doctor: newDoctor
+    });
+
+    //TODO zamienic na store
+    if (this.mode === 'create') {
+      this.doctorService.addUser(newUser).pipe(take(1)).subscribe(
+        () => this.goOut(),
+        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+      );
+    } else {     
+      this.doctorService.updateUser(newUser).pipe(take(1)).subscribe(
+        () => this.goOut(),
+        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+      );
+    }
   }
 
   private goOut() {

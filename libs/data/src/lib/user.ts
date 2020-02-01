@@ -3,7 +3,6 @@ import { Doctor } from './doctor';
 import { Lab } from './lab';
 
 export class User implements Document {
-
   readonly _id: string = null;
   readonly email: string;
   readonly role: string;
