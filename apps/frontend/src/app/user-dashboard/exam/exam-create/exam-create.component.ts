@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Doctor, Examination } from '@zabek/data';
+import { Doctor, Examination, Patient, Lab } from '@zabek/data';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject, from } from 'rxjs';
 import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
@@ -45,6 +45,7 @@ export class ExamCreateComponent implements OnInit {
   form: FormGroup;
   private mode: 'edit' | 'create' = 'create';
   private _id: string;
+  private lab: Lab;
   public selectedDoctor;
 
   endOfData: boolean;
@@ -146,22 +147,23 @@ export class ExamCreateComponent implements OnInit {
     if (exam) {
       this.mode = 'edit';
       this._id = exam._id;
+      this.lab = exam.lab;
       this.selectedDoctor = exam.doctor;
       this.form.setValue({
         examinationDate: exam.examinationDate,
         examinationType: exam.examinationType,
         examinationFile: exam.examinationFile,
-        patientFullName: exam.patientFullName,
-        patientPesel: exam.patientPesel,
-        patientOtherID: exam.patientOtherID,
-        patientAge: exam.patientAge,
-        patientIsFemale: exam.patientIsFemale,
-        patientProcessingAck: exam.patientProcessingAck,
-        patientMarketingAck: exam.patientMarketingAck,
-        patientEmail: exam.patientEmail,
-        patientPhone: exam.patientPhone,
+        patientFullName: exam.patient.fullName,
+        patientPesel: exam.patient.pesel,
+        patientOtherID: exam.patient.otherID,
+        patientAge: exam.patient.age,
+        patientIsFemale: exam.patient.female,
+        patientProcessingAck: exam.patient.processingAck,
+        patientMarketingAck: exam.patient.marketingAck,
+        patientEmail: exam.patient.email,
+        patientPhone: exam.patient.phone,
         doctor: exam.doctor,
-        sendEmailTo: exam.sendEmailTo
+        sendEmailTo: exam.sendEmailTo === undefined ? null : exam.sendEmailTo
       });
       setTimeout(() => { 
         if (this.selectedDoctor) {
@@ -174,6 +176,7 @@ export class ExamCreateComponent implements OnInit {
     } else {
       this.mode = 'create';
       this._id = null;
+      this.lab = null;
     }
   }
 
@@ -198,20 +201,25 @@ export class ExamCreateComponent implements OnInit {
       return;
     }
     this.store.dispatch(AppActions.loadingStart());
-    const exam = {
+    const patient: Patient = {
+      fullName: this.form.value.patientFullName,
+      pesel: this.form.value.patientPesel,
+      otherID: this.form.value.patientOtherID,
+      age: this.form.value.patientAge,
+      female: this.form.value.patientIsFemale,
+      processingAck: this.form.value.patientProcessingAck,
+      marketingAck: this.form.value.patientMarketingAck,
+      email: this.form.value.patientEmail,
+      phone: this.form.value.patientPhone,
+    };
+
+    const exam: Examination = {
       _id: this._id ? this._id : null,
       examinationDate: this.form.value.examinationDate,
       examinationType: this.form.value.examinationType,
       examinationFile: this.form.value.examinationFile,
-      patientFullName: this.form.value.patientFullName,
-      patientPesel: this.form.value.patientPesel,
-      patientOtherID: this.form.value.patientOtherID,
-      patientAge: this.form.value.patientAge,
-      patientIsFemale: this.form.value.patientIsFemale,
-      patientProcessingAck: this.form.value.patientProcessingAck,
-      patientMarketingAck: this.form.value.patientMarketingAck,
-      patientEmail: this.form.value.patientEmail,
-      patientPhone: this.form.value.patientPhone,
+      patient,
+      lab: this.lab,
       sendEmailTo: this.form.value.sendEmailTo,
       doctor:
         (this.form.value.doctor === null || undefined) || (this.form.value.doctor._id === 0) ? null : this.form.value.doctor

@@ -10,24 +10,24 @@ import { ExamEditResolver } from './exam-create/exam-create.resolver';
 const routes: Routes = [
     { 
       path: '', 
-      redirectTo: 'examinations',
+      redirectTo: 'list',
       pathMatch: 'full'
     },
     {
-        path: 'examinations',
+        path: 'list',
         component: ExamListComponent,
         resolve: { examinations : ExaminationListResolver },
         canActivate: [ AuthGuard ],
         data: { roles: [ Role.admin, Role.user ] }
     },
     {
-      path: 'examcreate',
+      path: 'create',
       component: ExamCreateComponent,
       canActivate: [AuthGuard],
       data: { roles: [Role.admin, Role.user] }
     },
     {
-      path: 'examedit/:examId',
+      path: 'edit/:examId',
       component: ExamCreateComponent,
       resolve: { examination: ExamEditResolver },
       canActivate: [AuthGuard],

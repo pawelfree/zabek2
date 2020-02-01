@@ -14,6 +14,7 @@ export class Doctor implements Document {
   readonly tomographyWithViewer: boolean;
   readonly pesel?: string;
   readonly nip?:  string;
+  readonly email?: string;
 }
 
 export const DoctorSchema = new Schema({
@@ -82,7 +83,14 @@ export const DoctorSchema = new Schema({
     minLength: 11,
     maxLength: 11,
     unique: false
-  }
+  },
+  email: {
+    type: String,
+    requred: true,
+    minLength: 5,
+    maxLength: 50,
+    unique: true
+  },
 });
 
 DoctorSchema.path('qualificationsNo').validate(function (value) {

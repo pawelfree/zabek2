@@ -1,85 +1,95 @@
 import { Document, Schema } from 'mongoose';
 import { Doctor } from '@zabek/data';
+import { Lab } from './lab';
+
+export interface Patient extends Document {
+  readonly fullName: string;
+  readonly pesel: string;
+  readonly otherID: string;
+  readonly age: number;
+  readonly female: boolean;
+  readonly processingAck: boolean;
+  readonly marketingAck: boolean;
+  readonly email: string;
+  readonly phone: string;  
+}
 
 export interface Examination extends Document {
   readonly _id: string;
-  readonly patientFullName: string; // Imię i nazwisko pacjenta ze skierowania
-  readonly patientPesel: string; //pesel pacjenta ze skierowania
-  readonly patientOtherID: string; //Inny dokument tożsamości
-  readonly patientAge: number; //z pesela - wyliczane automatycznie
-  readonly patientIsFemale: boolean; //z pesela - wyliczane automatycznie
-  readonly patientProcessingAck: boolean; //zgoda pacjenta na przetwarzanie badania
-  readonly patientMarketingAck: boolean; //zgoda pacjenta na działania marketingowe
-  readonly patientEmail: string;
-  readonly patientPhone: string;
-  readonly doctor?: Doctor; // imię i nazwisko lekarza ze skierowania
-  readonly sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
-  readonly examinationDate: string; //data wykonania badania
-  readonly examinationType: string; //rodzaj badania
-  readonly examinationFile: string; //link do wyników badan
+  readonly doctor?: Doctor; 
+  readonly patient: Patient;
+  readonly lab: Lab;
+  readonly sendEmailTo: string; 
+  readonly examinationDate: string; 
+  readonly examinationType: string; 
+  readonly examinationFile: string; 
 }
 
-export const ExamSchema = new Schema({
-  patientFullName: {
+export const PatientSchema = new Schema({
+  fullName: {
     type: String,
     requred: true,
     minLength: 5,
     maxLength: 50,
     unique: false
   },
-  patientPesel: {
+  pesel: {
     type: String,
     required: false,
     minLength: 11,
     maxLength: 11,
     unique: false
   },
-  patientOtherID: {
+  otherID: {
     type: String,
     required: false,
     minLength: 0,
     maxLength: 50,
     unique: false
   },
-  patientAge: {
-    type: String,
+  age: {
+    type: Number,
     required: false,
     minLength: 1,
     maxLength: 3,
     unique: false
   },
-  patientIsFemale: {
+ female: {
     type: Boolean,
     required: false,
     default: false
   },  
-  patientProcessingAck: {
+  processingAck: {
     type: Boolean,
     required: false,
     default: false
   },
-  patientMarketingAck: {
+  marketingAck: {
     type: Boolean,
     required: false,
     default: false
   },
-  patientEmail: {
+  email: {
     type: String,
     requred: false,
     minLength: 5,
     maxLength: 100,
     unique: false
   },
-  patientPhone: {
+  phone: {
     type: String,
     requred: false,
     minLength: 0,
     maxLength: 50,
     unique: false
-  },      
+  }
+})
+
+export const ExamSchema = new Schema({
+  patient: PatientSchema,
   doctor: {
     type: Schema.Types.ObjectId, 
-    ref: 'User',
+    ref: 'Doctor',
     requred: false,
   },
   sendEmailTo: {

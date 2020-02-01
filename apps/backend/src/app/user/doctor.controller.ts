@@ -36,7 +36,7 @@ export class DoctorController {
     @Query('page', new ParseIntPipe()) page: number = 10,
     @Request() req
   ) {
-    return await this.userService.findAllDoctors(
+    return await this.doctorService.findAllDoctors(
       pagesize,
       page,
       req.user.lab
@@ -102,15 +102,13 @@ export class DoctorController {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
-          const newUser: User = Object.assign(new User(), { ...user,
-            active: true
-          });
           console.log('activate - user', user);
-          const { n, nModified, ok } = await this.userService.update(newUser);
-          if (n !== 1 || nModified !== 1 || ok !== 1) {
-            error = new InternalServerErrorException('Nieznany błąd.');
-          }
-          this.emailService.sendUserActivatedEmail(user.email);
+          this.userService.activate(user).then(
+            res => {
+              this.emailService.sendUserActivatedEmail(user.email);
+              return res;
+            }
+          )
         }
       })
       .catch(err => {
@@ -132,14 +130,8 @@ export class DoctorController {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
-          const newUser: User = Object.assign(new User(), { ...user,
-            rulesAccepted: true
-          });
           console.log('accept rules - user', user);
-          const { n, nModified, ok } = await this.userService.update(newUser);
-          if (n !== 1 || nModified !== 1 || ok !== 1) {
-            error = new InternalServerErrorException('Nieznany błąd.');
-          }
+          return await this.userService.acceptRules(user);
         }
       })
       .catch(err => {
