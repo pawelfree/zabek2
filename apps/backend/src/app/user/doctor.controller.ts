@@ -22,6 +22,7 @@ import { LabService } from '../lab/lab.service';
 import { AuthService } from '../shared/security/auth.service';
 import { EmailService } from '../shared/email/email.service';
 import * as crypto from 'crypto';
+import { DoctorService } from './doctor.service';
 
 @Controller('doctor')
 export class DoctorController {
@@ -29,7 +30,8 @@ export class DoctorController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly labService: LabService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly doctorService: DoctorService
   ) {}
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -41,6 +43,21 @@ export class DoctorController {
     @Request() req
   ) {
     return await this.userService.findAllDoctors(
+      pagesize,
+      page,
+      req.user.lab
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.sadmin, Role.admin, Role.user)
+  @Get('online')
+  async allOnlineDoctors(
+    @Query('pagesize', new ParseIntPipe()) pagesize: number = 0,
+    @Query('page', new ParseIntPipe()) page: number = 10,
+    @Request() req
+  ) {
+    return await this.doctorService.findAllOnlineDoctors(
       pagesize,
       page,
       req.user.lab

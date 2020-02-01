@@ -94,7 +94,7 @@ export class DoctorCreateDlgComponent implements OnInit {
     this.store.pipe(
       select(currentUser),
       take(1),
-      tap(user => this.lab_id = user.lab)
+      tap(user => this.lab_id = user.lab._id)
     ).subscribe();
 
     this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges

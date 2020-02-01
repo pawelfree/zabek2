@@ -96,7 +96,7 @@ export class UserController {
     if (user.role === Role.admin && req.user.role === Role.admin) {
       throw new BadRequestException('Użytkownik nie może usunąć administratora');
     }
-    await this.labService.decrementUsers(user.lab);
+    await this.labService.decrementUsers(user.lab._id);
     return this.userService.delete(id);
   }
 

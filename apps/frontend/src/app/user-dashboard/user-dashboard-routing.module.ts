@@ -20,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: "doctor",
-    loadChildren: () => import('../doctor/doctor.module').then(m => m.DoctorModule), 
+    loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule), 
   },
   {
     path: "exam",

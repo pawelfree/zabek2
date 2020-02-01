@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
+import { CustomValidator, PeselValidator, NIPValidator } from '../../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor } from '@zabek/data';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DoctorService } from '../../_services';
-import { PwzValidator } from '../../_validators';
+import { DoctorService } from '../../../_services';
+import { PwzValidator } from '../../../_validators';
 import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store/app.reducer';
-import { AppActions } from '../../store';
-import { currentUser } from '../../auth/store';
+import { AppState } from '../../../store/app.reducer';
+import { AppActions } from '../../../store';
+import { currentUser } from '../../../auth/store';
+import { User } from '@zabek/data';
 
 @Component({
   selector: 'zabek-doctor-create',
@@ -37,7 +37,7 @@ export class DoctorCreateComponent implements OnInit {
     this.store.pipe(
       select(currentUser),
       take(1),
-      tap(user => this.lab_id = user.lab)
+      tap(user => this.lab_id = user.lab._id)
     ).subscribe();
 
     const doctor = this.route.snapshot.data.doctor;
@@ -126,6 +126,7 @@ export class DoctorCreateComponent implements OnInit {
     } else {
       this.mode = 'create';
       this._id = null;
+      this.form.patchValue({lab: this.lab_id});
     }
 
     this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges
@@ -153,22 +154,24 @@ export class DoctorCreateComponent implements OnInit {
     }
 
     this.store.dispatch(AppActions.loadingStart());
-    const doctor: Doctor = { ...this.form.value, _id: this._id ? this._id : null,
+    const doctor: User = { ...this.form.value, _id: this._id ? this._id : null,
       officeCorrespondenceAddres: this.form.value.sameAddresses
         ? this.form.value.officeAddress
         : this.form.value.officeCorrespondenceAddress,
     };
-    if (this.mode === 'create') {
-      this.doctorService.addDoctor(doctor).pipe(take(1)).subscribe(
-        () => this.goOut(),
-        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-      );
-    } else {     
-      this.doctorService.updateDoctor(doctor).pipe(take(1)).subscribe(
-        () => this.goOut(),
-        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-      );
-    }
+    console.log('nie zaimplementowane dodawanie lekarza', doctor)
+    // if (this.mode === 'create') {
+    //   this.doctorService.addUser(doctor).pipe(take(1)).subscribe(
+    //     () => this.goOut(),
+    //     err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+    //   );
+    // } else {     
+      //TODO update doctor
+      // this.doctorService.updateDoctor(doctor).pipe(take(1)).subscribe(
+      //   () => this.goOut(),
+      //   err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+      // );
+    // }
   }
 
   private goOut() {

@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { NgModule } from '@angular/core';
 import { DoctorListComponent } from './doctor-list/doctor-list.component';
-import { AuthGuard } from '../_guards';
+import { AuthGuard } from '../../_guards';
 import { Role } from '@zabek/data';
 import { DoctorCreateComponent } from './doctor-create/doctor-create.component';
 import { DoctorListResolver } from './doctor-list/doctor-list.resolver';
