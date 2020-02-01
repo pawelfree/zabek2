@@ -41,7 +41,7 @@ export class DoctorCreateComponent implements OnInit {
     ).subscribe();
 
     const doctor = this.route.snapshot.data.doctor;
-    const sameAddresses = doctor ? (doctor.officeAddress === doctor.officeCorrespondenceAddres ? true : false) : true;
+    const sameAddresses = doctor ? (doctor.doctor.officeAddress === doctor.doctor.officeCorrespondenceAddres ? true : false) : true;
 
     this.form = new FormGroup({
       email: new FormControl(null, {
@@ -104,24 +104,26 @@ export class DoctorCreateComponent implements OnInit {
     });
 
     if (doctor) {
+      console.log('doctor',doctor);
+      
       this.mode = 'edit';
       this._id = doctor._id;
       this.form.setValue({
         email: doctor.email,
-        firstName: doctor.firstName,
-        lastName: doctor.lastName,
+        firstName: doctor.doctor.firstName,
+        lastName: doctor.doctor.lastName,
         lab: doctor.lab,
-        qualificationsNo: doctor.qualificationsNo,
-        officeName: doctor.officeName,
+        qualificationsNo: doctor.doctor.qualificationsNo,
+        officeName: doctor.doctor.officeName,
         sameAddresses,
-        officeAddress: doctor.officeAddress,
-        officeCorrespondenceAddress: doctor.officeCorrespondenceAddres,
-        examFormat: doctor.examFormat,
-        tomographyWithViewer: doctor.tomographyWithViewer,
+        officeAddress: doctor.doctor.officeAddress,
+        officeCorrespondenceAddress: doctor.doctor.officeCorrespondenceAddres,
+        examFormat: doctor.doctor.examFormat,
+        tomographyWithViewer: doctor.doctor.tomographyWithViewer,
         active: doctor.active,
         rulesAccepted: doctor.rulesAccepted,
-        nip: doctor.nip,
-        pesel: doctor.pesel
+        nip: doctor.doctor.nip,
+        pesel: doctor.doctor.pesel
       });
     } else {
       this.mode = 'create';
