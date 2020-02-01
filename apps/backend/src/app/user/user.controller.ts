@@ -120,7 +120,7 @@ export class UserController {
 
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.sadmin, Role.admin)
+  @Roles(Role.sadmin, Role.admin, Role.user)
   @Get(':id')
   async getUser(@Param('id') id: string) {
     return this.userService.findById(id);
