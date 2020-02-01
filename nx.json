@@ -9,7 +9,8 @@
   },
   "projects": {
     "frontend-e2e": {
-      "tags": []
+      "tags": [],
+      "implicitDependencies": ["frontend"]
     },
     "frontend": {
       "tags": []
