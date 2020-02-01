@@ -12,6 +12,7 @@ export class ExamService {
     return await this.examModel
       .findById(id)
       .populate('doctor')
+      .populate('lab')
       .select('-__v');
   }
 

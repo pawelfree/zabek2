@@ -158,7 +158,8 @@ export class DoctorCreateComponent implements OnInit {
       ? this.form.value.officeAddress
       : this.form.value.officeCorrespondenceAddress,
       examFormat: this.form.value.examFormat,
-      tomographyWithViewer: this.form.value.tomographyWithViewer
+      tomographyWithViewer: this.form.value.tomographyWithViewer,
+      email: this.form.value.email
     }
     const newUser: User = Object.assign(new User(),{ 
       _id: this.user ? this.user._id : null,
@@ -185,6 +186,6 @@ export class DoctorCreateComponent implements OnInit {
   }
 
   private goOut() {
-    this.router.navigate(['/admin/doctor/list']);
+    this.router.navigate(['/user/doctor/list']);
   }
 }

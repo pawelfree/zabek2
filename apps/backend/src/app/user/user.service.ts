@@ -53,4 +53,12 @@ export class UserService {
   async update(updateUserDto: ResetPasswordDto | User)  {
     return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
   }
+
+  async acceptRules(user: User) {
+    return await this.userModel.findOneAndUpdate({_id: user._id},{$set: {rulesAccepted: true}}, {new: true});
+  }
+
+  async activate(user: User) {
+    return await this.userModel.findOneAndUpdate({_id: user._id},{$set: {active: true}}, {new: true});
+  }
 }
