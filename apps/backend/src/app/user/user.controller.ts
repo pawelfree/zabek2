@@ -72,7 +72,7 @@ export class UserController {
 // });
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.sadmin, Role.admin)
+  @Roles(Role.sadmin, Role.admin, Role.user)
   @Post()
   async addUser(@Body() userToCreate: User) {
     console.warn('wymusic polityke haseł')
@@ -127,7 +127,7 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.sadmin, Role.admin)
+  @Roles(Role.sadmin, Role.admin, Role.user)
   @Put(':id')
   async updateUser(@Body() userToUpdate: User, @Param('id') id: string) {
     console.warn('wymusic polityke haseł')
