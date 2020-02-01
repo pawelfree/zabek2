@@ -6,7 +6,7 @@ import { tap, catchError, take } from 'rxjs/operators';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { User } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
-import { ConfirmationComponent } from '../../common-dialogs/confirmation/confirmation.component';
+import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
 
 @Component({
   selector: 'zabek-doctor-list',
