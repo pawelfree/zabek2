@@ -27,7 +27,7 @@
             routerLinkActive="mat-accent"
             routerLink="/user/doctor/list">Lekarze</a>
       </li>
-      <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])">
+      <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])" [hidden]="true">
         <a mat-button 
             routerLinkActive="mat-accent"
             routerLink="/user/reports">Raporty</a>

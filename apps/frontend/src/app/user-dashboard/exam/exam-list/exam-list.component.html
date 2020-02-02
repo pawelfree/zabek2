@@ -77,11 +77,6 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="examinationFile">
-    <th mat-header-cell *matHeaderCellDef>Pliki</th>
-    <td mat-cell *matCellDef="let element"><a href="{{element.examinationFile}}" target="_blank" rel="_noopener"> Pobierz </a></td>
-  </ng-container>
-
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef style="text-align: center">Akcje</th>   
     <td mat-cell *matCellDef="let element; let i=index;"> 
@@ -103,6 +98,14 @@
               alt="Wyślij powiadomienie o badaniu" 
               (click)="onSendNotificationToDoctor(element._id)">
         <mat-icon aria-label="Wyślij powiadomienie o badaniu">mail_outline</mat-icon>
+      </button>
+      <button mat-icon-button
+              color="primary"
+              title="Plik"
+              alt="Dodaj plik do badania"
+              (click)="processFile(element)">
+        <mat-icon *ngIf="!element.file" aria-label="Dodaj zdjęcie" >photo_camera</mat-icon>
+        <mat-icon *ngIf="element.file" aria-label="Pobierz zdjęcie" hidden="true">save_alt</mat-icon>
       </button>
     </td>
   </ng-container> 

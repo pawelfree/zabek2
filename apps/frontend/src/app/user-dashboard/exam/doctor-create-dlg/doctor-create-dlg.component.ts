@@ -11,9 +11,8 @@ import { Doctor } from '@zabek/data';
 import { DoctorService } from '../../../_services';
 import { PwzValidator } from '../../../_validators';
 import { MatDialogRef } from '@angular/material';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState, AppActions } from '../../../store';
-import { currentUser } from '../../../auth/store';
 
 
 @Component({
@@ -26,7 +25,6 @@ export class DoctorCreateDlgComponent implements OnInit {
 
   onAdd = new EventEmitter();
   sameAddresses$: Observable<any>;
-  private lab_id: string
 
   constructor(
     private readonly doctorService: DoctorService,
@@ -90,12 +88,6 @@ export class DoctorCreateDlgComponent implements OnInit {
       active: new FormControl(null),
       rulesAccepted: new FormControl(null)
     });
-
-    this.store.pipe(
-      select(currentUser),
-      take(1),
-      tap(user => this.lab_id = user.lab._id)
-    ).subscribe();
 
     this.sameAddresses$ = this.form.controls.sameAddresses.valueChanges
       .pipe(

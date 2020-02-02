@@ -5,9 +5,9 @@ import uuid from 'uuid';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
-import { Role } from '@zabek/data';
+import { Role, FileUpload } from '@zabek/data';
 import { FileService } from './file.service';
-import { CreateFileUploadDto } from './dto/fileupload.create.dto';
+import { ExamService } from './exam.service';
 
 @Controller('files')
 export class FileuploadControler {
@@ -16,6 +16,7 @@ export class FileuploadControler {
 
   constructor(
     private readonly config: ConfigService,
+    private readonly examService: ExamService,
     private readonly fileService: FileService) {
 
     this.s3 = new S3({
@@ -52,8 +53,11 @@ export class FileuploadControler {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('admin','user')
   @Post()
-  async addFileUpload(@Body() createFileUploadDto: CreateFileUploadDto)  {
-    return await this.fileService.add(createFileUploadDto);
+  addFileUpload(@Body() file: FileUpload)  {
+    this.fileService.add(file).
+      then(async res => {
+        return await this.examService.addFileToExam(res.exam._id, res)
+      })
   }
 
 }

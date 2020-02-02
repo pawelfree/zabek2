@@ -1,6 +1,7 @@
 import { Document, Schema } from 'mongoose';
 import { Doctor } from '@zabek/data';
 import { Lab } from './lab';
+import { FileUpload } from './fileupload';
 
 export interface Patient extends Document {
   readonly fullName: string;
@@ -22,7 +23,7 @@ export interface Examination extends Document {
   readonly sendEmailTo: string; 
   readonly examinationDate: string; 
   readonly examinationType: string; 
-  readonly examinationFile: string; 
+  readonly file: FileUpload;
 }
 
 export const PatientSchema = new Schema({
@@ -113,16 +114,13 @@ export const ExamSchema = new Schema({
     maxLength: 50,
     unique: false
   },
-  examinationFile: {
-    type: String,
-    requred: false,
-    minLength: 1,
-    maxLength: 500,
-    unique: false
-  },
   lab: {
     type: Schema.Types.ObjectId, 
     ref: 'Lab',
     required: true
   },
+  file: {
+    type: Schema.Types.ObjectId,
+    ref: 'File'
+  }
 });
