@@ -11,7 +11,6 @@ export class CreateExamInternalDto {
   readonly sendEmailTo: string; // adres email, na który należy wysłać powiadomienie o gotowym badaniu do pobrania
   readonly examinationDate: string; //data wykonania badania
   readonly examinationType: string; //rodzaj badania
-  readonly examinationFile: string; //link do wyników badan
   readonly lab: string;
   readonly doctor: string;
 }

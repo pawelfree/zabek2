@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Examination, Lab, User } from '@zabek/data';
+import { Examination, Lab, User, FileUpload } from '@zabek/data';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateExamDto, CreateExamInternalDto } from './dto';
 
@@ -13,6 +13,7 @@ export class ExamService {
       .findById(id)
       .populate('doctor')
       .populate('lab')
+      .populate('file')
       .select('-__v');
   }
 
@@ -40,6 +41,7 @@ export class ExamService {
       .skip(pageSize * currentPage)
       .limit(pageSize)
       .populate('doctor')
+      .populate('file')
       .then(exams => ({ exams, count }));
   }
 
@@ -59,6 +61,7 @@ export class ExamService {
       .skip(pageSize * currentPage)
       .limit(pageSize)
       .populate('doctor')
+      .populate('file')
       .then(exams => ({ exams, count }));
   }
 
@@ -71,5 +74,9 @@ export class ExamService {
 
   async delete(_id: string) {
     return await this.examModel.deleteOne({ _id });
+  }
+
+  async addFileToExam(_id: String, file: FileUpload) {
+    return await this.examModel.findOneAndUpdate({ _id },{ $set: { file} },{ new: true });
   }
 }

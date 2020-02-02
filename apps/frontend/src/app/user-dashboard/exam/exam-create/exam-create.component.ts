@@ -98,7 +98,6 @@ export class ExamCreateComponent implements OnInit {
       examinationType: new FormControl(null, {
         validators: [Validators.required]
       }),
-      examinationFile: new FormControl(null, {}),
       patientFullName: new FormControl(null, {
         validators: [
           Validators.required,
@@ -152,7 +151,6 @@ export class ExamCreateComponent implements OnInit {
       this.form.setValue({
         examinationDate: exam.examinationDate,
         examinationType: exam.examinationType,
-        examinationFile: exam.examinationFile,
         patientFullName: exam.patient.fullName,
         patientPesel: exam.patient.pesel,
         patientOtherID: exam.patient.otherID,
@@ -217,10 +215,10 @@ export class ExamCreateComponent implements OnInit {
       _id: this._id ? this._id : null,
       examinationDate: this.form.value.examinationDate,
       examinationType: this.form.value.examinationType,
-      examinationFile: this.form.value.examinationFile,
       patient,
       lab: this.lab,
       sendEmailTo: this.form.value.sendEmailTo,
+      file: null,
       doctor:
         (this.form.value.doctor === null || undefined) || (this.form.value.doctor._id === 0) ? null : this.form.value.doctor
     };
@@ -260,6 +258,5 @@ export class ExamCreateComponent implements OnInit {
         subs.unsubscribe();
       }
     });
-
   }
 }

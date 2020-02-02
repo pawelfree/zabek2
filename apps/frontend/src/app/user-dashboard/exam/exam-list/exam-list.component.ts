@@ -11,8 +11,13 @@ import { ExamService } from '../../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
-import { Examination } from '@zabek/data';
+import { Examination, User } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
+import { FileUploadComponent } from '../../../files/fileupload/fileupload.component';
+import { AppState } from '../../../store';
+import { Store, select } from '@ngrx/store';
+import { currentUser } from '../../../auth/store';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'zabek-exam-list',
@@ -41,16 +46,18 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     'doctorFullName',
     'doctorQualificationsNo',
     'sendEmailTo',
-    'examinationFile',
     'actions'
   ];
   dataSource: ExamListDataSource;
   paginatorSub: Subscription = null;
 
+  private user: User = null;
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(private readonly examService: ExamService, 
               private readonly route: ActivatedRoute,
+              private readonly store: Store<AppState>,
               public dialog: MatDialog) {}
 
   ngOnInit() {
@@ -60,6 +67,13 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataCount = data.count;
     this.itemsOnPage = data.exams.length
     this.exams.next(data.exams);
+
+    this.store.pipe(select(currentUser),
+      take(1),
+      tap(user => {
+        this.user = user;
+      })
+    ).subscribe();
   }
 
   ngAfterViewInit() {
@@ -111,6 +125,22 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
       width: '350px',
       data: 'Funkcjonalność w przygotowaniu.'
     });
+  }
+
+  processFile(exam: Examination) {
+    if (exam.file) {
+      window.open(environment.s3BucketAddress+exam.file.key, "_blank");
+    } else {
+        const dialogRef =this.dialog.open(FileUploadComponent, {
+        data: { exam, user: this.user},
+        disableClose: true
+      });
+      dialogRef.afterClosed().pipe(
+        take(1)
+      ).subscribe(() => 
+          this.loadExamsPage()
+      );
+    }
   }
 
   loadExams(pageIndex = 0, pageSize = this.examsPerPage) {
