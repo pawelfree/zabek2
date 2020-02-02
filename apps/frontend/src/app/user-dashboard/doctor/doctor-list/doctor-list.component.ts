@@ -72,8 +72,6 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
           });
         }
       });
-
-
   }
 
   loadDoctors(pageIndex = 0, pageSize = this.doctorsPerPage) {

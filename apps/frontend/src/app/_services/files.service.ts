@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { FileUploadModel } from '../files/files.component';
 import { FileUpload } from '@zabek/data';
+import { FileUploadModel } from '../files/fileupload/fileupload.component';
 
 const BACKEND_URL = environment.apiUrl + '/api/files';
 

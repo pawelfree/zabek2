@@ -32,18 +32,10 @@
     <th mat-header-cell *matHeaderCellDef style="text-align: center"> Rodzaj </th>
     <td mat-cell *matCellDef="let element" style="text-align: center"> {{element.examinationType}} </td>
   </ng-container>
-  
-  <ng-container matColumnDef="examinationFile">
-    <th mat-header-cell *matHeaderCellDef>Pliki</th>
-    <td mat-cell *matCellDef="let element"><a href="{{element.examinationFile}}" target="_blank" rel="_noopener"> Pobierz </a></td>
-  </ng-container>
 
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef style="text-align: center">Akcje</th>   
     <td mat-cell *matCellDef="let element; let i=index;"> 
-      <!-- TUTAJ Akcje dla lekarza
-        - zamów archiwum badania
-      -->
     </td>
   </ng-container> 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
