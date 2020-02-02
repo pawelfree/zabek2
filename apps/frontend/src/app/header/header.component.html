@@ -5,12 +5,12 @@
       <li *ngIf="authorized(user.role, ['sadmin'])">
         <a mat-button 
             routerLinkActive="mat-accent"
-            routerLink="/admin/lab/list">Pracownie</a>
+            routerLink="/user/lab/list">Pracownie</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
-            routerLink="/admin/user/list">Użytkownicy</a>
+            routerLink="/user/user/list">Użytkownicy</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'user' ])">
         <a mat-button 
@@ -20,17 +20,17 @@
       <li *ngIf="authorized(user.role, ['admin', 'user'])">
         <a mat-button 
             routerLinkActive="mat-accent"
-            routerLink="/user/examinations">Badania</a>
+            routerLink="/user/exam">Badania</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin', 'admin', 'user' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
-            routerLink="/admin/doctor/list">Lekarze</a>
+            routerLink="/user/doctor/list">Lekarze</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
-            routerLink="/admin/reports">Raporty</a>
+            routerLink="/user/reports">Raporty</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'doctor' ])">
         <a mat-button 
@@ -40,7 +40,7 @@
       <li *ngIf="authorized(user.role, [ 'sadmin' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
-            routerLink="/admin/feedbacks">Uwagi</a>
+            routerLink="/user/feedbacks">Uwagi</a>
       </li>
       <li>
         <a name="loggedUser" mat-button (click)="logout()" >Logout ({{ user.email }})</a>

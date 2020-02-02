@@ -13,23 +13,19 @@ import {
   ParseIntPipe} from '@nestjs/common';
 import * as _ from 'lodash';
 import { UserService } from './user.service';
-import { IUser, Lab, Role } from '@zabek/data';
+import { User, Role, Doctor } from '@zabek/data';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
-import { UpdateUserInternalDto, CreateDoctorDto, UpdateDoctorDto } from './dto';
-import { LabService } from '../lab/lab.service';
-import { AuthService } from '../shared/security/auth.service';
 import { EmailService } from '../shared/email/email.service';
-import * as crypto from 'crypto';
+import { DoctorService } from './doctor.service';
 
 @Controller('doctor')
 export class DoctorController {
   constructor(
-    private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly labService: LabService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly doctorService: DoctorService
   ) {}
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -40,7 +36,22 @@ export class DoctorController {
     @Query('page', new ParseIntPipe()) page: number = 10,
     @Request() req
   ) {
-    return await this.userService.findAllDoctors(
+    return await this.doctorService.findAllDoctors(
+      pagesize,
+      page,
+      req.user.lab
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.sadmin, Role.admin, Role.user)
+  @Get('online')
+  async allOnlineDoctors(
+    @Query('pagesize', new ParseIntPipe()) pagesize: number = 0,
+    @Query('page', new ParseIntPipe()) page: number = 10,
+    @Request() req
+  ) {
+    return await this.doctorService.findAllOnlineDoctors(
       pagesize,
       page,
       req.user.lab
@@ -55,42 +66,10 @@ export class DoctorController {
   }
 
   @Post()
-  async addDoctor(@Body() createDoctorDto: CreateDoctorDto) {
-    console.warn('wymusic polityke haseł')
-    const user: IUser = await this.userService.findByEmail(createDoctorDto.email);
-    if (user) {
-      throw new BadRequestException('Lekarz jest już zarejestrowany');
-    }
-    const lab: Lab = await this.labService
-      .findById(createDoctorDto.lab)
-      .catch(err => {
-        let error = err.message;
-        if (err.name === 'CastError' && err.path === '_id') {
-          error = 'Błędny identyfikator pracowni ' + createDoctorDto.lab;
-        }
-        throw new BadRequestException(error);
-      });
-    if (!lab) {
-      throw new BadRequestException(
-        'Pracownia przypisana do obsługi lekarza nie istnieje'
-      );
-    }
-    await this.labService.incrementUsers(createDoctorDto.lab);
-
-    const _createDoctorDto: CreateDoctorDto = {
-      ...createDoctorDto,
-      active: false,
-      lab: lab._id,
-      role: Role.doctor,
-      //TODO przy tworzeniu lekarza nie ma hasla przeciez - nigdy tego nie przetestowales
-      password: createDoctorDto.password ? await this.authService.hash(createDoctorDto.password) : await this.authService.hash(crypto.randomBytes(20).toString('hex'))
-    } 
-    //TODO ten lodash to trzeba zmienic na cos innego
-    console.warn('zrobic cos z lodashem');
-    return _.pick(await this.userService.addDoctor(_createDoctorDto), [
+  async addDoctor(@Body() doctor: Doctor) {
+    console.warn('wymusic polityke haseł i weryfikowac unikalnosc')
+    return _.pick(await this.userService.addDoctor(doctor), [
       '_id',
-      'email',
-      'role',
       'firstName',
       'lastName',
       'qualificationsNo'
@@ -100,48 +79,16 @@ export class DoctorController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('admin','user')
   @Put(':id')
-  async updateDoctor(@Body() updateDoctorDto: UpdateDoctorDto, @Param('id') id: string, @Request() req) {
-    if (id !== updateDoctorDto._id ) {
+  async updateDoctor(@Body() doctor: Doctor, @Param('id') id: string, @Request() req) {
+    if (id !== doctor._id ) {
       throw new BadRequestException('Błędne dane lekarza i żądania');        
     }
-    const doctor: IUser = await this.userService.findById(id);
+    const doctorExists: User = await this.userService.findById(id);
 
-    if (!doctor) {
+    if (!doctorExists) {
       throw new BadRequestException('Lekarz nie istnieje');
     } 
-
-    const laboratory: Lab = await this.labService
-      .findById(updateDoctorDto.lab)
-      .catch(err => {
-        let error = err.message;
-        if (err.name === 'CastError' && err.path === '_id') {
-          error = 'Błędny identyfikator pracowni ' + updateDoctorDto.lab;
-        }
-        throw new BadRequestException(error);
-      });
-    if (!laboratory) {
-      throw new BadRequestException(
-        'Pracownia przypisana do obsługi lekarza nie istnieje'
-      );
-    }
-    
-    const _updateDoctorDto: UpdateDoctorDto = {
-      _id: updateDoctorDto._id,
-      email: updateDoctorDto.email,
-      role: updateDoctorDto.role,
-      active: updateDoctorDto.active,
-      rulesAccepted: updateDoctorDto.rulesAccepted,
-      firstName: updateDoctorDto.firstName,
-      lastName: updateDoctorDto.lastName,
-      officeName: updateDoctorDto.officeName,   
-      officeAddress: updateDoctorDto.officeAddress,
-      qualificationsNo: updateDoctorDto.qualificationsNo,
-      officeCorrespondenceAddres: updateDoctorDto.officeCorrespondenceAddres,
-      examFormat: updateDoctorDto.examFormat,
-      tomographyWithViewer: updateDoctorDto.tomographyWithViewer,
-      lab :  laboratory._id
-    } 
-    return await this.userService.update(_updateDoctorDto);
+    return await this.doctorService.update(doctor);
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -151,21 +98,17 @@ export class DoctorController {
     let error;
     await this.userService
       .findById(id)
-      .then(async (user: IUser) => {
+      .then(async (user: User) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
-          const _updateUserInternalDto: UpdateUserInternalDto = {
-            _id: user._id,
-            email: user.email,
-            role: user.role,
-            active: true
-          };
-          const { n, nModified, ok } = await this.userService.update(_updateUserInternalDto);
-          if (n !== 1 || nModified !== 1 || ok !== 1) {
-            error = new InternalServerErrorException('Nieznany błąd.');
-          }
-          this.emailService.sendUserActivatedEmail(user.email);
+          console.log('activate - user', user);
+          this.userService.activate(user).then(
+            res => {
+              this.emailService.sendUserActivatedEmail(user.email);
+              return res;
+            }
+          )
         }
       })
       .catch(err => {
@@ -183,20 +126,12 @@ export class DoctorController {
     let error;
     await this.userService
       .findById(id)
-      .then(async (user: IUser) => {
+      .then(async (user: User) => {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
-          const _updateUserInternalDto: UpdateUserInternalDto = {
-            _id: user._id,
-            email: user.email,
-            role: user.role,
-            rulesAccepted: true
-          };
-          const { n, nModified, ok } = await this.userService.update(_updateUserInternalDto);
-          if (n !== 1 || nModified !== 1 || ok !== 1) {
-            error = new InternalServerErrorException('Nieznany błąd.');
-          }
+          console.log('accept rules - user', user);
+          return await this.userService.acceptRules(user);
         }
       })
       .catch(err => {

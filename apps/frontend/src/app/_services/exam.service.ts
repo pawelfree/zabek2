@@ -51,7 +51,7 @@ export class ExamService {
       .post<{ message: string; exam: Examination }>(BACKEND_URL, exam)
       .pipe(take(1))
       .subscribe(responseData => {
-        this.router.navigate(['/user']);
+        this.router.navigate(['/user/exam/list']);
       });
   }
 
@@ -60,7 +60,7 @@ export class ExamService {
       .put<{ message: string; exam: Examination }>(BACKEND_URL + exam._id, exam)
       .pipe(take(1))
       .subscribe(responseData => {
-        this.router.navigate(['/user']);
+        this.router.navigate(['/user/exam/list']);
       });
   }
 }

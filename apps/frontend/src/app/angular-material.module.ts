@@ -18,7 +18,8 @@ import {
   MatMenuModule,
   MatCheckboxModule,
   MatAutocompleteModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatDatepickerModule
 } from '@angular/material';
 
 @NgModule({
@@ -41,7 +42,8 @@ import {
     MatTableModule,
     MatToolbarModule,
     MatAutocompleteModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDatepickerModule
   ]
 })
 export class AngularMaterialModule {}

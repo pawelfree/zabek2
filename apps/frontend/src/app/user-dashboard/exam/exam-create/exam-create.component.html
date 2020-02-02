@@ -1,0 +1,208 @@
+<mat-card>
+  <form [formGroup]="form" (submit)="onSaveExam()">
+    <mat-form-field>
+      <input
+        matInput
+        formControlName="examinationDate"
+        [matDatepicker]="examinationDatePicker"
+        placeholder="Data badania"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="examinationDatePicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker touchUi #examinationDatePicker></mat-datepicker>
+      <mat-error *ngIf="form.get('examinationDate').invalid"
+        >Wprowadź poprawną datę badania.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Rodzaj badania</mat-label>
+      <mat-select formControlName="examinationType">
+        <mat-option *ngFor="let examType of examTypes" [value]="examType">
+          {{ examType }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('examinationType').invalid"
+        >Wybierz rodzaj badania.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="patientFullName"
+        placeholder="Pacjent"
+      />
+      <mat-error *ngIf="form.get('patientFullName').invalid"
+        >Wprowadź imię i nazwisko pacjenta (max 50 znaków).
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="patientPesel"
+        placeholder="PESEL"
+        (change)="peselChanged()"
+      />
+      <mat-error *ngIf="form.get('patientPesel').hasError('required')"
+        >PESEL jest wymagany.</mat-error
+      >
+      <mat-error
+        *ngIf="
+          form.get('patientPesel').hasError('minlength') ||
+          form.get('patientPesel').hasError('maxlength')
+        "
+        >PESEL musi mieć 11 znaków.</mat-error
+      >
+      <mat-error *ngIf="form.get('patientPesel').hasError('onlyNumbers')"
+        >PESEL może składać się tylko z cyfr.
+      </mat-error>
+      <mat-error *ngIf="form.get('patientPesel').hasError('validPesel')"
+        >PESEL jest niepoprawny.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="patientOtherID"
+        placeholder="Inny dokument tożsamości"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="patientAge"
+        placeholder="Wiek pacjenta"
+      />
+      <mat-error *ngIf="form.get('patientAge').invalid"
+        >Wprowadź wiek pacjenta.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-checkbox formControlName="patientIsFemale">
+      <mat-error *ngIf="form.get('patientIsFemale').invalid"></mat-error
+      >Kobieta?</mat-checkbox
+    >
+    <div style="width: 100px"></div>
+    <mat-checkbox formControlName="patientProcessingAck">
+      <mat-error *ngIf="form.get('patientProcessingAck').invalid"
+        >Zaznacz zgodę pacjenta na badania online.</mat-error
+      >
+      Zgoda na badania online
+    </mat-checkbox>
+    <div style="width: 100px"></div>
+    <mat-checkbox formControlName="patientMarketingAck">
+      <mat-error *ngIf="form.get('patientMarketingAck').invalid"
+        >Zaznacz zgodę pacjenta na marketing.</mat-error
+      >
+      Zgoda na ofety marketingowe.
+    </mat-checkbox>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="patientEmail"
+        placeholder="Email pacjenta"
+      />
+      <mat-error *ngIf="form.get('patientEmail').invalid"
+        >Wprowadź poprawny email użytkownika.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="patientPhone"
+        placeholder="Telefon pacjenta"
+      />
+    </mat-form-field>
+  
+    <table style="width: 100%;">
+      <tr>
+        <td>
+          <mat-form-field>
+            <mat-label>Lekarz zlecający</mat-label>
+    
+            <mat-select
+              SelectInfiniteScroll
+              (infiniteScroll)="getNextDoctorsBatch()"
+              [complete]="endOfData"
+              [compareWith]="compareDoctors"
+              formControlName="doctor"
+              [value]="selectedDoctor">
+              <mat-option [value]='emptyDoctor'
+                (onSelectionChange)="doctorChanged($event)">Brak</mat-option>
+              <mat-option
+                *ngFor="let doctor of doctors$ | async"
+                [value]="doctor"
+                (onSelectionChange)="doctorChanged($event)">
+                <ng-container *ngIf="doctor">
+                  {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{
+                    doctor.qualificationsNo
+                  }}
+                </ng-container>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    
+        </td>
+        <td style="width: 2em;">
+          <button
+          type="button"       
+          color="accent"
+          aria-label="Dodaj lekarza"
+          title="Dodaj nowego lekarza"
+          alt="Dodaj nowego lekarza"
+          style="float: right"
+          (click)="openDoctorCreateDialog()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+
+
+        </td>
+      </tr>
+  </table>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="sendEmailTo"
+        placeholder="Email lekarza"
+      />
+      <mat-error *ngIf="form.get('sendEmailTo').invalid"
+        >Wprowadź email lekarza, na który ma zostać wysłane powiadomienie o
+        badaniu do pobrania.</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        formControlName="examinationFile"
+        placeholder="Pliki badania"
+      />
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      [disabled]="form.invalid">
+      Zapisz badanie
+    </button>
+    <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/exam">Anuluj</button>
+  </form>
+</mat-card>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
+import { Role } from '@zabek/data';
 
 @Injectable({ providedIn: 'root'})
 export class AuthGuard implements CanActivate {
@@ -22,7 +23,11 @@ export class AuthGuard implements CanActivate {
             map(user => {
                 if (user) {
                     if (route.data.roles && route.data.roles.indexOf(user.role) === -1 ) {
-                        return this.router.createUrlTree([user.role]);
+                        if (user.role === Role.doctor) {
+                            return this.router.createUrlTree([`/doctor`]);
+                          } else {
+                            return this.router.createUrlTree([`/user`]);
+                          }
                     }
                     return true;
                 }
