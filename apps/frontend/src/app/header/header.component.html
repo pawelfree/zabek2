@@ -43,7 +43,7 @@
             routerLink="/admin/feedbacks">Uwagi</a>
       </li>
       <li>
-        <a mat-button (click)="logout()" >Logout ({{ user.email }})</a>
+        <a name="loggedUser" mat-button (click)="logout()" >Logout ({{ user.email }})</a>
       </li>
       <li>
         <a mat-icon-button [matMenuTriggerFor]="menu" aria-label="System">

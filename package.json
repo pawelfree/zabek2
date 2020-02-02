@@ -25,7 +25,8 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "nx": "nx"
+    "nx": "nx",
+    "cypress:open": "cypress open"
   },
   "private": true,
   "dependencies": {
