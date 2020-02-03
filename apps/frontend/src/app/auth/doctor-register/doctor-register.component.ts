@@ -2,15 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
 import { Observable } from 'rxjs';
-import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor, User, Role } from '@zabek/data';
-import { Router, ActivatedRoute, Params, ResolveStart } from '@angular/router';
+import { tap, startWith, take, finalize } from 'rxjs/operators';
+import { User, Role, Doctor } from '@zabek/data';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DoctorService } from '../../_services'
 import { PwzValidator } from '../../_validators';
 import { Store } from '@ngrx/store';
 import { AppState, AppActions } from '../../store';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
-import { raiseError } from '../../store/app.actions';
 
 
 @Component({
@@ -142,30 +140,53 @@ export class DoctorRegisterComponent implements OnInit {
       this.store.dispatch(AppActions.sendInfo({info: 'Niepoprawny identyfikator pracowni' }));
       return;
     }
-    const doctor: User = Object.assign( new User(),{
+
+    this.store.dispatch(AppActions.loadingStart());
+    const newDoctor: Doctor = {
       _id: null,
-      role: Role.doctor,
+      firstName: this.form.value.firstName,
+      lastName: this.form.value.lastName,
+      pesel: this.form.value.pesel,
+      nip: this.form.value.nip,
+      qualificationsNo: this.form.value.qualificationsNo,
+      officeName: this.form.value.officeName,
+      officeAddress: this.form.value.officeAddress,
+      officeCorrespondenceAddres: this.form.value.sameAddresses
+      ? this.form.value.officeAddress
+      : this.form.value.officeCorrespondenceAddress,
+      examFormat: this.form.value.examFormat,
+      tomographyWithViewer: this.form.value.tomographyWithViewer,
+      email: this.form.value.email
+    }
+    const newUser: User = Object.assign(new User(),{ 
+      _id: null,
       email: this.form.value.email,
-      lab: this.queryParams['id'],
-      password: this.form.value.password1,
-      active: false,
+      role: Role.doctor,
       rulesAccepted: true,
+      active: false,
+      lab: this.queryParams['id'],
+      doctor: newDoctor,
+      password: this.form.value.password1
     });
 
-    console.error('lekarz rejestruje sam siebie', doctor);
-    this.store.dispatch(raiseError({message: 'lekarz rejestruje sam siebie', status: JSON.stringify(doctor)}))
-    // this.doctorService.addDoctor(doctor).subscribe(
-    //   res => this.goOut(),
-    //   err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-    // );
+    this.doctorService.registerDoctor(newUser).pipe(
+      take(1),
+      finalize(() => this.store.dispatch(AppActions.loadingEnd()))
+    ).subscribe(
+      res => this.goOut(),
+      err => {
+        this.store.dispatch(AppActions.raiseError({message: err, status: null}));
+      }
+    );
   }
   
   private goOut() {
+    this.store.dispatch(AppActions.sendInfo({info: 'Rejestracja zakończona pomyślnie. Na podany email zostanie wysłana informacja o aktywacji konta.'}))
     this.router.navigate(['/login']);
   }
 
   showRegulations() {
-    console.log(this.form)
+    window.open('regulations.html', "_blank");
   }
 
 }

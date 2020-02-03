@@ -101,6 +101,34 @@ export class UserController {
     ]);
   }
 
+  @Post('register')
+  async registerUser(@Body() userToCreate: User) {
+    console.warn('wymusic polityke haseł')
+    const user: User = await this.userService.findByEmail(userToCreate.email);
+    if (user) {
+      throw new BadRequestException('Lekarz jest już zarejestrowany');
+    }
+    //TODO to musi sie zadziac razem
+    await this.labService.incrementUsers(userToCreate.lab._id);
+    const doctor = userToCreate.doctor ? await this.doctorService.addDoctor(userToCreate.doctor) : null;
+    const newUser: User = Object.assign(new User(), {
+      _id: null,
+      doctor: doctor, 
+      email: userToCreate.email,
+      role: Role.doctor,
+      lab: userToCreate.lab,
+      active: false,
+      rulesAccepted: userToCreate.rulesAccepted,
+      password: userToCreate.password ? await this.authService.hash(userToCreate.password) : await this.authService.hash(crypto.randomBytes(20).toString('hex'))
+    });
+    return _.pick(await this.userService.addUser(newUser), [
+      '_id',
+      'email',
+      'role',
+      'lab'
+    ]);
+  }
+
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin)
   @Delete(':id')

@@ -70,12 +70,11 @@
       </mat-form-field>
       <mat-checkbox formControlName="regulationsAccepted">Akceptuję</mat-checkbox><a style="margin-left:0.2rem; text-decoration: underline;" (click)="showRegulations()" >regulamin</a>
     </mat-card-content>
- 
     <mat-card-title>
       <button mat-raised-button 
         color="accent" 
         type="submit" 
-        [disabled]="form.invalid || (!regulationsAccepted$ | async)">Zarejstruj</button>
+        [disabled]="form.invalid || !(regulationsAccepted$ | async)">Zarejstruj</button>
       <button style="float: right;" type="button" mat-button routerLink="/login">Anuluj</button>
     </mat-card-title>
   </form>

@@ -42,6 +42,10 @@ export class DoctorService {
     return this.http.post<User>(USER_BACKEND_URL,doctor);
   }
 
+  registerDoctor(doctor: User) {
+    return this.http.post<User>(USER_BACKEND_URL + 'register', doctor);
+  }
+
   updateUser(doctor: User) {
     return this.http.put<User>(USER_BACKEND_URL + doctor._id, doctor)
   }

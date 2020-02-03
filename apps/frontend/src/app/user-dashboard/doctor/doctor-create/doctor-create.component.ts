@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CustomValidator, PeselValidator, NIPValidator } from '../../../_validators';
 import { Observable } from 'rxjs';
-import { tap, startWith, take } from 'rxjs/operators';
+import { tap, startWith, take, finalize } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../../_services';
 import { PwzValidator } from '../../../_validators';
@@ -173,12 +173,18 @@ export class DoctorCreateComponent implements OnInit {
 
     //TODO zamienic na store
     if (this.mode === 'create') {
-      this.doctorService.addUser(newUser).pipe(take(1)).subscribe(
+      this.doctorService.addUser(newUser).pipe(
+        take(1),
+        finalize(() => this.store.dispatch(AppActions.loadingEnd())))
+      .subscribe(
         () => this.goOut(),
-        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+        err=>   this.store.dispatch(AppActions.raiseError({message: err, status: null}))
       );
     } else {     
-      this.doctorService.updateUser(newUser).pipe(take(1)).subscribe(
+      this.doctorService.updateUser(newUser).pipe(
+        take(1),
+        finalize(() => this.store.dispatch(AppActions.loadingEnd())))
+      .subscribe(
         () => this.goOut(),
         err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
       );

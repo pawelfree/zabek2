@@ -42,11 +42,11 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
 
     if (user) {
-      if (user.role === Role.doctor && !user.active) {
-        return { user: null, message: 'USER_NOT_ACTIVE'};
-      }
       const validPassword = await bcrypt.compare(pass, user.password);
       if (validPassword) {
+        if (user.role === Role.doctor && !user.active) {
+          return { user: null, message: 'USER_NOT_ACTIVE'};
+        }
         return { user: user , message: null };
       }
       return { user: null, message: 'INVALID_PASSWORD'};
