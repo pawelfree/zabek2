@@ -36,12 +36,13 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef style="text-align: center">Akcje</th>   
     <td mat-cell *matCellDef="let element; let i=index;"> 
-      <button mat-icon-button
+      <button *ngIf="element.file"
+              mat-icon-button
               color="primary"
               title="Plik"
               alt="Pobierz plik"
               (click)="processFile(element)">
-        <mat-icon *ngIf="element.file" aria-label="Pobierz plik badania" hidden="true">save_alt</mat-icon>
+        <mat-icon  aria-label="Pobierz plik badania" hidden="true">save_alt</mat-icon>
       </button>
     </td>
   </ng-container> 
