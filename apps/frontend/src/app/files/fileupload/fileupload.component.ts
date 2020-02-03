@@ -27,9 +27,6 @@ export class FileUploadComponent {
   accept = environment.s3AcceptFileTypes;
   file_to_upload: FileUploadModel;
 
-  private exam: Examination;
-  private user: User;
-
   constructor(private readonly fileService: FilesService,
               private readonly dialogRef: MatDialogRef<FileUploadComponent>,
               @Inject(MAT_DIALOG_DATA) public readonly data: any) {}

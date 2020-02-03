@@ -144,9 +144,9 @@ export class UserController {
           if (userToUpdate.password) {
             const updatedUser: User = Object.assign(new User(), { ...user,
             password: await this.authService.hash(userToUpdate.password)});
-            console.log('tylko zmiana hasla uzytkownika online')
+            //TODO poprawic
+            console.log('tylko zmiana hasla uzytkownika online - zmienic na set')
             const {n, nModified, ok} = await this.userService.update(updatedUser);
-            console.log(n,nModified, ok)
             if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
               error = new InternalServerErrorException('Nieznany błąd - zapis uzytkownika');
             } 

@@ -10,11 +10,11 @@ import { ExaminationListResolver } from './exam-list/exam-list.resolver';
 const routes: Routes = [
     { 
       path: '', 
-      redirectTo: 'examinations',
+      redirectTo: 'exam/list',
       pathMatch: 'full'
     },
     {
-      path: 'examinations',
+      path: 'exam/list',
       component: DoctorExamListComponent,
       resolve: { examinations: ExaminationListResolver },
       canActivate: [ AuthGuard ],

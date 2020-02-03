@@ -30,7 +30,7 @@ export class FileuploadControler {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(Role.user)
+  @Roles(Role.user, Role.admin)
   @Get('/fileupload')
   getPresignedFileUrl(
     @Request() req

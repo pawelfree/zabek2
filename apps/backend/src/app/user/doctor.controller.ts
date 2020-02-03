@@ -102,7 +102,6 @@ export class DoctorController {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
-          console.log('activate - user', user);
           this.userService.activate(user).then(
             res => {
               this.emailService.sendUserActivatedEmail(user.email);
@@ -130,7 +129,6 @@ export class DoctorController {
         if (!user) {
           error = new BadRequestException('Lekarz nie istnieje.');
         } else {
-          console.log('accept rules - user', user);
           return await this.userService.acceptRules(user);
         }
       })

@@ -17,6 +17,7 @@ export class AcceptRulesComponent {
   }
 
   showRegulations() {
+    //TODO zrobic
     console.log('show regulations')
   }
 }

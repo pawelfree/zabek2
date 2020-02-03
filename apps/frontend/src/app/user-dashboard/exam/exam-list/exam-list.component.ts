@@ -117,7 +117,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onSendNotificationToDoctor(id) {
-    // TODO
+    // TODO zrobic
     console.log(
       'Not implemented yet. Wyślij powiadomienie email do lekarza, o gotowości badania do pobrania.'
     );

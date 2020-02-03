@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Examination, Lab, User, FileUpload } from '@zabek/data';
+import { Examination, Lab, FileUpload, Doctor } from '@zabek/data';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateExamDto, CreateExamInternalDto } from './dto';
 
@@ -42,18 +42,17 @@ export class ExamService {
       .limit(pageSize)
       .populate('doctor')
       .populate('file')
-      .then(exams => ({ exams, count }));
+      .then(exams => ({ exams, count })); 
   }
 
-  // pobieranie badań dla wybranego lekarza
   async findAllExamsForDoctor(
     pageSize: number = 10,
     currentPage: number = 0,
-    doctor: User
+    doctor: Doctor
   ): Promise<{ exams: Examination[]; count: number }> {
     const options = {};
 
-    options['doctor'] = doctor._id; //aktualny user id
+    options['doctor'] = doctor._id;
 
     const findallQuery = this.examModel.find<Examination>(options);
     const count = await this.examModel.countDocuments(findallQuery);

@@ -5,13 +5,16 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import { MatPaginator, MatDialog } from '@angular/material';
+import { MatPaginator } from '@angular/material';
 import { ExamListDataSource } from './exam-list.datasource';
 import { DoctorExamService } from '../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, of } from 'rxjs';
 import { Examination } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState, AppActions } from '../../store';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'zabek-doctor-exam-list',
@@ -45,7 +48,7 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
 
   constructor(private readonly doctorExamService: DoctorExamService,
               private readonly route: ActivatedRoute,
-              public dialog: MatDialog) {}
+              private readonly store: Store<AppState>) {}
 
   ngOnInit() {
     this.dataSource = new ExamListDataSource(this.exams$);
@@ -83,6 +86,15 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
         }),
         catchError(() => of<Examination[]>([])),
       ).subscribe();
+  }
+
+  processFile(exam: Examination) {
+    if (exam.file) {
+      window.open(environment.s3BucketAddress+exam.file.key, "_blank");
+    } else 
+    {
+      this.store.dispatch(AppActions.raiseError({message: 'Do badania nie załączono pliku', status: 'To nie powinno się zdarzyć'}));
+    }
   }
 
 }

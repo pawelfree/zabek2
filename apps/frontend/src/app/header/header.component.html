@@ -35,6 +35,11 @@
       <li *ngIf="authorized(user.role, [ 'doctor' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
+            routerLink="/doctor/exam/list">Badania</a>
+      </li>
+      <li *ngIf="authorized(user.role, [ 'doctor' ])">
+        <a mat-button 
+            routerLinkActive="mat-accent"
             routerLink="/doctor/feedback">Zgłoś uwagi</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin' ])">
