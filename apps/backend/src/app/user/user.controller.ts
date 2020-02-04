@@ -170,14 +170,10 @@ export class UserController {
         }  else {
 
           if (userToUpdate.password) {
-            const updatedUser: User = Object.assign(new User(), { ...user,
-            password: await this.authService.hash(userToUpdate.password)});
-            //TODO poprawic
-            console.log('tylko zmiana hasla uzytkownika online - zmienic na set')
-            const {n, nModified, ok} = await this.userService.update(updatedUser);
-            if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
-              error = new InternalServerErrorException('Nieznany błąd - zapis uzytkownika');
-            } 
+            const password = await this.authService.hash(userToUpdate.password);
+            this.userService.setPassword(user._id, password)
+            .then(res => res)
+            .catch(err => error = new InternalServerErrorException('Błąd zapisu hasła użytkownia' + err));
           } else {
             console.log('zmiana danych lekarza', userToUpdate.doctor);
             const {n, nModified, ok} = await this.doctorService.update(userToUpdate.doctor);

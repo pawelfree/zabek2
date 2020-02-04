@@ -15,7 +15,6 @@ export class UserListResolver implements Resolve<User[]> {
     private readonly store: Store<AppState>,
     private readonly actions$: Actions) { } 
   
-  //TODO remember - niczego nie musi zwracac, zapewnia ze nie ma przejscia dopuki nie zaladuja sie dane
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User[]> {
     this.store.dispatch(UserActions.fetchUsers({page: 0}));
     return this.actions$.pipe(

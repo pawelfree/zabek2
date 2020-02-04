@@ -9,15 +9,16 @@ import { MatPaginator, MatDialog } from '@angular/material';
 import { ExamListDataSource } from './exam-list.datasource';
 import { ExamService } from '../../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
-import { Subscription, of, BehaviorSubject } from 'rxjs';
+import { Subscription, of, BehaviorSubject, noop } from 'rxjs';
 import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
 import { Examination, User } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 import { FileUploadComponent } from '../../../files/fileupload/fileupload.component';
-import { AppState } from '../../../store';
+import { AppState, AppActions } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { currentUser } from '../../../auth/store';
 import { environment } from '../../../../environments/environment';
+import { EmailService } from '../../../_services/email.service';
 
 @Component({
   selector: 'zabek-exam-list',
@@ -51,11 +52,12 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   dataSource: ExamListDataSource;
   paginatorSub: Subscription = null;
 
-  private user: User = null;
+  user: User = null;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(private readonly examService: ExamService, 
+              private readonly emailService: EmailService,
               private readonly route: ActivatedRoute,
               private readonly store: Store<AppState>,
               public dialog: MatDialog) {}
@@ -103,10 +105,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
-        // TODO: usuwac badanie powinien admin pracowni. Zrobić tylko adminowi, 
-        // czy też może dwustopniowe usuwanie, pracownik zaznacza że do usunięcia,
-        // a potem admin na swoim widoku widzi, i może usunąć fizycznie (z podaniem powodu).
-        this.examService.deleteExam(id).subscribe(res => {
+        this.examService.deleteExam(id).pipe(take(1)).subscribe(res => {
           if (this.itemsOnPage === 1) {
             this.paginator.pageIndex = this.paginator.pageIndex - 1;
           }
@@ -117,13 +116,24 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onSendNotificationToDoctor(id) {
-    // TODO zrobic
-    console.log(
-      'Not implemented yet. Wyślij powiadomienie email do lekarza, o gotowości badania do pobrania.'
-    );
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '350px',
-      data: 'Funkcjonalność w przygotowaniu.'
+      data: 'Wysłać powiadomienie do lekarza?'
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result) {
+        this.emailService.sendNotificationToDoctor(id).pipe(take(1)).subscribe(res => {
+          if (res) {
+            this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
+          } else {
+            this.store.dispatch(AppActions.raiseError({message: 'Wiadomość nie została wysłana', status: 'Spróbuj ponownie'}))
+          }
+        },
+        err => {
+          console.log('email send error', err);
+          this.store.dispatch(AppActions.raiseError({message: "Wiadomość nie została wysłana", status: 'Nieznany błąd'}));
+        });
+      }
     });
   }
 

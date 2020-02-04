@@ -17,7 +17,6 @@ export class ExamService {
       .select('-__v');
   }
 
-  // TODO zmienic z name na na przykład patientFullName
   async findByName(name: string): Promise<Examination> {
     return await this.examModel.findOne({ name }).select('-__v');
   }

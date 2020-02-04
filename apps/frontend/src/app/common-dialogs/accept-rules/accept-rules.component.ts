@@ -17,7 +17,6 @@ export class AcceptRulesComponent {
   }
 
   showRegulations() {
-    //TODO zrobic
-    console.log('show regulations')
+    window.open('regulations.html', "_blank");
   }
 }

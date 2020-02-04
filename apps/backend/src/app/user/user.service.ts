@@ -12,8 +12,12 @@ export class UserService {
     return await this.userModel.findById(id).populate('lab').populate('doctor').select('-password -__v');
   }
 
+  async findByDoctor(doctor: Doctor): Promise<User> {
+    return await this.userModel.findOne({doctor})
+  }
+
   async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email }); //TODO: ale teraz mogą być userzy z pustym emailem - lekarze....
+    return await this.userModel.findOne({ email }); 
   }
 
   async addDoctor(doctor: Doctor): Promise<User> {
@@ -60,5 +64,9 @@ export class UserService {
 
   async activate(user: User) {
     return await this.userModel.findOneAndUpdate({_id: user._id},{$set: {active: true}}, {new: true});
+  }
+
+  async setPassword(_id: string, password: string) {
+    return await this.userModel.findOneAndUpdate({_id}, {$set: { password }}, {new: true});
   }
 }

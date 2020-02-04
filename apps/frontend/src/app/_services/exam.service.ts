@@ -45,7 +45,7 @@ export class ExamService {
   deleteExam(examId: string) {
     return this.http.delete(BACKEND_URL + examId);
   }
-  //TODO zaktualizowac o pola badania
+
   addExam(exam: Examination) {
     this.http
       .post<{ message: string; exam: Examination }>(BACKEND_URL, exam)

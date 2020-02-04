@@ -115,12 +115,12 @@ export class FileUploadComponent {
                             return of(`${file.data.name} upload failed - error ${err}`);}),
                   finalize(() => this.dialogRef.close())
                 ).subscribe(
-                  result => console.log('fileupload success', result),
-                  err => console.log('fileupload failed', err)
+                  result => this.store.dispatch(AppActions.sendInfo({info: 'Plik został dodany.'})),
+                  err => this.store.dispatch(AppActions.raiseError({message: 'Bład podczas zapisyawnia pliku', status: null}))
                 )
               }
             },
-            err => console.log('error 2', err)
+            err => this.store.dispatch(AppActions.raiseError({message: 'Błąd podczas zapisywania pliku w chmurze', status: null}))
           );
         }
       );
