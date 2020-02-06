@@ -44,7 +44,7 @@ const routes: Routes = [
     {
         path: "files",
         canActivate: [AuthGuard],
-        data: { roles: [Role.user] },
+        data: { roles: [Role.sadmin] },
         component: FilesComponent
     },
     {

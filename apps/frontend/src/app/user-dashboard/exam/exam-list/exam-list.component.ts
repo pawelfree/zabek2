@@ -123,11 +123,8 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         this.emailService.sendNotificationToDoctor(id).pipe(take(1)).subscribe(res => {
-          if (res) {
-            this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
-          } else {
-            this.store.dispatch(AppActions.raiseError({message: 'Wiadomość nie została wysłana', status: 'Spróbuj ponownie'}))
-          }
+          console.log('res', res)
+          this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
         },
         err => {
           console.log('email send error', err);

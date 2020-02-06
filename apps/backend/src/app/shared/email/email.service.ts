@@ -26,13 +26,9 @@ export class EmailService {
 
     this.PASSWORD_RESET_PATH = configService.get('PASSWORD_RESET_PATH');
     this.PASSWORD_RESET_TEMPLATE_ID = configService.get('PASSWORD_RESET_TEMPLATE_ID');
-
     this.PASSWORD_RESET_ERROR_TEMPLATE_ID = configService.get('PASSWORD_RESET_ERROR_TEMPLATE_ID');
-
     this.DOCTOR_ACTIVATION_TEMPLATE_ID = configService.get('DOCTOR_ACTIVATION_TEMPLATE_ID');
-
     this.COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID = configService.get('COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID')
-
     this.EXAMINATION_CREATED_TEMPLATE_ID = configService.get('EXAMINATION_CREATED_TEMPLATE_ID');
 
   }
@@ -42,7 +38,7 @@ export class EmailService {
       console.log('Reset token email generated for',email);
       console.log(token);
     } else {
-      this.http.post("https://api.sendgrid.com/v3/mail/send", 
+      return this.http.post("https://api.sendgrid.com/v3/mail/send", 
       {
         "personalizations": [{
           "to": [{
@@ -64,10 +60,7 @@ export class EmailService {
           "content-type": "application/json",
           "Authorization": "Bearer " + this.API_KEY
         }
-      }).pipe(take(1)).subscribe(
-        succ => console.log('Wysłany email resetu hasła dla', email), 
-        err => console.log('Błąd wysyłania resetu maila dla', email)
-      );
+      });
     }
   }
 
@@ -102,12 +95,12 @@ export class EmailService {
     }
   }
 
-  sendExamNotification(email: string): boolean {
+  async sendExamNotification(email: string) {
     if (this.API_KEY === 'local') {
       console.log('Send exam notification email for', email);
       return true;
     } else {
-      this.http.post("https://api.sendgrid.com/v3/mail/send", 
+      await this.http.post("https://api.sendgrid.com/v3/mail/send", 
       {
         "personalizations": [{
           "to": [{
@@ -127,16 +120,8 @@ export class EmailService {
           "content-type": "application/json",
           "Authorization": "Bearer " + this.API_KEY
         }
-      }).pipe(take(1)).subscribe(
-        succ => {
-          console.log('Wysłany email z informacja o badaniu do', email);
-          return true
-        }, 
-        err => {
-          console.log('Błąd wysyłania emaila z informacją o badaniu do', email, err);
-          return false;
-        }
-      );
+      })
+      .pipe(take(1)).subscribe();
     }
   }
 

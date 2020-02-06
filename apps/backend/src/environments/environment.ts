@@ -8,7 +8,7 @@ export const environment = {
   MONGODB_URI: 'mongodb://localhost/zabek',
   JWT_PRIVATE_KEY: 'secret_jwt_key',
   RESET_TOKEN_EXPIRES_IN: 300, //sekundy
-  ZABEK_SENDGRID_API_KEY: 'local',
+//  ZABEK_SENDGRID_API_KEY: 'local',
   SALT: 10, //'ala_ma_kota@kot#to%ali&pies'
 
   ACCESS_KEY_ID: 'AKIAZNH67RLHXBQPPT6Z',

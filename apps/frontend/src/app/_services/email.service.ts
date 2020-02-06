@@ -11,6 +11,6 @@ export class EmailService {
   sendNotificationToDoctor(examId: string) {
     let params = new HttpParams();
     params = params.append('examId', '' + examId);
-    return this.http.get(BACKEND_URL, { params })
+    return  this.http.get<boolean>(BACKEND_URL, { params })
   }
 }
