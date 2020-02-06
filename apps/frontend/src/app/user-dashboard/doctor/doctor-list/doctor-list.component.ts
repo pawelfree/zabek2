@@ -3,10 +3,13 @@ import { MatPaginator, MatDialog } from '@angular/material';
 import { DoctorListDataSource } from './doctor-list.datasource';
 import { DoctorService } from '../../../_services';
 import { tap, catchError, take } from 'rxjs/operators';
-import { Subscription, of, BehaviorSubject } from 'rxjs';
+import { Subscription, of, BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { currentUser } from '../../../auth/store';
 
 @Component({
   selector: 'zabek-doctor-list',
@@ -28,8 +31,11 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  user$: Observable<User>;
+
   constructor(private readonly doctorService: DoctorService,
               private readonly route: ActivatedRoute,
+              private readonly store: Store<AppState>,
               public dialog: MatDialog) {}
 
   ngOnInit() {  
@@ -39,6 +45,9 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
     const data = this.route.snapshot.data.doctors;
     this.dataCount = data.count;
     this.doctors.next(data.doctors);
+
+    this.user$ = this.store.pipe(select(currentUser));
+
   }
 
   ngAfterViewInit() {

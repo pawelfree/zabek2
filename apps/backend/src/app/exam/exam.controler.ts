@@ -21,11 +21,7 @@ import { Examination } from '@zabek/data';
   
   @Controller('exam')
   export class ExamController {
-    constructor(
-      private readonly examService: ExamService
-    ) {
-      console.warn('Sprawdzic przekazywanie labow jako obiektow lub id')
-    }
+    constructor(private readonly examService: ExamService) {}
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('sadmin','admin','user')

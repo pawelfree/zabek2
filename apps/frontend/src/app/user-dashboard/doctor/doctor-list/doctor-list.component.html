@@ -34,8 +34,13 @@
 <p class="info-text mat-body-1" *ngIf="dataCount <= 0">
   Jeszcze nie ma zdefiniowanych lekarzy!
 </p>
-<div style="right: 15px; bottom: 5px; position: fixed">
-  <button mat-fab color="accent" md-fab-bottom-right aria-label="Dodaj badanie" title="Dodaj" alt="Dodaj"
+<div style="right: 15px; bottom: 5px; position: fixed" *ngIf="(user$ | async).role !== 'sadmin'" >
+  <button 
+    mat-fab color="accent" 
+    md-fab-bottom-right 
+    aria-label="Dodaj badanie" 
+    title="Dodaj" 
+    alt="Dodaj"
     routerLink="../create">
     <mat-icon>add</mat-icon>
   </button>
