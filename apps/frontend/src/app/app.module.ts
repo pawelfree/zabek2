@@ -28,6 +28,7 @@ import { FilesComponent } from './files/files.component';
 import { LoadingComponent } from './loading/loading.component';
 import { MessagesComponent } from './mesaages/messages.component';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RoleNamePipe } from './_pipes/role.pipe';
  
 registerLocaleData(localePl, 'pl');
 
@@ -45,7 +46,7 @@ registerLocaleData(localePl, 'pl');
     AcceptRulesComponent,
     FilesComponent,
     LoadingComponent,
-    MessagesComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +72,7 @@ registerLocaleData(localePl, 'pl');
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
   entryComponents: [

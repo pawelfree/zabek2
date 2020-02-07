@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './store/user.effects';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from './store/user.reducer';
+import { RoleNamePipe } from '../../_pipes/role.pipe';
 
 @NgModule({
   imports: [
@@ -21,7 +22,11 @@ import { userReducer } from './store/user.reducer';
   ],
   declarations: [
     UserListComponent,
-    UserCreateComponent
+    UserCreateComponent,
+    RoleNamePipe
+  ],
+  providers: [
+    RoleNamePipe
   ]
 })
 export class UserModule {}

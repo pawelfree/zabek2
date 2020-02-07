@@ -68,7 +68,7 @@ export class DoctorController {
   @Post()
   async addDoctor(@Body() doctor: Doctor) {
     console.warn('wymusic polityke haseł i weryfikowac unikalnosc')
-    return _.pick(await this.userService.addDoctor(doctor), [
+    return _.pick(await this.doctorService.addDoctor(doctor), [
       '_id',
       'firstName',
       'lastName',

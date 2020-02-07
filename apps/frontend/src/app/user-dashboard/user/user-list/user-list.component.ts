@@ -7,6 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { UserState } from '../store/user.reducer';
 import { UserActions, selectUserState } from '../store';
 import { AppActions } from '../../../store';
+import { RoleNamePipe } from '../../../_pipes/role.pipe';
 
 @Component({
   selector: 'zabek-user-list',
@@ -23,7 +24,8 @@ export class UserListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private readonly store: Store<UserState>) {}
+  constructor(private readonly store: Store<UserState>,
+              public roleName: RoleNamePipe) {}
 
   ngOnInit() {
     this.storeSub = this.store.pipe(select(selectUserState)).subscribe(state => {

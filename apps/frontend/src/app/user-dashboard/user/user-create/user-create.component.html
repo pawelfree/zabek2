@@ -12,7 +12,7 @@
       <mat-label>Rola użytkownika</mat-label>
       <mat-select formControlName="role">
         <mat-option  *ngFor="let role of roles" [value]="role">
-          {{ role }}
+          {{ role | roleName }}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>

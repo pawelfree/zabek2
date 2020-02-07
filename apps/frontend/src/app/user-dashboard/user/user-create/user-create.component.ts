@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { UserState } from '../store/user.reducer';
 import { UserActions }from '../store';
 import { AppActions } from '../../../store';
+import { RoleNamePipe } from '../../../_pipes/role.pipe';
 
 @Component({
   selector: 'zabek-user-create',

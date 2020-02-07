@@ -93,8 +93,8 @@ export const DoctorSchema = new Schema({
   },
 });
 
-DoctorSchema.path('qualificationsNo').validate(function (value) {
+// DoctorSchema.path('qualificationsNo').validate(function (value) {
 
-  isValidPwz(value);
+//   isValidPwz(value);
 
-}, 'To nie jest poprawny numer PWZ');
+// }, 'To nie jest poprawny numer PWZ');
