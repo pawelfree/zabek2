@@ -32,15 +32,9 @@ export const DoctorSchema = new Schema({
   },
   qualificationsNo: {
     type: String,
-    // validate: {
-    //   validator: function(value) {
-    //     return isValidPwz(value);
-    //   },
-    //   message: props => `${props.value} nie jest poprawnym numerem PWZ`
-    // },
-    required: false,
-    // minLength: 5,
-    // maxLength: 25
+    unique: true,
+    trim: true,    
+    sparse: true
   },
   officeName: {
     type: String,
@@ -86,10 +80,12 @@ export const DoctorSchema = new Schema({
   },
   email: {
     type: String,
-    requred: true,
     minLength: 5,
     maxLength: 50,
-    unique: true
+    unique: true,
+    trim: true, 
+    index: true,     
+    sparse: true
   },
 });
 
