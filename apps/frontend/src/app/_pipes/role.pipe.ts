@@ -8,7 +8,7 @@ export class RoleNamePipe implements PipeTransform {
 
     switch (value) {
       case 'user': 
-        role = 'Technik';
+        role = 'Technik RTG';
         break;
       case 'admin': 
         role = 'Administrator';
