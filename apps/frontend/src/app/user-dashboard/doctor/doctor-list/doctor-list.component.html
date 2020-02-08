@@ -36,9 +36,10 @@
 </p>
 <div style="right: 15px; bottom: 5px; position: fixed" *ngIf="(user$ | async).role !== 'sadmin'" >
   <button 
+    data-cy="addDoctor"
     mat-fab color="accent" 
     md-fab-bottom-right 
-    aria-label="Dodaj badanie" 
+    aria-label="Dodaj" 
     title="Dodaj" 
     alt="Dodaj"
     routerLink="../create">

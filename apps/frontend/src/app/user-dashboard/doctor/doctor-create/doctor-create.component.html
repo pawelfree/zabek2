@@ -3,20 +3,20 @@
     <mat-card-content>
       <mat-form-field>
         <input matInput type="text" formControlName="email" [value]="form.get('email').value | lowercase"
-          placeholder="Email">
+          placeholder="Email" data-cy="email">
         <mat-error *ngIf="form.get('email').invalid">Email jest wymagany.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="firstName" placeholder="Imię">
+        <input matInput type="text" formControlName="firstName" placeholder="Imię" data-cy="firstName">
         <mat-error *ngIf="form.get('firstName').invalid">Imię jest wymagane.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="lastName" placeholder="Nazwisko">
+        <input matInput type="text" formControlName="lastName" placeholder="Nazwisko" data-cy="lastName">
         <mat-error *ngIf="form.get('lastName').invalid">Nazwisko jest wymagane.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" formControlName="qualificationsNo"
-          placeholder="Numer pozwolenia na wykonywanie zawodu (PWZ)">
+          placeholder="Numer pozwolenia na wykonywanie zawodu (PWZ)" data-cy="qualificationsNo">
         <mat-error *ngIf="form.get('qualificationsNo').hasError('required')">PWZ jest wymagany.</mat-error>
         <mat-error
           *ngIf="form.get('qualificationsNo').hasError('minlength') || form.get('qualificationsNo').hasError('maxlength')">
@@ -26,42 +26,42 @@
         <mat-error *ngIf="form.get('qualificationsNo').hasError('validPwz')">PWZ jest niepoprawny.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="pesel" placeholder="PESEL">
+        <input matInput type="text" formControlName="pesel" placeholder="PESEL" data-cy="pesel">
         <mat-error *ngIf="form.get('pesel').hasError('onlyNumbers')">PESEL może zawierać tylko cyfry.</mat-error>
         <mat-error *ngIf="form.get('pesel').hasError('validPesel')">PESEL jest nieprawidłowy.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="nip" placeholder="NIP">
+        <input matInput type="text" formControlName="nip" placeholder="NIP" data-cy="nip">
         <mat-error *ngIf="form.get('nip').hasError('onlyNumbers')">NIP może zawierać tylko cyfry.</mat-error>
         <mat-error *ngIf="form.get('pesel').hasError('validNIP')">NIP jest nieprawidłowy.</mat-error>
       </mat-form-field>     
       <mat-form-field>
-        <input matInput type="text" formControlName="officeName" placeholder="Nazwa gabinetu">
+        <input matInput type="text" formControlName="officeName" placeholder="Nazwa gabinetu" data-cy="officeName">
         <mat-error *ngIf="form.get('officeName').invalid">Nazwa gabinetu jest wymagana.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="officeAddress" placeholder="Adres gabinetu">
+        <input matInput type="text" formControlName="officeAddress" placeholder="Adres gabinetu" data-cy="officeAddress">
         <mat-error *ngIf="form.get('officeAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
       </mat-form-field>
-      <mat-checkbox formControlName="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
+      <mat-checkbox formControlName="sameAddresses" data-cy="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
       <mat-form-field *ngIf="!(sameAddresses$ | async)">
-        <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres korespondencyjny">
+        <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres korespondencyjny" data-cy="officeCorrespondenceAddress">
         <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres korespondencyjny jest wymagany.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Domyślny format badania</mat-label>
-        <mat-select formControlName="examFormat">
+        <mat-select formControlName="examFormat" data-cy="examFormat">
           <mat-option [value]="'tiff'">tiff</mat-option>
           <mat-option [value]="'jpeg'">jpeg</mat-option>
           <mat-option [value]="'dicom'">dicom</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox formControlName="tomographyWithViewer">Proszę o załączanie do badań przeglądarki</mat-checkbox>
+      <mat-checkbox formControlName="tomographyWithViewer" data-cy="tomographyWithViewer">Proszę o załączanie do badań przeglądarki</mat-checkbox>
     </mat-card-content>
 
     <mat-card-title>
-      <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz</button>
-      <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/doctor/list">Anuluj</button>
+      <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid" data-cy="submit">Zapisz</button>
+      <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/doctor/list" data-cy="cancel">Anuluj</button>
     </mat-card-title>
   </form>
 </mat-card>
