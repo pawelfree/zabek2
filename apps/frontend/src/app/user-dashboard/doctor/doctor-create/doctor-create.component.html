@@ -45,8 +45,8 @@
       </mat-form-field>
       <mat-checkbox formControlName="sameAddresses">Taki sam adres do korespondencji</mat-checkbox>
       <mat-form-field *ngIf="!(sameAddresses$ | async)">
-        <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres gabinetu">
-        <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres gabinetu jest wymagany.</mat-error>
+        <input matInput type="text" formControlName="officeCorrespondenceAddress" placeholder="Adres korespondencyjny">
+        <mat-error *ngIf="form.get('officeCorrespondenceAddress').invalid">Adres korespondencyjny jest wymagany.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Domyślny format badania</mat-label>
@@ -56,7 +56,7 @@
           <mat-option [value]="'dicom'">dicom</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox formControlName="tomographyWithViewer">Tomografia razem z czytnikiem</mat-checkbox>
+      <mat-checkbox formControlName="tomographyWithViewer">Proszę o załączanie do badań przeglądarki</mat-checkbox>
     </mat-card-content>
 
     <mat-card-title>
