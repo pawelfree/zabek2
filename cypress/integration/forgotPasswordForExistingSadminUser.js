@@ -1,4 +1,4 @@
-describe('Reset hasła przy logowaniu dla istniejącego usera', function () {
+describe('Reset hasła przy logowaniu dla istniejącego usera sadmin', function () {
     it('Otwórz stronę logowania', function () {
         cy.visit('/');
     })
