@@ -8,7 +8,7 @@ describe('admin test - create an online doctor', function () {
     })
 
     it('successfully logs in', () => {
-
+      cy.visit('/user/doctor/list')
       cy.get('input[name=username]').type(username)
       cy.get('input[name=password]').type(password)
       cy.get('form').submit()
@@ -32,7 +32,20 @@ describe('admin test - create an online doctor', function () {
       cy.get('[data-cy=submit]').should('be.disabled')
       cy.get('[data-cy=cancel]').should('be.enabled')
       // teraz tworzymy doktora
-      cy.get('[data-cy=email').type('doctor001@zabek.pl')
+      var now = new Date();
+      var localDateTime = now.getFullYear() +
+      "-" +
+      (now.getMonth()+1) +
+      "-" +
+      (now.getDate()) +
+      "T" +
+      (now.getHours()) +
+      "-" +
+      (now.getMinutes()) +
+      "-" +
+      (now.getSeconds());
+      const newDoctor = localDateTime+'@zabek.pl'
+      cy.get('[data-cy=email').type(newDoctor)
       cy.get('[data-cy=firstName').type('Dr Jan Maria')
       cy.get('[data-cy=lastName]').type('Rokita')
       cy.get('[data-cy=qualificationsNo]').type('2644577')
