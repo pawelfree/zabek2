@@ -44,11 +44,25 @@ describe('admin test - create a user', function () {
       cy.get('[data-cy=submit]').should('be.disabled')
       cy.get('[data-cy=cancel]').should('be.enabled')
       // teraz tworzymy usera
-      cy.get('[data-cy=email').type('user101@zabek.pl')
+      var now = new Date();
+      var localDateTime = now.getFullYear() +
+   				 "-" +
+   				 (now.getMonth()+1) +
+   				 "-" +
+   				 (now.getDate()) +
+   				 "T" +
+   				 (now.getHours()) +
+   				 "-" +
+   				 (now.getMinutes()) +
+   				 "-" +
+           (now.getSeconds());
+      const newUser = localDateTime+'@zabek.pl'
+      cy.get('[data-cy=email').type(newUser)
       cy.get('[data-cy=password1]').type('Qwerty.1')
       cy.get('[data-cy=password2]').type('Qwerty.1')
       cy.get('[data-cy=submit]').should('be.enabled')
-      cy.get('[data-cy=submit]').click()
+      cy.get('form').submit()
+      cy.url().should('include', '/user/user/list')
     })
   })
 
