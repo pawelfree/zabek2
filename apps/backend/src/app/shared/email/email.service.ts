@@ -38,7 +38,7 @@ export class EmailService {
       console.log('Reset token email generated for',email);
       console.log(token);
     } else {
-      return this.http.post("https://api.sendgrid.com/v3/mail/send", 
+      this.http.post("https://api.sendgrid.com/v3/mail/send", 
       {
         "personalizations": [{
           "to": [{
@@ -60,7 +60,10 @@ export class EmailService {
           "content-type": "application/json",
           "Authorization": "Bearer " + this.API_KEY
         }
-      });
+      }).pipe(take(1)).subscribe(
+        succ => console.log('Wysłany email resetu hasła dla', email), 
+        err => console.log('Błąd wysyłania resetu maila dla', email)
+      );;
     }
   }
 
