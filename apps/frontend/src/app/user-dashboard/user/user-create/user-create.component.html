@@ -17,10 +17,10 @@
       </mat-select>
       <mat-error *ngIf="form.get('role').invalid">Wybierz rolę użytkownika.</mat-error>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field  *ngIf="user?.role === 'sadmin'">
       <input matInput type="text" formControlName="lab_name" placeholder="Pracownia użytkownika" readonly (click)="onSelectLab()">
     </mat-form-field>
-    <div hidden="true">
+    <div hidden="true" *ngIf="user?.role === 'sadmin'">
       <mat-form-field>
         <input matInput type="text" formControlName="lab" readonly>
       </mat-form-field>

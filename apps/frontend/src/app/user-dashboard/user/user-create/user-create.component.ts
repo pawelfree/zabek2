@@ -8,9 +8,8 @@ import { SelectLabComponent } from '../../select-lab/select-lab.component';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { UserState } from '../../store/user.reducer';
-import { UserActions }from '../../store';
-import { AppActions } from '../../../store';
-import { RoleNamePipe } from '../../../_pipes/role.pipe';
+import { AppActions, AppState } from '../../../store';
+import { UserActions } from '../../store';
 
 @Component({
   selector: 'zabek-user-create',
@@ -24,8 +23,10 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   private _id: string;
   private storeSub: Subscription = null;
 
+  user: User = null;
+
   constructor(    
-    private readonly store: Store<UserState>,
+    private readonly store: Store<AppState>,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog
   ) {}
@@ -63,8 +64,16 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     });
 
     this.storeSub = this.store.subscribe(state => {
-      if (state.error) {
-        this.store.dispatch(AppActions.raiseError({message: state.error, status: null}));
+      this.user = state.auth.user;
+      if (this.user && this.user.role !== Role.sadmin) {
+        this.form.controls.lab.clearValidators()
+      } else {
+        this.form.controls.lab.setValidators([Validators.required]);
+      }
+      this.form.controls.lab.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      //TODO globalne wyswietlanie bledow
+      if (state.global.error) {
+        this.store.dispatch(AppActions.raiseError({message: state.global.error.message, status: state.global.error.status}));
       }
     });
 
@@ -115,7 +124,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       _id: this._id ? this._id : null,
       email: this.form.value.email,
       role: this.form.value.role,
-      lab: this.form.value.lab,
+      lab: this.form.value.lab ? this.form.value.lab : this.user.lab,
       password: this.form.value.password1,
       active: true,
       rulesAccepted: false});
