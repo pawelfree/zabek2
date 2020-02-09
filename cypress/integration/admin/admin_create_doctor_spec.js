@@ -33,26 +33,29 @@ describe('admin test - create an online doctor', function () {
       cy.get('[data-cy=cancel]').should('be.enabled')
       // teraz tworzymy doktora
       var now = new Date();
-      var localDateTime = now.getFullYear() +
-      "-" +
-      (now.getMonth()+1) +
-      "-" +
-      (now.getDate()) +
-      "T" +
-      (now.getHours()) +
-      "-" +
-      (now.getMinutes()) +
-      "-" +
-      (now.getSeconds());
+      var localDateTime = now.getFullYear() + "" + (now.getMonth()+1) + "" 
+                        + (now.getDate()) + "" + (now.getHours()) + "" 
+                        + (now.getMinutes()) + "" + (now.getSeconds());
       const newDoctor = localDateTime+'@zabek.pl'
       cy.get('[data-cy=email').type(newDoctor)
-      cy.get('[data-cy=firstName').type('Dr Jan Maria')
-      cy.get('[data-cy=lastName]').type('Rokita')
-      cy.get('[data-cy=qualificationsNo]').type('2644577')
-      cy.get('[data-cy=pesel]').type('34111806970')
-      cy.get('[data-cy=nip]').type('7594670066')
-      cy.get('[data-cy=officeName]').type('Zabkowy Gigant Poudnia')
-      cy.get('[data-cy=officeAddress]').type('Blotna 123/4; Krakow i Okolice')
+      cy.get('[data-cy=firstName').type('Dr Test ')
+      cy.get('[data-cy=lastName]').type(localDateTime)
+      
+      // PWZ generator
+      // TODO - check if pwz is already used in DB
+      // 
+      const n = Math.floor(100000 + Math.random() * 900000)
+      var digits = (""+n).split("").map(Number);
+      const interSum = digits.reduce((prev, curr, index) => curr*(index+1) + prev, 0);
+      const controlDigit = (interSum % 11)
+      digits.unshift(controlDigit)
+
+
+      cy.get('[data-cy=qualificationsNo]').type(digits.join('')) 
+      cy.get('[data-cy=pesel]').type('34111806970') 
+      cy.get('[data-cy=nip]').type('7594670066') 
+      cy.get('[data-cy=officeName]').type('Zabkowy Gigant Poułdnia')
+      cy.get('[data-cy=officeAddress]').type('Zachlapana 123/4; Kraków i Okolice')
 
       cy.get('form').submit()
       cy.url().should('include', '/user/doctor/list')
