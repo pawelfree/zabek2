@@ -43,19 +43,22 @@ export class AuthEffects {
     })
   ));
 
-  authPassworResetTokenSent$ = this.actions$.pipe(
+  authPassworResetTokenSent$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.passwordResetTokenRequestSent),
-    map(() => AppActions.sendInfo({info: 'Żądanie zmiany hasła zostało wysłane. Sprawdź skrzynkę poczty.'}))
-  );
+    map(() => AppActions.sendInfo({info: 'Żądanie zmiany hasła zostało wysłane. Sprawdź skrzynkę poczty. Dostarczenie wiadomości moe potrwać nawet kilka godzin.'}))
+  ));
 
   authSendPasswordResetRequest$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.sendPasswordResetTokenRequest),
-    switchMap(props => {
-      return this.http.post(BACKEND_URL+'passwordreset', props).pipe(
-        map(res => AuthActions.passwordResetTokenRequestSent()),
+    switchMap(props =>   
+      this.http.post(BACKEND_URL+'passwordreset', props).pipe(
+        map(res => { 
+          console.log('send return');
+          
+          return AuthActions.passwordResetTokenRequestSent()}
+          ),
         catchError(error => of(AuthActions.passwordChangeError({error})))
-      )
-    })
+      ))
   ));
 
   authPasswordChanged$ = createEffect(() => this.actions$.pipe(
