@@ -1,5 +1,5 @@
 import { Directive, OnInit, OnDestroy, AfterViewInit, Output, Input, ElementRef, EventEmitter } from '@angular/core';
-import { MatSelect, SELECT_ITEM_HEIGHT_EM } from '@angular/material';
+import { MatSelect, SELECT_ITEM_HEIGHT_EM } from '@angular/material/select';
 import { Subscription, fromEvent, Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 

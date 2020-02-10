@@ -22,10 +22,6 @@ import { FileUploadComponent } from '../../files/fileupload/fileupload.component
     ExamCreateComponent,
     DoctorCreateDlgComponent,
     FileUploadComponent
-  ],
-  entryComponents: [
-    DoctorCreateDlgComponent,
-    FileUploadComponent
   ]
 })
 export class ExamModule {}

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '@zabek/data';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordComponent } from '../common-dialogs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';

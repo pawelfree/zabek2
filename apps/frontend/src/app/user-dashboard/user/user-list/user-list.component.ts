@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { UserListDataSource } from './user-list.datasource';
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';

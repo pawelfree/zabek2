@@ -6,7 +6,7 @@ import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { tap, last, catchError, finalize, take, map } from 'rxjs/operators';
 import { FileUpload } from '@zabek/data';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState, AppActions } from '../../store';
 

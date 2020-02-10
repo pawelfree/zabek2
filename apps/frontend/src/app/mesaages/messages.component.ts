@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState, selectError, AppActions, selectInfo } from '../store';
 import { Observable } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ErrorComponent, InfoComponent } from '../common-dialogs';
 
 @Component({

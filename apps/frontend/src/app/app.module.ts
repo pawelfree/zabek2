@@ -73,14 +73,7 @@ registerLocaleData(localePl, 'pl');
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [
-    ErrorComponent,
-    ChangePasswordComponent,
-    InfoComponent,
-    ConfirmationComponent,
-    AcceptRulesComponent
-  ]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, merge } from "rxjs";
-import { map, tap, filter } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { Router, NavigationStart, NavigationEnd } from "@angular/router";
 import { select, Store } from '@ngrx/store';
 import { AppState, selectLoading } from '../store';

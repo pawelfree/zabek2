@@ -5,7 +5,8 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import { MatPaginator, MatDialog } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, BehaviorSubject, of } from 'rxjs';
 import { FeedbackListDataSource } from '../feedback-list.datasource';

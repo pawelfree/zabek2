@@ -10,7 +10,8 @@
           "/favicon.ico",
           "/index.html",
           "/*.js",
-          "/*.css"
+          "/*.css",
+          "/manifest.webmanifest"
         ],
         "urls": [
           "https://fonts.googleapis.com/css?family=Roboto:300,400,500",

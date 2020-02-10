@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatPaginator, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { DoctorListDataSource } from './doctor-list.datasource';
 import { DoctorService } from '../../../_services';
 import { tap, catchError, take } from 'rxjs/operators';

@@ -12,11 +12,11 @@ const routes: Routes = [
   },
   {
     path: "user",
-    loadChildren: './user/user.module#UserModule'
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {   
     path: "lab", 
-    loadChildren: './lab/lab.module#LabModule'
+    loadChildren: () => import('./lab/lab.module').then(m => m.LabModule)
   },
   {
     path: "doctor",
@@ -28,7 +28,7 @@ const routes: Routes = [
   },
   {   
     path: "feedbacks", 
-    loadChildren: './feedback/feedback.module#FeedbackModule'
+    loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackModule)
   },
   {
     path: 'reports',

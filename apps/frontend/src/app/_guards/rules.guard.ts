@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.reducer';
 import { take, map } from 'rxjs/operators';
 import { Role } from '@zabek/data';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthActions } from '../auth/store';
 import { DoctorService } from '../_services';
 import { AcceptRulesComponent } from '../common-dialogs/accept-rules/accept-rules.component';

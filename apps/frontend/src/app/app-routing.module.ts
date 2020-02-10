@@ -17,12 +17,12 @@ const routes: Routes = [
     },
     {
         path: 'user',
-        loadChildren: './user-dashboard/user-dashboard.module#UserDashboardModule'
+        loadChildren: () => import('./user-dashboard/user-dashboard.module').then(m => m.UserDashboardModule)
     },
     {
         path: 'doctor',
         canActivate: [RulesGuard],
-        loadChildren: './doctor-dashboard/doctor-dashboard.module#DoctorDashboardModule'
+        loadChildren: () => import('./doctor-dashboard/doctor-dashboard.module').then(m => m.DoctorDashboardModule)
     },
     {
         path: 'login',

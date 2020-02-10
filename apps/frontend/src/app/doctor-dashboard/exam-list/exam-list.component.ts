@@ -5,7 +5,7 @@ import {
   ViewChild,
   AfterViewInit
 } from '@angular/core';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
 import { ExamListDataSource } from './exam-list.datasource';
 import { DoctorExamService } from '../../_services';
 import { tap, take, catchError } from 'rxjs/operators';

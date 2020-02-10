@@ -3,11 +3,10 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
 import { CustomValidator } from '../../../_validators';
 import { Role, Lab, User } from '@zabek/data';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectLabComponent } from '../../select-lab/select-lab.component';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { UserState } from '../../store/user.reducer';
 import { AppActions, AppState } from '../../../store';
 import { UserActions } from '../../store';
 
