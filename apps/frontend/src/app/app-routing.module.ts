@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthComponent } from './auth/login/auth.component';
-import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { NgModule } from '@angular/core';
 import { ResetPasswordComponent } from './auth/reset-password/resetpassword.component';
 import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resolver';
@@ -30,7 +29,7 @@ const routes: Routes = [
     },
     {
         path: 'register',
-        component: DoctorRegisterComponent
+        loadChildren: () => import('./register/register.module').then(m => m.DoctorRegisterModule)
     },
     {
         path: 'resetpassword/:id',
@@ -56,7 +55,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-//    imports: [RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})],
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })

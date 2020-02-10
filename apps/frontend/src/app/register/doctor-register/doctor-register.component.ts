@@ -4,7 +4,7 @@ import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators
 import { Observable } from 'rxjs';
 import { tap, startWith, take, finalize } from 'rxjs/operators';
 import { User, Role, Doctor } from '@zabek/data';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../_services'
 import { PwzValidator } from '../../_validators';
 import { Store } from '@ngrx/store';
@@ -20,7 +20,7 @@ export class DoctorRegisterComponent implements OnInit {
   form: FormGroup;
   regulationsAccepted$: Observable<boolean>;
   sameAddresses$: Observable<any>;
-  private queryParams: Params = null;
+  private lab_id: null;
 
   constructor(
     private readonly router: Router,
@@ -100,9 +100,9 @@ export class DoctorRegisterComponent implements OnInit {
           validators: CustomValidator.mustMatch('password1', 'password2')
       });
 
-      this.route.queryParams.pipe(
+      this.route.params.pipe(
         take(1),
-        tap(params => this.queryParams = params['id'] ? {id: params['id']} : null)
+        tap(parms => this.lab_id = parms['id'])
       ).subscribe();
 
       this.regulationsAccepted$ = this.form.controls.regulationsAccepted.valueChanges.pipe(
@@ -131,12 +131,12 @@ export class DoctorRegisterComponent implements OnInit {
     if (this.form.invalid)  {
       return;
     }
-    if (!this.queryParams) {
+    if (!this.lab_id) {
       this.store.dispatch(AppActions.sendInfo({info: 'Niepoprawny (brak) identyfikator pracowni' }));
       return;
     }
     const checkForLabId = new RegExp("^[0-9a-fA-F]{24}$")
-    if (!checkForLabId.test(this.queryParams.id)) {
+    if (!checkForLabId.test(this.lab_id)) {
       this.store.dispatch(AppActions.sendInfo({info: 'Niepoprawny identyfikator pracowni' }));
       return;
     }
@@ -164,7 +164,7 @@ export class DoctorRegisterComponent implements OnInit {
       role: Role.doctor,
       rulesAccepted: true,
       active: false,
-      lab: this.queryParams['id'],
+      lab: this.lab_id,
       doctor: newDoctor,
       password: this.form.value.password1
     });

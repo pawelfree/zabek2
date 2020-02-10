@@ -24,8 +24,8 @@ export class LabController {
     private readonly labService: LabService
   ) {}
 
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin', 'admin')
+    // @UseGuards(AuthGuard('jwt'), RolesGuard)
+    // @Roles('sadmin', 'admin')
     @Get()
     async allLabs(
       @Query('pagesize', new ParseIntPipe()) pagesize: number,

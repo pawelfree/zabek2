@@ -15,7 +15,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { appReducer } from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
-import { DoctorRegisterComponent } from './auth/doctor-register/doctor-register.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { registerLocaleData } from '@angular/common';
 import localePl from '@angular/common/locales/pl';
@@ -36,7 +35,6 @@ registerLocaleData(localePl, 'pl');
     AppComponent, 
     HeaderComponent,
     AuthComponent,
-    DoctorRegisterComponent,
     ResetPasswordComponent,
     ErrorComponent,
     ChangePasswordComponent,
