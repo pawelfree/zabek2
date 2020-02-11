@@ -54,7 +54,7 @@
           <mat-option [value]="'dicom'">dicom</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox formControlName="tomographyWithViewer">Tomografia razem z czytnikiem</mat-checkbox>
+      <mat-checkbox formControlName="tomographyWithViewer">Proszę o załączanie do badań przeglądarki</mat-checkbox>
       <mat-form-field>
         <input matInput type="password" formControlName="password1" placeholder="Hasło">
         <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>

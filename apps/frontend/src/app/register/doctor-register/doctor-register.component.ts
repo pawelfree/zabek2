@@ -78,7 +78,7 @@ export class DoctorRegisterComponent implements OnInit {
       }),
       sameAddresses: new FormControl(true), 
       officeCorrespondenceAddress: new FormControl(null),
-      examFormat: new FormControl("tiff", {
+      examFormat: new FormControl("jpeg", {
         validators: [ Validators.required]
       }),    
       tomographyWithViewer: new FormControl(false),    
