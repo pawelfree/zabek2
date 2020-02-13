@@ -91,6 +91,8 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         password1: '',
         password2: ''
       });
+      this.form.controls.email.disable();
+      this.form.controls.email.clearValidators();
     } else {
       this._id = null;
       this.mode = 'create';

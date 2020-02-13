@@ -249,7 +249,11 @@ export class ExamCreateComponent implements OnInit {
       disableClose: true
     });
     const subs = dialogRef.componentInstance.onAdd.subscribe(
-      (res: Doctor) => this.doctors.next([res]),
+      (res: Doctor) => {
+        console.log('next', res);
+        
+        return this.doctors.next([res]);
+      },
       err => console.log('cos poszlo nie tak',err)
     );
 

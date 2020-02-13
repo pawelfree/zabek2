@@ -151,7 +151,7 @@ export class DoctorRegisterComponent implements OnInit {
       qualificationsNo: this.form.value.qualificationsNo,
       officeName: this.form.value.officeName,
       officeAddress: this.form.value.officeAddress,
-      officeCorrespondenceAddres: this.form.value.sameAddresses
+      officeCorrespondenceAddress: this.form.value.sameAddresses
       ? this.form.value.officeAddress
       : this.form.value.officeCorrespondenceAddress,
       examFormat: this.form.value.examFormat,

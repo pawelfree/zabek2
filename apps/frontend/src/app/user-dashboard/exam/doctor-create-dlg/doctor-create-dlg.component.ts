@@ -8,12 +8,14 @@ import {
   UserEmailValidator
 } from '../../../_validators';
 import { Observable } from 'rxjs';
-import { tap, startWith, take } from 'rxjs/operators';
-import { Doctor } from '@zabek/data';
+import { tap, startWith, take, finalize } from 'rxjs/operators';
+import { Doctor, User, Role, Lab } from '@zabek/data';
 import { DoctorService } from '../../../_services';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState, AppActions } from '../../../store';
+import { currentUser } from '../../../auth/store';
+import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'zabek-doctor-create-dlg',
@@ -25,6 +27,7 @@ export class DoctorCreateDlgComponent implements OnInit {
 
   onAdd = new EventEmitter();
   sameAddresses$: Observable<any>;
+  private lab: Lab;
 
   constructor(
     private readonly doctorService: DoctorService,
@@ -34,6 +37,13 @@ export class DoctorCreateDlgComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.store.pipe(
+      select(currentUser),
+      take(1),
+      tap(user => this.lab = user.lab)
+    ).subscribe();
+
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.email],
@@ -117,20 +127,59 @@ export class DoctorCreateDlgComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    const doctor: Doctor = { ...this.form.value, _id: null,
+
+console.log('same address',this.form.value.sameAddresses, this.form.value.officeAddress);
+  
+    const doctor: Doctor = { 
+      officeAddress: null,
+      officeName: null, 
+      ...this.form.value, 
+      _id: null,
       officeCorrespondenceAddress: this.form.value.sameAddresses
         ? this.form.value.officeAddress
         : this.form.value.officeCorrespondenceAddress,
     };
 
-    this.doctorService.addDoctor(doctor).pipe(take(1)).subscribe(
-      (res: Doctor) => {
-        this.store.dispatch(AppActions.sendInfo({info: 'Nowy lekarz został dodany.'}))
-        this.onAdd.emit(res);
-        this.dialogRef.close();
-      },
-      err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
-    );
+    let user = null;
+    if (this.form.value.email) {
+      user = Object.assign( new User(),{
+        _id: null,
+        email: this.form.value.email,
+        role: Role.doctor,
+        rulesAccepted: false,
+        active: false,
+        lab: this.lab,
+        doctor
+      });
+    }
+
+    this.store.dispatch(AppActions.loadingStart());
+
+    if (user) {
+      this.doctorService.addUser(user).pipe(
+        take(1),
+        finalize(() => this.store.dispatch(AppActions.loadingEnd())))
+      .subscribe(
+        (res: User) => {
+          console.log('online', res.doctor);
+          this.store.dispatch(AppActions.sendInfo({info: 'Lekarz został dodany'}));
+          this.onAdd.emit(res.doctor);
+          this.dialogRef.close();
+        },
+        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+      )
+    } else {
+      this.doctorService.addDoctor(doctor).pipe(
+        take(1),
+        finalize(() => this.store.dispatch(AppActions.loadingEnd()))).subscribe(
+        (res: Doctor) => {
+          console.log('offline', res);
+          this.store.dispatch(AppActions.sendInfo({info: 'Lekarz został dodany.'}))
+          this.onAdd.emit(res);
+          this.dialogRef.close();
+        },
+        err => this.store.dispatch(AppActions.raiseError({message: err, status: null}))
+      );
+    }
   }
- 
 }

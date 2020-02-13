@@ -9,7 +9,7 @@ export class Doctor implements Document {
   readonly officeName: string;
   readonly officeAddress: string;
   readonly qualificationsNo: string;
-  readonly officeCorrespondenceAddres: string;
+  readonly officeCorrespondenceAddress: string;
   readonly examFormat: string = 'tiff';
   readonly tomographyWithViewer: boolean;
   readonly pesel?: string;
@@ -48,7 +48,7 @@ export const DoctorSchema = new Schema({
     minLength: 15,
     maxLength: 75
   },
-  officeCorrespondenceAddres: {
+  officeCorrespondenceAddress: {
     type: String,
     required: false,
     minLength: 15,

@@ -97,7 +97,8 @@ export class UserController {
       '_id',
       'email',
       'role',
-      'lab'
+      'lab',
+      'doctor'
     ]);
   }
 
@@ -125,7 +126,8 @@ export class UserController {
       '_id',
       'email',
       'role',
-      'lab'
+      'lab',
+      'doctor'
     ]);
   }
 
@@ -183,7 +185,6 @@ export class UserController {
             .then(res => res)
             .catch(err => error = new InternalServerErrorException('Błąd zapisu hasła użytkownia' + err));
           } else {
-            console.log('zmiana danych lekarza', userToUpdate.doctor);
             const {n, nModified, ok} = await this.doctorService.update(userToUpdate.doctor);
             if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
               error = new InternalServerErrorException('Nieznany błąd - zapis lekarza');

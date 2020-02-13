@@ -25,7 +25,8 @@ export class UserService {
   }
 
   async addUser(user: User): Promise<User> {
-    return await new this.userModel(user).save();
+    const newUser = new this.userModel({...user, _id: new Types.ObjectId()});
+    return newUser.save().then( savedUser => savedUser.populate('doctor').populate('lab').execPopulate());
   }
 
   async findAllDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {

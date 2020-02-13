@@ -42,7 +42,7 @@ export class DoctorCreateComponent implements OnInit {
     ).subscribe();
 
     this.user = this.route.snapshot.data.doctor;
-    const sameAddresses = this.user ? (this.user.doctor.officeAddress === this.user.doctor.officeCorrespondenceAddres ? true : false) : true;
+    const sameAddresses = this.user ? (this.user.doctor.officeAddress === this.user.doctor.officeCorrespondenceAddress ? true : false) : true;
 
     this.form = new FormGroup({
       email: new FormControl(null, {
@@ -113,12 +113,14 @@ export class DoctorCreateComponent implements OnInit {
         officeName: this.user.doctor.officeName,
         sameAddresses,
         officeAddress: this.user.doctor.officeAddress,
-        officeCorrespondenceAddress: this.user.doctor.officeCorrespondenceAddres,
+        officeCorrespondenceAddress: this.user.doctor.officeCorrespondenceAddress,
         examFormat: this.user.doctor.examFormat,
         tomographyWithViewer: this.user.doctor.tomographyWithViewer,
         nip: this.user.doctor.nip,
         pesel: this.user.doctor.pesel
       });
+      this.form.controls.email.disable();
+      this.form.controls.email.clearValidators();
     } else {
       this.mode = 'create';
     }
@@ -157,7 +159,7 @@ export class DoctorCreateComponent implements OnInit {
       qualificationsNo: this.form.value.qualificationsNo,
       officeName: this.form.value.officeName,
       officeAddress: this.form.value.officeAddress,
-      officeCorrespondenceAddres: this.form.value.sameAddresses
+      officeCorrespondenceAddress: this.form.value.sameAddresses
       ? this.form.value.officeAddress
       : this.form.value.officeCorrespondenceAddress,
       examFormat: this.form.value.examFormat,
