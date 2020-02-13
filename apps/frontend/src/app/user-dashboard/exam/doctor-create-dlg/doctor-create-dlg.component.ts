@@ -3,13 +3,14 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   CustomValidator,
   PeselValidator,
-  NIPValidator
+  NIPValidator,
+  PwzValidator,
+  UserEmailValidator
 } from '../../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take } from 'rxjs/operators';
 import { Doctor } from '@zabek/data';
 import { DoctorService } from '../../../_services';
-import { PwzValidator } from '../../../_validators';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { AppState, AppActions } from '../../../store';
@@ -28,13 +29,16 @@ export class DoctorCreateDlgComponent implements OnInit {
   constructor(
     private readonly doctorService: DoctorService,
     private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>,
-    private readonly store: Store<AppState>
+    private readonly store: Store<AppState>,
+    private readonly userEmailValidator: UserEmailValidator
   ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl(null, {
-        validators: [Validators.email]
+        validators: [Validators.email],
+        asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
+        updateOn: 'blur'
       }),
       lab: new FormControl(null),
       firstName: new FormControl(null, {

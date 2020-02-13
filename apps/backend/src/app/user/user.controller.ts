@@ -154,6 +154,14 @@ export class UserController {
     return this.userService.findById(id);
   }
 
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.admin, Role.user)
+  @Get('emailtaken/:email')
+  async isEmailTaken(@Param('email') email: string) {
+    return await this.userService.findByEmail(email) ? true : false;
+  }
+
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Put(':id')

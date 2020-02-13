@@ -57,5 +57,9 @@ export class DoctorService {
   getDoctor(id: string): Observable<Doctor> {
     return this.http.get<Doctor>(BACKEND_URL + id);
   }
+
+  isEmailTaken(email: string): Observable<boolean> {
+    return this.http.get<boolean>(USER_BACKEND_URL + 'emailtaken/' + email);
+  }
  
 }

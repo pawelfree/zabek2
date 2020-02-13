@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
-import { CustomValidator } from '../../../_validators';
+import { CustomValidator, UserEmailValidator } from '../../../_validators';
 import { Role, Lab, User } from '@zabek/data';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectLabComponent } from '../../select-lab/select-lab.component';
@@ -27,14 +27,17 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   constructor(    
     private readonly store: Store<AppState>,
     private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly userEmailValidator: UserEmailValidator
   ) {}
 
   ngOnInit() {
     //TODO walidacja roli i takiego samego hasla
     this.form = new FormGroup({
         email: new FormControl(null, {
-          validators: [Validators.required, Validators.email]
+          validators: [Validators.required, Validators.email],
+          asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
+          updateOn: 'blur'
         }),
         role: new FormControl("user", {
           validators: [Validators.required]
