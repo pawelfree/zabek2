@@ -16,6 +16,7 @@ import { RolesGuard } from '../shared/security/roles.guard';
 import { ExamService } from './exam.service';
 import { UserService } from '../user/user.service';
 import { Examination } from '@zabek/data';
+import { noop } from 'rxjs';
 
   @Controller('doctor-exam')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -77,7 +78,7 @@ import { Examination } from '@zabek/data';
             lastDownload: downloadDateObj.downloadDate };
         }
 
-        this.examService.update(newExam).then(res => console.log('res',res)).catch(err => console.log('err',err))
+        this.examService.update(newExam).then(noop).catch(err => console.log('error updating download date',err))
 
       }
 

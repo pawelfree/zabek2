@@ -53,9 +53,7 @@ export class AuthEffects {
     switchMap(props =>   
       this.http.post(BACKEND_URL+'passwordreset', props).pipe(
         map(res => { 
-          console.log('send return');
-          
-          return AuthActions.passwordResetTokenRequestSent()}
+            return AuthActions.passwordResetTokenRequestSent()}
           ),
         catchError(error => of(AuthActions.passwordChangeError({error})))
       ))

@@ -12,7 +12,7 @@ import { ExamService } from '../../../_services';
 import { tap, take, catchError } from 'rxjs/operators';
 import { Subscription, of, BehaviorSubject } from 'rxjs';
 import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
-import { Examination, User } from '@zabek/data';
+import { Examination, User, Role } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 import { FileUploadComponent } from '../../../files/fileupload/fileupload.component';
 import { AppState, AppActions } from '../../../store';
@@ -116,6 +116,14 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
+  stringify(exam: Examination) {
+    if (this.user.role === Role.admin) {
+      return exam.firstDownload ?  "Pierwsze pobranie - " + new Date(exam.firstDownload).toDateString() + 
+                        " \n " +  "Ostatnie pobranie - " + new Date(exam.lastDownload).toDateString() : null;
+    }
+    return null;
+  }
+
   onSendNotificationToDoctor(id) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '350px',
@@ -124,11 +132,9 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         this.emailService.sendNotificationToDoctor(id).pipe(take(1)).subscribe(res => {
-          console.log('res', res)
           this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
         },
         err => {
-          console.log('email send error', err);
           this.store.dispatch(AppActions.raiseError({message: "Wiadomość nie została wysłana", status: 'Nieznany błąd'}));
         });
       }

@@ -158,7 +158,6 @@ export class DoctorCreateDlgComponent implements OnInit {
         finalize(() => this.store.dispatch(AppActions.loadingEnd())))
       .subscribe(
         (res: User) => {
-          console.log('online', res.doctor);
           this.store.dispatch(AppActions.sendInfo({info: 'Lekarz został dodany'}));
           this.onAdd.emit(res.doctor);
           this.dialogRef.close();
@@ -170,7 +169,6 @@ export class DoctorCreateDlgComponent implements OnInit {
         take(1),
         finalize(() => this.store.dispatch(AppActions.loadingEnd()))).subscribe(
         (res: Doctor) => {
-          console.log('offline', res);
           this.store.dispatch(AppActions.sendInfo({info: 'Lekarz został dodany.'}))
           this.onAdd.emit(res);
           this.dialogRef.close();

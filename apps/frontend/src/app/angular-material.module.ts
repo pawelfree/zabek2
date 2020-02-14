@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
   import { MatSortModule } from '@angular/material/sort';
   import { MatTableModule } from '@angular/material/table';
   import { MatToolbarModule } from '@angular/material/toolbar';
+  import { MatTooltipModule } from '@angular/material/tooltip';
   import { MatMenuModule } from '@angular/material/menu';
   import { MatCheckboxModule } from '@angular/material/checkbox';
   import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -39,6 +40,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
+    MatTooltipModule,
     MatAutocompleteModule,
     MatProgressBarModule,
     MatDatepickerModule

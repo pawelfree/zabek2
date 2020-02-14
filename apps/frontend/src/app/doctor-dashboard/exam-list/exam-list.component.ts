@@ -90,7 +90,7 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
 
   processFile(exam: Examination) {
     if (exam.file) {
-      this.doctorExamService.setDownloadDate(exam._id, new Date());
+      this.doctorExamService.setDownloadDate(exam._id, new Date().toISOString());
       window.open(environment.s3BucketAddress+exam.file.key, "_blank");
     } else 
     {

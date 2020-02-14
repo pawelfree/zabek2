@@ -77,7 +77,7 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="actions">
+  <ng-container matColumnDef="actions" >
     <th mat-header-cell *matHeaderCellDef style="text-align: center">Akcje</th>   
     <td mat-cell *matCellDef="let element; let i=index;"> 
       <button *ngIf="user.role === 'admin' || user.role === 'user' " 
@@ -85,7 +85,7 @@
               [routerLink]="['../edit', element._id]"
               color="primary" 
               title="Edytuj" 
-              alt="Edytuj">
+              alt="Edytuj" >
         <mat-icon aria-label="Edytuj">edit</mat-icon>
       </button> 
       
@@ -96,6 +96,9 @@
 
       <button *ngIf="user.role === 'admin' || user.role === 'user' " 
               mat-icon-button 
+              [matTooltip]="stringify(element)"
+              matTooltipClass="linebreak"
+              matTooltipPosition="above"
               color="primary" 
               title="Powiadom lekarza" 
               alt="Wyślij powiadomienie o badaniu" 
@@ -104,6 +107,9 @@
       </button>
       <button *ngIf="user.role === 'admin' || user.role === 'user' " 
               mat-icon-button
+              [matTooltip]="stringify(element)"
+              matTooltipClass="linebreak"
+              matTooltipPosition="above"
               color="primary"
               title="Plik"
               alt="Dodaj plik do badania"
@@ -116,15 +122,9 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<mat-paginator
-  [length]="dataCount"
-  [hidePageSize]="true"
-  [pageSize]="examsPerPage"
-></mat-paginator>
+<mat-paginator [length]="dataCount" [hidePageSize]="true" [pageSize]="examsPerPage"></mat-paginator>
 </div>
-<p class="info-text mat-body-1" *ngIf="dataCount <= 0">
-  Jeszcze nie ma zdefiniowanych badań!
-</p>
+<p class="info-text mat-body-1" *ngIf="dataCount <= 0">Jeszcze nie ma zdefiniowanych badań!</p>
 <div style="right: 15px; bottom: 5px; position: fixed" >
   <button
     mat-fab

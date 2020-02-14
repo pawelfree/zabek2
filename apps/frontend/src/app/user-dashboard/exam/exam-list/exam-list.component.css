@@ -14,3 +14,7 @@
   mat-spinner {
       margin: auto;
   }
+
+  ::ng-deep .linebreak {
+    white-space: pre-line;
+  }
