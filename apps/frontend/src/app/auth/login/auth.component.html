@@ -1,29 +1,28 @@
 <mat-card>
   <mat-card-title>Zaloguj się ...</mat-card-title>
   <mat-card-content>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" autocomplete="on" (ngSubmit)="onSubmit()">
       <div class="example-container">
         <mat-form-field>
           <input
             name="username"
             matInput
             placeholder="Email użytkownika"
+            autocomplete="username"
             type="text"
             formControlName="username"
             [value]="loginForm.get('username').value | lowercase"
-            autofocus
-          />
-          <mat-error *ngIf="loginForm.get('username').invalid">Wymagany jest poprawny email.</mat-error
-          >
+            autofocus/>
+          <mat-error *ngIf="loginForm.get('username').invalid">Wymagany jest poprawny email.</mat-error>
         </mat-form-field>
         <mat-form-field>
           <input
             matInput
             name="password"
             placeholder="Hasło"
+            autocomplete="current-password"
             type="password"
-            formControlName="password"
-          />
+            formControlName="password"/>
           <mat-error *ngIf="loginForm.get('password').invalid">Hasło jest wymagane.</mat-error>
         </mat-form-field>
       </div>

@@ -1,9 +1,10 @@
 <mat-card>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form [formGroup]="form" autocomplete="on" (ngSubmit)="onSubmit()">
     <mat-card-content>
       <mat-form-field>
         <input matInput type="text" 
-          formControlName="email" 
+          formControlName="email"
+          autocomplete="username"
           [value]="form.get('email').value | lowercase"
           placeholder="Email">
           <mat-error *ngIf="form.get('email').hasError('uniqueEmail')">Ten email jest już zarejestrowany w systemie.</mat-error>
@@ -58,7 +59,7 @@
       </mat-form-field>
       <mat-checkbox formControlName="tomographyWithViewer">Proszę o załączanie do badań przeglądarki</mat-checkbox>
       <mat-form-field>
-        <input matInput type="password" formControlName="password1" placeholder="Hasło">
+        <input matInput type="password" autocomplete="new-password" formControlName="password1" placeholder="Hasło">
         <mat-error *ngIf="form.get('password1').hasError('required')">Hasło jest wymagane.</mat-error>
         <mat-error *ngIf="form.get('password1').hasError('minLength')">Hasło musi mieć minimum 8 znaków.</mat-error>
         <mat-error *ngIf="form.get('password1').hasError('hasNumber')">Hasło musi zawierać cyfrę.</mat-error>
@@ -67,7 +68,7 @@
         <mat-error *ngIf="form.get('password1').hasError('hasSpecialCharacters')">Hasło musi zawierać znak specjalny.</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła">
+        <input matInput type="password" autocomplete="new-password" formControlName="password2" placeholder="Potwierdzenie hasła">
         <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
       </mat-form-field>
       <mat-checkbox formControlName="regulationsAccepted">Akceptuję</mat-checkbox><a style="margin-left:0.2rem; text-decoration: underline;" (click)="showRegulations()" >regulamin</a>
