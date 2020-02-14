@@ -6,7 +6,8 @@
           formControlName="email" 
           [value]="form.get('email').value | lowercase"
           placeholder="Email">
-        <mat-error *ngIf="form.get('email').invalid">Email jest wymagany.</mat-error>
+          <mat-error *ngIf="form.get('email').hasError('uniqueEmail')">Ten email jest już zarejestrowany w systemie.</mat-error>
+          <mat-error *ngIf="form.get('email').hasError('email')">Email jest nieprawidłowy.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" formControlName="firstName" placeholder="Imię">

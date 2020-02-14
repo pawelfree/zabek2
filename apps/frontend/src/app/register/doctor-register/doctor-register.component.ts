@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator, PeselValidator, NIPValidator } from '../../_validators';
+import { CustomValidator, PeselValidator, NIPValidator, UserEmailValidator } from '../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take, finalize } from 'rxjs/operators';
 import { User, Role, Doctor } from '@zabek/data';
@@ -26,14 +26,16 @@ export class DoctorRegisterComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly doctorService: DoctorService,
-    private readonly store: Store<AppState>
+    private readonly store: Store<AppState>,
+    private readonly userEmailValidator: UserEmailValidator
   ){}
 
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl(null, {
-        validators: [ Validators.required, 
-                      Validators.email]
+        validators: [ Validators.required, Validators.email],
+                      asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
+                      updateOn: 'blur'
       }),
       firstName: new FormControl(null, {
         validators: [ Validators.required,
