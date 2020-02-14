@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Doctor, Examination, Patient, Lab } from '@zabek/data';
+import { Doctor, Examination, Patient, Lab, FileUpload } from '@zabek/data';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, from } from 'rxjs';
 import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
@@ -46,6 +46,7 @@ export class ExamCreateComponent implements OnInit {
   private mode: 'edit' | 'create' = 'create';
   private _id: string;
   private lab: Lab;
+  private file: FileUpload;
   public selectedDoctor;
 
   endOfData: boolean;
@@ -147,6 +148,7 @@ export class ExamCreateComponent implements OnInit {
       this.mode = 'edit';
       this._id = exam._id;
       this.lab = exam.lab;
+      this.file = exam.file;
       this.selectedDoctor = exam.doctor;
       this.form.setValue({
         examinationDate: exam.examinationDate,
@@ -175,6 +177,7 @@ export class ExamCreateComponent implements OnInit {
       this.mode = 'create';
       this._id = null;
       this.lab = null;
+      this.file = null;
     }
   }
 
@@ -218,7 +221,7 @@ export class ExamCreateComponent implements OnInit {
       patient,
       lab: this.lab,
       sendEmailTo: this.form.value.sendEmailTo,
-      file: null,
+      file: this.file,
       doctor:
         (this.form.value.doctor === null || undefined) || (this.form.value.doctor._id === 0) ? null : this.form.value.doctor
     };

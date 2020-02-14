@@ -128,6 +128,7 @@ export class DoctorRegisterComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.form)
     if (this.form.invalid)  {
       return;
     }

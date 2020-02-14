@@ -36,7 +36,6 @@ export class FileuploadControler {
     @Request() req
   ) {
     const key = `${req.user.lab}/${uuid()}`
-    console.log('getpresigned', key);
     const params = { Bucket: 'rtgcloud-pawel.f.dudek', Key : key};
     return this.s3.getSignedUrlPromise('putObject', params).then(
       url => ({url, key})

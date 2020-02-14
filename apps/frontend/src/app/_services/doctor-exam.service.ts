@@ -27,4 +27,8 @@ export class DoctorExamService {
     return this.http.get<Examination>(BACKEND_URL + id);
   }
 
+  setDownloadDate(id: string, date: Date) {
+    this.http.put(BACKEND_URL + id, {downloadDate : JSON.stringify(date)}).subscribe().unsubscribe();
+  }
+
 }

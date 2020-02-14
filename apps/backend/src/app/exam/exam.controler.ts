@@ -16,7 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { ExamService } from './exam.service';
-import { CreateExamDto,UpdateExamDto } from './dto';
+import { CreateExamDto } from './dto';
 import { Examination } from '@zabek/data';
   
   @Controller('exam')
@@ -44,15 +44,16 @@ import { Examination } from '@zabek/data';
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Roles('admin','user')
     @Put(':id')
-    async updateExam(@Body() updateExamDto: UpdateExamDto, @Param('id') id: string) {
-      if (id !== updateExamDto._id ) {
+    async updateExam(@Body() exam: Examination, @Param('id') id: string) {
+      //TODO ta metoda robi bez sensu findbyid - findoneandupdate?
+      if (id !== exam._id ) {
         throw new BadRequestException('Błędne dane badania i żądania');        
       }
-      const exam: Examination = await this.examService.findById(id);
-      if (!exam) {
+      const newExam: Examination = await this.examService.findById(id);
+      if (!newExam) {
         throw new BadRequestException('Badanie nie istnieje');
       }
-      return await this.examService.update(updateExamDto);
+      return await this.examService.update(exam);
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)

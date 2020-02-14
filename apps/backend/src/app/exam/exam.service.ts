@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { Examination, Lab, FileUpload, Doctor } from '@zabek/data';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateExamDto, CreateExamInternalDto } from './dto';
+import { CreateExamInternalDto } from './dto';
 
 @Injectable()
 export class ExamService {
@@ -15,10 +15,6 @@ export class ExamService {
       .populate('lab')
       .populate('file')
       .select('-__v');
-  }
-
-  async findByName(name: string): Promise<Examination> {
-    return await this.examModel.findOne({ name }).select('-__v');
   }
 
   async add(createDto: CreateExamInternalDto): Promise<Examination> {
@@ -63,10 +59,10 @@ export class ExamService {
       .then(exams => ({ exams, count }));
   }
 
-  async update(updateExamDto: UpdateExamDto) {
+  async update(exam: Examination) {
     return await this.examModel.updateOne(
-      { _id: updateExamDto._id },
-      updateExamDto
+      { _id: exam._id },
+      exam
     );
   }
 

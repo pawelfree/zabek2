@@ -24,6 +24,8 @@ export interface Examination extends Document {
   readonly examinationDate: string; 
   readonly examinationType: string; 
   readonly file: FileUpload;
+  readonly firstDownload?: string;
+  readonly lastDownload?: string;
 }
 
 export const PatientSchema = new Schema({
@@ -122,5 +124,13 @@ export const ExamSchema = new Schema({
   file: {
     type: Schema.Types.ObjectId,
     ref: 'File'
-  }
+  },
+  firstDownload: {
+    type: String,
+    required: false
+  },
+  lastDownload: {
+    type: String,
+    required: false
+  } 
 });

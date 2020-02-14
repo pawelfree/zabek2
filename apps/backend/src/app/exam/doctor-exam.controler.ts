@@ -7,12 +7,15 @@ import {
   Request,
   ParseIntPipe,
   BadRequestException,
+  Put,
+  Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
 import { ExamService } from './exam.service';
 import { UserService } from '../user/user.service';
+import { Examination } from '@zabek/data';
 
   @Controller('doctor-exam')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -41,4 +44,42 @@ import { UserService } from '../user/user.service';
     async getExam(@Param('id') id: string) {
       return this.examService.findById(id);
     }   
+
+    @Put(':id')
+    async setDowlnoadedDate(@Param('id') id: string, @Body() downloadDateObj: {downloadDate: string}) {
+      const exam = await this.examService.findById(id);
+      if (exam) {
+        //TODO to przepisywanie musi byc jako prostsze
+        
+        let newExam: Examination = null;
+        if (exam.firstDownload) {
+          newExam = {
+            _id: exam._id,
+            doctor: exam.doctor,
+            lab: exam.lab,
+            examinationDate: exam.examinationDate,
+            examinationType: exam.examinationType,
+            sendEmailTo: exam.sendEmailTo,
+            file: exam.file,
+            patient: exam.patient,
+            lastDownload: downloadDateObj.downloadDate };
+        } else {
+          newExam = {
+            _id: exam._id,
+            doctor: exam.doctor,
+            lab: exam.lab,
+            examinationDate: exam.examinationDate,
+            examinationType: exam.examinationType,
+            sendEmailTo: exam.sendEmailTo,
+            file: exam.file,
+            patient: exam.patient,
+            firstDownload: downloadDateObj.downloadDate, 
+            lastDownload: downloadDateObj.downloadDate };
+        }
+
+        this.examService.update(newExam).then(res => console.log('res',res)).catch(err => console.log('err',err))
+
+      }
+
+    }
   }  

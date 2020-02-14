@@ -127,9 +127,6 @@ export class DoctorCreateDlgComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-
-console.log('same address',this.form.value.sameAddresses, this.form.value.officeAddress);
-  
     const doctor: Doctor = { 
       officeAddress: null,
       officeName: null, 
