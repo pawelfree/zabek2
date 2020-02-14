@@ -11,3 +11,7 @@ describe('PWZ', () => {
   });
 
 });
+
+//pawel tadeusz dudek 2581386
+//pawel bogdan dudek 3473831
+//pawel adam dudek 1368479

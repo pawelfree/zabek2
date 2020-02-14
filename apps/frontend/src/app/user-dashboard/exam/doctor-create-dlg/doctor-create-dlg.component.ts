@@ -5,7 +5,8 @@ import {
   PeselValidator,
   NIPValidator,
   PwzValidator,
-  UserEmailValidator
+  UserEmailValidator,
+  UserPwzValidator
 } from '../../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take, finalize } from 'rxjs/operators';
@@ -15,7 +16,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { AppState, AppActions } from '../../../store';
 import { currentUser } from '../../../auth/store';
-import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'zabek-doctor-create-dlg',
@@ -33,7 +33,8 @@ export class DoctorCreateDlgComponent implements OnInit {
     private readonly doctorService: DoctorService,
     private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>,
     private readonly store: Store<AppState>,
-    private readonly userEmailValidator: UserEmailValidator
+    private readonly userEmailValidator: UserEmailValidator,
+    private readonly userPwzValidator: UserPwzValidator
   ) {}
 
   ngOnInit() {
@@ -66,9 +67,8 @@ export class DoctorCreateDlgComponent implements OnInit {
         ]
       }),
       qualificationsNo: new FormControl(null, {
-        validators: [
-          PwzValidator.validPwz
-        ]
+        asyncValidators: [ this.userPwzValidator.validate.bind(this.userPwzValidator)],
+        updateOn: 'blur'
       }),
       pesel: new FormControl(null, {
         validators: [

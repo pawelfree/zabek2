@@ -138,4 +138,9 @@ export class DoctorController {
       throw error;
     }
   }
+
+  @Get('pwztaken/:pwz')
+  async isPwzTaken(@Param('pwz') qualificationsNo: string) {
+    return await this.doctorService.findByPwz(qualificationsNo) ? true : false;
+  }
 }

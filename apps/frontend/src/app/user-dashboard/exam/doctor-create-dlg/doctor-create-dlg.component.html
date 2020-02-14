@@ -19,8 +19,9 @@
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" formControlName="qualificationsNo"
-          placeholder="Numer pozwolenia na wykonywanie zawodu (PWZ)">
-        <mat-error *ngIf="form.get('qualificationsNo').hasError('required')">PWZ jest wymagany.</mat-error>
+          placeholder="Numer pozwolenia na wykonywanie zawodu (PWZ)">        
+          <mat-error *ngIf="form.get('qualificationsNo').hasError('validPwz')">PWZ jest niepoprawny.</mat-error>
+          <mat-error *ngIf="form.get('qualificationsNo').hasError('uniquePwz')">PWZ jest juz zarejestrowany.</mat-error>
         <mat-error
           *ngIf="form.get('qualificationsNo').hasError('minlength') || form.get('qualificationsNo').hasError('maxlength')">
           PWZ musi mieć 7 cyfr.</mat-error>

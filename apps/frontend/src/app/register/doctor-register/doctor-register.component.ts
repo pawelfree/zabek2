@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator, PeselValidator, NIPValidator, UserEmailValidator } from '../../_validators';
+import { CustomValidator, PeselValidator, NIPValidator, UserEmailValidator, UserPwzValidator } from '../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take, finalize } from 'rxjs/operators';
 import { User, Role, Doctor } from '@zabek/data';
@@ -27,15 +27,16 @@ export class DoctorRegisterComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly doctorService: DoctorService,
     private readonly store: Store<AppState>,
-    private readonly userEmailValidator: UserEmailValidator
+    private readonly userEmailValidator: UserEmailValidator,
+    private readonly userPwzValidator: UserPwzValidator
   ){}
 
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [ Validators.required, Validators.email],
-                      asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
-                      updateOn: 'blur'
+        asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
+        updateOn: 'blur'
       }),
       firstName: new FormControl(null, {
         validators: [ Validators.required,
@@ -51,8 +52,9 @@ export class DoctorRegisterComponent implements OnInit {
         validators: [ Validators.required, 
                       Validators.minLength(7), 
                       Validators.maxLength(7), 
-                      CustomValidator.patternMatch(/^[0-9]{7}$/, {onlyNumbers : true}),
-                      PwzValidator.validPwz ]
+                      CustomValidator.patternMatch(/^[0-9]{7}$/, {onlyNumbers : true}) ],
+        asyncValidators: [ this.userPwzValidator.validate.bind(this.userPwzValidator)],
+        updateOn: 'blur'
       }),  
       pesel: new FormControl(null, {
         validators: [  

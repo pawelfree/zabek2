@@ -61,5 +61,9 @@ export class DoctorService {
   isEmailTaken(email: string): Observable<boolean> {
     return this.http.get<boolean>(USER_BACKEND_URL + 'emailtaken/' + email);
   }
+
+  isPwzTaken(pwz: string): Observable<boolean> {
+    return this.http.get<boolean>(BACKEND_URL + 'pwztaken/' + pwz);
+  }
  
 }

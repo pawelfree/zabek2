@@ -23,6 +23,7 @@
         <mat-error *ngIf="form.get('qualificationsNo').hasError('minlength') || form.get('qualificationsNo').hasError('maxlength')">PWZ musi mieć 7 cyfr.</mat-error>
         <mat-error *ngIf="form.get('qualificationsNo').hasError('onlyNumbers')">PWZ może składać się tylko z cyfr.</mat-error>
         <mat-error *ngIf="form.get('qualificationsNo').hasError('validPwz')">PWZ jest niepoprawny.</mat-error>
+        <mat-error *ngIf="form.get('qualificationsNo').hasError('uniquePwz')">PWZ jest juz zarejestrowany.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" formControlName="pesel" placeholder="PESEL">

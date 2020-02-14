@@ -41,4 +41,9 @@ export class DoctorService {
   async update(doctor: Doctor)  {
     return await this.doctorModel.updateOne({_id: doctor._id}, doctor);
   }
+
+  findByPwz(qualificationsNo: string): Promise<Doctor> {
+    return this.doctorModel.findOne({qualificationsNo})
+  }
+  
 }
