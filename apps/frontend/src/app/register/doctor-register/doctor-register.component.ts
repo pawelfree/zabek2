@@ -45,7 +45,7 @@ export class DoctorRegisterComponent implements OnInit {
       }),
       lastName: new FormControl(null, {
         validators: [ Validators.required,
-                      Validators.minLength(5),
+                      Validators.minLength(2),
                       Validators.maxLength(25)]
       }),    
       qualificationsNo: new FormControl(null, {

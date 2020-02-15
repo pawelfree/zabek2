@@ -27,7 +27,7 @@ export const DoctorSchema = new Schema({
   lastName: {
     type: String,
     required: false,
-    minlength: 5,
+    minlength: 2,
     maxLength: 25
   },
   qualificationsNo: {
