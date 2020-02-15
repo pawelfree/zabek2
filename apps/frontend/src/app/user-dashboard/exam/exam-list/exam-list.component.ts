@@ -124,21 +124,25 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     return null;
   }
 
-  onSendNotificationToDoctor(id) {
-    const dialogRef = this.dialog.open(ConfirmationComponent, {
-      width: '350px',
-      data: 'Wysłać powiadomienie do lekarza?'
-    });
-    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if (result) {
-        this.emailService.sendNotificationToDoctor(id).pipe(take(1)).subscribe(res => {
-          this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
-        },
-        err => {
-          this.store.dispatch(AppActions.raiseError({message: "Wiadomość nie została wysłana", status: 'Nieznany błąd'}));
-        });
-      }
-    });
+  onSendNotificationToDoctor(exam: Examination) {
+    if (exam.patient.processingAck) {
+      const dialogRef = this.dialog.open(ConfirmationComponent, {
+        width: '350px',
+        data: 'Wysłać powiadomienie do lekarza?'
+      });
+      dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+        if (result) {
+          this.emailService.sendNotificationToDoctor(exam._id).pipe(take(1)).subscribe(res => {
+            this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
+          },
+          err => {
+            this.store.dispatch(AppActions.raiseError({message: "Wiadomość nie została wysłana", status: 'Nieznany błąd'}));
+          });
+        }
+      });
+    } else {
+      this.store.dispatch(AppActions.sendInfo({info: 'Pacjent nie wyraził zgody na badania online'}));
+    }
   }
 
   processFile(exam: Examination) {

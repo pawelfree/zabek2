@@ -21,17 +21,21 @@ export class EmailController {
     //TODO nie wiem jak to dziala
     const exam = await this.examService.findById(examId);
     if (exam) {
-      if (exam.sendEmailTo) {
-        await this.emailService.sendExamNotification(exam.sendEmailTo);
-        return true;
-      } else {
-        const user = await this.userService.findByDoctor(exam.doctor);
-        if (user) {
-          await this.emailService.sendExamNotification(user.email);
+      if (exam?.patient.processingAck) {
+        if (exam.sendEmailTo) {
+          await this.emailService.sendExamNotification(exam.sendEmailTo);
           return true;
         } else {
-          throw new BadRequestException('Nie można znaleźć email lekarza')
+          const user = await this.userService.findByDoctor(exam.doctor);
+          if (user) {
+            await this.emailService.sendExamNotification(user.email);
+            return true;
+          } else {
+            throw new BadRequestException('Nie można znaleźć email lekarza')
+          }
         }
+      } else {
+        throw new BadRequestException('Pacjent nie wyraził zgody na badania online')
       }
     } else { 
       throw new BadRequestException('Badanie nie istnieje');
