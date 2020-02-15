@@ -1,6 +1,4 @@
 import { Document, Schema } from 'mongoose';
-import { isValidPwz } from '@zabek/util';
-
 
 export class Doctor implements Document {
   readonly _id: string = null;
@@ -21,12 +19,14 @@ export const DoctorSchema = new Schema({
   firstName: {
     type: String,
     required: false,
+    trim: true,
     minlength: 2,
     maxLength: 25
   },
   lastName: {
     type: String,
     required: false,
+    trim: true,
     minlength: 2,
     maxLength: 25
   },
@@ -39,18 +39,21 @@ export const DoctorSchema = new Schema({
   officeName: {
     type: String,
     required: false,
+    trim: true,
     minLength: 5,
     maxLength: 35
   },
   officeAddress: {
     type: String,
     required: false,
+    trim: true,
     minLength: 15,
     maxLength: 75
   },
   officeCorrespondenceAddress: {
     type: String,
     required: false,
+    trim: true,
     minLength: 15,
     maxLength: 75
   },
@@ -73,18 +76,17 @@ export const DoctorSchema = new Schema({
   },
   pesel: {
     type: String,
-    required: false,
     minLength: 11,
     maxLength: 11,
-    unique: false
+    unique: true,
+    sparse: true
   },
   email: {
     type: String,
     minLength: 5,
     maxLength: 50,
     unique: true,
-    trim: true, 
-    index: true,     
+    trim: true,  
     sparse: true
   },
 });

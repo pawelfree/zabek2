@@ -37,8 +37,7 @@ export class DoctorController {
   ) {
     return await this.doctorService.findAllDoctors(
       pagesize,
-      page,
-      req.user.lab
+      page
     );
   }
 

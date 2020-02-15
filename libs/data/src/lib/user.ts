@@ -34,7 +34,9 @@ export const UserSchema = new Schema({
     requred: true,
     minLength: 5,
     maxLength: 50,
-    unique: true
+    unique: true,
+    trim: true,
+    sparse: false,
   },
   password: {
     type: String,

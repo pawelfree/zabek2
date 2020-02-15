@@ -36,7 +36,8 @@ export const PatientSchema = new Schema({
     requred: true,
     minLength: 5,
     maxLength: 50,
-    unique: false
+    unique: false,
+    trim: true
   },
   pesel: {
     type: String,
@@ -79,14 +80,16 @@ export const PatientSchema = new Schema({
     requred: false,
     minLength: 5,
     maxLength: 100,
-    unique: false
+    unique: false,
+    trim: true
   },
   phone: {
     type: String,
     requred: false,
     minLength: 0,
     maxLength: 50,
-    unique: false
+    unique: false,
+    trim: true
   }
 })
 
@@ -102,7 +105,8 @@ export const ExamSchema = new Schema({
     requred: false,
     minLength: 5,
     maxLength: 50,
-    unique: false
+    unique: false,
+    trim: true
   },
   examinationDate: {
     type: String,

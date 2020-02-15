@@ -26,7 +26,7 @@ export class DoctorService {
                             .then((doctors: User[]) => ({ doctors, count }) );
   }
 
-  async findAllDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: Doctor[]; count: number }>  {
+  async findAllDoctors(pageSize: number, currentPage: number): Promise<{ doctors: Doctor[]; count: number }>  {
     const findallQuery = this.doctorModel.find();
     const count = await this.doctorModel.countDocuments(findallQuery);
     return await findallQuery.skip(pageSize * currentPage)
