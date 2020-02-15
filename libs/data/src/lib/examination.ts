@@ -26,6 +26,8 @@ export interface Examination extends Document {
   readonly file: FileUpload;
   readonly firstDownload?: string;
   readonly lastDownload?: string;
+  notificationSent?: number;
+  lastNotificationDate?: string;
 }
 
 export const PatientSchema = new Schema({
@@ -132,5 +134,13 @@ export const ExamSchema = new Schema({
   lastDownload: {
     type: String,
     required: false
-  } 
+  },
+  notificationSent: {
+    type: Number,
+    default: 0
+  },
+  lastNotificationDate: {
+    type: String,
+    required: false
+  }
 });

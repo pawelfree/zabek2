@@ -94,20 +94,20 @@
         <mat-icon aria-label="Usuń">delete</mat-icon>
       </button>
 
-      <button *ngIf="user.role === 'admin' || user.role === 'user' && element.patient.processingAck" 
+      <button *ngIf="(user.role === 'admin' || user.role === 'user') && element.patient.processingAck" 
               mat-icon-button 
-              [matTooltip]="stringify(element)"
+              [matTooltip]="sent(element)"
               matTooltipClass="linebreak"
               matTooltipPosition="above"
-              color="primary" 
+              [ngStyle]="{color: element?.notificationSent > 0 ? 'blue' : 'red'}"
               title="Powiadom lekarza" 
-              alt="Wyślij powiadomienie o badaniu" 
+              alt="Powiadom lekarza" 
               (click)="onSendNotificationToDoctor(element)">
-        <mat-icon aria-label="Wyślij powiadomienie o badaniu">mail_outline</mat-icon>
+        <mat-icon aria-label="Powiadom lekarza">mail_outline</mat-icon>
       </button>
       <button *ngIf="user.role === 'admin' || user.role === 'user' " 
               mat-icon-button
-              [matTooltip]="stringify(element)"
+              [matTooltip]="downloaded(element)"
               matTooltipClass="linebreak"
               matTooltipPosition="above"
               color="primary"

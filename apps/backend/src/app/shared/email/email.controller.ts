@@ -24,11 +24,13 @@ export class EmailController {
       if (exam?.patient.processingAck) {
         if (exam.sendEmailTo) {
           await this.emailService.sendExamNotification(exam.sendEmailTo);
+          await this.examService.registerSentNotification(exam._id);
           return true;
         } else {
           const user = await this.userService.findByDoctor(exam.doctor);
           if (user) {
             await this.emailService.sendExamNotification(user.email);
+            await this.examService.registerSentNotification(exam._id);            
             return true;
           } else {
             throw new BadRequestException('Nie można znaleźć email lekarza')

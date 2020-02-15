@@ -63,7 +63,10 @@ import { noop } from 'rxjs';
             sendEmailTo: exam.sendEmailTo,
             file: exam.file,
             patient: exam.patient,
-            lastDownload: downloadDateObj.downloadDate };
+            lastDownload: downloadDateObj.downloadDate,
+            notificationSent: exam.notificationSent,
+            lastNotificationDate: exam.lastNotificationDate };
+
         } else {
           newExam = {
             _id: exam._id,
@@ -75,7 +78,9 @@ import { noop } from 'rxjs';
             file: exam.file,
             patient: exam.patient,
             firstDownload: downloadDateObj.downloadDate, 
-            lastDownload: downloadDateObj.downloadDate };
+            lastDownload: downloadDateObj.downloadDate,
+            notificationSent: exam.notificationSent,
+            lastNotificationDate: exam.lastNotificationDate };
         }
 
         this.examService.update(newExam).then(noop).catch(err => console.log('error updating download date',err))

@@ -72,6 +72,10 @@ export class ExamService {
   }
 
   async addFileToExam(_id: String, file: FileUpload) {
-    return await this.examModel.findOneAndUpdate({ _id },{ $set: { file} },{ new: true });
+    return await this.examModel.findOneAndUpdate({ _id },{ $set: {file} },{ new: true });
+  }
+
+  async registerSentNotification(_id: String) {
+    return await this.examModel.findOneAndUpdate({_id}, {$set: {lastNotificationDate: new Date()}, $inc: {notificationSent: 1 } }, {new: true});
   }
 }

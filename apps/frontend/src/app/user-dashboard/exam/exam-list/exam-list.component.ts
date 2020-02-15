@@ -116,12 +116,17 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  stringify(exam: Examination) {
+  downloaded(exam: Examination) {
     if (this.user.role === Role.admin) {
       return exam.firstDownload ?  "Pierwsze pobranie - " + new Date(exam.firstDownload).toDateString() + 
                         " \n " +  "Ostatnie pobranie - " + new Date(exam.lastDownload).toDateString() : null;
     }
     return null;
+  }
+
+  sent(exam: Examination) {
+    return exam.notificationSent > 0 ? "Powiadomienie wysłane " + new Date(exam.lastNotificationDate).toLocaleDateString() + 
+                        " (" + exam.notificationSent + ")" : null;
   }
 
   onSendNotificationToDoctor(exam: Examination) {
@@ -132,6 +137,8 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
       });
       dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
         if (result) {
+          exam.notificationSent = exam.notificationSent + 1;
+          exam.lastNotificationDate = new Date().toString();
           this.emailService.sendNotificationToDoctor(exam._id).pipe(take(1)).subscribe(res => {
             this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
           },
