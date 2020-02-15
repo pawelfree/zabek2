@@ -42,7 +42,7 @@ import { Examination } from '@zabek/data';
     }
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('admin','user')
+    @Roles('admin')
     @Put(':id')
     async updateExam(@Body() exam: Examination, @Param('id') id: string) {
       //TODO ta metoda robi bez sensu findbyid - findoneandupdate?

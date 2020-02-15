@@ -5,14 +5,15 @@ import { ActivatedRoute } from '@angular/router';
 import { PeselValidator, CustomValidator } from '../../../_validators';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Doctor, Examination, Patient, Lab, FileUpload } from '@zabek/data';
+import { Doctor, Examination, Patient, Lab, FileUpload, User, Role } from '@zabek/data';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, from } from 'rxjs';
 import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
 import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg.component';
 import { AppActions, AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { currentUser } from '../../../auth/store';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -43,7 +44,7 @@ import { Store } from '@ngrx/store';
 })
 export class ExamCreateComponent implements OnInit {
   form: FormGroup;
-  private mode: 'edit' | 'create' = 'create';
+  mode: 'edit' | 'create' = 'create';
   private _id: string;
   private lab: Lab;
   private file: FileUpload;
@@ -67,6 +68,7 @@ export class ExamCreateComponent implements OnInit {
 
   private page = 0;
   private pageLen = 10;
+  user: User = null;
   // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
   examTypes: string[] = [
     'AP czaszki',
@@ -92,6 +94,14 @@ export class ExamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.store.pipe(select(currentUser),
+      take(1),
+      tap(user => {
+        this.user = user;
+      })
+    ).subscribe();
+    
     this.form = new FormGroup({
       examinationDate: new FormControl(new Date(), {
         validators: [Validators.required]
@@ -173,6 +183,9 @@ export class ExamCreateComponent implements OnInit {
           this.selectedDoctor = this.emptyDoctor;
         }
       }, 1);
+      if (this.user.role === Role.user) {
+        this.form.disable()
+      }
     } else {
       this.mode = 'create';
       this._id = null;
