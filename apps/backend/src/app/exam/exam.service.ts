@@ -48,6 +48,7 @@ export class ExamService {
     const options = {};
 
     options['doctor'] = doctor._id;
+    options['file'] = { $ne : null };
 
     const findallQuery = this.examModel.find<Examination>(options);
     const count = await this.examModel.countDocuments(findallQuery);
