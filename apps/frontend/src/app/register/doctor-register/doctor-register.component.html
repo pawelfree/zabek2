@@ -7,7 +7,7 @@
           autocomplete="username"
           [value]="form.get('email').value | lowercase"
           placeholder="Email">
-          <mat-error *ngIf="form.get('email').hasError('uniqueEmail')">Ten email jest już zarejestrowany w systemie.</mat-error>
+          <mat-error *ngIf="form.get('email').hasError('uniqueEmail')">Ten email jest już zarejestrowany.</mat-error>
           <mat-error *ngIf="form.get('email').hasError('email')">Email jest nieprawidłowy.</mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -30,11 +30,13 @@
         <input matInput type="text" formControlName="pesel" placeholder="PESEL">
         <mat-error *ngIf="form.get('pesel').hasError('onlyNumbers')">PESEL może zawierać tylko cyfry.</mat-error>
         <mat-error *ngIf="form.get('pesel').hasError('validPesel')">PESEL jest nieprawidłowy.</mat-error>
+        <mat-error *ngIf="form.get('pesel').hasError('uniquePesel')">Ten PESEL jest już zarejestrowany.</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput type="text" formControlName="nip" placeholder="NIP">
         <mat-error *ngIf="form.get('nip').hasError('onlyNumbers')">NIP może zawierać tylko cyfry.</mat-error>
-        <mat-error *ngIf="form.get('pesel').hasError('validNIP')">NIP jest nieprawidłowy.</mat-error>
+        <mat-error *ngIf="form.get('nip').hasError('validNip')">NIP jest nieprawidłowy.</mat-error>
+        <mat-error *ngIf="form.get('nip').hasError('uniqueNip')">Ten NIP jest już zarejestrowany.</mat-error>
       </mat-form-field>        
       <mat-form-field>
         <input matInput type="text" formControlName="officeName" placeholder="Nazwa gabinetu">

@@ -45,5 +45,12 @@ export class DoctorService {
   findByPwz(qualificationsNo: string): Promise<Doctor> {
     return this.doctorModel.findOne({qualificationsNo})
   }
+
+  findByPesel(pesel: string): Promise<Doctor> {
+    return this.doctorModel.findOne({pesel})
+  }
   
+  findByNip(nip: string): Promise<Doctor> {
+    return this.doctorModel.findOne({nip})
+  }
 }

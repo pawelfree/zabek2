@@ -143,4 +143,14 @@ export class DoctorController {
   async isPwzTaken(@Param('pwz') qualificationsNo: string) {
     return await this.doctorService.findByPwz(qualificationsNo) ? true : false;
   }
+
+  @Get('peseltaken/:pesel')
+  async isPeselTaken(@Param('pesel') pesel: string) {
+    return await this.doctorService.findByPesel(pesel) ? true : false;
+  }
+
+  @Get('niptaken/:nip')
+  async isNipTaken(@Param('nip') nip: string) {
+    return await this.doctorService.findByNip(nip) ? true : false;
+  }
 }

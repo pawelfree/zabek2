@@ -2,11 +2,10 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   CustomValidator,
-  PeselValidator,
-  NIPValidator,
-  PwzValidator,
   UserEmailValidator,
-  UserPwzValidator
+  UserPwzValidator,
+  UserPeselValidator,
+  UserNipValidator
 } from '../../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take, finalize } from 'rxjs/operators';
@@ -34,7 +33,9 @@ export class DoctorCreateDlgComponent implements OnInit {
     private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>,
     private readonly store: Store<AppState>,
     private readonly userEmailValidator: UserEmailValidator,
-    private readonly userPwzValidator: UserPwzValidator
+    private readonly userPwzValidator: UserPwzValidator,
+    private readonly userPeselValidator: UserPeselValidator,
+    private readonly userNipValidator: UserNipValidator
   ) {}
 
   ngOnInit() {
@@ -74,17 +75,17 @@ export class DoctorCreateDlgComponent implements OnInit {
         validators: [
           Validators.minLength(11),
           Validators.maxLength(11),
-          CustomValidator.patternMatch(/^[0-9]{11}$/, { onlyNumbers: true }),
-          PeselValidator.validPesel
-        ]
+          CustomValidator.patternMatch(/^[0-9]{11}$/, { onlyNumbers: true })],
+        asyncValidators: [ this.userPeselValidator.validate.bind(this.userPeselValidator)],
+        updateOn: 'blur'
       }),
       nip: new FormControl(null, {
         validators: [
           Validators.minLength(10),
           Validators.maxLength(10),
-          CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true }),
-          NIPValidator.validNIP
-        ]
+          CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true })],
+          asyncValidators: [ this.userNipValidator.validate.bind(this.userNipValidator)],
+          updateOn: 'blur'
       }),
       officeName: new FormControl(null, {
         validators: [Validators.minLength(5)]

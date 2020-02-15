@@ -66,4 +66,11 @@ export class DoctorService {
     return this.http.get<boolean>(BACKEND_URL + 'pwztaken/' + pwz);
   }
  
+  isPeselTaken(pesel: string): Observable<boolean> {
+    return this.http.get<boolean>(BACKEND_URL + 'peseltaken/' + pesel);
+  }
+
+  isNipTaken(nip: string): Observable<boolean> {
+    return this.http.get<boolean>(BACKEND_URL + 'niptaken/' + nip);
+  }
 }

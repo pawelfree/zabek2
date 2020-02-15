@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomValidator, PeselValidator, NIPValidator, UserEmailValidator, UserPwzValidator } from '../../../_validators';
+import { CustomValidator, UserEmailValidator, UserPwzValidator, UserPeselValidator, UserNipValidator } from '../../../_validators';
 import { Observable } from 'rxjs';
 import { tap, startWith, take, finalize } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../../../_services';
-import { PwzValidator } from '../../../_validators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.reducer';
 import { AppActions } from '../../../store';
@@ -31,7 +30,9 @@ export class DoctorCreateComponent implements OnInit {
     private readonly doctorService: DoctorService,
     private readonly store: Store<AppState>,
     private readonly userEmailValidator: UserEmailValidator,
-    private readonly userPwzValidator: UserPwzValidator
+    private readonly userPwzValidator: UserPwzValidator,
+    private readonly userPeselValidator: UserPeselValidator,
+    private readonly userNipValidator: UserNipValidator
   ) {}
 
   ngOnInit() {
@@ -69,25 +70,27 @@ export class DoctorCreateComponent implements OnInit {
         validators: [ Validators.required,
                       Validators.minLength(7),
                       Validators.maxLength(7),
-                      CustomValidator.patternMatch(/^[0-9]{7}$/, { onlyNumbers: true }),],
+                      CustomValidator.patternMatch(/^[0-9]{7}$/, { onlyNumbers: true })],
         asyncValidators: [ this.userPwzValidator.validate.bind(this.userPwzValidator)],
         updateOn: 'blur'
       }),
       pesel: new FormControl(null, {
         validators: [  
+          Validators.required,
           Validators.minLength(11), 
           Validators.maxLength(11), 
-          CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true}),
-          PeselValidator.validPesel ]
+          CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true})],
+          asyncValidators: [ this.userPeselValidator.validate.bind(this.userPeselValidator)],
+          updateOn: 'blur'
 
       }),
       nip: new FormControl(null, {
         validators: [         
           Validators.minLength(10),
           Validators.maxLength(10),
-          CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true }),
-          NIPValidator.validNIP
-        ]
+          CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true })],
+        asyncValidators: [ this.userNipValidator.validate.bind(this.userNipValidator)],
+        updateOn: 'blur'
       }),
       officeName: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(5)]
