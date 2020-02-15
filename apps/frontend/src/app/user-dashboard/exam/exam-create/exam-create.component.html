@@ -141,16 +141,13 @@
               [compareWith]="compareDoctors"
               formControlName="doctor"
               [value]="selectedDoctor">
-              <mat-option [value]='emptyDoctor'
-                (onSelectionChange)="doctorChanged($event)">Brak</mat-option>
+              <mat-option [value]='emptyDoctor' (onSelectionChange)="doctorChanged($event)">Brak</mat-option>
               <mat-option
                 *ngFor="let doctor of doctors$ | async"
                 [value]="doctor"
                 (onSelectionChange)="doctorChanged($event)">
                 <ng-container *ngIf="doctor">
-                  {{ doctor.firstName }}, {{ doctor.lastName }} - PWZ:{{
-                    doctor.qualificationsNo
-                  }}
+                  {{doctor.firstName}}, {{doctor.lastName}} - email: {{doctor.email}} - pwz: {{ doctor.qualificationsNo}}
                 </ng-container>
               </mat-option>
             </mat-select>
@@ -166,8 +163,7 @@
           alt="Dodaj nowego lekarza"
           style="float: right"
           [disabled]="mode ==='edit' && user.role === 'user' "
-          (click)="openDoctorCreateDialog()"
-        >
+          (click)="openDoctorCreateDialog()">
           <mat-icon>add</mat-icon>
         </button>
 

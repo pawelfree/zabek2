@@ -159,7 +159,6 @@ export class DoctorCreateDlgComponent implements OnInit {
         finalize(() => this.store.dispatch(AppActions.loadingEnd())))
       .subscribe(
         (res: User) => {
-          console.log('user', res, res.doctor);
           this.store.dispatch(AppActions.sendInfo({info: 'Lekarz został dodany'}));
           this.onAdd.emit(res.doctor);
           this.dialogRef.close();

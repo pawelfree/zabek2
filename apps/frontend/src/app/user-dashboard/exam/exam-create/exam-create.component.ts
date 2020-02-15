@@ -49,6 +49,7 @@ export class ExamCreateComponent implements OnInit {
   private lab: Lab;
   private file: FileUpload;
   public selectedDoctor;
+  private sendEmailTo;
 
   endOfData: boolean;
   doctors = new BehaviorSubject<Doctor[]>([]);
@@ -160,6 +161,7 @@ export class ExamCreateComponent implements OnInit {
       this.lab = exam.lab;
       this.file = exam.file;
       this.selectedDoctor = exam.doctor;
+      this.sendEmailTo = exam.sendEmailTo === undefined ? null : exam.sendEmailTo;
       this.form.setValue({
         examinationDate: exam.examinationDate,
         examinationType: exam.examinationType,
@@ -173,7 +175,7 @@ export class ExamCreateComponent implements OnInit {
         patientEmail: exam.patient.email,
         patientPhone: exam.patient.phone,
         doctor: exam.doctor,
-        sendEmailTo: exam.sendEmailTo === undefined ? null : exam.sendEmailTo
+        sendEmailTo: this.sendEmailTo
       });
       setTimeout(() => { 
         if (this.selectedDoctor) {
@@ -255,8 +257,13 @@ export class ExamCreateComponent implements OnInit {
   }
 
   doctorChanged(event) {
-    if (event.isUserInput) {   
-      this.form.patchValue({ sendEmailTo: event.source.value.email });
+    if (event.isUserInput && event.source.value.email !== this.selectedDoctor.email) {
+      const obj = { value: null, disabled: true };
+      if (event.source.value.email !== null) {
+        obj.value = event.source.value.email;
+        obj.disabled = false;
+      }
+      this.form.controls['sendEmailTo'].reset(obj);
     }
   }
 
