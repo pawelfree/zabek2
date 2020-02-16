@@ -9,7 +9,7 @@ import { User } from '@zabek/data';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationComponent } from '../../../common-dialogs/confirmation/confirmation.component';
 import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
+import { AppState, AppActions } from '../../../store';
 import { currentUser } from '../../../auth/store';
 
 @Component({
@@ -70,18 +70,24 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
     this.loadDoctors( this.paginator.pageIndex, this.paginator.pageSize);
   }
 
-  onActivate(id: string) {
-      const dialogRef = this.dialog.open(ConfirmationComponent, {
-        width: '350px',
-        data: 'Czy na pewno chcesz aktywować konto online wybranego lekarza?'
-      });
-      dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-        if (result) {
-          this.doctorService.activate(id).subscribe(res => {
-            this.loadDoctorsPage();
-          });
-        }
-      });
+  onActivate(doctor: User) {
+    if (!doctor.active) {
+      if (doctor.rulesAccepted) {
+        const dialogRef = this.dialog.open(ConfirmationComponent, {
+          width: '350px',
+          data: 'Czy na pewno chcesz aktywować konto online wybranego lekarza?'
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+          if (result) {
+            this.doctorService.activate(doctor._id).subscribe(res => {
+              this.loadDoctorsPage();
+            });
+          }
+        });
+      } else {
+        this.store.dispatch(AppActions.sendInfo({info: 'Lekarz nie ma uzupełnionych wszystkich danych - nie można go aktywować.'}));
+      }
+    } 
   }
 
   loadDoctors(pageIndex = 0, pageSize = this.doctorsPerPage) {

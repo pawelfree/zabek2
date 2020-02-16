@@ -71,7 +71,7 @@ export class DoctorService {
   isPwzTaken(pwz: string, _id: string): Observable<boolean> {
     let params = new HttpParams();
     params = params.append('doctor', '' + _id);
-    return this.http.get<boolean>(BACKEND_URL + 'pwztaken/' + pwz, _id === null ? null : {params});
+    return this.http.get<boolean>(BACKEND_URL + 'pwztaken/' + pwz, _id === null ? {} : {params});
   }
  
   isPeselTaken(pesel: string, _id: string): Observable<boolean> {
@@ -83,6 +83,6 @@ export class DoctorService {
   isNipTaken(nip: string, _id: string): Observable<boolean> {
     let params = new HttpParams();
     params = params.append('doctor', '' + _id);
-    return this.http.get<boolean>(BACKEND_URL + 'niptaken/' + nip, _id === null ? null : {params});
+    return this.http.get<boolean>(BACKEND_URL + 'niptaken/' + nip, _id === null ? {} : {params});
   }
 }
