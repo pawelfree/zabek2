@@ -129,6 +129,10 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
                         " (" + exam.notificationSent + ")" : null;
   }
 
+  getEmailToSendNotification(exam: Examination): string {
+    return exam.sendEmailTo ? exam.sendEmailTo : exam.doctor ? exam.doctor.email : 'Brak';
+  }
+
   onSendNotificationToDoctor(exam: Examination) {
     if (exam.patient.processingAck) {
       const dialogRef = this.dialog.open(ConfirmationComponent, {

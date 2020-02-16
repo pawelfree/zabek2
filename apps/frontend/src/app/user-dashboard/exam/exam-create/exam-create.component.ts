@@ -49,7 +49,7 @@ export class ExamCreateComponent implements OnInit {
   private lab: Lab;
   private file: FileUpload;
   public selectedDoctor;
-  private sendEmailTo;
+  private firstPageOpen;
 
   endOfData: boolean;
   doctors = new BehaviorSubject<Doctor[]>([]);
@@ -95,6 +95,8 @@ export class ExamCreateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.firstPageOpen = true;
 
     this.store.pipe(select(currentUser),
       take(1),
@@ -160,8 +162,8 @@ export class ExamCreateComponent implements OnInit {
       this._id = exam._id;
       this.lab = exam.lab;
       this.file = exam.file;
-      this.selectedDoctor = exam.doctor;
-      this.sendEmailTo = exam.sendEmailTo === undefined ? null : exam.sendEmailTo;
+      this.selectedDoctor = exam.doctor ? exam.doctor : this.emptyDoctor;
+      
       this.form.setValue({
         examinationDate: exam.examinationDate,
         examinationType: exam.examinationType,
@@ -174,15 +176,17 @@ export class ExamCreateComponent implements OnInit {
         patientMarketingAck: exam.patient.marketingAck,
         patientEmail: exam.patient.email,
         patientPhone: exam.patient.phone,
-        doctor: exam.doctor,
-        sendEmailTo: this.sendEmailTo
+        doctor: this.selectedDoctor,
+        sendEmailTo: exam.sendEmailTo === undefined  ? null : exam.sendEmailTo
       });
+      
       setTimeout(() => { 
-        if (this.selectedDoctor) {
+        if (this.selectedDoctor._id !== 0) {
           this.doctors.next([this.selectedDoctor]);
         }
         else {
           this.selectedDoctor = this.emptyDoctor;
+          this.form.controls['sendEmailTo'].reset({value: null, disabled: true});
         }
       }, 1);
       if (this.user.role === Role.user) {
@@ -193,6 +197,7 @@ export class ExamCreateComponent implements OnInit {
       this._id = null;
       this.lab = null;
       this.file = null;
+      this.selectedDoctor = this.emptyDoctor;
     }
   }
 
@@ -258,13 +263,16 @@ export class ExamCreateComponent implements OnInit {
   }
 
   doctorChanged(event) {
-    if (event.isUserInput && event.source.value.email !== this.selectedDoctor.email) {
-      const obj = { value: null, disabled: true };
-      if (event.source.value.email !== null) {
-        obj.value = event.source.value.email;
-        obj.disabled = false;
+    if (event.isUserInput) {
+      if (this.firstPageOpen) {
+        this.firstPageOpen = false;
+      } else {
+        if (event.source.value.email !== null) {
+          this.form.controls['sendEmailTo'].reset({ value: null, disabled: false});
+        } else {
+          this.form.controls['sendEmailTo'].reset({ value: null, disabled: true});
+        }
       }
-      this.form.controls['sendEmailTo'].reset(obj);
     }
   }
 

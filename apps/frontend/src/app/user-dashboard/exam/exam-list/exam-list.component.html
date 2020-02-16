@@ -59,15 +59,7 @@
 
   <ng-container matColumnDef="sendEmailTo">
     <th mat-header-cell *matHeaderCellDef style="text-align: center">Email</th>
-    <td mat-cell *matCellDef="let element"  style="text-align: center">
-       
-       <ng-container *ngIf="element.doctor; else defaultValue">
-        {{element.sendEmailTo}} 
-      </ng-container>
-      <ng-template #defaultValue>
-        Brak
-      </ng-template>  
-      </td>
+    <td mat-cell *matCellDef="let element"  style="text-align: center">{{ getEmailToSendNotification(element) }} </td>
   </ng-container>
 
   <ng-container matColumnDef="patientProcessingAck">
