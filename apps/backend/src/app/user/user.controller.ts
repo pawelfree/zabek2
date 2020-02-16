@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
 import { Roles } from '../shared/security/roles.decorator';
 import { RolesGuard } from '../shared/security/roles.guard';
-import { User, Role } from '@zabek/data';
+import { User, Role, Doctor } from '@zabek/data';
 import * as _ from 'lodash';
 import { LabService } from '../lab/lab.service';
 import { AuthService } from '../shared/security/auth.service';
@@ -58,6 +58,12 @@ export class UserController {
     console.warn('Dodac sadminowi lab');
     return await this.userService.findAllUsers(pagesize, page, req.user.lab);
   }
+
+
+  @Get('register/:email')
+  userRegisterData(@Param('email') email: string | null) {
+    return this.userService.findForRegistrationByEmail(email);
+  }
   
   //TODO hash password on presave isModified or null
 //   userModel.pre('save', async function save(next) {
@@ -76,7 +82,7 @@ export class UserController {
   @Post()
   async addUser(@Body() userToCreate: User) {
     console.warn('wymusic polityke haseł')
-    const user: User = await this.userService.findByEmail(userToCreate.email);
+    const user: User = await this.userService.findByEmail(userToCreate.email, null);
     if (user) {
       throw new BadRequestException('Użytkownik już istnieje');
     }
@@ -105,7 +111,7 @@ export class UserController {
   @Post('register')
   async registerUser(@Body() userToCreate: User) {
     console.warn('wymusic polityke haseł')
-    const user: User = await this.userService.findByEmail(userToCreate.email);
+    const user: User = await this.userService.findByEmail(userToCreate.email, null);
     if (user) {
       throw new BadRequestException('Lekarz jest już zarejestrowany');
     }
@@ -124,6 +130,34 @@ export class UserController {
     });
     return _.pick(await this.userService.addUser(newUser), [
       '_id',
+      'email',
+      'role',
+      'lab',
+      'doctor'
+    ]);
+  }
+
+  @Put('/updateregister/:id')
+  async updateRegisteredUser(@Body() userToUpdate: User) {
+    const user: User = await this.userService.findById(userToUpdate._id);
+    if (!user) {
+      throw new BadRequestException('Użytkownik nie jest jeszcze zarejestrowany.');
+    }
+    if (!userToUpdate.doctor) {
+      throw new BadRequestException('Lekarz nie został wskazany.')
+    }
+    const doctor: Doctor =  await this.doctorService.findById(userToUpdate.doctor._id);
+    if (!doctor) {
+      throw new BadRequestException('Lekarz nie jest jeszcze zarejestrowany');
+    }
+
+    const newUser: User = Object.assign(new User(), {
+      ...userToUpdate,
+      password: userToUpdate.password ? await this.authService.hash(userToUpdate.password) : await this.authService.hash(crypto.randomBytes(20).toString('hex'))
+    });
+
+    await this.doctorService.update(userToUpdate.doctor).catch(err => { throw new InternalServerErrorException('Nieuadna aktualizacja danych.', err); })
+    return _.pick(await this.userService.update(newUser), [
       'email',
       'role',
       'lab',
@@ -157,8 +191,8 @@ export class UserController {
   }
 
   @Get('emailtaken/:email')
-  async isEmailTaken(@Param('email') email: string) {
-    return await this.userService.findByEmail(email) ? true : false;
+  async isEmailTaken(@Param('email') email: string, @Query('user') user_id: string = null) {
+    return await this.userService.findByEmail(email, user_id) ? true : false;
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)

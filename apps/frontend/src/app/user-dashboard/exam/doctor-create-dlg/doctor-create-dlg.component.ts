@@ -31,11 +31,7 @@ export class DoctorCreateDlgComponent implements OnInit {
   constructor(
     private readonly doctorService: DoctorService,
     private readonly dialogRef: MatDialogRef<DoctorCreateDlgComponent>,
-    private readonly store: Store<AppState>,
-    private readonly userEmailValidator: UserEmailValidator,
-    private readonly userPwzValidator: UserPwzValidator,
-    private readonly userPeselValidator: UserPeselValidator,
-    private readonly userNipValidator: UserNipValidator
+    private readonly store: Store<AppState>
   ) {}
 
   ngOnInit() {
@@ -46,10 +42,15 @@ export class DoctorCreateDlgComponent implements OnInit {
       tap(user => this.lab = user.lab)
     ).subscribe();
 
+    const userEmailValidator = new UserEmailValidator(this.doctorService);
+    const userPwzValidator = new UserPwzValidator(this.doctorService);
+    const userPeselValidator = new UserPeselValidator(this.doctorService);
+    const userNipValidator = new UserNipValidator(this.doctorService);
+
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.email],
-        asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
+        asyncValidators: [userEmailValidator.validate.bind(userEmailValidator)],
         updateOn: 'blur'
       }),
       lab: new FormControl(null),
@@ -68,7 +69,7 @@ export class DoctorCreateDlgComponent implements OnInit {
         ]
       }),
       qualificationsNo: new FormControl(null, {
-        asyncValidators: [ this.userPwzValidator.validate.bind(this.userPwzValidator)],
+        asyncValidators: [ userPwzValidator.validate.bind(userPwzValidator)],
         updateOn: 'blur'
       }),
       pesel: new FormControl(null, {
@@ -76,7 +77,7 @@ export class DoctorCreateDlgComponent implements OnInit {
           Validators.minLength(11),
           Validators.maxLength(11),
           CustomValidator.patternMatch(/^[0-9]{11}$/, { onlyNumbers: true })],
-        asyncValidators: [ this.userPeselValidator.validate.bind(this.userPeselValidator)],
+        asyncValidators: [ userPeselValidator.validate.bind(userPeselValidator)],
         updateOn: 'blur'
       }),
       nip: new FormControl(null, {
@@ -84,7 +85,7 @@ export class DoctorCreateDlgComponent implements OnInit {
           Validators.minLength(10),
           Validators.maxLength(10),
           CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true })],
-          asyncValidators: [ this.userNipValidator.validate.bind(this.userNipValidator)],
+          asyncValidators: [ userNipValidator.validate.bind(userNipValidator)],
           updateOn: 'blur'
       }),
       officeName: new FormControl(null, {

@@ -59,8 +59,6 @@ export class LabController {
       return await this.labService.update(updateLabDto);
     }
 
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin')
     @Get(':id')
     async getLab(@Param('id') id: string) {
       return await this.labService.findById(id);

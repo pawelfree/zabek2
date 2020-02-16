@@ -16,8 +16,16 @@ export class UserService {
     return await this.userModel.findOne({doctor})
   }
 
-  async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email }); 
+  async findByEmail(email: string, _id: string): Promise<User> {
+    const obj = { email }
+    if (_id) {
+      obj['_id'] = { $ne: _id };
+    }
+    return await this.userModel.findOne(obj); 
+  }
+
+  findForRegistrationByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({email, rulesAccepted: false }).select('-password').then(async user => user ? await user.populate('doctor').execPopulate() : null );
   }
 
   async addDoctor(doctor: Doctor): Promise<User> {
@@ -56,7 +64,7 @@ export class UserService {
   }
 
   async update(updateUserDto: ResetPasswordDto | User)  {
-    return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto);
+    return await this.userModel.updateOne({_id: updateUserDto._id}, updateUserDto, {new : true});
   }
 
   async acceptRules(user: User) {

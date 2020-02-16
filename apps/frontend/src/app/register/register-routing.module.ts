@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RegisterListComponent } from './register-list/register-list.component';
 import { DoctorRegisterComponent } from './doctor-register/doctor-register.component';
+import { DoctorRegisterResolver } from './doctor-register/doctor-register.resolver';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'register/:id',
+    resolve: { data: DoctorRegisterResolver },
     component: DoctorRegisterComponent
   }
 ];

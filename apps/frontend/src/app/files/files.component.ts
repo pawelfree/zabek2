@@ -37,7 +37,7 @@ export class FilesComponent implements OnInit {
       take(1)
     ).subscribe(
       result => this.files.next(result),
-      err => console.log('error', err)
+      err => console.log('get all files error', err)
     );
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Doctor, User } from '@zabek/data';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
@@ -54,23 +54,35 @@ export class DoctorService {
     return this.http.get<User>(USER_BACKEND_URL + id);
   }
 
+  updateRegisteredDoctor(doctor: User) {
+    return this.http.put<Doctor>(USER_BACKEND_URL + "updateregister/"+doctor._id, doctor);
+  }
+
   getDoctor(id: string): Observable<Doctor> {
     return this.http.get<Doctor>(BACKEND_URL + id);
   }
 
-  isEmailTaken(email: string): Observable<boolean> {
+  isEmailTaken(email: string, _id: string): Observable<boolean> {
+    let params = new HttpParams();
+    params = params.append('user', '' + _id);
     return this.http.get<boolean>(USER_BACKEND_URL + 'emailtaken/' + email);
   }
 
-  isPwzTaken(pwz: string): Observable<boolean> {
-    return this.http.get<boolean>(BACKEND_URL + 'pwztaken/' + pwz);
+  isPwzTaken(pwz: string, _id: string): Observable<boolean> {
+    let params = new HttpParams();
+    params = params.append('doctor', '' + _id);
+    return this.http.get<boolean>(BACKEND_URL + 'pwztaken/' + pwz, _id === null ? null : {params});
   }
  
-  isPeselTaken(pesel: string): Observable<boolean> {
-    return this.http.get<boolean>(BACKEND_URL + 'peseltaken/' + pesel);
+  isPeselTaken(pesel: string, _id: string): Observable<boolean> {
+    let params = new HttpParams();
+    params = params.append('doctor', '' + _id);
+    return this.http.get<boolean>(BACKEND_URL + 'peseltaken/' + pesel, _id === null ? {} : {params});
   }
 
-  isNipTaken(nip: string): Observable<boolean> {
-    return this.http.get<boolean>(BACKEND_URL + 'niptaken/' + nip);
+  isNipTaken(nip: string, _id: string): Observable<boolean> {
+    let params = new HttpParams();
+    params = params.append('doctor', '' + _id);
+    return this.http.get<boolean>(BACKEND_URL + 'niptaken/' + nip, _id === null ? null : {params});
   }
 }

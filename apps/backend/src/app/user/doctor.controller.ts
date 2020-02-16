@@ -139,17 +139,17 @@ export class DoctorController {
   }
 
   @Get('pwztaken/:pwz')
-  async isPwzTaken(@Param('pwz') qualificationsNo: string) {
-    return await this.doctorService.findByPwz(qualificationsNo) ? true : false;
+  async isPwzTaken(@Param('pwz') qualificationsNo: string, @Query('doctor') doctor_id: string = null) {
+    return await this.doctorService.findByPwz(qualificationsNo, doctor_id) ? true : false;
   }
 
   @Get('peseltaken/:pesel')
-  async isPeselTaken(@Param('pesel') pesel: string) {
-    return await this.doctorService.findByPesel(pesel) ? true : false;
+  async isPeselTaken(@Param('pesel') pesel: string, @Query('doctor') doctor_id: string = null) {
+    return await this.doctorService.findByPesel(pesel, doctor_id) ? true : false;
   }
 
   @Get('niptaken/:nip')
-  async isNipTaken(@Param('nip') nip: string) {
-    return await this.doctorService.findByNip(nip) ? true : false;
+  async isNipTaken(@Param('nip') nip: string, @Query('doctor') doctor_id: string = null) {
+    return await this.doctorService.findByNip(nip, doctor_id) ? true : false;
   }
 }

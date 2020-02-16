@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   resetPasswordToken(email: string) {
-    return this.userService.findByEmail(email)
+    return this.userService.findByEmail(email,null)
       .then(async(user) => {
         return await jsonwebtoken.sign({ _id: user._id, email: user.email }, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn: +this.configService.get('RESET_TOKEN_EXPIRES_IN') });
       })
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, pass: string): Promise<{user: User, message: string}> {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findByEmail(email,null);
 
     if (user) {
       const validPassword = await bcrypt.compare(pass, user.password);

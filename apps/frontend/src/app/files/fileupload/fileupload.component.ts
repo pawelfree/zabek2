@@ -111,7 +111,7 @@ export class FileUploadComponent {
               if (event.type === HttpEventType.Response) {
                 this.fileService.addFileUpload(fileDisplay).pipe(
                   take(1),
-                  catchError(err => { console.log('error', err);
+                  catchError(err => { console.log('fileupload error', err);
                             return of(`${file.data.name} upload failed - error ${err}`);}),
                   finalize(() => this.dialogRef.close())
                 ).subscribe(

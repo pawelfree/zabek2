@@ -12,6 +12,10 @@ export class DoctorService {
     return await new this.doctorModel({...doctor, _id: new Types.ObjectId()}).save();
   }
 
+  async findById(id: string): Promise<Doctor> {
+    return await this.doctorModel.findById(id);
+  }
+
   async findAllOnlineDoctors(pageSize: number, currentPage: number, labId: string): Promise<{ doctors: User[]; count: number }>  {
     const options = {role: Role.doctor };
     console.warn('dodac sadminowi lab');
@@ -42,15 +46,27 @@ export class DoctorService {
     return await this.doctorModel.updateOne({_id: doctor._id}, doctor);
   }
 
-  findByPwz(qualificationsNo: string): Promise<Doctor> {
-    return this.doctorModel.findOne({qualificationsNo})
+  findByPwz(qualificationsNo: string, _id: string): Promise<Doctor> {
+    const obj = { qualificationsNo };
+    if (_id) {
+      obj['_id'] = { $ne: _id };
+    }
+    return this.doctorModel.findOne(obj);
   }
 
-  findByPesel(pesel: string): Promise<Doctor> {
-    return this.doctorModel.findOne({pesel})
+  findByPesel(pesel: string, _id: string): Promise<Doctor> {
+    const obj = { pesel }
+    if (_id) {
+      obj['_id'] = { $ne: _id };
+    }
+    return this.doctorModel.findOne(obj);
   }
   
-  findByNip(nip: string): Promise<Doctor> {
-    return this.doctorModel.findOne({nip})
+  findByNip(nip: string, _id: string): Promise<Doctor> {
+    const obj = { nip }
+    if (_id) {
+      obj['_id'] = { $ne: _id };
+    }
+    return this.doctorModel.findOne(obj);
   }
 }

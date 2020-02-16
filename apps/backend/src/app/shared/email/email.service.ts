@@ -143,7 +143,7 @@ export class EmailService {
           }],
           "dynamic_template_data": {
             "system_name": this.SYSTEM_NAME,
-            "app_server": this.APP_SERVER + '/register/register/' + lab_id + '?id=' + email
+            "app_server": this.APP_SERVER + '/register/register/' + lab_id + '?email=' + email
           }
         }],
         "from": {

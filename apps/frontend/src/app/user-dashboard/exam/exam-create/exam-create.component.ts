@@ -240,8 +240,6 @@ export class ExamCreateComponent implements OnInit {
       doctor:
         (this.form.value.doctor === null || undefined) || (this.form.value.doctor._id === 0) ? null : this.form.value.doctor
     };
-
-    console.log('exam form ', this.form.value);
     
     if (this.mode === 'create') {
       this.examService.addExam(exam);
