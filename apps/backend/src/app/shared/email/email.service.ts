@@ -15,6 +15,7 @@ export class EmailService {
   private DOCTOR_ACTIVATION_TEMPLATE_ID = null;
   private COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID = null;
   private EXAMINATION_CREATED_TEMPLATE_ID = null;
+  private USER_ACCOUNT_NOTIFICATION_TEMPLATE_ID = null;
 
   constructor(
     readonly configService: ConfigService,
@@ -30,6 +31,7 @@ export class EmailService {
     this.DOCTOR_ACTIVATION_TEMPLATE_ID = configService.get('DOCTOR_ACTIVATION_TEMPLATE_ID');
     this.COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID = configService.get('COMMENT_ACKNOWLEDGEMENT_TEMPLATE_ID')
     this.EXAMINATION_CREATED_TEMPLATE_ID = configService.get('EXAMINATION_CREATED_TEMPLATE_ID');
+    this.USER_ACCOUNT_NOTIFICATION_TEMPLATE_ID = configService.get('USER_ACCOUNT_NOTIFICATION_TEMPLATE_ID');
 
   }
 
@@ -125,6 +127,39 @@ export class EmailService {
         }
       })
       .pipe(take(1)).subscribe();
+    }
+  }
+
+  async sendAccountNotification(email: string, lab_id: string) {
+    if (this.API_KEY === 'local') {
+      console.log('Send exam notification email for', email);
+      return true;
+    } else {
+      await this.http.post("https://api.sendgrid.com/v3/mail/send", 
+      {
+        "personalizations": [{
+          "to": [{
+            "email": email,
+          }],
+          "dynamic_template_data": {
+            "system_name": this.SYSTEM_NAME,
+            "app_server": this.APP_SERVER + '/register/register/' + lab_id + '?id=' + email
+          }
+        }],
+        "from": {
+          "email": "noreply@rtgcloud.pl"
+        },
+        "template_id": this.USER_ACCOUNT_NOTIFICATION_TEMPLATE_ID
+      },{
+        headers: {
+          "content-type": "application/json",
+          "Authorization": "Bearer " + this.API_KEY
+        }
+      })
+      .pipe(take(1)).subscribe(
+        succ => console.log('Wysłany email aktywacji lekarza dla', email), 
+        err => console.log('Błąd wysyłania aktywacji lekarza dla', email)
+      );
     }
   }
 

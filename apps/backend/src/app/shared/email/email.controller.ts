@@ -22,18 +22,24 @@ export class EmailController {
     const exam = await this.examService.findById(examId);
     if (exam) {
       if (exam?.patient.processingAck) {
-        if (exam.sendEmailTo) {
-          await this.emailService.sendExamNotification(exam.sendEmailTo);
-          await this.examService.registerSentNotification(exam._id);
-          return true;
+        const user = await this.userService.findByDoctor(exam.doctor);
+        if (!user) {
+          throw new BadRequestException('Nie można znaleźć email lekarza. (' + exam.doctor._id + ')')
         } else {
-          const user = await this.userService.findByDoctor(exam.doctor);
-          if (user) {
-            await this.emailService.sendExamNotification(user.email);
-            await this.examService.registerSentNotification(exam._id);            
-            return true;
+          if (user.rulesAccepted) {
+            if (exam.sendEmailTo) {
+              await this.emailService.sendExamNotification(exam.sendEmailTo);
+              await this.examService.registerSentNotification(exam._id);
+              return true;
+            } else {
+              await this.emailService.sendExamNotification(user.email);
+              await this.examService.registerSentNotification(exam._id);            
+              return true;
+            }
           } else {
-            throw new BadRequestException('Nie można znaleźć email lekarza')
+            await this.emailService.sendAccountNotification(user.email, user.lab._id);
+            await this.examService.registerSentNotification(exam._id);            
+            return true;      
           }
         }
       } else {

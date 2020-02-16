@@ -137,18 +137,21 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
       });
       dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
         if (result) {
-          exam.notificationSent = exam.notificationSent + 1;
-          exam.lastNotificationDate = new Date().toString();
-          this.emailService.sendNotificationToDoctor(exam._id).pipe(take(1)).subscribe(res => {
-            this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana'}));
-          },
-          err => {
-            this.store.dispatch(AppActions.raiseError({message: "Wiadomość nie została wysłana", status: 'Nieznany błąd'}));
-          });
+          if (exam.doctor) {
+            exam.notificationSent = exam.notificationSent + 1;
+            exam.lastNotificationDate = new Date().toString();
+            this.emailService.sendNotificationToDoctor(exam._id).pipe(take(1)).
+              subscribe(
+                res => this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana.'})),
+                err => this.store.dispatch(AppActions.raiseError({message: "Wiadomość nie została wysłana.", status: 'Nieznany błąd.'}))
+              );
+          } else {
+            this.store.dispatch(AppActions.sendInfo({info: 'W badaniu nie został wskazany żaden lekarz. Nie można wysłać powiadomienia.'}))
+          }
         }
       });
     } else {
-      this.store.dispatch(AppActions.sendInfo({info: 'Pacjent nie wyraził zgody na badania online'}));
+      this.store.dispatch(AppActions.sendInfo({info: 'Pacjent nie wyraził zgody na badania online.'}));
     }
   }
 
