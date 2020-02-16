@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Examination } from '@zabek/data';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 const BACKEND_URL = environment.apiUrl + '/api/doctor-exam/';
 
@@ -28,7 +29,7 @@ export class DoctorExamService {
   }
 
   setDownloadDate(id: string, date: string) {
-    this.http.put(BACKEND_URL + id, {downloadDate : date}).subscribe().unsubscribe();
+    this.http.put(BACKEND_URL + id, {downloadDate : date}).pipe(take(1)).subscribe();
   }
 
 }
