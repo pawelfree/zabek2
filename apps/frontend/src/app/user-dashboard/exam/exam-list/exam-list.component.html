@@ -94,7 +94,7 @@
         <mat-icon aria-label="Usuń">delete</mat-icon>
       </button>
 
-      <button *ngIf="(user.role === 'admin' || user.role === 'user') && element.patient.processingAck" 
+      <button *ngIf="(user.role === 'admin' || user.role === 'user') && element.patient.processingAck && element.file" 
               mat-icon-button 
               [matTooltip]="sent(element)"
               matTooltipClass="linebreak"
