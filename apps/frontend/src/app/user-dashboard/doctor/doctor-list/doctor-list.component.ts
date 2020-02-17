@@ -72,7 +72,8 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   onActivate(doctor: User) {
     if (!doctor.active) {
-      if (doctor.rulesAccepted) {
+      //TODO niech bedzie takie pole w bazie danych - bedzie latwiej wyswietlac
+      if (this.isAllRequiredDataPresent(doctor)) {
         const dialogRef = this.dialog.open(ConfirmationComponent, {
           width: '350px',
           data: 'Czy na pewno chcesz aktywować konto online wybranego lekarza?'
@@ -88,6 +89,11 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
         this.store.dispatch(AppActions.sendInfo({info: 'Lekarz nie ma uzupełnionych wszystkich danych - nie można go aktywować.'}));
       }
     } 
+  }
+
+  isAllRequiredDataPresent(user: User): boolean {
+    return  user.doctor && user.doctor._id && user.doctor.firstName && user.doctor.lastName &&
+            user.doctor.officeAddress && user.doctor.officeName && user.doctor.pesel ? true : false
   }
 
   loadDoctors(pageIndex = 0, pageSize = this.doctorsPerPage) {

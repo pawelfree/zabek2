@@ -50,7 +50,7 @@ export class DoctorCreateComponent implements OnInit {
     this.form = new FormGroup({
       email: new FormControl(null, {
         validators: [Validators.required, Validators.email],
-        asyncValidators: [ userEmailValidator.validate.bind(userEmailValidator) ],
+        asyncValidators: [ this.user ? userEmailValidator.validate.bind(userEmailValidator, this.user) : userEmailValidator.validate.bind(userEmailValidator) ],
         updateOn: 'blur'
       }),
       firstName: new FormControl(null, {
@@ -72,7 +72,7 @@ export class DoctorCreateComponent implements OnInit {
                       Validators.minLength(7),
                       Validators.maxLength(7),
                       CustomValidator.patternMatch(/^[0-9]{7}$/, { onlyNumbers: true })],
-        asyncValidators: [ userPwzValidator.validate.bind(userPwzValidator) ],
+        asyncValidators: [ this.user ? userPwzValidator.validate.bind(userPwzValidator, this.user.doctor) : userPwzValidator.validate.bind(userPwzValidator) ],
         updateOn: 'blur'
       }),
       pesel: new FormControl(null, {
@@ -81,7 +81,7 @@ export class DoctorCreateComponent implements OnInit {
           Validators.minLength(11), 
           Validators.maxLength(11), 
           CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true})],
-          asyncValidators: [ userPeselValidator.validate.bind(userPeselValidator) ],
+          asyncValidators: [ this.user ? userPeselValidator.validate.bind(userPeselValidator,this.user.doctor) : userPeselValidator.validate.bind(userPeselValidator)  ],
           updateOn: 'blur'
 
       }),
@@ -90,7 +90,7 @@ export class DoctorCreateComponent implements OnInit {
           Validators.minLength(10),
           Validators.maxLength(10),
           CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true })],
-        asyncValidators: [ userNipValidator.validate.bind(userNipValidator) ],
+        asyncValidators: [ this.user ? userNipValidator.validate.bind(userNipValidator, this.user.doctor) : userNipValidator.validate.bind(userNipValidator) ],
         updateOn: 'blur'
       }),
       officeName: new FormControl(null, {
