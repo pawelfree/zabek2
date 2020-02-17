@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExamService, DoctorService } from '../../../_services';
 import { ActivatedRoute } from '@angular/router';
@@ -7,7 +7,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Doctor, Examination, Patient, Lab, FileUpload, User, Role } from '@zabek/data';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, from } from 'rxjs';
+import { BehaviorSubject, from, Subscription } from 'rxjs';
 import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
 import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg.component';
@@ -42,7 +42,8 @@ import { currentUser } from '../../../auth/store';
     }
   ]
 })
-export class ExamCreateComponent implements OnInit {
+export class ExamCreateComponent implements OnInit, OnDestroy {
+
   form: FormGroup;
   mode: 'edit' | 'create' = 'create';
   private _id: string;
@@ -50,6 +51,7 @@ export class ExamCreateComponent implements OnInit {
   private file: FileUpload;
   public selectedDoctor;
   private firstPageOpen;
+  private dialogSubs: Subscription = null;
 
   endOfData: boolean;
   doctors = new BehaviorSubject<Doctor[]>([]);
@@ -277,10 +279,14 @@ export class ExamCreateComponent implements OnInit {
   }
 
   openDoctorCreateDialog() {
+    if (this.dialogSubs) {
+      this.dialogSubs.unsubscribe();
+      this.dialogSubs = null;
+    }
     const dialogRef = this.dialog.open(DoctorCreateDlgComponent, {
       disableClose: true
     });
-    const subs = dialogRef.componentInstance.onAdd.subscribe(
+    this.dialogSubs = dialogRef.componentInstance.onAdd.subscribe(
       (res: Doctor) => {
         console.log('next', res);
         
@@ -288,13 +294,13 @@ export class ExamCreateComponent implements OnInit {
       },
       err => console.log('cos poszlo nie tak',err)
     );
-
-    dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
-      if (subs) {
-        console.log('unsubscribe');
-        
-        subs.unsubscribe();
-      }
-    });
   }
+
+  ngOnDestroy(): void {
+    if (this.dialogSubs) {
+      this.dialogSubs.unsubscribe();
+      this.dialogSubs = null;
+    }
+  }
+
 }
