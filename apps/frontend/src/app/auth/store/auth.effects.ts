@@ -25,6 +25,18 @@ const handleError = (errorRes: any) => {
     case 'USER_NOT_ACTIVE':
       error = 'Użytkownik nie jest aktywny.';
       break;
+    case 'TOKEN_EXPIRED':
+      error = 'Upłynął termin ważności (tokenu) żądania zmiany hasła.';
+      break;
+    case 'BAD_RESET_TOKEN':
+      error = 'Niepoprawny token zmiany hasła.'
+      break;
+    case 'EMPTY_PASSWORD':
+      error = 'Hasło nie może być puste.'
+      break;
+    case 'EMPTY_EMAIL':
+      error = 'Email nie może być pusty.'
+      break;
     default:
       error = 'Nieznany błąd';
   }
@@ -66,6 +78,7 @@ export class AuthEffects {
 
   authPasswordChangeError$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.passwordChangeError),
+    tap(res=> console.log('token error',res)),
     switchMap(res => handleError(res.error))
   ));
 
