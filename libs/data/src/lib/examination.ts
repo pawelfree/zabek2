@@ -21,13 +21,13 @@ export interface Examination extends Document {
   readonly patient: Patient;
   readonly lab: Lab;
   readonly sendEmailTo: string; 
-  readonly examinationDate: string; 
+  readonly examinationDate: Date; 
   readonly examinationType: string; 
   readonly file: FileUpload;
-  readonly firstDownload?: string;
-  readonly lastDownload?: string;
+  readonly firstDownload?: Date;
+  readonly lastDownload?: Date;
   notificationSent?: number;
-  lastNotificationDate?: string;
+  lastNotificationDate?: Date;
 }
 
 export const PatientSchema = new Schema({
@@ -109,11 +109,8 @@ export const ExamSchema = new Schema({
     trim: true
   },
   examinationDate: {
-    type: String,
-    requred: true,
-    minLength: 10,
-    maxLength: 10,
-    unique: false
+    type: Date,
+    default: Date.now
   },
   examinationType: {
     type: String,
@@ -132,11 +129,11 @@ export const ExamSchema = new Schema({
     ref: 'File'
   },
   firstDownload: {
-    type: String,
+    type: Date,
     required: false
   },
   lastDownload: {
-    type: String,
+    type: Date,
     required: false
   },
   notificationSent: {
@@ -144,7 +141,7 @@ export const ExamSchema = new Schema({
     default: 0
   },
   lastNotificationDate: {
-    type: String,
+    type: Date,
     required: false
   }
 });

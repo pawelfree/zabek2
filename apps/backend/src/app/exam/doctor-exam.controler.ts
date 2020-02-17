@@ -47,7 +47,7 @@ import { noop } from 'rxjs';
     }   
 
     @Put(':id')
-    async setDowlnoadedDate(@Param('id') id: string, @Body() downloadDateObj: {downloadDate: string}) {
+    async setDowlnoadedDate(@Param('id') id: string, @Body() downloadDateObj: {downloadDate: Date}) {
       const exam = await this.examService.findById(id);
       if (exam) {
         //TODO to przepisywanie musi byc jako prostsze

@@ -52,9 +52,9 @@ export class ExamService {
     options['doctor'] = doctor._id;
     options['file'] = { $ne : null };
 
-    // const beforeMili = (new Date()).getTime() - 14 * DAY_MILISECONDS;
-    // const before = (new Date()).setTime(beforeMili);
-    // options['examinationDate'] = { $gte: before }
+    const beforeMili = (new Date()).getTime() - 14 * DAY_MILISECONDS;
+    const before = (new Date()).setTime(beforeMili);
+    options['examinationDate'] = { $gte: before }
 
 
     const findallQuery = this.examModel.find<Examination>(options);
