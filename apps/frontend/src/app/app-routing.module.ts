@@ -7,6 +7,7 @@ import { ResetPasswordResolver } from './auth/reset-password/resetpassword.resol
 import { RulesGuard, AuthGuard } from './_guards';
 import { FilesComponent } from './files/files.component';
 import { Role } from '@zabek/data';
+import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.component';
 
 const routes: Routes = [
     {
@@ -45,6 +46,10 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { roles: [Role.sadmin] },
         component: FilesComponent
+    },
+    {
+        path: 'virtual',
+        component: VirtualScrollComponent
     },
     {
         path: '**',
