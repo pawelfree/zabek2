@@ -17,7 +17,7 @@ export const environment = {
   SYSTEM_NAME: "RTG Cloud",
   APP_SERVER: "https://rtgcloud.herokuapp.com",
 
-  PASSWORD_RESET_PATH: "resetpassword/",
+  PASSWORD_RESET_PATH: "resetpassword",
   PASSWORD_RESET_TEMPLATE_ID: "d-7d0e1ca1065841748b069ffff3cc5413",
 
   PASSWORD_RESET_ERROR_TEMPLATE_ID: "d-d7080425117d45fd97c088a8ab9a2321",

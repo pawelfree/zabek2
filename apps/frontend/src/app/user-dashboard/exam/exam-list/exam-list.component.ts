@@ -143,7 +143,7 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
         if (result) {
           if (exam.doctor) {
             exam.notificationSent = exam.notificationSent + 1;
-            exam.lastNotificationDate = new Date().toString();
+            exam.lastNotificationDate = new Date();
             this.emailService.sendNotificationToDoctor(exam._id).pipe(take(1)).
               subscribe(
                 res => this.store.dispatch(AppActions.sendInfo({info: 'Wiadomość została wysłana.'})),

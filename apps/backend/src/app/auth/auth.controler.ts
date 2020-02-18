@@ -29,16 +29,16 @@ export class AuthController {
   async resetPassword(@Param('id') encodedToken: string, @Body() body: {password: string}) {
     console.warn('wymusic polityke haseł')
     if (!body || !body.password) {
-      throw new BadRequestException('Hasło nie może być puste');
+      throw new BadRequestException('EMPTY_PASSWORD');
     }
     const {token, error} = this.authService.decodeResetPasswordToken(encodedToken);
 
     if (error) {
       if (error.name.includes('TokenExpiredError')) {
-        throw new BadRequestException('Upłynął termin ważności (tokenu) żądania zmiany hasła');
+        throw new BadRequestException('TOKEN_EXPIRED');
       }
       else {
-        throw new BadRequestException('Niepoprawny token zmiany hasła', error.name + ' | ' + error.message);
+        throw new BadRequestException('BAD_RESET_TOKEN', error.name + ' | ' + error.message);
       }
     }
     const reset = {
@@ -54,7 +54,7 @@ export class AuthController {
   @Post('passwordreset')
   async forgotPassword(@Body() body: { email: string }) {
     if (!body || !body.email || ! isValidEmail(body.email)) {
-      throw new BadRequestException('Email nie może być pusty')
+      throw new BadRequestException('EMPTY_EMAIL')
     }
     const token: string = await this.authService.resetPasswordToken(body.email);
     if (token) {
@@ -78,7 +78,7 @@ export class AuthController {
   async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Request() req){
     console.warn('wymusic polityke haseł')
     if (!changePasswordDto.newPassword || ! changePasswordDto.oldPassword) {
-      throw new BadRequestException('Brak danych wejściowych');
+      throw new BadRequestException('EMPTY_PASSWORD');
     }
     let error = null;
     await this.authService.validateUser(req.user.email, changePasswordDto.oldPassword)
