@@ -216,10 +216,7 @@ export class UserController {
             .then(res => res)
             .catch(err => error = new InternalServerErrorException('Błąd zapisu hasła użytkownia' + err));
           } else {
-            const {n, nModified, ok} = await this.doctorService.update(userToUpdate.doctor);
-            if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
-              error = new InternalServerErrorException('Nieznany błąd - zapis lekarza');
-            } 
+            return await this.doctorService.update(userToUpdate.doctor).catch(err => { throw new InternalServerErrorException('Nieuadna aktualizacja danych.', err); });
           }
        
         }
