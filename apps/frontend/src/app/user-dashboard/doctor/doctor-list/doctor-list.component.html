@@ -1,5 +1,5 @@
 <div>
-  <button
+  <button *ngIf="(user$ | async)?. role !== 'sadmin'"
     mat-icon-button    
     aria-label="Dodaj badanie" title="Dodaj" alt="Dodaj"
     routerLink="../create">
