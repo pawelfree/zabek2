@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
 import { CustomValidator, UserEmailValidator } from '../../../_validators';
-import { Role, Lab, User } from '@zabek/data';
+import { Role, Lab, User, } from '@zabek/data';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectLabComponent } from '../../select-lab/select-lab.component';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppActions, AppState } from '../../../store';
 import { UserActions } from '../../store';
+import { DoctorService } from '../../../_services';
 
 @Component({
   selector: 'zabek-user-create',
@@ -28,15 +29,18 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     private readonly store: Store<AppState>,
     private readonly route: ActivatedRoute,
     private readonly dialog: MatDialog,
-    private readonly userEmailValidator: UserEmailValidator
+    private readonly doctorService: DoctorService
   ) {}
 
   ngOnInit() {
+
+    const user = this.route.snapshot.data.user;
+    const userEmailValidator = new UserEmailValidator(this.doctorService)
     //TODO walidacja roli i takiego samego hasla
     this.form = new FormGroup({
         email: new FormControl(null, {
           validators: [Validators.required, Validators.email],
-          asyncValidators: [this.userEmailValidator.validate.bind(this.userEmailValidator)],
+          asyncValidators: [ this.user ? userEmailValidator.validate.bind(userEmailValidator, this.user) : userEmailValidator.validate.bind(userEmailValidator) ],
           updateOn: 'blur'
         }),
         role: new FormControl("user", {
@@ -79,7 +83,6 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       }
     });
 
-    const user = this.route.snapshot.data.user;
     if (user) {
       this._id = user._id;
       this.mode = 'edit';
