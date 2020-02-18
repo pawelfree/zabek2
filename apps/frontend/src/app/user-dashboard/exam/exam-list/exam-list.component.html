@@ -1,3 +1,18 @@
+<div>
+  <button
+    mat-icon-button    
+    aria-label="Dodaj badanie"
+    title="Dodaj" alt="Dodaj"
+    routerLink="../create">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button
+    mat-icon-button        
+    aria-label="Odśwież" title="Odśwież" alt="Odśwież"
+    (click)="loadExamsPage()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
 <div [hidden]="dataCount <= 0">
 <table mat-table [dataSource]='dataSource' class='mat-elevation-z2' >
 
@@ -117,25 +132,3 @@
 <mat-paginator [length]="dataCount" [hidePageSize]="true" [pageSize]="examsPerPage"></mat-paginator>
 </div>
 <p class="info-text mat-body-1" *ngIf="dataCount <= 0">Jeszcze nie ma zdefiniowanych badań!</p>
-<div style="right: 15px; bottom: 5px; position: fixed" >
-  <button
-    mat-fab
-    color="accent"
-    md-fab-bottom-right
-    aria-label="Dodaj badanie"
-    title="Dodaj" alt="Dodaj"
-    routerLink="../create">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>
-<div style="right: 85px; bottom: 5px; position: fixed">
-    <button
-      mat-fab
-      color="primary"
-      md-fab-bottom-right
-      aria-label="Odśwież"
-      title="Odśwież" alt="Odśwież"
-      (click)="loadExamsPage()">
-      <mat-icon>refresh</mat-icon>
-    </button>
-  </div>

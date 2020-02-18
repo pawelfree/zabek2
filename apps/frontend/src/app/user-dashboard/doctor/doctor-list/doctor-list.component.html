@@ -1,3 +1,17 @@
+<div>
+  <button
+    mat-icon-button    
+    aria-label="Dodaj badanie" title="Dodaj" alt="Dodaj"
+    routerLink="../create">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button
+    mat-icon-button        
+    aria-label="Odśwież" title="Odśwież" alt="Odśwież"
+    (click)="loadDoctorsPage()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
 <div [hidden]="dataCount <= 0" >
   <table mat-table [dataSource]='dataSource' class='mat-elevation-z2'>
     <ng-container matColumnDef="email">
@@ -30,26 +44,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <mat-paginator [length]="dataCount" [hidePageSize]="true" [pageSize]="doctorsPerPage"></mat-paginator>
-  <table>
-    <tr>
-      <td style="text-align: right;">
-        <button 
-          mat-fab color="accent" 
-          md-fab-bottom-right 
-          aria-label="Dodaj badanie" 
-          title="Dodaj" 
-          alt="Dodaj"
-          routerLink="../create">
-          <mat-icon>add</mat-icon>
-        </button>
-        &nbsp;
-        <button mat-fab color="primary" md-fab-bottom-right aria-label="Odśwież" title="Odśwież" alt="Odśwież"
-          (click)="loadDoctorsPage()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-      </td>
-    </tr>  
-  </table>
+
 </div>
 <p class="info-text mat-body-1" *ngIf="dataCount <= 0">
   Jeszcze nie ma zdefiniowanych lekarzy!
