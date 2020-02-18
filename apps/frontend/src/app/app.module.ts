@@ -27,8 +27,6 @@ import { FilesComponent } from './files/files.component';
 import { LoadingComponent } from './loading/loading.component';
 import { MessagesComponent } from './mesaages/messages.component';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.component';
  
 registerLocaleData(localePl, 'pl');
 
@@ -46,10 +44,8 @@ registerLocaleData(localePl, 'pl');
     FilesComponent,
     LoadingComponent,
     MessagesComponent,
-    VirtualScrollComponent,
   ],
   imports: [
-    ScrollingModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

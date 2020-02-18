@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_guards';
 import { Role } from '@zabek/data';
 import { ReportsComponent } from './reports/reports.component';
+import { VirtualScrollComponent } from '../virtual-scroll/virtual-scroll.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
   {   
     path: "feedbacks", 
     loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackModule)
+  },
+  {
+    path: 'virtual',
+    component: VirtualScrollComponent
   },
   {
     path: 'reports',

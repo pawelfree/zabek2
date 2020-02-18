@@ -10,9 +10,12 @@ import { StoreModule } from '@ngrx/store';
 import { userDashboardReducer } from './store/user-dashboard.reducer';
 import { UserEffects } from './store/user.effects';
 import { LabEffects } from './store/lab.effects';
+import { VirtualScrollComponent } from '../virtual-scroll/virtual-scroll.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
+    ScrollingModule,
     CommonModule, 
     AngularMaterialModule, 
     UserDashboardRoutingModule,
@@ -23,6 +26,7 @@ import { LabEffects } from './store/lab.effects';
   declarations: [
     ReportsComponent,
     SelectLabComponent,
+    VirtualScrollComponent
   ]
 })
 export class UserDashboardModule {}

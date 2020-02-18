@@ -32,6 +32,13 @@
             routerLinkActive="mat-accent"
             routerLink="/user/reports">Raporty</a>
       </li>
+
+      <li>
+        <a mat-button 
+            routerLinkActive="mat-accent"
+            routerLink="/user/virtual">Virtual</a>
+      </li>
+
       <li *ngIf="authorized(user.role, [ 'doctor' ])">
         <a mat-button 
             routerLinkActive="mat-accent"

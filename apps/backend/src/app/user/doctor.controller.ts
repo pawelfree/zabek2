@@ -26,7 +26,7 @@ export class DoctorController {
     private readonly emailService: EmailService,
     private readonly doctorService: DoctorService
   ) {}
-
+  
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Get()

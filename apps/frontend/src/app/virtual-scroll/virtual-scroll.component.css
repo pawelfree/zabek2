@@ -1,5 +1,5 @@
 cdk-virtual-scroll-viewport {
-  height: 100vh;
-  border: 1px;
-  border-color: black;
+  height: 25vh;
+  width: 100%;
+  border-style: solid;
 }
