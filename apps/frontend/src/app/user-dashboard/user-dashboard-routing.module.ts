@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_guards';
 import { Role } from '@zabek/data';
 import { ReportsComponent } from './reports/reports.component';
-import { VirtualScrollComponent } from '../virtual-scroll/virtual-scroll.component';
 
 const routes: Routes = [
   {
@@ -33,7 +32,7 @@ const routes: Routes = [
   },
   {
     path: 'virtual',
-    component: VirtualScrollComponent
+    loadChildren: () => import('./scroll-testing/scroll-testing.module').then(m => m.ScrollTestingModule)
   },
   {
     path: 'reports',

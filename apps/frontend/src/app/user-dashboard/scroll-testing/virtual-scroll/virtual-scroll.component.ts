@@ -1,9 +1,9 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Doctor } from '@zabek/data';
 import { BehaviorSubject, from } from 'rxjs';
-import { DoctorService } from '../_services';
 import { map, take, tap, scan, switchMap, distinct, toArray } from 'rxjs/operators';
+import { DoctorService } from '../../../_services';
 
 
 @Component({
