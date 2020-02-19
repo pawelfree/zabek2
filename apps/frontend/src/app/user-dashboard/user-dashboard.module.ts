@@ -12,10 +12,12 @@ import { UserEffects } from './store/user.effects';
 import { LabEffects } from './store/lab.effects';
 import { VirtualScrollComponent } from '../virtual-scroll/virtual-scroll.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { SearchSelectModule } from '../search-select';
 
 @NgModule({
   imports: [
     ScrollingModule,
+    SearchSelectModule,
     CommonModule, 
     AngularMaterialModule, 
     UserDashboardRoutingModule,
