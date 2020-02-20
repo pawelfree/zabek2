@@ -24,7 +24,8 @@ export class DoctorService {
     } 
     const findallQuery = this.userModel.find(options);
     const count = await this.userModel.countDocuments(findallQuery);
-    return await findallQuery.skip(pageSize * currentPage)
+    return await findallQuery
+                            .skip(pageSize * currentPage)
                             .limit(pageSize)
                             .populate('doctor')
                             .then((doctors: User[]) => ({ doctors, count }) );
@@ -33,7 +34,8 @@ export class DoctorService {
   async findAllDoctors(pageSize: number, currentPage: number): Promise<{ doctors: Doctor[]; count: number }>  {
     const findallQuery = this.doctorModel.find();
     const count = await this.doctorModel.countDocuments(findallQuery);
-    return await findallQuery.skip(pageSize * currentPage)
+    return await findallQuery.sort({lastName: 1, firstName: 1})
+                            .skip(pageSize * currentPage)
                             .limit(pageSize)
                             .then((doctors: User[]) => ({ doctors, count }) );
   }

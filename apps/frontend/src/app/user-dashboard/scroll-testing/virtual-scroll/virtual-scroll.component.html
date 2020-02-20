@@ -1,13 +1,12 @@
 <p>Virtual scroll works</p>
 
 <ng-container *ngIf="infinitedata$ | async as elements" >
-  <cdk-virtual-scroll-viewport itemSize="40" (scrolledIndexChange)="handler($event)" >
-    <li *cdkVirtualFor="let element of elements; let i = index" >
-      <h2>{{ i }}. {{ element.firstName }} {{ element.lastName }}</h2>
-      <p> {{ element.qualificationsNo }} </p>
+  <cdk-virtual-scroll-viewport itemSize="15" (scrolledIndexChange)="handler($event)" >
+    <li *cdkVirtualFor="let element of elements" style="height: 15px;">
+      <p style="height: 15px;">{{ element.lastName }} {{ element.firstName }} {{ element.qualificationsNo ? element.qualificationsNo : '' }} </p>
     </li>
 
-    <li *ngIf="theEnd">The End</li>
+    <li *ngIf="theEnd" style="height: 15px; font-size: small;">The End</li>
 
   </cdk-virtual-scroll-viewport>
 </ng-container>
