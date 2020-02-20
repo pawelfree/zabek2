@@ -33,7 +33,7 @@
             routerLink="/user/reports">Raporty</a>
       </li>
 
-      <li>
+      <li *ngIf="authorized(user.role, [ 'sadmin' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
             routerLink="/user/virtual">Virtual</a>

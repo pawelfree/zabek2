@@ -32,7 +32,7 @@ export class AutocompleteComponent implements OnInit {
     }
 
     const search = (term: string): Observable<OptionEntry[]> => {
-      return this.doctorService.getDoctors(20,0, {sort: '-lastNeme-firstName', term})
+      return this.doctorService.getDoctors(20,0, {sort: 'lastNeme-,firstName-', term})
         .pipe(
           map(result => result.doctors),
           map(list => list.map((e: Doctor) => ({

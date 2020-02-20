@@ -36,12 +36,11 @@ export class DoctorController {
     @Query('term') term: string = '',
     @Query('sort') sort: string = ''
   ) {
-    console.log('term', term);
-    console.log('sort', sort);
-    
     return await this.doctorService.findAllDoctors(
       pagesize,
-      page
+      page,
+      term,
+      sort
     );
   }
 
@@ -63,7 +62,12 @@ export class DoctorController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Get(':id')
+  //TODO przerobic param na pipe
   async getDoctor(@Param('id') id: string) {
+    const checkForDoctorId = new RegExp("^[0-9a-fA-F]{24}$")
+    if (!checkForDoctorId.test(id)) {
+      throw new BadRequestException('Niepoprawny identyfikator lekarza.')
+    }
     return this.doctorService.findById(id);
   }
 
