@@ -7,7 +7,7 @@ import { ReportsComponent } from './reports/reports.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'doctor',
+    redirectTo: 'exam',
     pathMatch: 'full'
   },
   {

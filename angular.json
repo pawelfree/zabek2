@@ -110,7 +110,8 @@
           "options": {
             "jestConfig": "apps/frontend/jest.config.js",
             "tsConfig": "apps/frontend/tsconfig.spec.json",
-            "setupFile": "apps/frontend/src/test-setup.ts"
+            "setupFile": "apps/frontend/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       }
@@ -191,7 +192,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/backend/jest.config.js",
-            "tsConfig": "apps/backend/tsconfig.spec.json"
+            "tsConfig": "apps/backend/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -216,7 +218,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/util/jest.config.js",
-            "tsConfig": "libs/util/tsconfig.spec.json"
+            "tsConfig": "libs/util/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
