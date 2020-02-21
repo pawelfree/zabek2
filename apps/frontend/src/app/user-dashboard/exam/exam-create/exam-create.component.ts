@@ -72,19 +72,21 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
   private page = 0;
   private pageLen = 10;
   user: User = null;
-  // TODO: to powinna być lista zarządzalna przez superadmina lub admina per placówka?
   examTypes: string[] = [
-    'AP czaszki',
-    'cefalometryczne',
     'pantomograficzne',
-    'pantomograficzne i cefalometryczne',
-    'pantomograficzne z opisem',
-    'punktowe',
-    'tomografia 5x5',
-    'tomografia 8x9 i tomografia 12x9 (zatoki)',
-    'tomografia 12x9',
-    'tomografia 12x9 i pantomograficzne',
-    'tomografia 16x9',
+    'wewnątrzustne',
+    'cefalometryczne',
+    'cbct 5x5',
+    'cbct 12x9',
+    'cbct 16x9',
+    'cbct 8x9',
+    'sektorowe',
+    'zatok przynosowych',
+    'ssż w zwarciu i rozwarciu',
+    'ssż w zwarciu',
+    'ssż w rozwarciu',
+    'skrzydłowo-zgryzowe panto',
+    'PA/AP',
     'inne'
   ];
 
