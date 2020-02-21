@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Doctor } from '@zabek/data';
 import { BehaviorSubject, from } from 'rxjs';
-import { map, take, tap, scan, switchMap, distinct, toArray } from 'rxjs/operators';
+import { map, take, tap, scan, switchMap, distinct, toArray, refCount } from 'rxjs/operators';
 import { DoctorService } from '../../../_services';
 
 
@@ -57,7 +57,7 @@ export class VirtualScrollComponent {
     }
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
-    if (end === total) {
+    if (end >= total) {
       this.getBatch();
     }
   }

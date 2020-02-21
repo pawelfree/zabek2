@@ -32,8 +32,9 @@ export class DoctorService {
   }
 
   async findAllDoctors(pageSize: number, currentPage: number, term: string, sort: string): Promise<{ doctors: Doctor[]; count: number }>  {
-    const search = term ? { $or: [  {firstName: { $regex: term, $options: 'i'} }, 
-                                    {lastName: { $regex: term, $options: 'i'}} ]} : {}
+    const item = term.replace(/\s\s+/g, ' ').split(' ')[0];
+    const search = item ? { $or: [ {firstName: { $regex: item, $options: 'i'}}, 
+                                   {lastName: { $regex: item, $options: 'i'}} ]} : {}
     
     const findallQuery = this.doctorModel.find(search);
     const count = await this.doctorModel.countDocuments(findallQuery);
