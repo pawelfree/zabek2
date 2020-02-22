@@ -47,17 +47,17 @@ export class DoctorRegisterComponent implements OnInit {
         asyncValidators: [ userEmailValidator.validate.bind(userEmailValidator) ],
         updateOn: 'blur'
       }),
-      firstName: new FormControl({value: doctor ? doctor.firstName : null, disabled: false}, {
+      firstName: new FormControl(null, {
         validators: [ Validators.required,
                       Validators.minLength(2),
                       Validators.maxLength(25)]
       }),
-      lastName: new FormControl({value: doctor? doctor.lastName : null, disabled: false}, {
+      lastName: new FormControl(null, {
         validators: [ Validators.required,
                       Validators.minLength(2),
                       Validators.maxLength(25)]
       }),    
-      qualificationsNo: new FormControl({value: doctor ? doctor.qualificationsNo : null, disabled: false }, {
+      qualificationsNo: new FormControl(null, {
         validators: [ Validators.required, 
                       Validators.minLength(7), 
                       Validators.maxLength(7), 
@@ -65,7 +65,7 @@ export class DoctorRegisterComponent implements OnInit {
         asyncValidators: [ userPwzValidator.validate.bind(userPwzValidator) ],
         updateOn: 'blur'
       }),  
-      pesel: new FormControl({value: doctor ? doctor.pesel : null, disabled: false}, {
+      pesel: new FormControl(null, {
         validators: [  
           Validators.required,
           Validators.minLength(11), 
@@ -74,7 +74,7 @@ export class DoctorRegisterComponent implements OnInit {
           asyncValidators: [ userPeselValidator.validate.bind(userPeselValidator)],
           updateOn: 'blur'         
       }),
-      nip: new FormControl({value: doctor ? doctor.nip : null, disabled: false}, {
+      nip: new FormControl(null, {
         validators: [         
           Validators.minLength(10),
           Validators.maxLength(10),
@@ -82,20 +82,20 @@ export class DoctorRegisterComponent implements OnInit {
         asyncValidators: [ userNipValidator.validate.bind(userNipValidator) ],
         updateOn: 'blur'         
       }),
-      officeName: new FormControl({value: doctor ? doctor.officeName : null, disabled: false}, {
+      officeName: new FormControl(null, {
         validators: [ Validators.required,
                       Validators.minLength(5)]
       }),   
-      officeAddress: new FormControl({value: doctor ? doctor.officeAddress : null, disabled: false}, {
+      officeAddress: new FormControl(null, {
         validators: [ Validators.required,
                       Validators.minLength(5)]
       }),
-      sameAddresses: new FormControl({value : doctor ? doctor.officeAddress === doctor.officeCorrespondenceAddress : true, disabled: false}), 
-      officeCorrespondenceAddress: new FormControl({value: doctor ? doctor.officeCorrespondenceAddress : null, disabled: false}),
-      examFormat: new FormControl({value: doctor ? doctor.examFormat : 'jpeg', disabled: false}, {
+      sameAddresses: new FormControl(true), 
+      officeCorrespondenceAddress: new FormControl(null),
+      examFormat: new FormControl('jpeg', {
         validators: [ Validators.required]
       }),    
-      tomographyWithViewer: new FormControl({value: doctor ? doctor.tomographyWithViewer : false, disabled: false}),    
+      tomographyWithViewer: new FormControl(false),    
       password1: new FormControl(null, {
         validators: [ Validators.required, 
                       Validators.minLength(8),
