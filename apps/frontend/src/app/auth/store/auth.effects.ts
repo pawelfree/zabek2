@@ -149,6 +149,36 @@ export class AuthEffects {
     })
   ));
 
+  authRenewToken$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.renewTokenRequest),
+    switchMap(_ => {
+      return this.http.get<User>(BACKEND_URL + 'authenticate/renew').pipe(
+        map((userData: User) => {
+          if (userData) {
+            this.authService.clearLogoutTimer();
+            this.authService.setLogoutTimer(userData.expiresIn * 1000);
+            const expirationDate = new Date(new Date().getTime() + userData.expiresIn * 1000);
+            const userTemplate = {
+              ...userData, 
+              token: '',
+              password: '',
+              _token: userData.token,
+              _tokenExpirationDate: expirationDate };
+            delete userTemplate.token
+            const user = Object.assign(new User(), userTemplate);
+            localStorage.setItem('currentUser', JSON.stringify(user));      
+            return AuthActions.renewTokenSuccess({user});        
+          } else {
+            return { type: 'DUMMY' }
+          }
+        }),
+        catchError(_ => {
+          return of({ type: 'DUMMY' });
+        })
+      )
+    })
+  ));
+
   authLogout$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.logout),
     tap(() => {

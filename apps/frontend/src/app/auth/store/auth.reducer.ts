@@ -24,6 +24,8 @@ const _authReducer = createReducer(initialState,
   on(AuthActions.sendPasswordResetTokenRequest, (state, {email}) => ({...state, loading: true })),
   on(AuthActions.passwordResetTokenRequestSent, (state) => ({...state, loading: false})),
   on(AuthActions.sendPasswordResetRequest,(state, {token, password}) => ({...state, loading: true})),
+  on(AuthActions.renewTokenRequest,state => state),
+  on(AuthActions.renewTokenSuccess,(state, {user}) => ({...state, user})),
   on(AuthActions.rulesAccepted, (state) => {
       const user = Object.assign(new User(), {...state.user, rulesAccepted: true});
       return {...state, loading: false, user}

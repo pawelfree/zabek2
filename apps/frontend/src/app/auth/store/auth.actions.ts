@@ -14,3 +14,5 @@ export const sendPasswordResetTokenRequest = createAction('[Auth] Send password 
 export const passwordResetTokenRequestSent = createAction('[Auth] Password reset token request sent');
 export const sendPasswordResetRequest = createAction('[Auth] Send password reset request', props<{token: string, password: string}>());
 export const rulesAccepted = createAction('[Auth] Rules accepted');
+export const renewTokenRequest = createAction('[Auth] Renew auth token request');
+export const renewTokenSuccess = createAction('[Auth] Renew auth token success',props<{user: User}>());

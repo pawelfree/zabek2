@@ -6,13 +6,17 @@ import * as AuthActions from './store/auth.actions';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
   private tokenExpirationTimer: any;
+  private tokenRenewalTimer: any
 
-  constructor(
-    private readonly store: Store<AppState>
-  ) {}
+  constructor(private readonly store: Store<AppState>) {}
 
   setLogoutTimer(expirationDuration: number) {
-    this.tokenExpirationTimer = setTimeout(() => {
+    const tokenRenewalTime = expirationDuration - (expirationDuration * 0.1);
+    this.tokenRenewalTimer = setTimeout(_ =>{
+      this.store.dispatch(AuthActions.renewTokenRequest());
+    }, tokenRenewalTime);
+    
+    this.tokenExpirationTimer = setTimeout(_ => {
       this.store.dispatch(AuthActions.logout());  
     }, expirationDuration); 
   }
@@ -21,7 +25,11 @@ export class AuthenticationService {
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
+    if (this.tokenRenewalTimer) {
+      clearTimeout(this.tokenRenewalTimer);
+    }
     this.tokenExpirationTimer = null;
+    this.tokenRenewalTimer = null;
   }
   
 }

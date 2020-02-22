@@ -5,7 +5,8 @@ import { Controller,
         InternalServerErrorException, 
         Request, 
         Body,
-        Param} from "@nestjs/common";
+        Param,
+        Get} from "@nestjs/common";
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../shared/security/roles.decorator';
 import { Role } from '@zabek/data';
@@ -68,8 +69,16 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('authenticate')
   async authenticate(@Request() req) {
-    const userData = await this.authService.login(req.user);
-    return userData;
+    return  this.authService.login(req.user);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('authenticate/renew')
+  async renewAuthToken(@Request() req){
+    const user = await this.userService.findById(req.user._id)
+    if (user) {
+      return this.authService.login(user);
+    }
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -90,6 +99,7 @@ export class AuthController {
             _id: user._id,
             password: await this.authService.hash(changePasswordDto.newPassword)
           });
+          //TODO poprawic bo jak zmieni na to samo haslo to moze byc problem z nModified
           if ( n !== 1 || nModified !== 1 || ok !== 1 ) {
             error = new InternalServerErrorException('Nieznany błąd');
           } 

@@ -16,12 +16,16 @@ export class UserService {
     return await this.userModel.findOne({doctor})
   }
 
+  async findByEmailForLogin(email: string): Promise<User> {
+    return await this.userModel.findOne({email}).populate('lab').populate('doctor').select('-__v');     
+  } 
+
   async findByEmail(email: string, _id: string): Promise<User> {
     const obj = { email }
     if (_id) {
       obj['_id'] = { $ne: _id };
     }
-    return await this.userModel.findOne(obj); 
+    return await this.userModel.findOne(obj).populate('lab').populate('doctor').select('-password -__v'); 
   }
 
   findForRegistrationByEmail(email: string): Promise<User> {
