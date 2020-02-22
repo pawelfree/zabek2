@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-title>Zaloguj się ...</mat-card-title>
   <mat-card-content>
-    <form [formGroup]="loginForm" autocomplete="on" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+    <form [formGroup]="loginForm" autocomplete="on" (ngSubmit)="onSubmit()">
       <div class="example-container">
         <mat-form-field>
           <input
