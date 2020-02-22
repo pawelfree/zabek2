@@ -1,5 +1,5 @@
 <mat-card>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-card-content>
       <mat-form-field>
         <input matInput type="text" formControlName="email" [value]="form.get('email').value | lowercase"

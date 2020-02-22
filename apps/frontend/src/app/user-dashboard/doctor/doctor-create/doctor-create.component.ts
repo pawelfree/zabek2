@@ -21,6 +21,7 @@ export class DoctorCreateComponent implements OnInit {
   private mode: 'create' | 'edit';
   private lab: Lab;
   private user: User;
+  private doctor: Doctor;
 
   sameAddresses$: Observable<boolean>;
 
@@ -39,91 +40,78 @@ export class DoctorCreateComponent implements OnInit {
       tap(user => this.lab = user.lab)
     ).subscribe();
 
-    const userEmailValidator = new UserEmailValidator(this.doctorService);
-    const userPwzValidator = new UserPwzValidator(this.doctorService);
-    const userPeselValidator = new UserPeselValidator(this.doctorService);
-    const userNipValidator = new UserNipValidator(this.doctorService);
-
     this.user = this.route.snapshot.data.doctor;
-    const sameAddresses = this.user ? (this.user.doctor.officeAddress === this.user.doctor.officeCorrespondenceAddress ? true : false) : true;
+    this.doctor = this.user ? this.user.doctor ? this.user.doctor : null : null;
+
+    const userEmailValidator = new UserEmailValidator(this.doctorService, this.user);
+    const userPwzValidator = new UserPwzValidator(this.doctorService, this.doctor);
+    const userPeselValidator = new UserPeselValidator(this.doctorService, this.doctor);
+    const userNipValidator = new UserNipValidator(this.doctorService, this.doctor);
+
+    const sameAddresses = this.doctor ? (this.doctor.officeAddress === this.doctor.officeCorrespondenceAddress ? true : false) : true;
 
     this.form = new FormGroup({
-      email: new FormControl(null, {
+      email: new FormControl({value: this.user ? this.user.email : null, disabled: this.user ? true : false}, {
         validators: [Validators.required, Validators.email],
-        asyncValidators: [ this.user ? userEmailValidator.validate.bind(userEmailValidator, this.user) : userEmailValidator.validate.bind(userEmailValidator) ],
+        asyncValidators: [ userEmailValidator.validate.bind(userEmailValidator) ],
         updateOn: 'blur'
       }),
-      firstName: new FormControl(null, {
+      firstName: new FormControl({value: this.doctor ? this.doctor.firstName : null, disabled: false}, {
         validators: [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(25)
         ]
       }),
-      lastName: new FormControl(null, {
+      lastName: new FormControl({value: this.doctor ? this.doctor.lastName : null, disabled: false}, {
         validators: [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(25)
         ]
       }),
-      qualificationsNo: new FormControl(null, {
+      qualificationsNo: new FormControl({value: this.doctor ? this.doctor.qualificationsNo : null, disabled: false}, {
         validators: [ Validators.required,
                       Validators.minLength(7),
                       Validators.maxLength(7),
                       CustomValidator.patternMatch(/^[0-9]{7}$/, { onlyNumbers: true })],
-        asyncValidators: [ this.user ? userPwzValidator.validate.bind(userPwzValidator, this.user.doctor) : userPwzValidator.validate.bind(userPwzValidator) ],
+        asyncValidators: [ userPwzValidator.validate.bind(userPwzValidator) ],
         updateOn: 'blur'
       }),
-      pesel: new FormControl(null, {
-        validators: [  
+      pesel: new FormControl({value: this.doctor ? this.doctor.pesel : null, disabled: false}, {
+        validators: [ 
           Validators.required,
           Validators.minLength(11), 
           Validators.maxLength(11), 
           CustomValidator.patternMatch(/^[0-9]{11}$/, {onlyNumbers : true})],
-          asyncValidators: [ this.user ? userPeselValidator.validate.bind(userPeselValidator,this.user.doctor) : userPeselValidator.validate.bind(userPeselValidator)  ],
+          asyncValidators: [ userPeselValidator.validate.bind(userPeselValidator) ],
           updateOn: 'blur'
 
       }),
-      nip: new FormControl(null, {
+      nip: new FormControl({value: this.doctor ? this.doctor.nip : null, disabled: false}, {
         validators: [         
           Validators.minLength(10),
           Validators.maxLength(10),
           CustomValidator.patternMatch(/^[0-9]{10}$/, { onlyNumbers: true })],
-        asyncValidators: [ this.user ? userNipValidator.validate.bind(userNipValidator, this.user.doctor) : userNipValidator.validate.bind(userNipValidator) ],
+        asyncValidators: [ userNipValidator.validate.bind(userNipValidator) ],
         updateOn: 'blur'
       }),
-      officeName: new FormControl(null, {
+      officeName: new FormControl({value: this.doctor ? this.doctor.officeName : null, disabled: false}, {
         validators: [Validators.required, Validators.minLength(5)]
       }),
-      officeAddress: new FormControl(null, {
+      officeAddress: new FormControl({value: this.doctor ? this.doctor.officeAddress : null, disabled: false}, {
         validators: [Validators.required, Validators.minLength(5)]
       }),
       sameAddresses: new FormControl(sameAddresses),
       officeCorrespondenceAddress: new FormControl(null),
-      examFormat: new FormControl('jpeg', {
+      examFormat: new FormControl({value: this.doctor ? this.doctor.examFormat : 'jpeg', disabled: false}, {
         validators: [Validators.required]
       }),
-      tomographyWithViewer: new FormControl(false)
+      tomographyWithViewer: new FormControl({value: this.doctor ? this.doctor.tomographyWithViewer : false, disabled: false})
     });
 
     if (this.user) {      
       this.mode = 'edit';
-      this.form.setValue({
-        email: this.user.email,
-        firstName: this.user.doctor.firstName,
-        lastName: this.user.doctor.lastName,
-        qualificationsNo: this.user.doctor.qualificationsNo,
-        officeName: this.user.doctor.officeName,
-        sameAddresses,
-        officeAddress: this.user.doctor.officeAddress,
-        officeCorrespondenceAddress: this.user.doctor.officeCorrespondenceAddress,
-        examFormat: this.user.doctor.examFormat,
-        tomographyWithViewer: this.user.doctor.tomographyWithViewer,
-        nip: this.user.doctor.nip,
-        pesel: this.user.doctor.pesel
-      });
-      this.form.controls.email.disable();
       this.form.controls.email.clearValidators();
     } else {
       this.mode = 'create';
