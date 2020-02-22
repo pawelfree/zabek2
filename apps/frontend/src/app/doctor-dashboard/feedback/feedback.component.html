@@ -1,6 +1,6 @@
 <div class="feedback-main-div">
   <mat-card style="width: 33%;">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
 
       <mat-card-content>
         <mat-form-field class="feedback-form-width">

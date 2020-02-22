@@ -1,5 +1,5 @@
 <mat-card>
-  <form [formGroup]="form" (submit)="onSaveExam()">
+  <form [formGroup]="form" (submit)="onSaveExam()" (keydown.enter)="$event.preventDefault()">
     <mat-form-field>
       <input matInput formControlName="examinationDate" [matDatepicker]="examinationDatePicker" placeholder="Data badania"/>
       <mat-datepicker-toggle matSuffix [for]="examinationDatePicker"
