@@ -1,5 +1,5 @@
 <mat-card>
-  <form [formGroup]="form" (submit)="onSaveLab()">
+  <form [formGroup]="form">
     <mat-form-field>
       <input matInput type="text" formControlName="name" placeholder="Nazwa pracowni">
       <mat-error *ngIf="form.get('name').invalid">Wprowadź nazwę pracowni (5 - 100 znaków).</mat-error>
@@ -12,7 +12,7 @@
         <input matInput type="text" formControlName="address" placeholder="Adres pracowni">
         <mat-error *ngIf="form.get('address').invalid">Wprowadź adres pracowni (min. 20 znaków).</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid" routerLink="/user/lab/list">Zapisz pracownię</button>
+    <button mat-raised-button color="accent" type="button" (click)="onSaveLab()" [disabled]="form.invalid" routerLink="/user/lab/list">Zapisz pracownię</button>
     <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/lab/list">Anuluj</button>
   </form>
 </mat-card>

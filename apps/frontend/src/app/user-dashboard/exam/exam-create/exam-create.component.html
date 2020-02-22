@@ -1,5 +1,5 @@
 <mat-card>
-  <form [formGroup]="form" (submit)="onSaveExam()">
+  <form [formGroup]="form">
     <mat-form-field>
       <input matInput formControlName="examinationDate" [matDatepicker]="examinationDatePicker" placeholder="Data badania"/>
       <mat-datepicker-toggle matSuffix [for]="examinationDatePicker"
@@ -104,7 +104,13 @@
       <mat-error *ngIf="form.get('sendEmailTo').invalid">Wprowadź email lekarza, na który ma zostać wysłane powiadomienie o badaniu do pobrania.</mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid || (mode ==='edit' && user.role === 'user')">Zapisz badanie</button>
+    <button mat-raised-button 
+            color="accent" 
+            type="button" 
+            (click)="onSaveExam()"
+            [disabled]="form.invalid || (mode ==='edit' && user.role === 'user')">
+      Zapisz badanie
+    </button>
     <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/exam/list">Anuluj</button>
   </form>
 </mat-card>

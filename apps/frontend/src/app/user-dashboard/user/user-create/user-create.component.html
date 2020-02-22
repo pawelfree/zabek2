@@ -1,5 +1,5 @@
 <mat-card>
-  <form [formGroup]="form" (submit)="onSaveUser()">
+  <form [formGroup]="form">
     <mat-form-field>
       <input matInput 
         type="email" 
@@ -40,7 +40,12 @@
     <input matInput type="password" formControlName="password2" placeholder="Potwierdzenie hasła">
     <mat-error *ngIf="form.get('password2').hasError('mustMatch')">Hasła nie są takie same.</mat-error>
   </mat-form-field>
-  <button mat-raised-button color="accent" type="submit" [disabled]="form.invalid">Zapisz użytkownika</button>
+  <button mat-raised-button 
+          color="accent" 
+          type="button" (click)="onSaveUser()"
+          [disabled]="form.invalid">
+    Zapisz użytkownika
+  </button>
   <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/user/list">Anuluj</button>
   </form>
 </mat-card>
