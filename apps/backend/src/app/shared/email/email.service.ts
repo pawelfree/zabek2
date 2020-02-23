@@ -130,7 +130,7 @@ export class EmailService {
     }
   }
 
-  async sendAccountNotification(email: string, lab_id: string) {
+  async sendAccountNotification(email: string, lab_id: string, token: string) {
     if (this.API_KEY === 'local') {
       console.log('Send exam notification email for', email);
       return true;
@@ -143,7 +143,7 @@ export class EmailService {
           }],
           "dynamic_template_data": {
             "system_name": this.SYSTEM_NAME,
-            "app_server": this.APP_SERVER + '/register/register/' + lab_id + '?email=' + email
+            "app_server": this.APP_SERVER + '/register/register/' + lab_id + '?email=' + email + '&token=' + token
           }
         }],
         "from": {

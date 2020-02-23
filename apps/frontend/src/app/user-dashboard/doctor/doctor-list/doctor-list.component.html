@@ -39,8 +39,11 @@
             check_circle
           </mat-icon> 
         </button>
-        <button mat-icon-button [routerLink]="['../edit', element._id]" color="primary" title="Edytuj" alt="Edytuj">
-          <mat-icon aria-label="Edytuj">edit</mat-icon>
+        <button 
+            mat-icon-button [routerLink]="['../edit', element._id]" color="primary" 
+            [title]="(user$ | async)?. role === 'user' ? 'Podgląd' :  'Edytuj' ">
+          <mat-icon *ngIf="(user$ | async)?. role !== 'user'" aria-label="Edytuj">edit</mat-icon>
+          <mat-icon *ngIf="(user$ | async)?. role === 'user'" aria-label="Szczegóły">remove_red_eye</mat-icon>
         </button>
       </td>
     </ng-container>

@@ -19,8 +19,10 @@ export class DoctorRegisterResolver implements Resolve<[User, Lab]> {
    resolve(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot) {    
       const lab_id = route.paramMap.get('id');
       const email = route.queryParamMap.get('email');      
+      const token = route.queryParams.get('token')
       return combineLatest([  email ? this.http.get<User>(BACKEND_URL + 'user/register/' + email) : of(null), 
-                              lab_id ? this.http.get<Lab>(BACKEND_URL + 'lab/' + lab_id) : of(null)])
+                              lab_id ? this.http.get<Lab>(BACKEND_URL + 'lab/' + lab_id) : of(null),
+                              of(token)])
                   .pipe(catchError( err => of(null)));
    }
 

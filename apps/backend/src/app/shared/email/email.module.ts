@@ -6,6 +6,7 @@ import { ExamSchema, UserSchema } from '@zabek/data';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserService } from '../../user/user.service';
 import { ExamService } from '../../exam/exam.service';
+import { AuthService } from '../security/auth.service';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { ExamService } from '../../exam/exam.service';
     ConfigService,
     EmailService,
     ExamService,
-    UserService
+    UserService,
+    AuthService
   ],
   controllers: [
     EmailController

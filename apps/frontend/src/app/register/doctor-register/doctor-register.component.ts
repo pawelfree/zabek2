@@ -21,6 +21,7 @@ export class DoctorRegisterComponent implements OnInit {
   mode: 'register' | 'confirm' = 'register';
   private user: User = null;
   private lab: Lab = null;
+  private token: string = null;
   
   constructor(
     private readonly router: Router,
@@ -31,8 +32,8 @@ export class DoctorRegisterComponent implements OnInit {
 
   ngOnInit() {
     if (this.route.snapshot.data.data) {
-      [this.user, this.lab] = this.route.snapshot.data.data;
-      this.mode = this.user ? 'confirm' : 'register'
+      [this.user, this.lab, this.token] = this.route.snapshot.data.data;
+      this.mode = this.user ? 'confirm' : 'register';
     }
     const doctor: Doctor = this.user ? this.user.doctor : null;
 
@@ -187,7 +188,7 @@ export class DoctorRegisterComponent implements OnInit {
         err => this.store.dispatch(AppActions.raiseError({message: err, status: 'Rejestracja lekarza.'}))
       );
     } else {
-      this.doctorService.updateRegisteredDoctor(newUser).pipe(
+      this.doctorService.updateRegisteredDoctor(newUser, this.token).pipe(
 
       ).subscribe(
         res => this.goOut(),

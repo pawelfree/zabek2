@@ -32,7 +32,7 @@ export class AuthController {
     if (!body || !body.password) {
       throw new BadRequestException('EMPTY_PASSWORD');
     }
-    const {token, error} = this.authService.decodeResetPasswordToken(encodedToken);
+    const {token, error} = this.authService.decodeToken(encodedToken, 'reset');
 
     if (error) {
       if (error.name.includes('TokenExpiredError')) {
@@ -57,7 +57,7 @@ export class AuthController {
     if (!body || !body.email || ! isValidEmail(body.email)) {
       throw new BadRequestException('EMPTY_EMAIL')
     }
-    const token: string = await this.authService.resetPasswordToken(body.email);
+    const token: string = await this.authService.encodeToken(body.email, 'reset');
     if (token) {
       this.mailService.sendResetTokenSuccesEmail(body.email,token);
     } else {

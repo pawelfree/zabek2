@@ -54,8 +54,9 @@ export class DoctorService {
     return this.http.get<User>(USER_BACKEND_URL + id);
   }
 
-  updateRegisteredDoctor(doctor: User) {
-    return this.http.put<Doctor>(USER_BACKEND_URL + "updateregister/"+doctor._id, doctor);
+  updateRegisteredDoctor(doctor: User, token: string) {
+    const params = new HttpParams().set('token', token);
+    return this.http.put<Doctor>(USER_BACKEND_URL + "updateregister/"+doctor._id, doctor, {params});
   }
 
   getDoctor(id: string): Observable<Doctor> {
@@ -63,9 +64,8 @@ export class DoctorService {
   }
 
   isEmailTaken(email: string, _id: string): Observable<boolean> {
-    let params = new HttpParams();
-    params = params.append('user', '' + _id);
-    return this.http.get<boolean>(USER_BACKEND_URL + 'emailtaken/' + email);
+    const params = new HttpParams().set('user', '' + _id);
+    return this.http.get<boolean>(USER_BACKEND_URL + 'emailtaken/' + email, _id === null ? {} : {params} );
   }
 
   isPwzTaken(pwz: string, _id: string): Observable<boolean> {

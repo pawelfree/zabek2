@@ -138,8 +138,17 @@ export class UserController {
   }
 
   @Put('/updateregister/:id')
-  async updateRegisteredUser(@Body() userToUpdate: User) {
-    const user: User = await this.userService.findById(userToUpdate._id);
+  async updateRegisteredUser(@Body() userToUpdate: User, @Query('token') encodedToken: string) {
+    const {token, error} = this.authService.decodeToken(encodedToken, 'register');
+    if (error) {
+      if (error.name.includes('TokenExpiredError')) {
+        throw new BadRequestException('Upłynął termin ważności (tokenu) rejestracji lekarza.');
+      }
+      else {
+        throw new BadRequestException('Niepoprawny token rejestracji lekarza.', error.name + ' | ' + error.message);
+      }
+    }
+    const user: User = await this.userService.findById(token['_id']);
     if (!user) {
       throw new BadRequestException('Użytkownik nie jest jeszcze zarejestrowany.');
     }

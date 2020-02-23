@@ -17,7 +17,7 @@
             routerLinkActive="mat-accent"
             routerLink="/files">Pliki</a>
       </li>
-      <li *ngIf="authorized(user.role, ['admin', 'user'])">
+      <li *ngIf="authorized(user.role, ['admin', 'user' ])">
         <a mat-button 
             routerLinkActive="mat-accent"
             routerLink="/user/exam">Badania</a>

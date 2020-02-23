@@ -5,6 +5,7 @@ import { RolesGuard } from '../security/roles.guard';
 import { EmailService } from './email.service';
 import { ExamService } from '../../exam/exam.service';
 import { UserService } from '../../user/user.service';
+import { AuthService } from '../security/auth.service';
 
 
 @Controller('email')
@@ -12,7 +13,8 @@ export class EmailController {
 
   constructor(private readonly emailService: EmailService,
               private readonly examService: ExamService,
-              private readonly userService: UserService) {}
+              private readonly userService: UserService,
+              private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('admin', 'user')
@@ -37,7 +39,7 @@ export class EmailController {
               return true;
             }
           } else {
-            await this.emailService.sendAccountNotification(user.email, user.lab._id);
+            await this.emailService.sendAccountNotification(user.email, user.lab._id, await this.authService.encodeToken(user.email,'register'));
             await this.examService.registerSentNotification(exam._id);            
             return true;      
           }

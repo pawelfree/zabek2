@@ -12,21 +12,31 @@ export class AuthService {
     private readonly configService: ConfigService
   ) {}
 
-  decodeResetPasswordToken(encodedToken: string): {token: Object, error: {name: string, message: string}} {
+  decodeToken(encodedToken: string, type: 'reset' | 'register' = 'reset'): {token: Object, error: {name: string, message: string}} {
     let error = null;
     let token = null;
     try {
       token = jsonwebtoken.verify(encodedToken, this.configService.get('JWT_PRIVATE_KEY') );
+      if (token.type !== type) {
+        token = null,
+        error = { name: 'Błąd weryfikacji tokena.', message: 'To nie jest token typu ' + type + '.'}
+      }
     } catch(err) {
       error = err;
     }
     return { token, error };
   }
+  
+  encodeToken(email: string, type: 'reset' | 'register' = 'reset') {
 
-  resetPasswordToken(email: string) {
+    let expiresIn = +this.configService.get('RESET_TOKEN_EXPIRES_IN');
+    if (type === 'reset') {
+      expiresIn = +this.configService.get('REGISTER_TOKEN_EXPIRES_IN');
+    }
+
     return this.userService.findByEmail(email,null)
       .then(async(user) => {
-        return await jsonwebtoken.sign({ _id: user._id, email: user.email }, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn: +this.configService.get('RESET_TOKEN_EXPIRES_IN') });
+        return await jsonwebtoken.sign({ _id: user._id, email: user.email, type }, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn });
       })
       .catch((err) => {
         return  null;
