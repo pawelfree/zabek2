@@ -188,9 +188,7 @@ export class DoctorRegisterComponent implements OnInit {
         err => this.store.dispatch(AppActions.raiseError({message: err, status: 'Rejestracja lekarza.'}))
       );
     } else {
-      this.doctorService.updateRegisteredDoctor(newUser, this.token).pipe(
-
-      ).subscribe(
+      this.doctorService.updateRegisteredDoctor(newUser, this.token).subscribe(
         res => this.goOut(),
         err => this.store.dispatch(AppActions.raiseError({message: err, status: 'Aktualizacja lekarza.'}))
       )

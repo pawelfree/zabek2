@@ -62,6 +62,10 @@
             <mat-icon>person</mat-icon>
             <span>Zmień hasło</span>
           </button>
+          <button *ngIf="authorized(user.role, [ 'doctor' ])" mat-menu-item (click)="openDoctorEditDialog()">
+            <mat-icon>edit</mat-icon>
+            <span>Moje dane</span>
+          </button>
         </mat-menu>  
       </li>
     </ul>

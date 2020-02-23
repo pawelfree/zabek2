@@ -74,7 +74,7 @@ export class DoctorCreateComponent implements OnInit {
           Validators.maxLength(25)
         ]
       }),
-      qualificationsNo: new FormControl({value: this.doctor ? this.doctor.qualificationsNo : null, disabled: this.doctor.qualificationsNo ? true : false}, {
+      qualificationsNo: new FormControl({value: this.doctor ? this.doctor.qualificationsNo : null, disabled: this.doctor?.qualificationsNo ? true : false}, {
         validators: [ Validators.required,
                       Validators.minLength(7),
                       Validators.maxLength(7),
@@ -82,7 +82,7 @@ export class DoctorCreateComponent implements OnInit {
         asyncValidators: [ userPwzValidator.validate.bind(userPwzValidator) ],
         updateOn: 'blur'
       }),
-      pesel: new FormControl({value: this.doctor ? this.doctor.pesel : null, disabled: this.doctor.pesel ? true : false}, {
+      pesel: new FormControl({value: this.doctor ? this.doctor.pesel : null, disabled: this.doctor?.pesel ? true : false}, {
         validators: [ 
           Validators.required,
           Validators.minLength(11), 

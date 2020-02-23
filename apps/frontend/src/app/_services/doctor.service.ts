@@ -50,8 +50,16 @@ export class DoctorService {
     return this.http.put<User>(USER_BACKEND_URL + doctor._id, doctor)
   }
 
+  updateUserMe(doctor: User) {
+    return this.http.put<User>(USER_BACKEND_URL + 'me/' + doctor._id, doctor)
+  }
+
   getOnlineDoctor(id: string) {
     return this.http.get<User>(USER_BACKEND_URL + id);
+  }
+
+  getOnlineDoctorMe() {
+    return this.http.get<User>(USER_BACKEND_URL + 'me');
   }
 
   updateRegisteredDoctor(doctor: User, token: string) {

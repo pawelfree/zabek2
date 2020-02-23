@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterListComponent } from './register-list/register-list.component';
 import { DoctorRegisterComponent } from './doctor-register/doctor-register.component';
 import { DoctorRegisterRoutingModule } from './register-routing.module';
+import { DoctorEditComponent } from './doctor-edit/doctor-edit.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { DoctorRegisterRoutingModule } from './register-routing.module';
   ],
   declarations: [
     RegisterListComponent,
-    DoctorRegisterComponent
+    DoctorRegisterComponent,
+    DoctorEditComponent
   ]
 })
 export class DoctorRegisterModule {}

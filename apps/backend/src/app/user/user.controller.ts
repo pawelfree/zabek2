@@ -205,12 +205,48 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.doctor)
+  @Put('me/:id')
+  async updateUserMe(@Body() userToUpdate: User, @Param('id') id: string, @Request() req) {
+    console.warn('wymusic polityke haseł')
+    if (id !== userToUpdate._id ) {
+      throw new BadRequestException('Niezgodne dane użytkownika i żądania');        
+    }  
+    if (id !== req.user._id ) {
+      throw new BadRequestException('Niezgodne dane zalogowanego użytkownika i żądania');        
+    }  
+    //TODO to i nastepne do wspolnej metody
+    let error;
+    await this.userService.findById(id)
+      .then(async user => {
+        if (!user) {
+          error = new BadRequestException('Użytkownik nie istnieje');
+        }  else {
+          if (userToUpdate.password) {
+            const password = await this.authService.hash(userToUpdate.password);
+            this.userService.setPassword(user._id, password)
+            .then(res => res)
+            .catch(err => error = new InternalServerErrorException('Błąd zapisu hasła użytkownia' + err));
+          } else { 
+            return await this.doctorService.update(userToUpdate.doctor).catch(err => { throw new InternalServerErrorException('Nieuadna aktualizacja danych.', err); });
+          }
+        }
+      })
+     .catch(err => {
+        error = new BadRequestException(err); 
+      });
+    if (error) {
+      throw error;
+    }
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Put(':id')
   async updateUser(@Body() userToUpdate: User, @Param('id') id: string) {
     console.warn('wymusic polityke haseł')
     if (id !== userToUpdate._id ) {
-      throw new BadRequestException('Błędne dane użytkownika i żądania');        
+      throw new BadRequestException('Niezgodne dane użytkownika i żądania');        
     }  
     let error;
     await this.userService.findById(id)
@@ -218,7 +254,6 @@ export class UserController {
         if (!user) {
           error = new BadRequestException('Użytkownik nie istnieje');
         }  else {
-
           if (userToUpdate.password) {
             const password = await this.authService.hash(userToUpdate.password);
             this.userService.setPassword(user._id, password)
@@ -227,7 +262,6 @@ export class UserController {
           } else {
             return await this.doctorService.update(userToUpdate.doctor).catch(err => { throw new InternalServerErrorException('Nieuadna aktualizacja danych.', err); });
           }
-       
         }
       })
      .catch(err => {

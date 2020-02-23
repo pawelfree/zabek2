@@ -92,7 +92,7 @@ export class DoctorListComponent implements OnInit, AfterViewInit, OnDestroy  {
   }
 
   isAllRequiredDataPresent(user: User): boolean {
-    return  user.doctor && user.doctor._id && user.doctor.firstName && user.doctor.lastName &&
+    return  user.doctor && user.doctor._id && user.doctor.firstName && user.doctor.lastName && user.doctor.qualificationsNo &&
             user.doctor.officeAddress && user.doctor.officeName && user.doctor.pesel ? true : false
   }
 

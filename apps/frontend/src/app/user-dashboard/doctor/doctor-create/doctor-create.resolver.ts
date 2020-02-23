@@ -5,7 +5,7 @@ import { DoctorService } from '../../../_services';
 import { of, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class DoctorEditResolver implements Resolve<User> {
+export class DoctorCreateResolver implements Resolve<User> {
 
   constructor(private readonly doctorService: DoctorService) { } 
 
