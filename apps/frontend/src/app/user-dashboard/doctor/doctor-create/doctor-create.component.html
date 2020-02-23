@@ -62,7 +62,7 @@
     </mat-card-content>
 
     <mat-card-title>
-      <button mat-raised-button color="accent" type="button" (click)="onSubmit()" [disabled]="form.invalid">Zapisz</button>
+      <button mat-raised-button #close color="accent" type="button" (click)="onSubmit()" [disabled]="form.invalid || form.disabled">Zapisz</button>
       <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/doctor/list">Anuluj</button>
     </mat-card-title>
   </form>

@@ -25,7 +25,10 @@ export class AuthGuard implements CanActivate {
                     if (route.data.roles && route.data.roles.indexOf(user.role) === -1 ) {
                         if (user.role === Role.doctor) {
                             return this.router.createUrlTree([`/doctor`]);
-                          } else {
+                          }
+                        if (user.role === Role.sadmin) {
+                            return this.router.createUrlTree(['/user/user/list']);
+                        } else {
                             return this.router.createUrlTree([`/user`]);
                           }
                     }

@@ -22,6 +22,7 @@ export class DoctorCreateComponent implements OnInit {
   private lab: Lab;
   private user: User;
   private doctor: Doctor;
+  private currentUser: User = null;
 
   sameAddresses$: Observable<boolean>;
 
@@ -37,7 +38,10 @@ export class DoctorCreateComponent implements OnInit {
     this.store.pipe(
       select(currentUser),
       take(1),
-      tap(user => this.lab = user.lab)
+      tap(user => {
+        this.currentUser = user;
+        this.lab = user.lab;
+      })
     ).subscribe();
 
     this.user = this.route.snapshot.data.doctor;
@@ -112,7 +116,11 @@ export class DoctorCreateComponent implements OnInit {
 
     if (this.user) {      
       this.mode = 'edit';
+      if (this.currentUser && this.currentUser.role === 'user') {
+        this.form.disable();
+      }
       this.form.controls.email.clearValidators();
+
     } else {
       this.mode = 'create';
     }
