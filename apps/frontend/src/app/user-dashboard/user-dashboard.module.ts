@@ -22,7 +22,7 @@ import { LabEffects } from './store/lab.effects';
   ],
   declarations: [
     ReportsComponent,
-    SelectLabComponent,
+    SelectLabComponent
   ]
 })
 export class UserDashboardModule {}

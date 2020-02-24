@@ -7,13 +7,14 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Doctor, Examination, Patient, Lab, FileUpload, User, Role } from '@zabek/data';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, from, Subscription } from 'rxjs';
-import { take, tap, map, scan, switchMap, distinct, toArray } from 'rxjs/operators';
+import { Subscription, Observable, of } from 'rxjs';
+import { take, tap, map } from 'rxjs/operators';
 import { getAge, isFemale } from '@zabek/util';
 import { DoctorCreateDlgComponent } from '../doctor-create-dlg/doctor-create-dlg.component';
 import { AppActions, AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { currentUser } from '../../../auth/store';
+import { DataSource, OptionEntry } from '../search-select';
 
 @Component({
   selector: 'zabek-exam-create',
@@ -49,28 +50,11 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
   private _id: string;
   private lab: Lab;
   private file: FileUpload;
-  public selectedDoctor;
   private firstPageOpen;
   private dialogSubs: Subscription = null;
 
-  endOfData: boolean;
-  doctors = new BehaviorSubject<Doctor[]>([]);
-  doctors$ = this.doctors.asObservable().pipe(
-    scan((acc, curr) => {
-      return [...acc, ...curr];
-    }, <Doctor[]>[]),
-    switchMap(arr =>
-      from(arr).pipe(
-        distinct(single => single._id),
-        toArray()
-      )
-    )
-  );
+  dataSource: DataSource;
 
-  emptyDoctor = { _id: 0, email: null }
-
-  private page = 0;
-  private pageLen = 10;
   user: User = null;
   examTypes: string[] = [
     'pantomograficzne',
@@ -99,6 +83,30 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+
+    const displayValue= (value: string): Observable<OptionEntry | null> => {
+      if (!value) return of(null);
+      return this.doctorService.getDoctor(value).pipe(
+        map((e: Doctor) => e? ({
+          value: e._id,
+          display: `${e.lastName} ${e.firstName} ${e.qualificationsNo ? e.qualificationsNo : ''}`,
+          details: {}
+        }): null)
+      );
+    }
+
+    const search = (term: string): Observable<OptionEntry[]> => {      
+      return this.doctorService.getDoctors(20,0,term)
+        .pipe(
+          map(result => result.doctors),
+          map(list => list.map((e: Doctor) => ({
+            value: e._id,
+            display: `${e.lastName} ${e.firstName} ${e.qualificationsNo ? e.qualificationsNo : ''}`,
+            details: {}
+          }))));
+    }
+
+    this.dataSource = { displayValue, search };
 
     this.firstPageOpen = true;
 
@@ -157,16 +165,12 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       })
     });
 
-    this.endOfData = false;
-    this.getNextDoctorsBatch();
-
     const exam: Examination = this.route.snapshot.data.examination;
     if (exam) {
       this.mode = 'edit';
       this._id = exam._id;
       this.lab = exam.lab;
       this.file = exam.file;
-      this.selectedDoctor = exam.doctor ? exam.doctor : this.emptyDoctor;
       
       this.form.setValue({
         examinationDate: exam.examinationDate,
@@ -180,19 +184,10 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
         patientMarketingAck: exam.patient.marketingAck,
         patientEmail: exam.patient.email,
         patientPhone: exam.patient.phone,
-        doctor: this.selectedDoctor,
+        doctor: exam.doctor ? exam.doctor._id: null,
         sendEmailTo: exam.sendEmailTo === undefined  ? null : exam.sendEmailTo
       });
       
-      setTimeout(() => { 
-        if (this.selectedDoctor._id !== 0) {
-          this.doctors.next([this.selectedDoctor]);
-        }
-        else {
-          this.selectedDoctor = this.emptyDoctor;
-          this.form.controls['sendEmailTo'].reset({value: null, disabled: true});
-        }
-      }, 1);
       if (this.user.role === Role.user) {
         this.form.disable()
       }
@@ -201,23 +196,6 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       this._id = null;
       this.lab = null;
       this.file = null;
-      this.selectedDoctor = this.emptyDoctor;
-    }
-  }
-
-  getNextDoctorsBatch() {
-    if (!this.endOfData) {
-      this.doctorService
-        .getDoctors(this.pageLen, this.page)
-        .pipe(
-          take(1),
-          map(res => res.doctors),
-          tap(res => {
-            this.endOfData = res.length < this.pageLen;
-            this.page += 1;
-          })
-        )
-        .subscribe(res => this.doctors.next(res));
     }
   }
 
@@ -290,9 +268,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
     });
     this.dialogSubs = dialogRef.componentInstance.onAdd.subscribe(
       (res: Doctor) => {
-        console.log('next', res);
-        
-        return this.doctors.next([res]);
+        this.form.patchValue({doctor: res._id});
       },
       err => console.log('cos poszlo nie tak',err)
     );

@@ -33,11 +33,12 @@ export class DoctorController {
   async allUsers(
     @Query('pagesize', new ParseIntPipe()) pagesize: number = 0,
     @Query('page', new ParseIntPipe()) page: number = 10,
-    @Request() req
+    @Query('term') term: string = '',
   ) {
     return await this.doctorService.findAllDoctors(
       pagesize,
-      page
+      page,
+      term
     );
   }
 
@@ -60,7 +61,7 @@ export class DoctorController {
   @Roles(Role.sadmin, Role.admin, Role.user)
   @Get(':id')
   async getDoctor(@Param('id') id: string) {
-    return this.userService.findById(id);
+    return this.doctorService.findById(id);
   }
 
   @Post()

@@ -28,9 +28,12 @@ export class DoctorService {
     return this.http.put(BACKEND_URL+"acceptrules/"+userId, {});
   }
 
-  getDoctors(doctorsPerPage: number = 0, currentPage: number = 10) {
-    const queryParams = `?pagesize=${doctorsPerPage}&page=${currentPage}`;
-    return this.http.get<{ doctors: Doctor[]; count: number }>(BACKEND_URL + queryParams);
+  getDoctors(doctorsPerPage: number = 0, currentPage: number = 10, term: string = '') {
+    const params = new HttpParams()
+      .set('pagesize', '' + doctorsPerPage)
+      .set('page', '' + currentPage)
+      .set('term', term );
+    return this.http.get<{ doctors: Doctor[]; count: number }>(BACKEND_URL, {params});
   }
 
   getOnlineDoctors(doctorsPerPage: number = 0, currentPage: number = 10) {

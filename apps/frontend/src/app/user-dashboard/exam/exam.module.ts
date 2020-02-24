@@ -8,6 +8,7 @@ import { ExamRoutingModule } from './exam-routing.module';
 import { DoctorCreateDlgComponent } from './doctor-create-dlg/doctor-create-dlg.component';
 import { MatSelectInfiniteScrollModule } from '../../_directives/select-infinite-scroll/selectinfinitescroll.module';
 import { FileUploadComponent } from '../../files/fileupload/fileupload.component';
+import { SearchSelectComponent } from './search-select/search-select.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { FileUploadComponent } from '../../files/fileupload/fileupload.component
     ExamListComponent,
     ExamCreateComponent,
     DoctorCreateDlgComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    SearchSelectComponent
   ]
 })
 export class ExamModule {}
