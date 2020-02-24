@@ -116,7 +116,7 @@ export class DoctorCreateComponent implements OnInit {
 
     if (this.user) {      
       this.mode = 'edit';
-      if (this.currentUser && this.currentUser.role === 'user') {
+      if (this.currentUser && (this.currentUser.role === Role.user || this.currentUser.role === Role.sadmin )) {
         this.form.disable();
       }
       this.form.controls.email.clearValidators();

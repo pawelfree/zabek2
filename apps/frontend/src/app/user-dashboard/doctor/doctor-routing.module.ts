@@ -32,7 +32,7 @@ const routes: Routes = [
     component: DoctorCreateComponent,
     resolve: {doctor: DoctorCreateResolver },
     canActivate: [AuthGuard],
-    data: { roles: [Role.admin, Role.user]  }
+    data: { roles: [Role.sadmin, Role.admin, Role.user]  }
   }
 
 ];
