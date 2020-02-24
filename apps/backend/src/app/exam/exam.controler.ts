@@ -64,7 +64,7 @@ import { Examination } from '@zabek/data';
     }   
 
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('sadmin','admin')
+    @Roles('sadmin', 'admin', 'user')
     @Delete(':id')
     async deleteExam(@Param('id') id: string) {
       //TODO zdefinowac kto i kiedy moze usuwac

@@ -111,7 +111,8 @@ export class ExamListComponent implements AfterViewInit, OnInit, OnDestroy {
             this.paginator.pageIndex = this.paginator.pageIndex - 1;
           }
           this.loadExamsPage();
-        });
+        },
+        err => this.store.dispatch(AppActions.raiseError({message: 'Nie można usunąć badania' , status: err})));
       }
     });
   }
