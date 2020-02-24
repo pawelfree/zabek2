@@ -45,13 +45,8 @@ import { Examination } from '@zabek/data';
     @Roles('admin')
     @Put(':id')
     async updateExam(@Body() exam: Examination, @Param('id') id: string) {
-      //TODO ta metoda robi bez sensu findbyid - findoneandupdate?
       if (id !== exam._id ) {
         throw new BadRequestException('Błędne dane badania i żądania');        
-      }
-      const newExam: Examination = await this.examService.findById(id);
-      if (!newExam) {
-        throw new BadRequestException('Badanie nie istnieje');
       }
       return await this.examService.update(exam);
     }

@@ -68,10 +68,7 @@ export class ExamService {
   }
 
   async update(exam: Examination) {
-    return await this.examModel.updateOne(
-      { _id: exam._id },
-      exam
-    );
+    return await this.examModel.findOneAndUpdate({ _id: exam._id }, exam, {new: true});
   }
 
   async delete(_id: string) {
