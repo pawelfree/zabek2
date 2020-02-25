@@ -54,7 +54,11 @@ export class LabController {
       }
       const lab: Lab = await this.labService.findById(id);
       if (!lab) {
-        throw new BadRequestException('Pracownia nie istnieje');
+        throw new BadRequestException('Pracownia nie istnieje.');
+      }
+      const lab1: Lab = await this.labService.findByName(updateLabDto.name, updateLabDto._id);
+      if (lab1) {
+        throw new BadRequestException('Pracownia o tej nazwie juz istnieje');
       }
       return await this.labService.update(updateLabDto);
     }

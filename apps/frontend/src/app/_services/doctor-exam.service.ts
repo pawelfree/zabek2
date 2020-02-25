@@ -17,10 +17,7 @@ export class DoctorExamService {
     examsPerPage: number = 0,
     currentPage: number = 10
   ): Observable<{ exams: Examination[]; count: number }> {
-    let params = new HttpParams();
-    params = params.append('pagesize', '' + examsPerPage);
-    params = params.append('page', '' + currentPage);
-
+    const params = new HttpParams().set('pagesize', '' + examsPerPage).set('page', '' + currentPage);
     return this.http.get<{ exams: Examination[]; count: number }>(BACKEND_URL, { params });
   }
 

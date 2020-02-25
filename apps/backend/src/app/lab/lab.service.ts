@@ -13,8 +13,12 @@ export class LabService {
     return await this.labModel.findById(id).select('-__v');
   }
 
-  async findByName(name: string): Promise<Lab> {
-    return await this.labModel.findOne({ name }).select('-__v');
+  async findByName(name: string, _id: string = null): Promise<Lab> {
+    const obj = { name }
+    if (_id) {
+      obj['_id'] = { $ne: _id };
+    }
+    return await this.labModel.findOne(obj).select('-__v');
   }
 
   async add(createDto: CreateLabDto): Promise<Lab> {
