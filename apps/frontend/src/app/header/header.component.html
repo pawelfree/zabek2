@@ -3,12 +3,12 @@
   <div fxFlex fxLayout fxLayoutAlign="end">
     <ul fxLayout fxLayoutGap="5px" *ngIf="(currentUser$ | async) as user">
       <li *ngIf="authorized(user.role, ['sadmin'])">
-        <a mat-button 
+        <a mat-button name="pracownieMenu"
             routerLinkActive="mat-accent"
             routerLink="/user/lab/list">Pracownie</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin', 'admin' ])">
-        <a mat-button 
+        <a mat-button name="uzytkownicyMenu"
             routerLinkActive="mat-accent"
             routerLink="/user/user/list">Użytkownicy</a>
       </li>
@@ -18,12 +18,12 @@
             routerLink="/files">Pliki</a>
       </li>
       <li *ngIf="authorized(user.role, ['admin', 'user' ])">
-        <a mat-button 
+        <a mat-button name="badaniaUserMenu"
             routerLinkActive="mat-accent"
             routerLink="/user/exam">Badania</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin', 'admin', 'user' ])">
-        <a mat-button 
+        <a mat-button name="lekarzeMenu"
             routerLinkActive="mat-accent"
             routerLink="/user/doctor/list">Lekarze</a>
       </li>
@@ -33,7 +33,7 @@
             routerLink="/user/reports">Raporty</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'doctor' ])">
-        <a mat-button 
+        <a mat-button name="badaniaDoctorMenu"
             routerLinkActive="mat-accent"
             routerLink="/doctor/exam/list">Badania</a>
       </li>
@@ -43,7 +43,7 @@
             routerLink="/doctor/feedback">Zgłoś uwagi</a>
       </li>
       <li *ngIf="authorized(user.role, [ 'sadmin' ])">
-        <a mat-button 
+        <a mat-button name="uwagiMenu"
             routerLinkActive="mat-accent"
             routerLink="/user/feedbacks">Uwagi</a>
       </li>

@@ -1,18 +1,18 @@
 <mat-card>
   <form [formGroup]="form">
     <mat-form-field>
-      <input matInput type="text" formControlName="name" placeholder="Nazwa pracowni">
+      <input matInput type="text" name="name" formControlName="name" placeholder="Nazwa pracowni">
       <mat-error *ngIf="form.get('name').invalid">Wprowadź nazwę pracowni (5 - 100 znaków).</mat-error>
     </mat-form-field>
     <mat-form-field>
-        <input matInput type="text" formControlName="email" placeholder="Email pracowni">
+        <input matInput type="text" name="email" formControlName="email" placeholder="Email pracowni">
         <mat-error *ngIf="form.get('email').invalid">Wprowadź email pracowni.</mat-error>
     </mat-form-field>
     <mat-form-field>
-        <input matInput type="text" formControlName="address" placeholder="Adres pracowni">
+        <input matInput type="text" name="address" formControlName="address" placeholder="Adres pracowni">
         <mat-error *ngIf="form.get('address').invalid">Wprowadź adres pracowni (min. 20 znaków).</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="button" (click)="onSaveLab()" [disabled]="form.invalid" routerLink="/user/lab/list">Zapisz pracownię</button>
-    <button mat-raised-button style="float: right;" type="button" mat-button routerLink="/user/lab/list">Anuluj</button>
+    <button mat-raised-button name="saveLab" color="accent" type="button" (click)="onSaveLab()" [disabled]="form.invalid" routerLink="/user/lab/list">Zapisz pracownię</button>
+    <button mat-raised-button name="cancel" style="float: right;" type="button" mat-button routerLink="/user/lab/list">Anuluj</button>
   </form>
 </mat-card>
