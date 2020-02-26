@@ -89,7 +89,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
       return this.doctorService.getDoctor(value).pipe(
         map((e: Doctor) => e? ({
           value: e._id,
-          display: `${e.lastName} ${e.firstName} ${e.qualificationsNo ? e.qualificationsNo : ''}`,
+          display: `${e.lastName} ${e.firstName} ${e.email ? e.email : ''} ${e.qualificationsNo ? e.qualificationsNo : ''}`,
           details: {}
         }): null)
       );
@@ -101,7 +101,7 @@ export class ExamCreateComponent implements OnInit, OnDestroy {
           map(result => result.doctors),
           map(list => list.map((e: Doctor) => ({
             value: e._id,
-            display: `${e.lastName} ${e.firstName} ${e.qualificationsNo ? e.qualificationsNo : ''}`,
+            display: `${e.lastName} ${e.firstName} ${e.email ? e.email : ''} ${e.qualificationsNo ? e.qualificationsNo : ''}`,
             details: {}
           }))));
     }
