@@ -37,7 +37,6 @@ export class DoctorExamListComponent implements AfterViewInit, OnInit, OnDestroy
     'examinationType',
     'patientFullName',
     'patientPesel',
-    'patientIsFemale',
     'patientAge',  
     'actions'
   ];
