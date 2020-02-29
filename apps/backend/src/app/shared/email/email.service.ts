@@ -63,8 +63,8 @@ export class EmailService {
           "Authorization": "Bearer " + this.API_KEY
         }
       }).pipe(take(1)).subscribe(
-        succ => console.log('Wysłany email resetu hasła dla', email), 
-        err => console.log('Błąd wysyłania resetu maila dla', email)
+        _ => console.log('Wysłany email resetu hasła dla', email), 
+        _ => console.log('Błąd wysyłania resetu maila dla', email)
       );;
     }
   }
@@ -94,8 +94,8 @@ export class EmailService {
           "Authorization": "Bearer " + this.API_KEY
         }
       }).pipe(take(1)).subscribe(
-        succ => console.log('Wysłany email błędu resetu hasła dla', email), 
-        err => console.log('Błąd wysyłania błędu resetu maila dla', email)
+        _ => console.log('Wysłany email błędu resetu hasła dla', email), 
+        _ => console.log('Błąd wysyłania błędu resetu maila dla', email)
       );
     }
   }
@@ -157,8 +157,8 @@ export class EmailService {
         }
       })
       .pipe(take(1)).subscribe(
-        succ => console.log('Wysłany email aktywacji lekarza dla', email), 
-        err => console.log('Błąd wysyłania aktywacji lekarza dla', email)
+        _ => console.log('Wysłany email aktywacji lekarza dla', email), 
+        _ => console.log('Błąd wysyłania aktywacji lekarza dla', email)
       );
     }
   }
@@ -188,8 +188,8 @@ export class EmailService {
           "Authorization": "Bearer " + this.API_KEY
         }
       }).pipe(take(1)).subscribe(
-        succ => console.log('Wysłany email aktywacji lekarza dla', email), 
-        err => console.log('Błąd wysyłania aktywacji lekarza dla', email)
+        _ => console.log('Wysłany email aktywacji lekarza dla', email), 
+        _ => console.log('Błąd wysyłania aktywacji lekarza dla', email)
       );
     }
   }
@@ -219,8 +219,8 @@ export class EmailService {
           "Authorization": "Bearer " + this.API_KEY
         }
       }).pipe(take(1)).subscribe(
-        succ => console.log('Wysłany email dot. rejestracji feedbacku dla ', email), 
-        err => console.log('Błąd wysyłania emaila dot. rejestracji feedbacku dla ', email)
+        _ => console.log('Wysłany email dot. rejestracji feedbacku dla ', email), 
+        _ => console.log('Błąd wysyłania emaila dot. rejestracji feedbacku dla ', email)
       );
     }
   }

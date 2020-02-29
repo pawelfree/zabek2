@@ -38,7 +38,7 @@ export class AuthService {
       .then(async(user) => {
         return await jsonwebtoken.sign({ _id: user._id, email: user.email, type }, this.configService.get('JWT_PRIVATE_KEY'), { expiresIn });
       })
-      .catch((err) => {
+      .catch(_ => {
         return  null;
       })
   }

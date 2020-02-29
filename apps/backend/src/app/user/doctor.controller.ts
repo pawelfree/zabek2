@@ -78,7 +78,7 @@ export class DoctorController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('admin','user')
   @Put(':id')
-  async updateDoctor(@Body() doctor: Doctor, @Param('id') id: string, @Request() req) {
+  async updateDoctor(@Body() doctor: Doctor, @Param('id') id: string) {
     if (id !== doctor._id ) {
       throw new BadRequestException('Błędne dane lekarza i żądania');        
     }

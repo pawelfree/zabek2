@@ -16,6 +16,7 @@ import { AuthService } from '../shared/security/auth.service';
 import { UserService } from '../user/user.service';
 import { isValidEmail } from '@zabek/util';
 import { EmailService } from '../shared/email/email.service';
+import { of } from 'rxjs';
 
 @Controller('auth')
 export class AuthController {
@@ -78,7 +79,7 @@ export class AuthController {
     const user = await this.userService.findById(req.user._id)
     if (user) {
       return this.authService.login(user);
-    }
+    };
   }
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
