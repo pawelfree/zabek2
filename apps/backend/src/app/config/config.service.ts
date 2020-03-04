@@ -38,6 +38,10 @@ export class ConfigService {
         if (process.env.SECRET_API_KEY) {
             Object.assign(this.envConfig, { SECRET_API_KEY: process.env.SECRET_API_KEY});
         }
+
+        if (process.env.TIMBER_API_KEY) {
+            Object.assign(this.envConfig, { TIMBER_API_KEY : process.env.TIMBER_API_KEY});
+        }
         
     }
 

@@ -13,6 +13,7 @@ export const environment = {
   SALT: 10, //'ala_ma_kota@kot#to%ali&pies'
 
   ACCESS_KEY_ID: 'AKIAZNH67RLHXBQPPT6Z',
+  TIMBER_API_KEY: '',
 
   //mail templates config
   SYSTEM_NAME: "RTG Cloud",
