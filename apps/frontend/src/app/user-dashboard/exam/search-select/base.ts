@@ -2,7 +2,7 @@
 // have any connection to how the result is rendered in the Dom, with what
 // component set, and so on.
 
-import { Input, OnDestroy } from '@angular/core';
+import { Input, OnDestroy, Directive } from '@angular/core';
 import { FormControl, ControlValueAccessor } from '@angular/forms';
 import {
   Subscription, Observable, BehaviorSubject, of,
@@ -22,6 +22,7 @@ interface SearchResult {
   errorMessage?: string;
 }
 
+@Directive()
 export class SearchSelectBase implements ControlValueAccessor, OnDestroy {
   @Input() debounceTime = 75;
   @Input() set dataSource(ds: DataSource) { this.incomingDataSources.next(ds); }

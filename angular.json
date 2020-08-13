@@ -102,15 +102,13 @@
               "apps/frontend/tsconfig.app.json",
               "apps/frontend/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/frontend/**"]
+            "exclude": ["**/node_modules/**", "!apps/frontend/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/frontend/jest.config.js",
-            "tsConfig": "apps/frontend/tsconfig.spec.json",
-            "setupFile": "apps/frontend/src/test-setup.ts",
             "passWithNoTests": true
           }
         }
@@ -138,7 +136,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/frontend-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/frontend-e2e/**"]
+            "exclude": ["**/node_modules/**", "!apps/frontend-e2e/**/*"]
           }
         }
       }
@@ -156,7 +154,8 @@
             "outputPath": "dist/apps/backend",
             "main": "apps/backend/src/main.ts",
             "tsConfig": "apps/backend/tsconfig.app.json",
-            "assets": ["apps/backend/src/assets"]
+            "assets": ["apps/backend/src/assets"],
+            "buildLibsFromSource": true
           },
           "configurations": {
             "production": {
@@ -185,14 +184,13 @@
               "apps/backend/tsconfig.app.json",
               "apps/backend/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/backend/**"]
+            "exclude": ["**/node_modules/**", "!apps/backend/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/backend/jest.config.js",
-            "tsConfig": "apps/backend/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -211,14 +209,13 @@
               "libs/util/tsconfig.lib.json",
               "libs/util/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/util/**"]
+            "exclude": ["**/node_modules/**", "!libs/util/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/util/jest.config.js",
-            "tsConfig": "libs/util/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }

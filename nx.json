@@ -3,9 +3,9 @@
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": "*",
-    "tsconfig.json": "*",
     "tslint.json": "*",
-    "nx.json": "*"
+    "nx.json": "*",
+    "tsconfig.base.json": "*"
   },
   "projects": {
     "frontend-e2e": {
@@ -21,5 +21,16 @@
     "util": {
       "tags": []
     }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "affected": {
+    "defaultBase": "master"
   }
 }
