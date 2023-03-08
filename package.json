@@ -46,7 +46,7 @@
     "@angular/router": "^10.0.14",
     "@angular/service-worker": "^10.0.14",
     "@nestjs/common": "^7.0.0",
-    "@nestjs/core": "^7.0.0",
+    "@nestjs/core": "^9.0.5",
     "@nestjs/jwt": "^6.1.2",
     "@nestjs/mongoose": "^6.3.1",
     "@nestjs/passport": "^6.2.0",
